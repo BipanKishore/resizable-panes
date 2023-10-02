@@ -70,5 +70,13 @@
     "react": "*",
     "react-dom": "*"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BipanKishore/resizable-panes-react.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BipanKishore/resizable-panes-react/issues",
+    "email": "bipankishore@gmail.com"
+  },
   "homepage": "https://bipankishore.github.io/resizable-panes-demo/"
 }
