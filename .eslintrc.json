@@ -1,0 +1,82 @@
+
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    }, 
+    "root": true,
+    "extends": [
+        "eslint:recommended",
+        "standard",
+        "standard-react",
+        "plugin:react-hooks/recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "react",
+        "sort-keys-fix",
+        "simple-import-sort",
+        "react-hooks",
+        "@typescript-eslint"],
+    "rules": {
+      "@typescript-eslint/no-explicit-any": 0,
+      "space-infix-ops": "error",
+        "camelcase": ["error", {"allow": ["^UNSAFE_"]}],
+        "complexity": ["error", 5],
+        "max-len": ["error", {
+          "code": 120,
+          "tabWidth": 2
+        }],
+        "no-unused-expressions": ["error", {
+          "allowTernary": true
+        }],
+        "no-var": "error",
+        "object-curly-spacing": ["error", "never"],
+        "react/default-props-match-prop-types": "error",
+        "react/no-unused-prop-types": "off", // gives false positives
+        "react/jsx-closing-bracket-location": "error",
+        "react/jsx-closing-tag-location": "error",
+        "react/jsx-first-prop-new-line": ["error", "multiline"],
+        "react/jsx-indent-props": ["error", 2],
+        "react/jsx-indent": ["error", 2],
+        "react/jsx-no-duplicate-props": "error",
+        "react/jsx-sort-props": ["error", {
+          "callbacksLast": true
+        }],
+        "react/sort-prop-types": ["error", {
+          "callbacksLast": true,
+          "sortShapeProp": true
+        }],
+        "valid-jsdoc": ["error", {
+          "prefer": {
+            "virtual": "abstract",
+            "extends": "augments",
+            "constructor": "class",
+            "const": "constant",
+            "defaultValue": "default",
+            "desc": "description",
+            "host": "external",
+            "fileoverview": "file",
+            "emits": "fires",
+            "func": "function",
+            "method": "function",
+            "var": "member",
+            "arg": "param",
+            "argument": "param",
+            "return": "returns",
+            "exception": "throws"
+          },
+          "requireReturn": false
+        }],
+        "no-fallthrough": 0
+    },
+    "reportUnusedDisableDirectives": true
+}
