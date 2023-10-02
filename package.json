@@ -1,5 +1,5 @@
 {
-  "name": "resizable-panes-react-testing",
+  "name": "resizable-panes-react",
   "version": "0.7.9",
   "description": "A simple library for resizing elements in the browser",
   "main": "./lib/index.js",
