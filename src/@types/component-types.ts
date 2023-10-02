@@ -1,8 +1,9 @@
-import {MouseEventHandler, ReactNode, RefObject} from 'react'
+import {MouseEventHandler, ReactNode} from 'react'
 import {IKeyToBoolMap, IMapIdToSize} from './general-type'
 import {IResizableApi} from './use-resizable-panes-types'
 import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from '../utils/storage'
+import {ResizerModel} from '../models/resizer-model'
 
 export type onResizeType = (param: IMapIdToSize) => void
 export type onReadyType = (api: IResizableApi) => void
@@ -91,7 +92,7 @@ export interface IStoreModel {
 
 export interface IContextDetails {
   panesList: PaneModel[],
-  resizersList: any[],
+  resizersList: ResizerModel[],
   isSetRatioMode: boolean,
   activeIndex: number,
   axisCoordinate: number,

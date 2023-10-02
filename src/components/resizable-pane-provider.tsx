@@ -6,10 +6,9 @@ import {useResizableApi} from '../hook/use-resizable-api'
 import {useMountingConsole} from '../utils/development-util'
 import {onResizeClearSizesMapFromStore} from '../utils/storage'
 import {IResizablePaneProviderProps} from '../@types'
-import {toArray} from '../utils/dom'
 
 export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
-  const {storeKey, sessionStore, children} = props
+  const {storeKey, sessionStore} = props
   const [context] = useState(getResizableContext(props))
   // context.storage.readPaneChange(toArray(children), context)
   useResizableApi(context, props)
