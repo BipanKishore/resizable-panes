@@ -60,16 +60,13 @@ const getVisibilityArray = (panesList: PaneModel[]) => {
 // eslint-disable-next-line complexity
 export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBoolMap) => {
   const {
-    panesList, resizersList,
-    newVisibilityModel
+    panesList, resizersList
   } = contextDetails
 
-  if (newVisibilityModel) {
-    panesList.forEach((pane) => pane.syncToOldVisibilityModel())
-  }
+  panesList.forEach((pane) => pane.syncToOldVisibilityModel())
 
-  // console.log('Before----------------------------------', getList(panesList, 'size'),
-  //   getPanesSizeSum(panesList, 0, panesList.length - 1))
+  console.log('Before----------------------------------', getList(panesList, 'size'),
+    getPanesSizeSum(panesList, 0, panesList.length - 1))
   for (let i = 0; i < panesList.length; i++) {
     const pane = panesList[i]
     const {id, visibility: currentVisibility} = pane
@@ -86,19 +83,21 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
       // console.log(getList(panesList, 'size'))
     }
   }
-  // console.log('After----------------------------------', getList(panesList, 'size'),
-  //   getPanesSizeSum(panesList, 0, panesList.length - 1))
+  console.log('After----------------------------------', getList(panesList, 'size'),
+    getPanesSizeSum(panesList, 0, panesList.length - 1))
 
   const visibilityList = getVisibilityArray(panesList)
   const lastVisibleIndex = visibilityList.pop() as number
   const resizer = resizersList[lastVisibleIndex]
 
-  if (resizer) {
+  if (resizer && resizer.visibility) {
     let sizeChange = resizer.setVisibility(false)
     for (let i = lastVisibleIndex; i > -1; i--) {
       sizeChange = panesList[i].addVisibilitySize(sizeChange)
     }
   }
+  console.log('After 2----------------------------------', getList(panesList, 'size'),
+    getPanesSizeSum(panesList, 0, panesList.length - 1))
   setUISizesFn(panesList)
 }
 
