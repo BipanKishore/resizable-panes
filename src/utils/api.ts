@@ -65,8 +65,8 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
 
   panesList.forEach((pane) => pane.syncToOldVisibilityModel())
 
-  console.log('Before----------------------------------', getList(panesList, 'size'),
-    getPanesSizeSum(panesList, 0, panesList.length - 1))
+  // console.log('Before----------------------------------', getList(panesList, 'size'),
+  //   getPanesSizeSum(panesList, 0, panesList.length - 1))
   for (let i = 0; i < panesList.length; i++) {
     const pane = panesList[i]
     const {id, visibility: currentVisibility} = pane
@@ -83,8 +83,8 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
       // console.log(getList(panesList, 'size'))
     }
   }
-  console.log('After----------------------------------', getList(panesList, 'size'),
-    getPanesSizeSum(panesList, 0, panesList.length - 1))
+  // console.log('After----------------------------------', getList(panesList, 'size'),
+  //   getPanesSizeSum(panesList, 0, panesList.length - 1))
 
   const visibilityList = getVisibilityArray(panesList)
   const lastVisibleIndex = visibilityList.pop() as number
@@ -96,8 +96,8 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
       sizeChange = panesList[i].addVisibilitySize(sizeChange)
     }
   }
-  console.log('After 2----------------------------------', getList(panesList, 'size'),
-    getPanesSizeSum(panesList, 0, panesList.length - 1))
+  // console.log('After 2----------------------------------', getList(panesList, 'size'),
+  //   getPanesSizeSum(panesList, 0, panesList.length - 1))
   setUISizesFn(panesList)
 }
 
