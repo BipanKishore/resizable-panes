@@ -25,15 +25,6 @@ export const createMap = (paneList: PaneModel[], ...keys: IPaneModelKey[]) => {
   return map
 }
 
-export const toRatioMap = (sizeMap: any, total: number) => {
-  const ratioMap = Object.keys(sizeMap)
-    .reduce((acc: any, key) => {
-      acc[key] = sizeMap[key] / total
-      return acc
-    }, {})
-  return ratioMap
-}
-
 export const isUndefinedOrNull = (value: any) => value === undefined || value === null
 
 export const findIndex = (list: any[], value: any, key = 'id') => {
@@ -45,4 +36,3 @@ export const ratioToNumber = (totalSize: number, maxRatioValue: number, size: nu
     (totalSize * (size / maxRatioValue)).toFixed(0)
   )
 }
-export const getIdsKey = (list: any[]) => list.map((pane) => pane.visibility ? pane.id : '').join('')

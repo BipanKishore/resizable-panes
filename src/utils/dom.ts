@@ -2,7 +2,7 @@ import {
   IResizableEvent, IJoinClassNameParam,
   UnitTypes, IBooleanOrUndefined
 } from '../@types'
-import {DIRECTIONS, RATIO, RIGHT_BUTTON_VALUE, ZERO} from '../constant'
+import {DIRECTIONS, RATIO, ZERO} from '../constant'
 
 export const getSizeStyle = (vertical: IBooleanOrUndefined, size: number) => {
   const style: any = {}
@@ -14,8 +14,6 @@ export const getSizeStyle = (vertical: IBooleanOrUndefined, size: number) => {
   }
   return style
 }
-
-export const isNotRightButtonPressed = (e: MouseEvent) => e.button !== RIGHT_BUTTON_VALUE
 
 export const toPx = (size: number) => `${size}px`
 
@@ -37,47 +35,37 @@ export const getContainerClass = (vertical: boolean, className: string, unit: Un
     [className]: className
   })
 }
+
 export function isTouchEvent (event: any): boolean {
   return event.type.startsWith('touch')
+}
+
+class ResizableEvent {
+  mouseCoordinate: number
+  movement: number
+  constructor (mouseCoordinate: number, movement: number) {
+    this.mouseCoordinate = mouseCoordinate
+    this.movement = movement
+  }
 }
 
 export const getResizableEventFromTouch = (e: any, vertical: boolean, previousTouchEvent: any): IResizableEvent => {
   const currentTouch = e.targetTouches[0]
   const {pageX = 0, pageY = 0} = previousTouchEvent.current ?? {}
-
-  let resizeEvent: IResizableEvent
-  if (vertical) {
-    resizeEvent = {
-      mouseCoordinate: currentTouch.clientX,
-      movement: currentTouch.pageX - pageX
-    }
-  } else {
-    resizeEvent = {
-      mouseCoordinate: currentTouch.clientY,
-      movement: currentTouch.pageY - pageY
-    }
-  }
   previousTouchEvent.current = currentTouch
-  return resizeEvent
+  const movementX = currentTouch.pageX - pageX
+  const movementY = currentTouch.pageY - pageY
+  if (vertical) {
+    return new ResizableEvent(currentTouch.clientX, movementX)
+  } else {
+    return new ResizableEvent(currentTouch.clientY, movementY)
+  }
 }
 
 export const getResizableEventFromMouse = (e: any, vertical: boolean): IResizableEvent => {
   e.preventDefault()
-  let resizeEvent: IResizableEvent
-  if (vertical) {
-    const {clientX, movementX} = e
-    resizeEvent = {
-      mouseCoordinate: clientX,
-      movement: movementX
-    }
-  } else {
-    const {clientY, movementY} = e
-    resizeEvent = {
-      mouseCoordinate: clientY,
-      movement: movementY
-    }
-  }
-  return resizeEvent
+  const {clientX, clientY, movementX, movementY} = e
+  return vertical ? new ResizableEvent(clientX, movementX) : new ResizableEvent(clientY, movementY)
 }
 
 export const getResizableEvent = (e: any, vertical: boolean, previousTouchEvent: any): IResizableEvent => {
