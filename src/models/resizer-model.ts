@@ -20,7 +20,7 @@ export class ResizerModel {
     this.index = index
     this.id = `${RESIZER}-${paneProps.id}`
     this.isStorPresent = !store.empty
-    this.resizerSize = resizerSize
+    this.resizerSize = paneProps.resizerSize || resizerSize
 
     if (this.isStorPresent) {
       const storedResizer = store.getStoredResizer(this.id)
