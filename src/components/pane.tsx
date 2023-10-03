@@ -12,7 +12,6 @@ export const Pane = (props: IPane) => {
   const {
     className,
     children,
-    size,
     resizer,
     id
   } = props
@@ -29,9 +28,7 @@ export const Pane = (props: IPane) => {
       node.classList.remove('full-page-class')
     }
 
-    const onFullSize = () => {
-      onCloseFullSize()
-    }
+    const onFullSize = () => onCloseFullSize()
 
     const onFullPage = () => {
       node.style.removeProperty('height')
@@ -54,7 +51,7 @@ export const Pane = (props: IPane) => {
   })
 
   const style = context.getPaneSizeStyle(id)
-  // Need to add visibility check
+
   return (
     <Fragment>
       <div

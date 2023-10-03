@@ -1,27 +1,27 @@
 import {useEffect} from 'react'
-import {closeFullSizeFn, restoreDefaultFn, setVisibilityFn, toFullPageFn, toFullSizeFn} from '../utils/api'
-import {IContextDetails, IKeyToBoolMap} from '../@types'
-import {createMap, getIdsKey} from '../utils/util'
-import {PaneModel} from '../models/pane-model'
+import {
+  closeFullSizeFn, restoreDefaultFn,
+  setVisibilityFn, toFullPageFn, toFullSizeFn
+} from '../utils/api'
+import {IContextDetails, IKeyToBoolMap, IResizableContext} from '../@types'
+import {createMap} from '../utils/util'
 
-export const useResizableApi = (context: any, props: any) => {
+export const useResizableApi = (context: IResizableContext, props: any) => {
+  const {getIdToSizeMap, storage} = context
   const contextDetails = context.contextDetails as IContextDetails
-  const {onReady, onChangeVisibility} = props
-  const toFullPage = (paneId: string) => {
-    toFullPageFn(contextDetails.panesList, paneId)
-  }
 
-  const toFullSize = (paneId: string) => {
-    toFullSizeFn(contextDetails, paneId)
-  }
+  const {
+    onReady,
+    onChangeVisibility, onResizeStop
+  } = props
 
-  const closeFullSize = () => {
-    closeFullSizeFn(contextDetails)
-  }
+  const toFullPage = (paneId: string) => toFullPageFn(contextDetails.panesList, paneId)
 
-  const restoreDefault = () => {
-    restoreDefaultFn(contextDetails)
-  }
+  const toFullSize = (paneId: string) => toFullSizeFn(contextDetails, paneId)
+
+  const closeFullSize = () => closeFullSizeFn(contextDetails)
+
+  const restoreDefault = () => restoreDefaultFn(contextDetails)
 
   const setVisibility = (param: IKeyToBoolMap) => {
     const {
@@ -30,13 +30,15 @@ export const useResizableApi = (context: any, props: any) => {
 
     if (!newVisibilityModel) {
       contextDetails.newVisibilityModel = true
-      panesList.forEach((pane) => pane.setOldVisibilityModel())
+      panesList.forEach(pane => pane.setOldVisibilityModel())
     }
 
     setVisibilityFn(contextDetails, param)
     const visibilityMap = createMap(contextDetails.panesList, 'visibility')
 
-    context.storage.setStorage(context)
+    storage.setStorage(context)
+    const sisesMap = getIdToSizeMap()
+    onResizeStop(sisesMap)
     onChangeVisibility(visibilityMap)
   }
 

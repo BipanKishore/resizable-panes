@@ -15,10 +15,10 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   useEffect(() => {
     onResizeClearSizesMapFromStore(storeKey as string, sessionStore)
   }, [])
-  // useEffect(() => {
-  //   console.log('v-- contextDetails', context.contextDetails)
-  // }, [context])
-  // useMountingConsole('ResizablePaneProvider')
+  useEffect(() => {
+    console.log('v-- contextDetails', context.contextDetails)
+  }, [context])
+  useMountingConsole('ResizablePaneProvider')
   return (
     <ResizablePaneContext.Provider value={context} >
       <ResizablePanes {...props}/>

@@ -1,9 +1,8 @@
 import {ReactNode, isValidElement} from 'react'
 import {IBooleanOrUndefined, IStoreModel, IStorePaneModel} from '../@types'
 import {PaneModel} from '../models/pane-model'
-import {findById} from './util'
 import {toRatioModeFn} from './resizable-pane'
-import {getPanesSizeSum, getResizerSum} from './panes'
+import {getResizerSum} from './panes'
 import {ResizerModel} from '../models/resizer-model'
 
 const setItem = (storeKey: string, session: IBooleanOrUndefined, value: IStoreModel) => {
@@ -37,7 +36,7 @@ export class ResizeStorage {
     this.getStorage()
   }
 
-  setStorage (context: any, _containerSize: number) {
+  setStorage (context: any, _containerSize?: number) {
     const {getContainerRect, panesList, vertical, resizersList} = context.contextDetails
     const {storeKey, sessionStore} = this
     const {width, height} = getContainerRect()
@@ -124,7 +123,6 @@ export class ResizeStorage {
         isVisibilityChanged = true
       }
       pane.size = panesMap[pane.id].size
-      // console.log('pane.size pane.size pane.size ', pane.size, pane.id, panesMap[pane.id].size)
     })
 
     if (isVisibilityChanged) {

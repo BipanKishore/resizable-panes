@@ -1,6 +1,5 @@
-import {ZERO} from '../constant'
 import {ResizeStorage} from '../utils/storage'
-
+export const RESIZER = 'resizer'
 export class ResizerModel {
   api: any
   visibility: boolean
@@ -9,7 +8,7 @@ export class ResizerModel {
   isRegistered: boolean = false
   isStorPresent: boolean = false
   constructor (paneProps: any, resizableProps: any, store: ResizeStorage) {
-    this.id = 'resizer-' + paneProps.id
+    this.id = `${RESIZER}-${paneProps.id}`
     const storedResizer = store.getStoredResizer(this.id)
     if (storedResizer) {
       this.isStorPresent = true

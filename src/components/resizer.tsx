@@ -1,6 +1,6 @@
 import React, {
   useState,
-  useContext, useCallback, useEffect,
+  useContext, useCallback,
   isValidElement, cloneElement, useRef
 } from 'react'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
@@ -24,7 +24,7 @@ export const Resizer = (props: IResizer) => {
   const isNotLastIndex = index < (myChildren.length - 1)
   const previousTouchEvent:any = useRef()
 
-  const [isVisibile, setIsVisibility] = useState(true)
+  const [isVisibile, setVisibility] = useState(true)
   const [isMouseDown, setIsMouseDown] = useState(false)
 
   const onMouseMove = useCallback((e: any) => {
@@ -67,10 +67,6 @@ export const Resizer = (props: IResizer) => {
     id,
     onMoveEnd
   ])
-
-  const setVisibility = (visibility: boolean) => {
-    setIsVisibility(visibility)
-  }
 
   const getSize = (node: any) => {
     if (!isVisibile) {

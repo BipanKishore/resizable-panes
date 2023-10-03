@@ -295,6 +295,5 @@ export class PaneModel {
     this.size = this.oldVisibleSize
     this.visibility = this.oldVisibility
     this.storedSize = this.oldStoredSize
-    // console.log('-------', this.size, this.visibility, this.storedSize)
   }
 }

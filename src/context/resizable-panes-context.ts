@@ -1,5 +1,4 @@
-import {ReactNode, createContext} from 'react'
-import {PaneModel} from '../models/pane-model'
+import {createContext} from 'react'
 import {createMap, findById} from '../utils/util'
 import {DIRECTIONS, RATIO, ZERO} from '../constant'
 import {
