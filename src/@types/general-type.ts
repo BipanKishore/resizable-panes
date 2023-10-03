@@ -16,3 +16,4 @@ export interface IResizableEvent {
 export type addAndRemoveType = '+'| '-'
 
 export type IBooleanOrUndefined = boolean | undefined
+export type IStringOrUndefined = string | undefined

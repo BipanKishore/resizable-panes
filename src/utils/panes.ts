@@ -37,10 +37,10 @@ export const getPanesSizeSum = (panesList: PaneModel[], start: number, end: numb
   return sum
 }
 
-export const getResizerSum = (resizersList: any[], start: number, end: number) => {
+export const getResizerSum = (resizersList: ResizerModel[], start: number, end: number) => {
   let sum = 0
   for (let i = start; i <= end; i++) {
-    sum += resizersList[i].getSize()
+    sum += resizersList[i].size
   }
   return sum
 }
@@ -130,14 +130,16 @@ export const createPaneModelList = (children: ReactNode[], props: IResizablePane
   return paneList
 }
 
-export const createResizerModelList = (children: ReactNode[], props: IResizablePanesProps, store: ResizeStorage) => {
+export const createResizerModelList = (children: ReactNode[], resizerSize: number, store: ResizeStorage) => {
   const resizersList: ResizerModel[] = []
+  let i = 0
   for (const child of children) {
     if (isValidElement(child)) {
       resizersList.push(
-        new ResizerModel(child.props, props, store)
+        new ResizerModel(child.props, resizerSize, store, i)
       )
     }
+    ++i
   }
   return resizersList
 }

@@ -1,5 +1,5 @@
 import {ReactNode, isValidElement} from 'react'
-import {IBooleanOrUndefined, IStoreModel, IStorePaneModel} from '../@types'
+import {IBooleanOrUndefined, IStoreModel, IStorePaneModel, IStringOrUndefined} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {toRatioModeFn} from './resizable-pane'
 import {getResizerSum} from './panes'
@@ -26,11 +26,11 @@ export const onResizeClearSizesMapFromStore = (storeKey: string, session: boolea
 
 export class ResizeStorage {
   store: any = null
-  storeKey: string
+  storeKey: IStringOrUndefined
   sessionStore: IBooleanOrUndefined
   empty = false
 
-  constructor (storeKey: string, sessionStore: IBooleanOrUndefined) {
+  constructor (storeKey: IStringOrUndefined, sessionStore: IBooleanOrUndefined) {
     this.storeKey = storeKey
     this.sessionStore = sessionStore
     this.getStorage()

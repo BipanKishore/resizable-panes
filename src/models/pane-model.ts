@@ -14,7 +14,7 @@ export class PaneModel {
   defaultMinSize: number
   maxSize: number
   defaultMaxSize: number
-  storedSize: number
+  storedSize: number = 0
 
   vertical: boolean
 
@@ -35,7 +35,7 @@ export class PaneModel {
     const storedPane = store.getStoredPane(id)
     if (storedPane) {
       const {size, defaultMaxSize, defaultMinSize, visibility, storedSize} = storedPane
-      keyConsole({size, defaultMaxSize, defaultMinSize, visibility, storedSize}, 'v--------- ' + typeof storedSize)
+      // keyConsole({size, defaultMaxSize, defaultMinSize, visibility, storedSize}, 'v--------- ' + typeof storedSize)
       this.initializeSizes(size, defaultMinSize, defaultMaxSize as number, storedSize, visibility)
     } else {
       this.initializeSizes(size, minSize, maxSize, size)
@@ -141,26 +141,6 @@ export class PaneModel {
   removeVisibilitySize (sizeChange: number) {
     const newSize = this.size - sizeChange
     return this.setVisibilitySize(newSize)
-  }
-
-  setVisibility (visibility: boolean) {
-    if (this.visibility === visibility) {
-      return this.visibility ? this.size : this.storedSize
-    }
-
-    this.visibility = visibility
-    if (visibility) {
-      this.size = this.storedSize as number
-      this.minSize = this.defaultMinSize
-      this.maxSize = this.defaultMaxSize
-      return this.size
-    } else {
-      this.storedSize = this.size
-      this.size = 0
-      this.minSize = 0
-      this.maxSize = 0
-      return this.storedSize
-    }
   }
 
   addSize (sizeChange: number) {
@@ -282,6 +262,29 @@ export class PaneModel {
   fixChange (key: IPaneNumericKeys, change: number) {
     if (this.visibility) {
       this[key] = this[key] + change
+    }
+  }
+
+  setVisibility (visibility: boolean) {
+    const currentLocalVisibility = this.visibility
+    if (currentLocalVisibility === visibility) {
+      return 0
+    }
+    this.visibility = visibility
+
+    if (visibility) {
+      this.size = this.storedSize as number
+      this.minSize = this.defaultMinSize
+      this.maxSize = this.defaultMaxSize
+    } else {
+      this.storedSize = this.size
+      this.size = 0
+      this.minSize = 0
+      this.maxSize = 0
+    }
+
+    if (currentLocalVisibility !== visibility) {
+      return this.storedSize
     }
   }
 

@@ -24,7 +24,7 @@ export const Resizer = (props: IResizer) => {
   const isNotLastIndex = index < (myChildren.length - 1)
   const previousTouchEvent:any = useRef()
 
-  const [isVisibile, setVisibility] = useState(true)
+  const [isVisibile, setVisibility] = useState(isNotLastIndex)
   const [isMouseDown, setIsMouseDown] = useState(false)
 
   const onMouseMove = useCallback((e: any) => {
@@ -68,10 +68,7 @@ export const Resizer = (props: IResizer) => {
     onMoveEnd
   ])
 
-  const getSize = (node: any) => {
-    if (!isVisibile) {
-      return 0
-    }
+  const getVisibleSize = (node: any) => {
     if (children) {
       const {height, width} = node.getBoundingClientRect()
       return vertical ? width : height
@@ -82,21 +79,20 @@ export const Resizer = (props: IResizer) => {
   const onNewRef = (node: any) => {
     context.registerResizer({
       setVisibility,
-      getSize: () => getSize(node),
-      visibleSize: getSize(node),
-      visibility: true
+      getVisibleSize: () => getVisibleSize(node),
+      visibility: isNotLastIndex
     }, id)
   }
 
   const onEmptyRef = (previousNode: any) => {
     context.registerResizer({
       setVisibility,
-      getSize: () => getSize(previousNode),
-      visibleSize: getSize(previousNode),
+      getVisibleSize: () => getVisibleSize(previousNode),
       visibility: false
     }, id)
   }
 
+  // Does not run for the last element
   const [setResizerRef]: any = useHookWithRefCallback(onNewRef, onEmptyRef)
 
   const className = joinClassName({

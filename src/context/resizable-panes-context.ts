@@ -17,14 +17,15 @@ import {ResizeStorage} from '../utils/storage'
 import {IResizableContext, IResizablePaneProviderProps} from '../@types'
 
 export const getResizableContext = (props: IResizablePaneProviderProps): IResizableContext => {
-  const {vertical, children, unit, storeKey, sessionStore} = props
+  const {vertical, children, unit, storeKey, sessionStore, resizerSize} = props
   const myChildren = toArray(children)
 
   const storage = new ResizeStorage(storeKey, sessionStore)
+  const panesList = createPaneModelList(myChildren, props, storage)
   const contextDetails: any = {
     vertical,
-    panesList: createPaneModelList(myChildren, props, storage),
-    resizersList: createResizerModelList(myChildren, props, storage),
+    panesList,
+    resizersList: createResizerModelList(myChildren, resizerSize as number, storage),
     isSetRatioMode: false,
     newVisibilityModel: false
   }

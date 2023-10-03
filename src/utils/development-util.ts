@@ -26,7 +26,7 @@ export const minMaxTotal = (serviceRefCurrent: IServiceRef) => {
 
   // const paneSizeTotal = sum
   const paneSizeTotal = sum / 2
-  console.warn('SIZE SUM', sum, paneSizeTotal, 'max allowd', maxPaneSize)
+  console.warn(`Valid Sum: [${sum}, ${paneSizeTotal}], value :${maxPaneSize}`)
   if ((Math.trunc(maxPaneSize) !== Math.trunc(sum) && Math.trunc(maxPaneSize) !== Math.trunc(paneSizeTotal))) {
     throw new Error(`Max Pane sum total: ${maxPaneSize} = ${sum} or ${maxPaneSize} = ${paneSizeTotal}`)
   }

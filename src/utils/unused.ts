@@ -30,3 +30,9 @@ export const toRatioMap = (sizeMap: any, total: number) => {
 }
 
 export const getIdsKey = (list: any[]) => list.map((pane) => pane.visibility ? pane.id : '').join('')
+
+export const throwForNonZero = (value: any, id: string) => {
+  if (typeof value !== 'number') {
+    throw new Error(`${id} -- ${value} `)
+  }
+}

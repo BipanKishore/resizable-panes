@@ -25,12 +25,14 @@ export const useResizableApi = (context: IResizableContext, props: any) => {
 
   const setVisibility = (param: IKeyToBoolMap) => {
     const {
-      panesList, newVisibilityModel
+      panesList, newVisibilityModel,
+      resizersList
     } = contextDetails
 
     if (!newVisibilityModel) {
       contextDetails.newVisibilityModel = true
       panesList.forEach(pane => pane.setOldVisibilityModel())
+      resizersList.forEach(resizer => resizer.setOldVisibilityModel())
     }
 
     setVisibilityFn(contextDetails, param)

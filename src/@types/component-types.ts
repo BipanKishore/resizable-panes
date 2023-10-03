@@ -27,9 +27,10 @@ export interface IResizablePanesPropsBase {
 }
 
 export interface IResizablePaneProviderProps extends IResizablePanesPropsBase {
-  storeKey: string,
-  sessionStore: boolean,
-  resizer: ReactNode
+  storeKey?: string,
+  sessionStore?: boolean,
+  resizer?: ReactNode,
+  resizerSize?: number
 }
 
 export interface IResizablePanesProps extends IResizablePanesPropsBase {
@@ -42,7 +43,8 @@ export interface IPane {
   children?: ReactNode[] | ReactNode,
   maxSize?: number
   minSize?: number,
-  resizer?: ReactNode
+  resizer?: ReactNode,
+  resizerSize?: number
 }
 
 export interface IPaneRef {
