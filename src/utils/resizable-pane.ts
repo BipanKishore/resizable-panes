@@ -363,6 +363,6 @@ export const toRatioModeFn = (panesList: PaneModel[], containerSize: number) => 
   const sizeSum = getPanesSizeSum(panesList, 0, panesList.length - 1)
   const leftOverTotalSize = containerSize - sizeSum
   const changeOperation = leftOverTotalSize < 0 ? '-' : '+'
-  change1PixelToPanes(panesList, Math.abs(leftOverTotalSize), changeOperation, 'size', 'defaultSize')
+  change1PixelToPanes(panesList, Math.abs(leftOverTotalSize), changeOperation)
   setUISizesFn(panesList)
 }

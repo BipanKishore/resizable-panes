@@ -1,5 +1,5 @@
 import {ReactNode, isValidElement} from 'react'
-import {IPaneNumericKeys, IResizablePanesProps, addAndRemoveType} from '../@types'
+import {IResizablePanesProps, addAndRemoveType} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
 import {ResizerModel} from '../models/resizer-model'
@@ -91,7 +91,7 @@ const fixChangeCallBack = (pane: PaneModel, change: number,
 }
 
 export const change1PixelToPanes = (panesList: PaneModel[], sizeChange: number,
-  operation: addAndRemoveType, ...keys: IPaneNumericKeys[]) => {
+  operation: addAndRemoveType) => {
   let count = 0
   const len = panesList.length
   let index: number
