@@ -8,13 +8,13 @@ export class ResizerModel {
   visibleSize : number = 0
   id: string
   isRegistered: boolean = false
-  isStorPresent: boolean = false
+  isStorPresent: boolean
 
   constructor (paneProps: any, resizableProps: any, store: ResizeStorage) {
     this.id = `${RESIZER}-${paneProps.id}`
-    const storedResizer = store.getStoredResizer(this.id)
-    if (storedResizer) {
-      this.isStorPresent = true
+    this.isStorPresent = !store.empty
+    if (this.isStorPresent) {
+      const storedResizer = store.getStoredResizer(this.id)
       this.visibility = storedResizer.visibility
     }
 
@@ -22,13 +22,19 @@ export class ResizerModel {
   }
 
   register (api: any) {
-    if (!this.isRegistered && this.isStorPresent) {
-      api.setVisibility(this.visibility)
+    if (!this.isRegistered) {
+      if (this.isStorPresent) {
+        api.setVisibility(this.visibility)
+      } else {
+        this.visibility = api.visibility
+      }
+    } else {
+      this.visibility = api.visibility
     }
-    this.isRegistered = true
-    this.api = api
+
     this.visibleSize = api.visibleSize
-    this.visibility = api.visibility
+    this.api = api
+    this.isRegistered = true
   }
 
   setVisibility (visibility: boolean) {
