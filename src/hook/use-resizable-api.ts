@@ -3,12 +3,11 @@ import {
   closeFullSizeFn, restoreDefaultFn,
   setVisibilityFn, toFullPageFn, toFullSizeFn
 } from '../utils/api'
-import {IContextDetails, IKeyToBoolMap, IResizableContext} from '../@types'
+import {IKeyToBoolMap, IResizableContext} from '../@types'
 import {createMap} from '../utils/util'
 
 export const useResizableApi = (context: IResizableContext, props: any) => {
-  const {getIdToSizeMap, storage} = context
-  const contextDetails = context.contextDetails as IContextDetails
+  const {getIdToSizeMap, storage, contextDetails} = context
 
   const {
     onReady,
