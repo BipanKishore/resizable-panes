@@ -1,5 +1,5 @@
 import {IServiceRef} from '../@types'
-import {MINUS_ONE} from '../constant'
+import {MINUS, MINUS_ONE, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
 import {getList, localConsole, setPaneList} from './development-util'
 import {
@@ -362,7 +362,7 @@ export const toRatioModeFn = (panesList: PaneModel[], containerSize: number) => 
 
   const sizeSum = getPanesSizeSum(panesList, 0, panesList.length - 1)
   const leftOverTotalSize = containerSize - sizeSum
-  const changeOperation = leftOverTotalSize < 0 ? '-' : '+'
+  const changeOperation = leftOverTotalSize < 0 ? MINUS : PLUS
   change1PixelToPanes(panesList, Math.abs(leftOverTotalSize), changeOperation)
   setUISizesFn(panesList)
 }

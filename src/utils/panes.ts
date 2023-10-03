@@ -3,6 +3,7 @@ import {IResizablePanesProps, addAndRemoveType} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
 import {ResizerModel} from '../models/resizer-model'
+import {PLUS} from '../constant'
 
 export const syncAxisSizesFn = (panesList: PaneModel[]) => {
   panesList.forEach(pane => pane.syncAxisSize())
@@ -86,7 +87,7 @@ export const findIndexInChildrenbyId = (children: any, _id: string) => {
 
 const fixChangeCallBack = (pane: PaneModel, change: number,
   operation: addAndRemoveType) => {
-  const newSize = pane.size + (operation === '+' ? change : -change)
+  const newSize = pane.size + (operation === PLUS ? change : -change)
   pane.initializeSize(newSize)
 }
 

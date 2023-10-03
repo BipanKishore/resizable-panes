@@ -24,3 +24,5 @@ export const RESIZER = 'resizer'
 
 export const VISIBILITY = 'visibility'
 export const SIZE = 'size'
+export const PLUS = '+'
+export const MINUS = '-'
