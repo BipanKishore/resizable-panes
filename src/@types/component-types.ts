@@ -9,6 +9,12 @@ export type onResizeType = (param: IMapIdToSize) => void
 export type onReadyType = (api: IResizableApi) => void
 export type UnitTypes = 'ratio' | 'pixel' | undefined
 
+export type IGetMapApiParam = 'size' | 'visibility'
+
+export interface IGetMaP {
+  [key: string]: number | boolean
+}
+
 export interface IResizablePanesPropsBase {
   className?: string,
   vertical?: boolean,

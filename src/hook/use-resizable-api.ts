@@ -3,8 +3,9 @@ import {
   closeFullSizeFn, restoreDefaultFn,
   setVisibilityFn, toFullPageFn, toFullSizeFn
 } from '../utils/api'
-import {IKeyToBoolMap, IResizableContext} from '../@types'
+import {IGetMaP, IGetMapApiParam, IKeyToBoolMap, IResizableContext} from '../@types'
 import {createMap} from '../utils/util'
+import {VISIBILITY} from '../constant'
 
 export const useResizableApi = (context: IResizableContext, props: any) => {
   const {getIdToSizeMap, storage, contextDetails} = context
@@ -33,12 +34,16 @@ export const useResizableApi = (context: IResizableContext, props: any) => {
     }
 
     setVisibilityFn(contextDetails, param)
-    const visibilityMap = createMap(contextDetails.panesList, 'visibility')
+    const visibilityMap = createMap(contextDetails.panesList, VISIBILITY)
 
     storage.setStorage(context)
     const sisesMap = getIdToSizeMap()
     onResizeStop(sisesMap)
     onChangeVisibility(visibilityMap)
+  }
+
+  const getMap = (...keys: IGetMapApiParam[]): IGetMaP => {
+    return createMap(contextDetails.panesList, ...keys)
   }
 
   useEffect(() => {
@@ -47,7 +52,8 @@ export const useResizableApi = (context: IResizableContext, props: any) => {
       closeFullSize,
       restoreDefault,
       toFullPage,
-      setVisibility
+      setVisibility,
+      getMap
     }
 
     onReady(api)

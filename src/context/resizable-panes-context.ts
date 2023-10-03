@@ -1,6 +1,6 @@
 import {createContext} from 'react'
 import {createMap, findById} from '../utils/util'
-import {DIRECTIONS, RATIO, ZERO} from '../constant'
+import {DIRECTIONS, RATIO, SIZE, ZERO} from '../constant'
 import {
   createPaneModelList,
   createResizerModelList,
@@ -72,7 +72,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   const getIdToSizeMap = () => {
-    return createMap(contextDetails.panesList, 'size')
+    return createMap(contextDetails.panesList, SIZE)
   }
 
   const setMouseDownAndPaneAxisDetails = ({mouseCoordinate}: any, id: string) => {

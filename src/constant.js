@@ -21,3 +21,6 @@ export const PANE_MODE = {
 export const RATIO = 'ratio'
 
 export const RESIZER = 'resizer'
+
+export const VISIBILITY = 'visibility'
+export const SIZE = 'size'

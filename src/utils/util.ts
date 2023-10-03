@@ -1,4 +1,4 @@
-import {IAnyMap, IMapIdToSize, IPaneModelKey, IStorePaneModel} from '../@types'
+import {IAnyMap, IPaneModelKey} from '../@types'
 import {PaneModel} from '../models/pane-model'
 
 export const noop = (_: any): any => _
