@@ -45,3 +45,9 @@ export interface IResizerApi {
     getVisibleSize: () => number,
     visibility: boolean
   }
+
+export interface IMovingLogicParams {
+    axisCoordinate: number,
+    panesList: PaneModel[],
+    activeIndex: number
+  }

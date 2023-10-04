@@ -45,7 +45,6 @@ export class ResizerModel {
   }
 
   // This method never runs for last Element
-
   register (api: IResizerApi) {
     this.api = api
     this.registerMe()

@@ -1,4 +1,4 @@
-import {IServiceRef} from '../@types'
+import {IMovingLogicParams, IResizableEvent, IServiceRef} from '../@types'
 import {MINUS, MINUS_ONE, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
 import {ResizerModel} from '../models/resizer-model'
@@ -8,13 +8,7 @@ import {
   getPanesSizeSum, getResizerSum, setUISizesFn, synPanesMaxToSize, synPanesMinToSize
 } from './panes'
 
-interface IGoingLogic {
-  axisCoordinate: number,
-  panesList: PaneModel[],
-  activeIndex: number
-}
-
-export const goingDownLogic = (e: any, {axisCoordinate, panesList, activeIndex}: IGoingLogic) => {
+export const goingDownLogic = (e: IResizableEvent, {axisCoordinate, panesList, activeIndex}: IMovingLogicParams) => {
   let sizeChange = e.mouseCoordinate - <number>axisCoordinate
   if (sizeChange < 0) {
     // throw new Error('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
@@ -33,7 +27,7 @@ export const goingDownLogic = (e: any, {axisCoordinate, panesList, activeIndex}:
   }
 }
 
-export const goingUpLogic = (e: any, {axisCoordinate, panesList, activeIndex}: IGoingLogic) => {
+export const goingUpLogic = (e: any, {axisCoordinate, panesList, activeIndex}: IMovingLogicParams) => {
   let sizeChange = axisCoordinate - e.mouseCoordinate
   if (sizeChange < 0) {
     // throw new Error('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
@@ -361,6 +355,7 @@ export const registerContainer = (context: any) => (node: any) => {
   context.registerContainer({getContainerRect: () => node.getBoundingClientRect()})
 }
 
+// getMaxContainerSizes need to use this
 export const toRatioModeFn = (panesList: PaneModel[], resizersList: ResizerModel[], containerSize: number) => {
   const maxRatioValue = getPanesSizeSum(panesList, 0, panesList.length - 1)
   panesList
