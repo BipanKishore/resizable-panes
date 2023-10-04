@@ -2,7 +2,7 @@ import {IServiceRef} from '../@types'
 import {MINUS, MINUS_ONE, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
 import {ResizerModel} from '../models/resizer-model'
-import {getList, localConsole, setPaneList} from './development-util'
+import {setPaneList} from './development-util'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
   getPanesSizeSum, getResizerSum, setUISizesFn, synPanesMaxToSize, synPanesMinToSize
@@ -63,8 +63,8 @@ export const setCurrentMinMax = (serviceRefCurrent: IServiceRef, index?: number)
 
   minMaxLogicUp(panesList, aMaxChangeUp - bMaxChangeUp, idx, nextIdx, 0, maxPaneSize)
 
-  localConsole(getList(panesList, 'minSize'), 'minSize')
-  localConsole(getList(panesList, 'maxSize'), 'maxSize')
+  // localConsole(getList(panesList, 'minSize'), 'minSize')
+  // localConsole(getList(panesList, 'maxSize'), 'maxSize')
   // setPaneList(panesList, ['minSize', 'maxSize'], null)
   const aMaxChangeDown = panesList[nextIdx].getMinDiff()
   const bMaxChangeDown = panesList[idx].getMaxDiff()
@@ -86,11 +86,11 @@ export const calculateAxes = (serviceRefCurrent: any) => {
 
   const bottomAxis = maxTopAxis + getMaxSizeSum(panesList, 0, idx) + resizerAddon
   const topAxis = maxTopAxis + getMinSizeSum(panesList, 0, idx) + resizerAddon
-  localConsole({
-    resizerAddon,
-    bottomAxis,
-    topAxis
-  }, 'calculateAxes')
+  // localConsole({
+  //   resizerAddon,
+  //   bottomAxis,
+  //   topAxis
+  // }, 'calculateAxes')
   return {
     bottomAxis,
     topAxis

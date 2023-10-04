@@ -5,6 +5,7 @@ import {setUISizesFn} from './panes'
 import {visibilityOperation, visibilityOperationHideResizer} from './resizable-pane'
 import {findIndex} from './util'
 
+// Need to check for hidden element
 export const restoreDefaultFn = ({panesList, resizersList}: IServiceRef) => {
   panesList.forEach((pane) => pane.restore())
   setResizersVisibility(resizersList, true)
