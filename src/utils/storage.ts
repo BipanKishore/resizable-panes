@@ -92,11 +92,6 @@ export class ResizeStorage {
     } as IStoreModel
   }
 
-  getStoredSize = (id: keyof IStorePaneModel, size: number) => {
-    const pane = this.getStoredPane(id)
-    return pane?.size ?? size
-  }
-
   // Removed from Call
   getStoredPane (id: keyof IStorePaneModel): IStorePaneModel | null {
     const {panesMap} = this.getStorage()
