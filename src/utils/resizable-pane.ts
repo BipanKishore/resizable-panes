@@ -332,6 +332,19 @@ export const visibilityOperation = (index: number, panesList: PaneModel[],
   }
 }
 
+export const visibilityOperationHideResizer = (index: number, panesList: PaneModel[],
+  sizeChange: number, visibility: boolean) => {
+  const operationKey = visibility ? 'removeVisibilitySize' : 'addVisibilitySize'
+
+  for (let i = index; i > MINUS_ONE; i--) {
+    sizeChange = panesList[i][operationKey](sizeChange)
+  }
+
+  for (let i = index + 1; i < panesList.length; i++) {
+    sizeChange = panesList[i][operationKey](sizeChange)
+  }
+}
+
 export const getMaxContainerSizes = ({getContainerRect, vertical, panesList, resizersList} :any) => {
   const {top, height, left, width} = getContainerRect()
   const maxTopAxis = vertical ? left : top
