@@ -337,12 +337,6 @@ export const getMaxContainerSizes = ({getContainerRect, vertical, panesList, res
   const maxTopAxis = vertical ? left : top
   const maxPaneSize = (vertical ? width : height) - getResizerSum(resizersList, 0, panesList.length - 2)
 
-  localStorage.setItem('maxsizes', JSON.stringify({
-    maxTopAxis,
-    maxPaneSize,
-    height
-  }))
-
   return {
     maxTopAxis,
     maxPaneSize

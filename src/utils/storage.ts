@@ -5,7 +5,7 @@ import {toRatioModeFn} from './resizable-pane'
 import {getResizerSum} from './panes'
 import {ResizerModel} from '../models/resizer-model'
 
-const setItem = (storeKey: string, session: IBooleanOrUndefined, value: IStoreModel) => {
+const setItem = (storeKey: IStringOrUndefined = '', session: IBooleanOrUndefined, value: IStoreModel) => {
   const stringifyMap = JSON.stringify(value)
   if (session) {
     sessionStorage.setItem(storeKey, stringifyMap)
