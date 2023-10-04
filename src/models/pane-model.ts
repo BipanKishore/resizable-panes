@@ -1,6 +1,6 @@
+/* eslint-disable complexity */
 import {IPaneNumericKeys, IStorePaneModel, keyOfPaneModel} from '../@types'
 import {ZERO} from '../constant'
-import {keyConsole} from '../utils/development-util'
 import {ResizeStorage} from '../utils/storage'
 import {ratioToNumber} from '../utils/util'
 
@@ -24,21 +24,23 @@ export class PaneModel {
   oldVisibleSize: number = 0
   oldVisibility: boolean = true
   oldStoredSize: number = 0
-
+  initiallyStorePresent: boolean = false
   // Development Variables
 
   constructor (paneProps: any, resizableProps: any, store: ResizeStorage) {
     const {
-      id, minSize = ZERO, size, maxSize = Infinity
+      id, minSize = ZERO, size, maxSize = Infinity, show
     } = paneProps
 
     const storedPane = store.getStoredPane(id)
     if (storedPane) {
+      this.initiallyStorePresent = true
       const {size, defaultMaxSize, defaultMinSize, visibility, storedSize} = storedPane
       // keyConsole({size, defaultMaxSize, defaultMinSize, visibility, storedSize}, 'v--------- ' + typeof storedSize)
       this.initializeSizes(size, defaultMinSize, defaultMaxSize as number, storedSize, visibility)
     } else {
-      this.initializeSizes(size, minSize, maxSize, size)
+      const freshSize = show ? size : 0
+      this.initializeSizes(freshSize, minSize, maxSize, size, show)
     }
 
     const {vertical} = resizableProps
@@ -64,7 +66,8 @@ export class PaneModel {
     this.storedSize = size
   }
 
-  initializeSizes (size: number, minSize: number, maxSize: number, storedSize: number, visibility: boolean = true) {
+  initializeSizes (size: number, minSize: number, maxSize: number, storedSize: number, visibility: boolean) {
+    console.log(this.id, size, minSize, maxSize, visibility, this.storedSize)
     this.initializeSize(size)
     this.minSize = minSize
     this.maxSize = maxSize
@@ -249,14 +252,14 @@ export class PaneModel {
     }
   }
 
+  // We never come here for the case of store
   toRatioMode (containerSize: number, maxRatioValue: number) {
-    if (this.visibility) {
-      const size = ratioToNumber(containerSize, maxRatioValue, this.size)
-      const minSize = ratioToNumber(containerSize, maxRatioValue, this.minSize)
-      const maxSize = ratioToNumber(containerSize, maxRatioValue, this.maxSize)
-      // Need to check if it is right
-      this.initializeSizes(size, minSize, maxSize, size)
-    }
+    const storeSize = ratioToNumber(containerSize, maxRatioValue, this.size)
+    const minSize = ratioToNumber(containerSize, maxRatioValue, this.minSize)
+    const maxSize = ratioToNumber(containerSize, maxRatioValue, this.maxSize)
+    // Need to check if it is right
+    const size = this.visibility ? storeSize : 0
+    this.initializeSizes(size, minSize, maxSize, storeSize, this.visibility)
   }
 
   fixChange (key: IPaneNumericKeys, change: number) {

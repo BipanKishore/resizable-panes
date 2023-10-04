@@ -2,9 +2,10 @@ import {IContextDetails, IKeyToBoolMap, IServiceRef} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {ResizerModel} from '../models/resizer-model'
 import {setUISizesFn} from './panes'
-import {visibilityOperation} from './resizable-pane'
+import {visibilityOperation, visibilityOperationHideResizer} from './resizable-pane'
 import {findIndex} from './util'
 
+// Need to check for hidden element
 export const restoreDefaultFn = ({panesList, resizersList}: IServiceRef) => {
   panesList.forEach((pane) => pane.restore())
   setResizersVisibility(resizersList, true)
@@ -21,6 +22,7 @@ const getVisibilityArray = (panesList: PaneModel[]) => {
   return indexList
 }
 
+// eslint-disable-next-line complexity
 export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBoolMap) => {
   const {
     panesList, resizersList
@@ -36,20 +38,30 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
     const index = findIndex(panesList, id)
 
     const sizeChange = pane.setVisibility(visibility) as number
-    const resizerSizeChange = resizersList[index].setVisibility(visibility)
 
-    visibilityOperation(index, panesList, sizeChange + resizerSizeChange, visibility)
+    visibilityOperation(index, panesList, sizeChange, visibility)
   }
 
   const visibilityList = getVisibilityArray(panesList)
-
   const lastVisibleIndex = visibilityList.pop()
-  if (lastVisibleIndex !== undefined) {
-    const resizerSizeChange = resizersList[lastVisibleIndex].setVisibility(false)
-    if (visibilityList.length) {
-      visibilityOperation(lastVisibleIndex, panesList, resizerSizeChange, false)
+
+  for (let i = 0; i < panesList.length; i++) {
+    if (i === lastVisibleIndex) {
+      continue
     }
-    if (visibilityList.length === 0) { panesList[lastVisibleIndex].addVisibilitySize(resizerSizeChange) }
+    const pane = panesList[i]
+    const {id} = pane
+    const visibility = Boolean(idMap[id])
+    const index = findIndex(panesList, id)
+
+    const resizerSizeChange = resizersList[index].setVisibility(visibility)
+
+    visibilityOperation(index, panesList, resizerSizeChange, visibility)
+  }
+
+  if (lastVisibleIndex !== undefined && resizersList[lastVisibleIndex].visibility) {
+    const resizerSizeChange = resizersList[lastVisibleIndex].setVisibility(false)
+    visibilityOperationHideResizer(lastVisibleIndex, panesList, resizerSizeChange, false)
   }
 
   setUISizesFn(panesList)

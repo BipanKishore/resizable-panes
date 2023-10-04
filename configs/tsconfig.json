@@ -10,10 +10,13 @@
       "moduleResolution": "node",
       "sourceMap": true,
       "allowSyntheticDefaultImports": true,
-      "declaration": true
+      "declaration": true,
+      "removeComments": true,
+      "disableSizeLimit": true
     },
-    "include": [
-      "../src"
+
+    "files": [
+      "../src/index.ts"
     ],
     "exclude": [
       "config",

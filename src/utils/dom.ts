@@ -5,11 +5,10 @@ import {
 import {DIRECTIONS, RATIO, ZERO} from '../constant'
 
 export const toPx = (size: number) => `${size}px`
-
-export const getSizeStyle = (vertical: IBooleanOrUndefined, size: number): ISizeStyle => {
-  const px = toPx(size)
-  return vertical ? {width: px} : {height: px}
-}
+export const getSizeKey = (vertical: boolean) => vertical ? 'width' : 'height'
+export const getSizeStyle = (vertical: IBooleanOrUndefined, size: number): ISizeStyle => ({
+  [getSizeKey(vertical as boolean)]: toPx(size)
+})
 
 export const joinClassName = (param: IJoinClassNameParam, notRequired: boolean | any = false) => {
   if (notRequired) {
@@ -30,9 +29,7 @@ export const getContainerClass = (vertical: boolean, className: string, unit: Un
   })
 }
 
-export function isTouchEvent (event: any): boolean {
-  return event.type.startsWith('touch')
-}
+export const isTouchEvent = (event: any) => event.type.startsWith('touch')
 
 const resizableEvent = (mouseCoordinate: number, movement: number) => ({
   mouseCoordinate,

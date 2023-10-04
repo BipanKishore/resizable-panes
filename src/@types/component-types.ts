@@ -44,14 +44,15 @@ export interface IPane {
   maxSize?: number
   minSize?: number,
   resizer?: ReactNode,
-  resizerSize?: number
+  resizerSize?: number,
+  show?: boolean
 }
 
 export interface IPaneRef {
   setSize: (size: number) => void,
-  onFullSize: () => void,
-  onFullPage: () => void,
-  onCloseFullSize: () => void,
+  // onFullSize: () => void,
+  // onFullPage: () => void,
+  // onCloseFullSize: () => void,
 }
 
 export interface IResizer {
@@ -115,7 +116,7 @@ export interface IResizableContext {
   registerResizer: any,
   registerContainer: any,
   getIdToSizeMap: any,
-  setMouseDownAndPaneAxisDetails: any,
+  setMouseDownDetails: any,
   vertical: boolean | undefined,
   calculateAndSetHeight: any,
   props: IResizablePaneProviderProps,

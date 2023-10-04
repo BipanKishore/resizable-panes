@@ -1,6 +1,6 @@
 {
   "name": "resizable-panes-react",
-  "version": "0.7.13",
+  "version": "0.7.14",
   "description": "A simple library for resizing elements in the browser",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -18,14 +18,22 @@
   },
   "keywords": [
     "resizable",
+    "resizable react",
     "resizable div",
+    "resizable div react",
     "resizable panel",
+    "resizable panel react",
     "resizable panes",
+    "resizable panes react",
     "resizable container",
+    "resizable container react",
     "resizable panes react",
     "split panes",
+    "split panes react",
     "multi split",
-    "resize"
+    "multi split react",
+    "resize",
+    "resize react"
   ],
   "author": "bipankishore@gmail.com",
   "license": "ISC",

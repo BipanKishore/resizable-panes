@@ -54,7 +54,7 @@ export const Resizer = (props: IResizer) => {
   const onMouseDown = useCallback((e: any) => {
     setIsMouseDown(true)
     const resizableEvent = getResizableEvent(e, vertical, previousTouchEvent)
-    context.setMouseDownAndPaneAxisDetails(resizableEvent, id)
+    context.setMouseDownDetails(resizableEvent, id)
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('touchmove', onTouchMove, {passive: false})
     document.addEventListener('mouseup', onMoveEnd)
