@@ -11,7 +11,7 @@ import {
   calculateAxes, goingDownLogic, goingUpLogic, setCurrentMinMax,
   toRatioModeFn
 } from '../utils/resizable-pane'
-import {minMaxTotal, sizesConsole} from '../utils/development-util'
+import {minMaxTotal} from '../utils/development-util'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
 import {IResizableContext, IResizablePaneProviderProps} from '../@types'
@@ -87,7 +87,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   const calculateAndSetHeight = (e: any) => {
     const {movement} = e
     if (movement) {
-      sizesConsole(contextDetails.panesList)
       setDirection(e)
       const isChangeRequired = setAxisConfig(e)
 

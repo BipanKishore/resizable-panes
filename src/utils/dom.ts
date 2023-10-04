@@ -40,12 +40,10 @@ export function isTouchEvent (event: any): boolean {
   return event.type.startsWith('touch')
 }
 
-class ResizableEvent {
-  mouseCoordinate: number
-  movement: number
-  constructor (mouseCoordinate: number, movement: number) {
-    this.mouseCoordinate = mouseCoordinate
-    this.movement = movement
+function resizableEvent (mouseCoordinate: number, movement: number) {
+  return {
+    mouseCoordinate,
+    movement
   }
 }
 
@@ -53,19 +51,17 @@ export const getResizableEventFromTouch = (e: any, vertical: boolean, previousTo
   const currentTouch = e.targetTouches[0]
   const {pageX = 0, pageY = 0} = previousTouchEvent.current ?? {}
   previousTouchEvent.current = currentTouch
-  const movementX = currentTouch.pageX - pageX
-  const movementY = currentTouch.pageY - pageY
   if (vertical) {
-    return new ResizableEvent(currentTouch.clientX, movementX)
+    return resizableEvent(currentTouch.clientX, currentTouch.pageX - pageX)
   } else {
-    return new ResizableEvent(currentTouch.clientY, movementY)
+    return resizableEvent(currentTouch.clientY, currentTouch.pageY - pageY)
   }
 }
 
 export const getResizableEventFromMouse = (e: any, vertical: boolean): IResizableEvent => {
   e.preventDefault()
   const {clientX, clientY, movementX, movementY} = e
-  return vertical ? new ResizableEvent(clientX, movementX) : new ResizableEvent(clientY, movementY)
+  return vertical ? resizableEvent(clientX, movementX) : resizableEvent(clientY, movementY)
 }
 
 export const getResizableEvent = (e: any, vertical: boolean, previousTouchEvent: any): IResizableEvent => {
