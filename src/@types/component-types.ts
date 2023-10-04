@@ -50,9 +50,9 @@ export interface IPane {
 
 export interface IPaneRef {
   setSize: (size: number) => void,
-  onFullSize: () => void,
-  onFullPage: () => void,
-  onCloseFullSize: () => void,
+  // onFullSize: () => void,
+  // onFullPage: () => void,
+  // onCloseFullSize: () => void,
 }
 
 export interface IResizer {

@@ -1,6 +1,6 @@
-import React, {useContext, Fragment} from 'react'
+import React, {useContext, Fragment, useEffect} from 'react'
 import {IPane} from '../@types'
-import {joinClassName, toPx} from '../utils/dom'
+import {getSizeKey, joinClassName, toPx} from '../utils/dom'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
 import {Resizer} from './resizer'
 import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
@@ -8,39 +8,51 @@ import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
 export const Pane = (props: IPane) => {
   const context: any = useContext(ResizablePaneContext)
 
-  const {resizer: parentResizer} = context.props
+  const {
+    vertical, registerPane, getPaneSizeStyle,
+    props: {
+      resizer: parentResizer
+    }
+  } = context
+
   const {
     className,
     children,
     resizer,
-    id
+    id,
+    show
   } = props
+
+  useEffect(() => {
+
+  }, [show])
 
   const [setPaneRef]: any = useHookWithRefCallback((node: any) => {
     const setSize = (size: number) => {
-      if (context.vertical) {
-        node.style.width = toPx(size)
-      } else {
-        node.style.height = toPx(size)
-      }
-    }
-    const onCloseFullSize = () => {
-      node.classList.remove('full-page-class')
+      node.style[getSizeKey(vertical)] = toPx(size)
     }
 
-    const onFullSize = () => onCloseFullSize()
+    // const onCloseFullSize = () => {
+    //   node.classList.remove('full-page-class')
+    // }
 
-    const onFullPage = () => {
-      node.style.removeProperty('height')
-      node.style.removeProperty('width')
-      node.classList.add('full-page-class')
-    }
+    // const onFullSize = () => onCloseFullSize()
 
-    context.registerPane({
-      setSize,
-      onFullSize,
-      onFullPage,
-      onCloseFullSize
+    // const onFullPage = () => {
+    //   node.style.removeProperty('height')
+    //   node.style.removeProperty('width')
+    //   node.classList.add('full-page-class')
+    // }
+
+    // registerPane({
+    //   setSize,
+    //   onFullSize,
+    //   onFullPage,
+    //   onCloseFullSize
+    // }, id)
+
+    registerPane({
+      setSize
     }, id)
   })
 
@@ -50,7 +62,7 @@ export const Pane = (props: IPane) => {
     [className]: className
   })
 
-  const style = context.getPaneSizeStyle(id)
+  const style = getPaneSizeStyle(id)
 
   return (
     <Fragment>
@@ -62,7 +74,6 @@ export const Pane = (props: IPane) => {
       >
         {children}
       </div>
-
       <Resizer id={id}>
         {resizer || parentResizer}
       </Resizer>
