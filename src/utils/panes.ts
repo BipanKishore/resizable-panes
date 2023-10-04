@@ -22,19 +22,11 @@ export const getSum = (list: any[], getNumber: (item:any) => number, start = 0, 
 }
 
 export const synPanesMaxToSize = (panesList: PaneModel[], start: number, end: number) => {
-  let sum = 0
-  for (let i = start; i <= end; i++) {
-    sum += panesList[i].synMaxToSize()
-  }
-  return sum
+  return getSum(panesList, (pane: PaneModel) => pane.synMaxToSize(), start, end)
 }
 
 export const synPanesMinToSize = (panesList: PaneModel[], start: number, end: number) => {
-  let sum = 0
-  for (let i = start; i <= end; i++) {
-    sum += panesList[i].synMinToSize()
-  }
-  return sum
+  return getSum(panesList, (pane: PaneModel) => pane.synMinToSize(), start, end)
 }
 
 export const getPanesSizeSum = (panesList: PaneModel[], start: number, end: number) => {
@@ -42,27 +34,15 @@ export const getPanesSizeSum = (panesList: PaneModel[], start: number, end: numb
 }
 
 export const getResizerSum = (resizersList: ResizerModel[], start: number, end: number) => {
-  let sum = 0
-  for (let i = start; i <= end; i++) {
-    sum += resizersList[i].size
-  }
-  return sum
+  return getSum(resizersList, (resizer: ResizerModel) => resizer.size, start, end)
 }
 
 export const getMaxSizeSum = (panesList: PaneModel[], start: number, end: number) => {
-  let sum = 0
-  for (let i = start; i <= end; i++) {
-    sum += panesList[i].maxSize
-  }
-  return sum
+  return getSum(panesList, (pane: PaneModel) => pane.maxSize, start, end)
 }
 
 export const getMinSizeSum = (panesList: PaneModel[], start: number, end: number) => {
-  let sum = 0
-  for (let i = start; i <= end; i++) {
-    sum += panesList[i].minSize
-  }
-  return sum
+  return getSum(panesList, (pane: PaneModel) => pane.minSize, start, end)
 }
 
 export const setDownMaxLimits = (panesList: PaneModel[], index: number) => {
