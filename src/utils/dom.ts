@@ -1,21 +1,15 @@
 import {
   IResizableEvent, IJoinClassNameParam,
-  UnitTypes, IBooleanOrUndefined
+  UnitTypes, IBooleanOrUndefined, ISizeStyle
 } from '../@types'
 import {DIRECTIONS, RATIO, ZERO} from '../constant'
 
-export const getSizeStyle = (vertical: IBooleanOrUndefined, size: number) => {
-  const style: any = {}
-  const px = toPx(size)
-  if (!vertical) {
-    style.height = px
-  } else {
-    style.width = px
-  }
-  return style
-}
-
 export const toPx = (size: number) => `${size}px`
+
+export const getSizeStyle = (vertical: IBooleanOrUndefined, size: number): ISizeStyle => {
+  const px = toPx(size)
+  return vertical ? {width: px} : {height: px}
+}
 
 export const joinClassName = (param: IJoinClassNameParam, notRequired: boolean | any = false) => {
   if (notRequired) {
