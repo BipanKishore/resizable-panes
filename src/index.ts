@@ -1,5 +1,3 @@
-export {PANE_MODE} from './constant'
-
 export {
   Pane as Panes,
   Pane,
