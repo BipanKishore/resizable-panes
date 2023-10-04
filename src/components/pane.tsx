@@ -58,8 +58,7 @@ export const Pane = (props: IPane) => {
 
   const classname = joinClassName({
     'overflow-hidden flex-shrink-0': true,
-    // @ts-ignore
-    [className]: className
+    [className as string]: className
   })
 
   const style = getPaneSizeStyle(id)

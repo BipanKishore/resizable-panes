@@ -29,9 +29,7 @@ export const getContainerClass = (vertical: boolean, className: string, unit: Un
   })
 }
 
-export function isTouchEvent (event: any): boolean {
-  return event.type.startsWith('touch')
-}
+export const isTouchEvent = (event: any) => event.type.startsWith('touch')
 
 const resizableEvent = (mouseCoordinate: number, movement: number) => ({
   mouseCoordinate,
