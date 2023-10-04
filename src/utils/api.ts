@@ -1,44 +1,9 @@
 import {IContextDetails, IKeyToBoolMap, IServiceRef} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {ResizerModel} from '../models/resizer-model'
-import {getPanesSizeSum, getResizerSum, setUISizesFn} from './panes'
+import {setUISizesFn} from './panes'
 import {visibilityOperation} from './resizable-pane'
 import {findIndex} from './util'
-
-export const toFullPageFn = (panesList: PaneModel[], paneId: string) => {
-  panesList.forEach((pane) => {
-    pane.synPreservedSize()
-    if (pane.id === paneId) {
-      pane.pane.onFullPage()
-    }
-  })
-}
-
-export const toFullSizeFn = (serviceRefCurrent: any, paneId: string) => {
-  const {panesList, resizersList} = serviceRefCurrent
-  const containerSize = getPanesSizeSum(panesList, 0, panesList.length - 1) +
-  getResizerSum(resizersList, 0, resizersList.length - 1)
-  panesList.forEach((pane: any) => {
-    pane.synPreservedSize()
-    if (pane.id === paneId) {
-      pane.size = containerSize
-      pane.pane.onFullSize()
-    } else {
-      pane.size = 0
-    }
-  })
-  setResizersVisibility(resizersList, false)
-  setUISizesFn(serviceRefCurrent.panesList)
-}
-
-export const closeFullSizeFn = ({panesList, resizersList}: IServiceRef) => {
-  panesList.forEach((pane) => {
-    pane.synSizeToStored()
-    pane.pane.onCloseFullSize()
-  })
-  setResizersVisibility(resizersList, true)
-  setUISizesFn(panesList)
-}
 
 export const restoreDefaultFn = ({panesList, resizersList}: IServiceRef) => {
   panesList.forEach((pane) => pane.restore())
@@ -79,9 +44,12 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
   const visibilityList = getVisibilityArray(panesList)
 
   const lastVisibleIndex = visibilityList.pop()
-  if (lastVisibleIndex) {
+  if (lastVisibleIndex !== undefined) {
     const resizerSizeChange = resizersList[lastVisibleIndex].setVisibility(false)
-    visibilityOperation(lastVisibleIndex, panesList, resizerSizeChange, false)
+    if (visibilityList.length) {
+      visibilityOperation(lastVisibleIndex, panesList, resizerSizeChange, false)
+    }
+    if (visibilityList.length === 0) { panesList[lastVisibleIndex].addVisibilitySize(resizerSizeChange) }
   }
 
   setUISizesFn(panesList)
