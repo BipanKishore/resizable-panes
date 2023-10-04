@@ -18,14 +18,23 @@
   },
   "keywords": [
     "resizable",
+    "resizable react",
     "resizable div",
+    "resizable div react",
     "resizable panel",
+    "resizable panel react",
     "resizable panes",
+    "resizable panes react",
     "resizable container",
+    "resizable container react",
     "resizable panes react",
     "split panes",
+    "split panes react",
     "multi split",
-    "resize"
+    "multi split react",
+    "resize",
+    "resize react"
+
   ],
   "author": "bipankishore@gmail.com",
   "license": "ISC",
