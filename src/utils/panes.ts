@@ -13,6 +13,14 @@ export const setUISizesFn = (panesList: PaneModel[]) => {
   panesList.forEach(pane => pane.setUISize())
 }
 
+export const getSum = (list: any[], getNumber: (item:any) => number, start = 0, end = list.length - 1) => {
+  let sum = 0
+  for (let i = start; i <= end; i++) {
+    sum += getNumber(list[i])
+  }
+  return sum
+}
+
 export const synPanesMaxToSize = (panesList: PaneModel[], start: number, end: number) => {
   let sum = 0
   for (let i = start; i <= end; i++) {
@@ -30,11 +38,7 @@ export const synPanesMinToSize = (panesList: PaneModel[], start: number, end: nu
 }
 
 export const getPanesSizeSum = (panesList: PaneModel[], start: number, end: number) => {
-  let sum = 0
-  for (let i = start; i <= end; i++) {
-    sum += panesList[i].getSize()
-  }
-  return sum
+  return getSum(panesList, (pane: PaneModel) => pane.getSize(), start, end)
 }
 
 export const getResizerSum = (resizersList: ResizerModel[], start: number, end: number) => {

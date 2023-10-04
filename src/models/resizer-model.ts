@@ -16,7 +16,8 @@ export class ResizerModel {
   visibilityChangedLast: boolean
 
   constructor (paneProps: IPane, resizerSize: number, store: ResizeStorage) {
-    this.id = `${RESIZER}-${paneProps.id}`
+    const {id, show} = paneProps
+    this.id = `${RESIZER}-${id}`
     this.isStorPresent = !store.empty
     this.resizerSize = paneProps.resizerSize || resizerSize
 
@@ -26,7 +27,7 @@ export class ResizerModel {
       // this.preSize = storedResizer.preSize
       // this.size = storedResizer.size
     } else {
-      this.visibility = false
+      this.visibility = show as boolean
       this.preSize = 0
       this.size = 0
     }
@@ -35,11 +36,7 @@ export class ResizerModel {
   registerMe () {
     switch (true) {
       case !this.isRegistered:
-        if (this.isStorPresent) {
-          this.api.setVisibility(this.visibility)
-        } else {
-          this.visibility = this.api.visibility
-        }
+        this.api.setVisibility(this.visibility)
         break
       case this.isRegistered:
         this.visibility = this.api.visibility

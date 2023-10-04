@@ -44,7 +44,8 @@ export interface IPane {
   maxSize?: number
   minSize?: number,
   resizer?: ReactNode,
-  resizerSize?: number
+  resizerSize?: number,
+  show?: boolean
 }
 
 export interface IPaneRef {
@@ -115,7 +116,7 @@ export interface IResizableContext {
   registerResizer: any,
   registerContainer: any,
   getIdToSizeMap: any,
-  setMouseDownAndPaneAxisDetails: any,
+  setMouseDownDetails: any,
   vertical: boolean | undefined,
   calculateAndSetHeight: any,
   props: IResizablePaneProviderProps,

@@ -58,19 +58,19 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const registerContainer = ({getContainerRect}: any) => {
     contextDetails.getContainerRect = getContainerRect
-    const {panesList} = contextDetails
+    const {panesList, resizersList} = contextDetails
 
     const {width, height} = getContainerRect()
     const containerSize = vertical ? width : height
     if (storage.empty && unit === RATIO && !contextDetails.isSetRatioMode) {
-      toRatioModeFn(panesList, containerSize)
+      toRatioModeFn(panesList, resizersList, containerSize)
       contextDetails.isSetRatioMode = true
     }
   }
 
   const getIdToSizeMap = () => createMap(contextDetails.panesList, SIZE)
 
-  const setMouseDownAndPaneAxisDetails = ({mouseCoordinate}: any, id: string) => {
+  const setMouseDownDetails = ({mouseCoordinate}: any, id: string) => {
     const index = findIndexInChildrenbyId(myChildren, id)
     setActiveIndex(index)
     contextDetails.prevDirection = DIRECTIONS.NONE
@@ -145,7 +145,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     registerResizer,
     registerContainer,
     getIdToSizeMap,
-    setMouseDownAndPaneAxisDetails,
+    setMouseDownDetails,
     vertical,
     calculateAndSetHeight,
     props,

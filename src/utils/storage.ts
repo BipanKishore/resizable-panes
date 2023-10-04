@@ -124,7 +124,7 @@ export class ResizeStorage {
     })
 
     if (isVisibilityChanged) {
-      toRatioModeFn(panesList, containerSize)
+      // toRatioModeFn(panesList, containerSize)
       context.contextDetails.isSetRatioMode = true
     }
   }

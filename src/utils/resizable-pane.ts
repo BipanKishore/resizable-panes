@@ -1,6 +1,7 @@
 import {IServiceRef} from '../@types'
 import {MINUS, MINUS_ONE, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
+import {ResizerModel} from '../models/resizer-model'
 import {getList, localConsole, setPaneList} from './development-util'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
@@ -360,7 +361,7 @@ export const registerContainer = (context: any) => (node: any) => {
   context.registerContainer({getContainerRect: () => node.getBoundingClientRect()})
 }
 
-export const toRatioModeFn = (panesList: PaneModel[], containerSize: number) => {
+export const toRatioModeFn = (panesList: PaneModel[], resizersList: ResizerModel[], containerSize: number) => {
   const maxRatioValue = getPanesSizeSum(panesList, 0, panesList.length - 1)
   panesList
     .forEach((pane: PaneModel) => {
