@@ -1,4 +1,4 @@
-import {IResizerApi, IStoreResizerModel} from '../@types'
+import {IPane, IResizerApi, IStoreResizerModel} from '../@types'
 import {RESIZER} from '../constant'
 import {ResizeStorage} from '../utils/storage'
 
@@ -16,7 +16,7 @@ export class ResizerModel {
   index: number
   visibilityChangedLast: boolean
 
-  constructor (paneProps: any, resizerSize: number, store: ResizeStorage, index: number) {
+  constructor (paneProps: IPane, resizerSize: number, store: ResizeStorage, index: number) {
     this.index = index
     this.id = `${RESIZER}-${paneProps.id}`
     this.isStorPresent = !store.empty
