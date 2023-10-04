@@ -34,12 +34,10 @@ export function isTouchEvent (event: any): boolean {
   return event.type.startsWith('touch')
 }
 
-function resizableEvent (mouseCoordinate: number, movement: number) {
-  return {
-    mouseCoordinate,
-    movement
-  }
-}
+const resizableEvent = (mouseCoordinate: number, movement: number) => ({
+  mouseCoordinate,
+  movement
+})
 
 export const getResizableEventFromTouch = (e: any, vertical: boolean, previousTouchEvent: any): IResizableEvent => {
   const currentTouch = e.targetTouches[0]
