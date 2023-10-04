@@ -36,7 +36,7 @@ export const Pane = (props: IPane) => {
       node.classList.add('full-page-class')
     }
 
-    context.registerPaneAndResizer({
+    context.registerPane({
       setSize,
       onFullSize,
       onFullPage,

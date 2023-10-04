@@ -30,13 +30,9 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     newVisibilityModel: false
   }
 
-  const syncAxisSizes = () => {
-    syncAxisSizesFn(contextDetails.panesList)
-  }
+  const syncAxisSizes = () => syncAxisSizesFn(contextDetails.panesList)
 
-  const setUISizes = () => {
-    setUISizesFn(contextDetails.panesList)
-  }
+  const setUISizes = () => setUISizesFn(contextDetails.panesList)
 
   const setCurrentMinMaxAndAxes = (index?: number) => {
     setCurrentMinMax(contextDetails, index)
@@ -47,7 +43,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     contextDetails.activeIndex = index
   }
 
-  const registerPaneAndResizer = (pane: any, id:string) => {
+  const registerPane = (pane: any, id:string) => {
     const index = findIndexInChildrenbyId(myChildren, id)
     contextDetails.panesList[index].registerPaneRef(pane)
   }
@@ -72,9 +68,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     }
   }
 
-  const getIdToSizeMap = () => {
-    return createMap(contextDetails.panesList, SIZE)
-  }
+  const getIdToSizeMap = () => createMap(contextDetails.panesList, SIZE)
 
   const setMouseDownAndPaneAxisDetails = ({mouseCoordinate}: any, id: string) => {
     const index = findIndexInChildrenbyId(myChildren, id)
@@ -147,7 +141,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   return {
     setActiveIndex,
-    registerPaneAndResizer,
+    registerPane,
     registerResizer,
     registerContainer,
     getIdToSizeMap,

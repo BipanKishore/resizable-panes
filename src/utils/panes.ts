@@ -132,14 +132,12 @@ export const createPaneModelList = (children: ReactNode[], props: IResizablePane
 
 export const createResizerModelList = (children: ReactNode[], resizerSize: number, store: ResizeStorage) => {
   const resizersList: ResizerModel[] = []
-  let i = 0
   for (const child of children) {
     if (isValidElement(child)) {
       resizersList.push(
-        new ResizerModel(child.props, resizerSize, store, i)
+        new ResizerModel(child.props, resizerSize, store)
       )
     }
-    ++i
   }
   return resizersList
 }

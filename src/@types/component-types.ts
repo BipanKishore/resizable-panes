@@ -111,7 +111,7 @@ export interface IContextDetails {
 
 export interface IResizableContext {
   setActiveIndex : (index: number) => void,
-  registerPaneAndResizer: any,
+  registerPane: any,
   registerResizer: any,
   registerContainer: any,
   getIdToSizeMap: any,

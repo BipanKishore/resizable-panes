@@ -13,11 +13,9 @@ export class ResizerModel {
   size: number
   preSize: number // previousVisible
   resizerSize: number
-  index: number
   visibilityChangedLast: boolean
 
-  constructor (paneProps: IPane, resizerSize: number, store: ResizeStorage, index: number) {
-    this.index = index
+  constructor (paneProps: IPane, resizerSize: number, store: ResizeStorage) {
     this.id = `${RESIZER}-${paneProps.id}`
     this.isStorPresent = !store.empty
     this.resizerSize = paneProps.resizerSize || resizerSize
