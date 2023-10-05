@@ -8,7 +8,7 @@ import {
   setUISizesFn, setUpMaxLimits, syncAxisSizesFn
 } from '../utils/panes'
 import {
-  calculateAxes, goingDownLogic, goingUpLogic, setCurrentMinMax,
+  calculateAxes, getMaxContainerSizes, goingDownLogic, goingUpLogic, setCurrentMinMax,
   toRatioModeFn
 } from '../utils/resizable-pane'
 import {minMaxTotal} from '../utils/development-util'
@@ -60,10 +60,9 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     contextDetails.getContainerRect = getContainerRect
     const {panesList, resizersList} = contextDetails
 
-    const {width, height} = getContainerRect()
-    const containerSize = vertical ? width : height
+    const {maxPaneSize} = getMaxContainerSizes(contextDetails)
     if (storage.empty && unit === RATIO && !contextDetails.isSetRatioMode) {
-      toRatioModeFn(panesList, resizersList, containerSize)
+      toRatioModeFn(panesList, resizersList, maxPaneSize)
       contextDetails.isSetRatioMode = true
     }
   }
