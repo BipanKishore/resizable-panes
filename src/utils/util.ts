@@ -27,12 +27,8 @@ export const createMap = (paneList: PaneModel[], ...keys: IPaneModelKey[]) => {
 
 export const isUndefinedOrNull = (value: any) => value === undefined || value === null
 
-export const findIndex = (list: any[], value: any, key = 'id') => {
-  return list.findIndex((item) => item[key] === value)
-}
+export const findIndex = (list: any[], value: any, key = 'id') =>
+  list.findIndex((item) => item[key] === value)
 
-export const ratioToNumber = (totalSize: number, maxRatioValue: number, size: number) => {
-  return Number(
-    (totalSize * (size / maxRatioValue)).toFixed(0)
-  )
-}
+export const ratioToNumber = (totalSize: number, maxRatioValue: number, size: number) =>
+  Number((totalSize * (size / maxRatioValue)).toFixed(0))

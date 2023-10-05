@@ -1,7 +1,6 @@
 import {ReactNode, isValidElement} from 'react'
 import {IBooleanOrUndefined, IStoreModel, IStorePaneModel, IStringOrUndefined} from '../@types'
 import {PaneModel} from '../models/pane-model'
-import {toRatioModeFn} from './resizable-pane'
 import {getResizerSum} from './panes'
 import {ResizerModel} from '../models/resizer-model'
 
