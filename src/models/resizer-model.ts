@@ -53,10 +53,13 @@ export class ResizerModel {
   }
 
   getSize () {
-    return this.visibility ? this.size : 0
+    return !this.isRegistered ? (this.visibility ? this.size : 0) : 0
   }
 
   setVisibility (visibility: boolean) {
+    if (!this.isRegistered) {
+      return 0
+    }
     const localVisibility = this.visibility
     this.visibility = visibility
 
