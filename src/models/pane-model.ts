@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import {IPaneNumericKeys, IStorePaneModel, keyOfPaneModel} from '../@types'
+import {IPaneNumericKeys, IResizablePaneProviderProps, IStorePaneModel, keyOfPaneModel} from '../@types'
 import {ZERO} from '../constant'
 import {ResizeStorage} from '../utils/storage'
 import {ratioToNumber} from '../utils/util'
@@ -27,7 +27,7 @@ export class PaneModel {
   initiallyStorePresent: boolean = false
   // Development Variables
 
-  constructor (paneProps: any, resizableProps: any, store: ResizeStorage) {
+  constructor (paneProps: any, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
     const {
       id, minSize = ZERO, size, maxSize = Infinity, show
     } = paneProps
@@ -36,7 +36,6 @@ export class PaneModel {
     if (storedPane) {
       this.initiallyStorePresent = true
       const {size, defaultMaxSize, defaultMinSize, visibility, storedSize} = storedPane
-      // keyConsole({size, defaultMaxSize, defaultMinSize, visibility, storedSize}, 'v--------- ' + typeof storedSize)
       this.initializeSizes(size, defaultMinSize, defaultMaxSize as number, storedSize, visibility)
     } else {
       const freshSize = show ? size : 0
@@ -67,7 +66,7 @@ export class PaneModel {
   }
 
   initializeSizes (size: number, minSize: number, maxSize: number, storedSize: number, visibility: boolean) {
-    console.log(this.id, size, minSize, maxSize, visibility, this.storedSize)
+    // console.log(this.id, size, minSize, maxSize, visibility, this.storedSize)
     this.initializeSize(size)
     this.minSize = minSize
     this.maxSize = maxSize

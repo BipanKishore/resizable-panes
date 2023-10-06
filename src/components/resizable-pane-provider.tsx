@@ -3,13 +3,19 @@ import {ResizablePaneContext, getResizableContext} from '../context/resizable-pa
 import {ResizablePanes} from './resizable-panes'
 import {noop} from '../utils/util'
 import {useResizableApi} from '../hook/use-resizable-api'
-// import {useMountingConsole} from '../utils/development-util'
+import {useMountingConsole} from '../utils/development-util'
 import {onResizeClearSizesMapFromStore} from '../utils/storage'
 import {IResizablePaneProviderProps} from '../@types'
 
 export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
-  const {storeKey, sessionStore} = props
+  const {storeKey, sessionStore, visibility} = props
   const [context] = useState(getResizableContext(props))
+
+  useEffect(() => {
+    console.log('ResizablePaneProvider')
+    context.setVisibility(visibility)
+  }, [visibility])
+
   // context.storage.readPaneChange(toArray(children), context)
   useResizableApi(context, props)
   useEffect(() => {
@@ -18,7 +24,7 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   // useEffect(() => {
   //   console.log('v-- contextDetails', context.contextDetails)
   // }, [context])
-  // useMountingConsole('ResizablePaneProvider')
+  useMountingConsole('ResizablePaneProvider')
   return (
     <ResizablePaneContext.Provider value={context} >
       <ResizablePanes {...props}/>
@@ -36,5 +42,6 @@ ResizablePaneProvider.defaultProps = {
   sessionStore: false,
   unit: undefined,
   resizer: undefined,
-  resizerSize: 2
+  resizerSize: 2,
+  visibility: {}
 }

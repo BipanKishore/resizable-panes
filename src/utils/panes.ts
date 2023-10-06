@@ -1,5 +1,5 @@
 import {ReactNode, isValidElement} from 'react'
-import {IResizablePanesProps, addAndRemoveType} from '../@types'
+import {IResizablePaneProviderProps, addAndRemoveType} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
 import {ResizerModel} from '../models/resizer-model'
@@ -8,8 +8,9 @@ import {PLUS} from '../constant'
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
   panesList.forEach(pane => pane.syncAxisSize())
 
-export const setUISizesFn = (panesList: PaneModel[]) =>
-  panesList.forEach(pane => pane.setUISize())
+export const setUISizesFn = (panesList: PaneModel[]) => {
+  return panesList.forEach(pane => pane.setUISize())
+}
 
 export function getSum <T> (list: T[], getNumber: (item:T) => number, start = 0, end = list.length - 1) {
   let sum = 0
@@ -92,7 +93,8 @@ export const change1PixelToPanes = (panesList: PaneModel[], sizeChange: number,
   }
 }
 
-export const createPaneModelList = (children: ReactNode[], props: IResizablePanesProps, store: ResizeStorage) => {
+export const createPaneModelList = (children: ReactNode[], props: IResizablePaneProviderProps,
+  store: ResizeStorage) => {
   const paneList: PaneModel[] = []
   for (const child of children) {
     if (isValidElement(child)) {
@@ -104,12 +106,13 @@ export const createPaneModelList = (children: ReactNode[], props: IResizablePane
   return paneList
 }
 
-export const createResizerModelList = (children: ReactNode[], resizerSize: number, store: ResizeStorage) => {
+export const createResizerModelList = (children: ReactNode[],
+  resizableProps: IResizablePaneProviderProps, store: ResizeStorage) => {
   const resizersList: ResizerModel[] = []
   for (const child of children) {
     if (isValidElement(child)) {
       resizersList.push(
-        new ResizerModel(child.props, resizerSize, store)
+        new ResizerModel(child.props, resizableProps, store)
       )
     }
   }

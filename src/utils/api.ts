@@ -12,14 +12,18 @@ export const restoreDefaultFn = ({panesList, resizersList}: IServiceRef) => {
   setUISizesFn(panesList)
 }
 
-const getVisibilityArray = (panesList: PaneModel[]) => {
+const getLastVisibleResizerIndexToHide = (panesList: boolean[]) => {
   const indexList: number[] = []
   for (let i = 0; i < panesList.length; i++) {
-    if (panesList[i].visibility) {
+    if (panesList[i]) {
       indexList.push(i)
     }
   }
-  return indexList
+  return indexList.pop() as number
+}
+
+const mapToArrayOrder = (panesList:PaneModel[], idMap: IKeyToBoolMap) => {
+  return panesList.map((pane) => Boolean(idMap[pane.id]))
 }
 
 // eslint-disable-next-line complexity
@@ -27,23 +31,25 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
   const {
     panesList, resizersList
   } = contextDetails
-
+  console.log('v----------------------setVisibilityFnsetVisibilityFnsetVisibilityFn ')
   panesList.forEach((pane) => pane.syncToOldVisibilityModel())
   resizersList.forEach(resizer => resizer.syncToOldVisibilityModel())
+
+  const newVisibilityList: boolean[] = mapToArrayOrder(panesList, idMap)
+  const lastVisibleIndex = getLastVisibleResizerIndexToHide(newVisibilityList)
 
   for (let i = 0; i < panesList.length; i++) {
     const pane = panesList[i]
     const {id} = pane
     const visibility = Boolean(idMap[id])
+
+    newVisibilityList.push(visibility)
     const index = findIndex(panesList, id)
 
     const sizeChange = pane.setVisibility(visibility) as number
 
     visibilityOperation(index, panesList, sizeChange, visibility)
   }
-
-  const visibilityList = getVisibilityArray(panesList)
-  const lastVisibleIndex = visibilityList.pop()
 
   for (let i = 0; i < panesList.length; i++) {
     if (i === lastVisibleIndex) {
@@ -64,6 +70,7 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
     visibilityOperationHideResizer(lastVisibleIndex, panesList, resizerSizeChange, false)
   }
 
+  console.log('v----------------------setUISizesFnsetUISizesFnsetUISizesFnsetUISizesFn ')
   setUISizesFn(panesList)
 }
 

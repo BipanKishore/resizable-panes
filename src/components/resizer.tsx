@@ -4,17 +4,19 @@ import React, {
   isValidElement, cloneElement, useRef
 } from 'react'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
-import {getResizableEvent, joinClassName} from '../utils/dom'
+import {getResizableEvent, getSizeKey, joinClassName, toPx} from '../utils/dom'
 import {findIndexInChildrenbyId} from '../utils/panes'
 import {noop} from '../utils/util'
 import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
 import {IResizer} from '../@types'
+import {useMountingConsole} from '../utils/development-util'
 
 export const Resizer = (props: IResizer) => {
   const {
     children,
     id
   } = props
+  useMountingConsole('Resizer---------------------' + id)
 
   const context: any = useContext(ResizablePaneContext)
   const {getIdToSizeMap, myChildren} = context
@@ -71,6 +73,7 @@ export const Resizer = (props: IResizer) => {
   const getVisibleSize = (node: any) => {
     if (children) {
       const {height, width} = node.getBoundingClientRect()
+
       return vertical ? width : height
     }
     return 2
@@ -78,7 +81,11 @@ export const Resizer = (props: IResizer) => {
 
   const onNewRef = (node: any) => {
     context.registerResizer({
-      setVisibility,
+      setVisibility: (visibility: boolean) => {
+        console.log('setSize', visibility, id)
+
+        node.style[getSizeKey(vertical)] = toPx(visibility ? 12 : 0)
+      },
       getVisibleSize: () => getVisibleSize(node),
       visibility: isNotLastIndex
     }, id)
@@ -103,7 +110,7 @@ export const Resizer = (props: IResizer) => {
 
   const isValidResizer = isValidElement(children)
 
-  let cloneChild
+  let cloneChild: React.ReactNode
   if (isValidResizer) {
     cloneChild = cloneElement(children, {
       ...children.props as object,
@@ -117,17 +124,27 @@ export const Resizer = (props: IResizer) => {
 
   const onMouseDownElement = isValidResizer ? noop : onMouseDown
 
-  if (isVisibile && isNotLastIndex) {
+  if (isNotLastIndex) {
     return (
       <div
-        className={className}
-        ref={setResizerRef}
-        onMouseDown={onMouseDownElement}
-        onTouchStartCapture={onMouseDownElement}
+        ref={setResizerRef} style={{
+          overflow: 'hidden'
+        }}
       >
-        {cloneChild}
+
+        <div
+          className={className}
+          style={{
+            height: '100%',
+            width: '100%'
+          }}
+          onMouseDown={onMouseDownElement}
+          onTouchStartCapture={onMouseDownElement}
+        >
+          {cloneChild}
+        </div>
+
       </div>
     )
   }
-  return null
 }

@@ -1,6 +1,6 @@
 import {createContext} from 'react'
 import {createMap, findById} from '../utils/util'
-import {DIRECTIONS, RATIO, SIZE, ZERO} from '../constant'
+import {DIRECTIONS, RATIO, SIZE, VISIBILITY, ZERO} from '../constant'
 import {
   createPaneModelList,
   createResizerModelList,
@@ -14,10 +14,18 @@ import {
 import {minMaxTotal} from '../utils/development-util'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
-import {IResizableContext, IResizablePaneProviderProps} from '../@types'
+import {IKeyToBoolMap, IResizableContext, IResizablePaneProviderProps} from '../@types'
+import {setVisibilityFn} from '../utils/api'
+import {PaneModel} from '../models/pane-model'
+import {ResizerModel} from '../models/resizer-model'
 
 export const getResizableContext = (props: IResizablePaneProviderProps): IResizableContext => {
-  const {vertical, children, unit, storeKey, sessionStore, resizerSize} = props
+  const {
+    vertical, children, unit,
+    storeKey, sessionStore,
+    onResizeStop, onChangeVisibility
+  } = props
+
   const myChildren = toArray(children)
 
   const storage = new ResizeStorage(storeKey, sessionStore)
@@ -25,7 +33,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   const contextDetails: any = {
     vertical,
     panesList,
-    resizersList: createResizerModelList(myChildren, resizerSize as number, storage),
+    resizersList: createResizerModelList(myChildren, props, storage),
     isSetRatioMode: false,
     newVisibilityModel: false
   }
@@ -138,6 +146,36 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     return getSizeStyle(vertical, size as number)
   }
 
+  const setVisibility = (param: IKeyToBoolMap) => {
+    if (!param) {
+      return
+    }
+    const oldVisibilityMap = createMap(contextDetails.panesList, VISIBILITY)
+    const newMap = {
+      ...oldVisibilityMap,
+      ...param
+    }
+
+    const {
+      panesList, newVisibilityModel,
+      resizersList
+    } = contextDetails
+
+    if (!newVisibilityModel) {
+      contextDetails.newVisibilityModel = true
+      panesList.forEach((pane: PaneModel) => pane.setOldVisibilityModel())
+      resizersList.forEach((resizer: ResizerModel) => resizer.setOldVisibilityModel())
+    }
+
+    setVisibilityFn(contextDetails, newMap)
+    const visibilityMap = createMap(contextDetails.panesList, VISIBILITY)
+
+    // storage.setStorage(context)
+    const sisesMap = getIdToSizeMap()
+    onResizeStop(sisesMap)
+    onChangeVisibility(visibilityMap)
+  }
+
   return {
     setActiveIndex,
     registerPane,
@@ -151,7 +189,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     contextDetails,
     storage,
     myChildren,
-    getPaneSizeStyle
+    getPaneSizeStyle,
+    setVisibility
   }
 }
 

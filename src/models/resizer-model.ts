@@ -1,4 +1,4 @@
-import {IPane, IResizerApi, IStoreResizerModel} from '../@types'
+import {IKeyToBoolMap, IPane, IResizablePaneProviderProps, IResizerApi, IStoreResizerModel} from '../@types'
 import {RESIZER} from '../constant'
 import {ResizeStorage} from '../utils/storage'
 
@@ -15,11 +15,12 @@ export class ResizerModel {
   resizerSize: number
   visibilityChangedLast: boolean
 
-  constructor (paneProps: IPane, resizerSize: number, store: ResizeStorage) {
-    const {id, show} = paneProps
+  constructor (paneProps: IPane, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
+    const {id} = paneProps
+    const {resizerSize, visibility} = resizableProps
     this.id = `${RESIZER}-${id}`
     this.isStorPresent = !store.empty
-    this.resizerSize = paneProps.resizerSize || resizerSize
+    this.resizerSize = paneProps.resizerSize || resizerSize as number
 
     if (this.isStorPresent) {
       const storedResizer = store.getStoredResizer(this.id)
@@ -27,9 +28,9 @@ export class ResizerModel {
       // this.preSize = storedResizer.preSize
       // this.size = storedResizer.size
     } else {
-      this.visibility = show as boolean
+      this.visibility = (visibility as IKeyToBoolMap)[id] ? (visibility as IKeyToBoolMap)[id] : true
       this.preSize = 0
-      this.size = 0
+      this.size = this.resizerSize ?? 0
     }
   }
 
@@ -48,7 +49,7 @@ export class ResizerModel {
   register (api: IResizerApi) {
     this.api = api
     this.registerMe()
-    this.size = api.visibility ? api.getVisibleSize() : 0
+    this.size = this.visibility ? api.getVisibleSize() : 0
   }
 
   getSize () {
@@ -56,6 +57,7 @@ export class ResizerModel {
   }
 
   setVisibility (visibility: boolean) {
+    console.log('setVisibility', visibility, this.id)
     const localVisibility = this.visibility
     this.visibility = visibility
 
@@ -66,6 +68,10 @@ export class ResizerModel {
       return this.resizerSize
     }
     return 0
+  }
+
+  setUISize () {
+
   }
 
   getStoreModel (): IStoreResizerModel {

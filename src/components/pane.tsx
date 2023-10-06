@@ -1,4 +1,4 @@
-import React, {useContext, Fragment, useEffect} from 'react'
+import React, {useContext, Fragment, useEffect, useMemo} from 'react'
 import {IPane} from '../@types'
 import {getSizeKey, joinClassName, toPx} from '../utils/dom'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
@@ -19,16 +19,12 @@ export const Pane = (props: IPane) => {
     className,
     children,
     resizer,
-    id,
-    show
+    id
   } = props
-
-  useEffect(() => {
-
-  }, [show])
 
   const [setPaneRef]: any = useHookWithRefCallback((node: any) => {
     const setSize = (size: number) => {
+      // console.log('setSize', size, id)
       node.style[getSizeKey(vertical)] = toPx(size)
     }
 
@@ -61,7 +57,8 @@ export const Pane = (props: IPane) => {
     [className as string]: className
   })
 
-  const style = getPaneSizeStyle(id)
+  const style = useMemo(() => getPaneSizeStyle(id), [])
+  // console.log(id, style)
 
   return (
     <Fragment>
@@ -69,7 +66,7 @@ export const Pane = (props: IPane) => {
         className={classname}
         key={id}
         ref={setPaneRef}
-        style={style}
+        style={{...style}}
       >
         {children}
       </div>

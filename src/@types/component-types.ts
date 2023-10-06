@@ -30,7 +30,8 @@ export interface IResizablePaneProviderProps extends IResizablePanesPropsBase {
   storeKey?: string,
   sessionStore?: boolean,
   resizer?: ReactNode,
-  resizerSize?: number
+  resizerSize?: number,
+  visibility?: IKeyToBoolMap
 }
 
 export interface IResizablePanesProps extends IResizablePanesPropsBase {
@@ -44,8 +45,7 @@ export interface IPane {
   maxSize?: number
   minSize?: number,
   resizer?: ReactNode,
-  resizerSize?: number,
-  show?: boolean
+  resizerSize?: number
 }
 
 export interface IPaneRef {
@@ -123,5 +123,6 @@ export interface IResizableContext {
   contextDetails: IContextDetails,
   myChildren: ReactNode[],
   storage: ResizeStorage,
-  getPaneSizeStyle: (id: string) => void
+  getPaneSizeStyle: (id: string) => void,
+  setVisibility: any
 }
