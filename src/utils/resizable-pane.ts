@@ -2,7 +2,7 @@ import {IMovingLogicParams, IResizableEvent, IServiceRef} from '../@types'
 import {MINUS, MINUS_ONE, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
 import {ResizerModel} from '../models/resizer-model'
-import {setPaneList} from './development-util'
+import {getList, localConsole, setPaneList} from './development-util'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
   getPanesSizeSum, getResizerSum, setUISizesFn, synPanesMaxToSize, synPanesMinToSize
@@ -57,8 +57,8 @@ export const setCurrentMinMax = (serviceRefCurrent: IServiceRef, index?: number)
 
   minMaxLogicUp(panesList, aMaxChangeUp - bMaxChangeUp, idx, nextIdx, 0, maxPaneSize)
 
-  // localConsole(getList(panesList, 'minSize'), 'minSize')
-  // localConsole(getList(panesList, 'maxSize'), 'maxSize')
+  localConsole(getList(panesList, 'minSize'), 'minSize')
+  localConsole(getList(panesList, 'maxSize'), 'maxSize')
   // setPaneList(panesList, ['minSize', 'maxSize'], null)
   const aMaxChangeDown = panesList[nextIdx].getMinDiff()
   const bMaxChangeDown = panesList[idx].getMaxDiff()
@@ -112,7 +112,7 @@ export const minMaxLogicUp = (
         case value < 0:
           sum += paneA.resetMin()
           nextAIndex = aIndex - 1
-          nextValue = paneB.getMinDiff() + value
+          nextValue = panesList[nextAIndex].getMinDiff() + value
           break
 
         case value === 0:
@@ -120,7 +120,7 @@ export const minMaxLogicUp = (
           sum += paneB.resetMax()
           nextAIndex = aIndex - 1
           nextBIndex = bIndex + 1
-          nextValue = paneB.getMinDiff() - panesList[nextBIndex].getMaxDiff()
+          nextValue = panesList[nextAIndex].getMinDiff() - panesList[nextBIndex].getMaxDiff()
           break
 
         case value > 0:
@@ -159,7 +159,7 @@ export const minMaxLogicUp = (
         case value < 0:
           sum += paneA.resetMin()
           nextAIndex = aIndex - 1
-          nextValue = paneB.getMinDiff() + value
+          nextValue = panesList[nextAIndex].getMinDiff() + value
           break
 
         case value === 0:
@@ -225,7 +225,7 @@ export const minMaxLogicDown = (
         case value < 0:
           sum += paneA.resetMax()
           nextAIndex = aIndex - 1
-          nextValue = paneB.getMaxDiff() + value
+          nextValue = panesList[nextAIndex].getMaxDiff() + value
           break
 
         case value === 0:
@@ -233,7 +233,7 @@ export const minMaxLogicDown = (
           sum += paneB.resetMin()
           nextAIndex = aIndex - 1
           nextBIndex = bIndex + 1
-          nextValue = paneB.getMaxDiff() - panesList[nextBIndex].getMinDiff()
+          nextValue = panesList[nextAIndex].getMaxDiff() - panesList[nextBIndex].getMinDiff()
           break
 
         case value > 0:
@@ -272,7 +272,7 @@ export const minMaxLogicDown = (
         case value < 0:
           sum += paneA.resetMax()
           nextAIndex = aIndex - 1
-          nextValue = paneB.getMaxDiff() + value
+          nextValue = panesList[nextAIndex].getMaxDiff() + value
           break
 
         case value === 0:

@@ -67,7 +67,7 @@ export class PaneModel {
   }
 
   initializeSizes (size: number, minSize: number, maxSize: number, storedSize: number, visibility: boolean) {
-    console.log(this.id, size, minSize, maxSize, visibility, this.storedSize)
+    // console.log(this.id, size, minSize, maxSize, visibility, this.storedSize)
     this.initializeSize(size)
     this.minSize = minSize
     this.maxSize = maxSize
