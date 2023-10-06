@@ -62,3 +62,21 @@ export const getResizableEvent = (e: any, vertical: boolean, previousTouchEvent:
 export const getDirection = (e: IResizableEvent) => e.movement < ZERO ? DIRECTIONS.UP : DIRECTIONS.DOWN
 
 export const toArray = (items: any) => Array.isArray(items) ? items : [items]
+
+export const getSetSize = (node: any, vertical: boolean,
+  addOverFlowLogic = false, addMinSize: number = 0) => (size: number) => {
+  // console.log(node, vertical, size)
+  node.style[getSizeKey(vertical)] = toPx(size)
+  if (addOverFlowLogic) {
+    if (size === 0) {
+      node.style.overflow = 'hidden'
+    } else {
+      node.style.overflow = 'visible'
+    }
+  }
+
+  if (addMinSize) {
+    const key: string = `miin-${getSizeKey(vertical)}` as 'min-width' | 'min-height'
+    node.style[key] = toPx(size === 0 ? size : addMinSize)
+  }
+}

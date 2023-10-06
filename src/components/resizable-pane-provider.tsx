@@ -8,13 +8,19 @@ import {onResizeClearSizesMapFromStore} from '../utils/storage'
 import {IResizablePaneProviderProps} from '../@types'
 
 export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
-  const {storeKey, sessionStore} = props
+  const {storeKey, sessionStore, visibility} = props
   const [context] = useState(getResizableContext(props))
   // context.storage.readPaneChange(toArray(children), context)
   useResizableApi(context, props)
   useEffect(() => {
     onResizeClearSizesMapFromStore(storeKey as string, sessionStore as boolean)
   }, [])
+
+  useEffect(() => {
+    console.log('ResizablePaneProvider')
+    context.setVisibility(visibility)
+  }, [visibility])
+
   // useEffect(() => {
   //   console.log('v-- contextDetails', context.contextDetails)
   // }, [context])
@@ -36,5 +42,6 @@ ResizablePaneProvider.defaultProps = {
   sessionStore: false,
   unit: undefined,
   resizer: undefined,
-  resizerSize: 2
+  resizerSize: 2,
+  visibility: {}
 }
