@@ -29,8 +29,10 @@ export class PaneModel {
 
   constructor (paneProps: any, resizableProps: any, store: ResizeStorage) {
     const {
-      id, minSize = ZERO, size, maxSize = Infinity, show
+      id, minSize = ZERO, size, maxSize = Infinity
     } = paneProps
+
+    const show = true
 
     const storedPane = store.getStoredPane(id)
     if (storedPane) {

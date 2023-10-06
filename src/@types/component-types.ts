@@ -44,8 +44,7 @@ export interface IPane {
   maxSize?: number
   minSize?: number,
   resizer?: ReactNode,
-  resizerSize?: number,
-  show?: boolean
+  resizerSize?: number
 }
 
 export interface IPaneRef {
