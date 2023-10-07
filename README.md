@@ -5,7 +5,7 @@ various applications where flexible layout management is required.
 
 # Key Features
 
-* Smooth Resizing: Enjoy smooth and fast pane resizing without performance issues.
+* **Smooth Resizing:** Enjoy smooth and fast pane resizing without performance issues.
 
 * No Unnecessary Rerenders: Child components in the panes won't rerender during resizing, ensuring a seamless experience.
 
