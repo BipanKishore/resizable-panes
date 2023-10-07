@@ -110,6 +110,7 @@ export interface IContextDetails {
   prevDirection: string,
   getContainerRect: any,
   newVisibilityModel: boolean,
+  vertical: boolean
 }
 
 export interface IResizableContext {

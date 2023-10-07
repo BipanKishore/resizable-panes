@@ -1,5 +1,5 @@
 import {ReactNode, isValidElement} from 'react'
-import {IBooleanOrUndefined, IStoreModel, IStorePaneModel, IStringOrUndefined} from '../@types'
+import {IBooleanOrUndefined, IContextDetails, IStoreModel, IStorePaneModel, IStringOrUndefined} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {getResizerSum} from './panes'
 import {ResizerModel} from '../models/resizer-model'
@@ -35,11 +35,12 @@ export class ResizeStorage {
     this.getStorage()
   }
 
-  setStorage (context: any, _containerSize?: number) {
-    const {getContainerRect, panesList, vertical, resizersList} = context.contextDetails
+  setStorage (contextDetails: IContextDetails, _containerSize?: number) {
+    const {getContainerRect, panesList, vertical, resizersList} = contextDetails
     const {storeKey, sessionStore} = this
     const {width, height} = getContainerRect()
 
+    // Need to make sure if we are using it containerSize
     const containerSize = _containerSize || (vertical ? width : height) -
     getResizerSum(resizersList, 0, resizersList.length - 1)
 

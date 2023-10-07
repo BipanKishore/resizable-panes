@@ -170,7 +170,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     setVisibilityFn(contextDetails, newMap)
     const visibilityMap = createMap(contextDetails.panesList, VISIBILITY)
 
-    // storage.setStorage(context)
+    // storage.setStorage(contextDetails)
     const sisesMap = getIdToSizeMap()
     onResizeStop(sisesMap)
     onChangeVisibility(visibilityMap)

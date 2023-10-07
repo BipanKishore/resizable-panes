@@ -43,7 +43,7 @@ export const Resizer = (props: IResizer) => {
     document.removeEventListener('touchmove', onTouchMove)
 
     const resizeParams = getIdToSizeMap()
-    context.storage.setStorage(context)
+    context.storage.setStorage(context.contextDetails)
     setIsMouseDown(false)
     context.props.onResizeStop(resizeParams)
     document.removeEventListener('mouseup', onMoveEnd)
