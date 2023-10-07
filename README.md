@@ -3,7 +3,7 @@ The ResizablePanes component is a React component designed to create resizable p
 the size of individual sections within a container. This component is highly customizable and can be used in
 various applications where flexible layout management is required.
 
-# Key Features
+## Key Features
 
 * **Smooth Resizing:** Enjoy smooth and fast pane resizing without performance issues.
 
@@ -15,4 +15,4 @@ various applications where flexible layout management is required.
 
 * **Auto-Save Sizes:** Pane sizes are automatically saved in the browser's memory for consistent layouts across sessions.
 
-# [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
+### [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
