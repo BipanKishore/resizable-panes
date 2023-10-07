@@ -351,8 +351,8 @@ export const getMaxContainerSizes = ({getContainerRect, vertical, panesList, res
   const maxTopAxis = vertical ? left : top
   const maxPaneSize = (vertical ? width : height) - getResizerSum(resizersList, 0, panesList.length - 2)
 
-  console.log('mas Size limits', maxPaneSize,
-    getPanesSizeSum(panesList, 0, panesList.length - 1), getResizerSum(resizersList, 0, panesList.length - 2))
+  // console.log('mas Size limits', maxPaneSize,
+  //   getPanesSizeSum(panesList, 0, panesList.length - 1), getResizerSum(resizersList, 0, panesList.length - 2))
   return {
     maxTopAxis,
     maxPaneSize

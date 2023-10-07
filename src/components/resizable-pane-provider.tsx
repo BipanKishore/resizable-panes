@@ -17,7 +17,6 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   }, [])
 
   useEffect(() => {
-    console.log('ResizablePaneProvider')
     context.setVisibility(visibility)
   }, [visibility])
 

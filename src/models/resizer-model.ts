@@ -22,7 +22,7 @@ export class ResizerModel {
 
     this.initialVisibility = visibility[id]
     const show = visibility[id] !== undefined ? visibility[id] : true
-    console.log('show', show)
+    // console.log('show', show)
     this.id = `${RESIZER}-${id}`
     this.isStorPresent = !store.empty
     this.resizerSize = paneProps.resizerSize || resizerSize as number
@@ -58,7 +58,7 @@ export class ResizerModel {
     this.resizerSize = api.visibility ? api.getVisibleSize() : 0
     // }
 
-    console.log(this.resizerSize, this.id)
+    // console.log(this.resizerSize, this.id)
   }
 
   getSize () {
@@ -77,7 +77,7 @@ export class ResizerModel {
         }
       }
 
-      console.log(this.id, uiSize, this.visibility)
+      // console.log(this.id, uiSize, this.visibility)
 
       this.api.setSize(uiSize)
     }

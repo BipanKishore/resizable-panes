@@ -10,7 +10,7 @@ export const keyConsole = (obj: any = {}, add = 'v--') => {
 }
 
 export const localConsole = (obj: any = {}, key : string) => {
-  localStorage.setItem(key, JSON.stringify(obj))
+  // localStorage.setItem(key, JSON.stringify(obj))
 }
 
 export const minMaxTotal = (serviceRefCurrent: IServiceRef) => {
@@ -50,7 +50,7 @@ export const sizesConsole = (panesList: PaneModel[]) => {
     return pane.getObj('size', 'minSize', 'maxSize', 'defaultMinSize', 'defaultMaxSize')
   })
 
-  localConsole(t, 'sizesConsole')
+  // localConsole(t, 'sizesConsole')
 }
 
 export const useMountingConsole = (name: string) => {
