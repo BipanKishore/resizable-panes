@@ -1,7 +1,7 @@
 import {IContextDetails, IKeyToBoolMap, IServiceRef} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {ResizerModel} from '../models/resizer-model'
-import {setUISizesFn} from './panes'
+import {setUISizesFn, setUISizesOfAllElement} from './panes'
 import {visibilityOperation, visibilityOperationHideResizer} from './resizable-pane'
 import {findIndex} from './util'
 
@@ -64,7 +64,7 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
     visibilityOperationHideResizer(lastVisibleIndex, panesList, resizerSizeChange, false)
   }
 
-  setUISizesFn(panesList)
+  setUISizesOfAllElement(panesList, resizersList)
 }
 
 export const setResizersVisibility = (resizersList: ResizerModel[], visibility: boolean) => {

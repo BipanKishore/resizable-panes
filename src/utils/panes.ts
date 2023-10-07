@@ -1,5 +1,5 @@
 import {ReactNode, isValidElement} from 'react'
-import {IResizablePanesProps, addAndRemoveType} from '../@types'
+import {IResizablePaneProviderProps, IResizablePanesProps, addAndRemoveType} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
 import {ResizerModel} from '../models/resizer-model'
@@ -8,8 +8,13 @@ import {PLUS} from '../constant'
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
   panesList.forEach(pane => pane.syncAxisSize())
 
-export const setUISizesFn = (panesList: PaneModel[]) =>
-  panesList.forEach(pane => pane.setUISize())
+export const setUISizesFn = (modelList: PaneModel[] | ResizerModel[]) =>
+  modelList.forEach((pane: PaneModel | ResizerModel) => pane.setUISize())
+
+export const setUISizesOfAllElement = (panesList: PaneModel[], resizersList: ResizerModel[]) => {
+  setUISizesFn(panesList)
+  setUISizesFn(resizersList)
+}
 
 export function getSum <T> (list: T[], getNumber: (item:T) => number, start = 0, end = list.length - 1) {
   let sum = 0
@@ -29,7 +34,7 @@ export const getPanesSizeSum = (panesList: PaneModel[], start: number, end: numb
   getSum(panesList, (pane) => pane.getSize(), start, end)
 
 export const getResizerSum = (resizersList: ResizerModel[], start: number, end: number) =>
-  getSum(resizersList, (resizer) => resizer.size, start, end)
+  getSum(resizersList, (resizer) => resizer.getSize(), start, end)
 
 export const getMaxSizeSum = (panesList: PaneModel[], start: number, end: number) =>
   getSum(panesList, (pane) => pane.maxSize, start, end)
@@ -104,7 +109,8 @@ export const createPaneModelList = (children: ReactNode[], props: IResizablePane
   return paneList
 }
 
-export const createResizerModelList = (children: ReactNode[], resizerSize: number, store: ResizeStorage) => {
+export const createResizerModelList = (children: ReactNode[],
+  resizerSize: IResizablePaneProviderProps, store: ResizeStorage) => {
   const resizersList: ResizerModel[] = []
   for (const child of children) {
     if (isValidElement(child)) {

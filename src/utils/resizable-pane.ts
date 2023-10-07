@@ -5,7 +5,7 @@ import {ResizerModel} from '../models/resizer-model'
 import {getList, localConsole, setPaneList} from './development-util'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
-  getPanesSizeSum, getResizerSum, setUISizesFn, synPanesMaxToSize, synPanesMinToSize
+  getPanesSizeSum, getResizerSum, setUISizesOfAllElement, synPanesMaxToSize, synPanesMinToSize
 } from './panes'
 
 export const goingDownLogic = (e: IResizableEvent, {axisCoordinate, panesList, activeIndex}: IMovingLogicParams) => {
@@ -351,6 +351,8 @@ export const getMaxContainerSizes = ({getContainerRect, vertical, panesList, res
   const maxTopAxis = vertical ? left : top
   const maxPaneSize = (vertical ? width : height) - getResizerSum(resizersList, 0, panesList.length - 2)
 
+  // console.log('mas Size limits', maxPaneSize,
+  //   getPanesSizeSum(panesList, 0, panesList.length - 1), getResizerSum(resizersList, 0, panesList.length - 2))
   return {
     maxTopAxis,
     maxPaneSize
@@ -373,5 +375,6 @@ export const toRatioModeFn = (panesList: PaneModel[], resizersList: ResizerModel
   const leftOverTotalSize = containerSize - sizeSum
   const changeOperation = leftOverTotalSize < 0 ? MINUS : PLUS
   change1PixelToPanes(panesList, Math.abs(leftOverTotalSize), changeOperation)
-  setUISizesFn(panesList)
+
+  setUISizesOfAllElement(panesList, resizersList)
 }

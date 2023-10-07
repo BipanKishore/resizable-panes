@@ -4,7 +4,7 @@ import React, {
   isValidElement, cloneElement, useRef
 } from 'react'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
-import {getResizableEvent, joinClassName} from '../utils/dom'
+import {getResizableEvent, getSetSize, joinClassName} from '../utils/dom'
 import {findIndexInChildrenbyId} from '../utils/panes'
 import {noop} from '../utils/util'
 import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
@@ -24,7 +24,6 @@ export const Resizer = (props: IResizer) => {
   const isNotLastIndex = index < (myChildren.length - 1)
   const previousTouchEvent:any = useRef()
 
-  const [isVisibile, setVisibility] = useState(isNotLastIndex)
   const [isMouseDown, setIsMouseDown] = useState(false)
 
   const onMouseMove = useCallback((e: any) => {
@@ -77,23 +76,18 @@ export const Resizer = (props: IResizer) => {
   }
 
   const onNewRef = (node: any) => {
+    // need to work for default resizer
+    const setSize = getSetSize(node, vertical, true, children ? 0 : 12)
+
     context.registerResizer({
-      setVisibility,
       getVisibleSize: () => getVisibleSize(node),
+      setSize,
       visibility: isNotLastIndex
     }, id)
   }
 
-  const onEmptyRef = (previousNode: any) => {
-    context.registerResizer({
-      setVisibility,
-      getVisibleSize: () => getVisibleSize(previousNode),
-      visibility: false
-    }, id)
-  }
-
   // Does not run for the last element
-  const [setResizerRef]: any = useHookWithRefCallback(onNewRef, onEmptyRef)
+  const [setResizerRef]: any = useHookWithRefCallback(onNewRef)
 
   const className = joinClassName({
     resizer: true,
@@ -117,7 +111,7 @@ export const Resizer = (props: IResizer) => {
 
   const onMouseDownElement = isValidResizer ? noop : onMouseDown
 
-  if (isVisibile && isNotLastIndex) {
+  if (isNotLastIndex) {
     return (
       <div
         className={className}

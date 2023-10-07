@@ -1,6 +1,6 @@
 import React, {useContext, Fragment} from 'react'
 import {IPane} from '../@types'
-import {getSizeKey, joinClassName, toPx} from '../utils/dom'
+import {getSetSize, joinClassName} from '../utils/dom'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
 import {Resizer} from './resizer'
 import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
@@ -14,18 +14,22 @@ export const Pane = (props: IPane) => {
       resizer: parentResizer
     }
   } = context
+  // const [destroy, setDestroy] = useState()
 
   const {
     className,
     children,
     resizer,
     id
+    // removeNodeOnHide
   } = props
 
-  const [setPaneRef]: any = useHookWithRefCallback((node: any) => {
-    const setSize = (size: number) => {
-      node.style[getSizeKey(vertical)] = toPx(size)
-    }
+  const [setPaneRef]: any = useHookWithRefCallback((node: HTMLElement) => {
+    const setSize = getSetSize(node, vertical)
+
+    registerPane({
+      setSize
+    }, id)
 
     // const onCloseFullSize = () => {
     //   node.classList.remove('full-page-class')
@@ -45,10 +49,6 @@ export const Pane = (props: IPane) => {
     //   onFullPage,
     //   onCloseFullSize
     // }, id)
-
-    registerPane({
-      setSize
-    }, id)
   })
 
   const classname = joinClassName({
