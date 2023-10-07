@@ -4,7 +4,7 @@ import React, {
   isValidElement, cloneElement, useRef
 } from 'react'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
-import {getResizableEvent, getSetSize, joinClassName} from '../utils/dom'
+import {getResizableEvent, getSetSize, getSizeKey, joinClassName} from '../utils/dom'
 import {findIndexInChildrenbyId} from '../utils/panes'
 import {noop} from '../utils/util'
 import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
@@ -69,8 +69,8 @@ export const Resizer = (props: IResizer) => {
 
   const getVisibleSize = (node: any) => {
     if (children) {
-      const {height, width} = node.getBoundingClientRect()
-      return vertical ? width : height
+      const rect = node.getBoundingClientRect()
+      return rect[getSizeKey(vertical)]
     }
     return 2
   }
