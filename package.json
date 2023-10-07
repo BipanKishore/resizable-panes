@@ -1,6 +1,6 @@
 {
   "name": "resizable-panes-react",
-  "version": "0.7.14",
+  "version": "0.8.0",
   "description": "A simple library for resizing elements in the browser",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
