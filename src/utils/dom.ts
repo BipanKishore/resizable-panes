@@ -23,8 +23,8 @@ export const getContainerClass = (vertical: boolean, className: string, unit: Un
     'd-flex': true,
     'f-row w-fit-content': vertical,
     'f-column': !vertical,
-    'w-100p': unit === RATIO && vertical,
-    'h-100p': unit === RATIO && !vertical,
+    'h-100p': vertical,
+    'w-100p h-100p': unit === RATIO,
     [className]: className
   })
 }
@@ -64,6 +64,7 @@ export const getDirection = (e: IResizableEvent) => e.movement < ZERO ? DIRECTIO
 export const toArray = (items: any) => Array.isArray(items) ? items : [items]
 
 export const getSetSize = (node: any, vertical: boolean,
+  // eslint-disable-next-line complexity
   addOverFlowLogic = false, addMinSize: number = 0) => (size: number) => {
   // console.log(node, vertical, size)
   node.style[getSizeKey(vertical)] = toPx(size)
@@ -76,7 +77,7 @@ export const getSetSize = (node: any, vertical: boolean,
   }
 
   if (addMinSize) {
-    const key: string = `miin-${getSizeKey(vertical)}` as 'min-width' | 'min-height'
+    const key: string = `min${vertical ? 'Width' : 'Height'}` as 'minWidth' | 'minHeight'
     node.style[key] = toPx(size === 0 ? size : addMinSize)
   }
 }

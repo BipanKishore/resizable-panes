@@ -3,11 +3,8 @@ import {PaneModel} from '../models/pane-model'
 
 export const noop = (_: any): any => _
 
-export const findById = (list: PaneModel[], _id: string) => {
-  return list.find(({
-    id
-  }) => id === _id)
-}
+export const findById = (list: PaneModel[], _id: string) =>
+  list.find(({id}) => id === _id)
 
 export const createMap = (paneList: PaneModel[], ...keys: IPaneModelKey[]) => {
   const map: IAnyMap = {}

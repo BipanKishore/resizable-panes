@@ -47,6 +47,7 @@ export interface IPane {
   minSize?: number,
   resizer?: ReactNode,
   resizerSize?: number
+  // destroyOnHide?: boolean
 }
 
 export interface IPaneRef {

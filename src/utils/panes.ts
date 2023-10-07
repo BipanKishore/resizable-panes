@@ -34,7 +34,7 @@ export const getPanesSizeSum = (panesList: PaneModel[], start: number, end: numb
   getSum(panesList, (pane) => pane.getSize(), start, end)
 
 export const getResizerSum = (resizersList: ResizerModel[], start: number, end: number) =>
-  getSum(resizersList, (resizer) => resizer.resizerSize, start, end)
+  getSum(resizersList, (resizer) => resizer.getSize(), start, end)
 
 export const getMaxSizeSum = (panesList: PaneModel[], start: number, end: number) =>
   getSum(panesList, (pane) => pane.maxSize, start, end)

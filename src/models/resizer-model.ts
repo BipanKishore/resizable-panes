@@ -1,4 +1,4 @@
-import {IPane, IResizablePaneProviderProps, IResizerApi, IStoreResizerModel} from '../@types'
+import {IBooleanOrUndefined, IPane, IResizablePaneProviderProps, IResizerApi, IStoreResizerModel} from '../@types'
 import {RESIZER} from '../constant'
 import {ResizeStorage} from '../utils/storage'
 
@@ -14,11 +14,13 @@ export class ResizerModel {
   preSize: number // previousVisible
   resizerSize: number
   visibilityChangedLast: boolean
+  initialVisibility: IBooleanOrUndefined
 
   constructor (paneProps: IPane, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
     const {id} = paneProps
     const {resizerSize, visibility = {}} = resizableProps
 
+    this.initialVisibility = visibility[id]
     const show = visibility[id] !== undefined ? visibility[id] : true
     console.log('show', show)
     this.id = `${RESIZER}-${id}`
@@ -52,11 +54,15 @@ export class ResizerModel {
   register (api: IResizerApi) {
     this.api = api
     this.registerMe()
+    // if (this.initialVisibility === undefined) {
     this.resizerSize = api.visibility ? api.getVisibleSize() : 0
+    // }
+
+    console.log(this.resizerSize, this.id)
   }
 
   getSize () {
-    return !this.isRegistered ? (this.visibility ? this.resizerSize : 0) : 0
+    return this.isRegistered ? (this.visibility ? this.resizerSize : 0) : 0
   }
 
   setUISize () {
