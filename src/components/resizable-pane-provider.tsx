@@ -42,5 +42,5 @@ ResizablePaneProvider.defaultProps = {
   unit: undefined,
   resizer: undefined,
   resizerSize: 2,
-  visibility: {}
+  visibility: undefined
 }

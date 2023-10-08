@@ -66,11 +66,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const registerContainer = ({getContainerRect}: any) => {
     contextDetails.getContainerRect = getContainerRect
-    const {panesList, resizersList} = contextDetails
-
-    const {maxPaneSize} = getMaxContainerSizes(contextDetails)
     if (storage.empty && unit === RATIO && !contextDetails.isSetRatioMode) {
-      toRatioModeFn(panesList, resizersList, maxPaneSize)
+      toRatioModeFn(contextDetails)
       contextDetails.isSetRatioMode = true
     }
   }

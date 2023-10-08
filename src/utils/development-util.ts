@@ -1,3 +1,4 @@
+import {IContextDetails} from '../@types'
 import {IServiceRef} from '../@types/use-resizable-panes-types'
 import {PaneModel} from '../models/pane-model'
 import {getMaxContainerSizes} from './resizable-pane'
@@ -13,7 +14,7 @@ export const localConsole = (obj: any = {}, key : string) => {
   // localStorage.setItem(key, JSON.stringify(obj))
 }
 
-export const minMaxTotal = (serviceRefCurrent: IServiceRef) => {
+export const minMaxTotal = (serviceRefCurrent: IContextDetails) => {
   const {panesList} = serviceRefCurrent
 
   const {maxPaneSize} = getMaxContainerSizes(serviceRefCurrent)
