@@ -366,6 +366,7 @@ export const registerContainer = (context: any) => (node: any) => {
 // getMaxContainerSizes need to use this
 export const toRatioModeFn = (panesList: PaneModel[], resizersList: ResizerModel[], containerSize: number) => {
   const maxRatioValue = getPanesSizeSum(panesList, 0, panesList.length - 1)
+  console.log('v--', 'toRatioModeFn')
   panesList
     .forEach((pane: PaneModel) => {
       pane.toRatioMode(containerSize, maxRatioValue)

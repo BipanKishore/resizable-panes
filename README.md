@@ -13,6 +13,8 @@ various applications where flexible layout management is required.
 
 * **Custom Resizers:** Customize resizer handles to match your app's design.
 
+* **Responsive:** In ratio mode, It adjusts pane sizes responsively to fit in available space, making it perfect for dynamic layouts.
+
 * **Auto-Save Sizes:** Pane sizes are automatically saved in the browser's memory for consistent layouts across sessions.
 
 ### [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
