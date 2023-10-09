@@ -53,7 +53,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const registerPane = (pane: any, id:string) => {
     const index = findIndexInChildrenbyId(myChildren, id)
-    contextDetails.panesList[index].registerPaneRef(pane)
+    contextDetails.panesList[index].registerRef(pane)
   }
 
   const registerResizer = (resizer: any, id: string) => {

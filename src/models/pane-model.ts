@@ -149,12 +149,12 @@ export class PaneModel {
 
   setUISize () {
     if (this.pane) {
-      this.pane.setSize(this.size)
+      this.pane.setSize(this.visibility ? this.size : 0)
       return this.size
     }
   }
 
-  registerPaneRef (pane: any) {
+  registerRef (pane: any) {
     if (this.pane) {
       this.pane = pane
       this.setUISize()
@@ -175,7 +175,6 @@ export class PaneModel {
 
   syncAxisSize () {
     this.axisSize = this.size
-    return this.axisSize
   }
 
   restore () {
