@@ -112,7 +112,7 @@ export class PaneModel {
       }
       return Math.abs(this.size - newSize)
     } else {
-      return newSize
+      return Math.abs(newSize)
     }
   }
 
