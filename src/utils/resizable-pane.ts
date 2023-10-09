@@ -16,13 +16,13 @@ export const goingDownLogic = (e: IResizableEvent, {axisCoordinate, panesList, a
   let sizeChangeUp = sizeChange
 
   for (let i = activeIndex; i > MINUS_ONE; i -= 1) {
-    sizeChangeUp = panesList[i].addSize(sizeChangeUp)
+    sizeChangeUp = panesList[i].changeSize(sizeChangeUp, PLUS)
   }
 
   sizeChange -= sizeChangeUp
 
   for (let i = activeIndex + 1; i < panesList.length; i += 1) {
-    sizeChange = panesList[i].removeSize(sizeChange)
+    sizeChange = panesList[i].changeSize(sizeChange, MINUS)
   }
 }
 
@@ -34,13 +34,13 @@ export const goingUpLogic = (e: any, {axisCoordinate, panesList, activeIndex}: I
   let sizeChangeUp = sizeChange
 
   for (let i = activeIndex + 1; i < panesList.length; i++) {
-    sizeChangeUp = panesList[i].addSize(sizeChangeUp)
+    sizeChangeUp = panesList[i].changeSize(sizeChangeUp, PLUS)
   }
 
   sizeChange -= sizeChangeUp
 
   for (let i = activeIndex; i > MINUS_ONE; i -= 1) {
-    sizeChange = panesList[i].removeSize(sizeChange)
+    sizeChange = panesList[i].changeSize(sizeChange, MINUS)
   }
 }
 

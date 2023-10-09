@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import {IPaneNumericKeys, IStorePaneModel, keyOfPaneModel} from '../@types'
+import {IPaneNumericKeys, IStorePaneModel, addAndRemoveType, keyOfPaneModel} from '../@types'
 import {ZERO} from '../constant'
 import {ResizeStorage} from '../utils/storage'
 import {ratioToNumber} from '../utils/util'
@@ -125,7 +125,7 @@ export class PaneModel {
 
   setVisibilitySize (newSize: number) {
     this.restoreLimits()
-    this.setSize(newSize)
+    return this.setSize(newSize)
   }
 
   addVisibilitySize (sizeChange: number) {
@@ -138,13 +138,8 @@ export class PaneModel {
     return this.setVisibilitySize(newSize)
   }
 
-  addSize (sizeChange: number) {
-    const newSize = this.axisSize + sizeChange
-    return this.setSize(newSize)
-  }
-
-  removeSize (sizeChange: number) {
-    const newSize = this.axisSize - sizeChange
+  changeSize (sizeChange: number, operation: addAndRemoveType) {
+    const newSize = this.axisSize + (operation === '+' ? sizeChange : -sizeChange)
     return this.setSize(newSize)
   }
 
