@@ -110,9 +110,10 @@ export class PaneModel {
       } else {
         this.size = this.minSize
       }
+      return Math.abs(this.size - newSize)
+    } else {
+      return newSize
     }
-    const left = Math.abs(this.size - newSize)
-    return left
   }
 
   getSize () {
@@ -123,19 +124,8 @@ export class PaneModel {
   }
 
   setVisibilitySize (newSize: number) {
-    if (this.visibility) {
-      if (newSize >= this.defaultMinSize && newSize <= this.defaultMaxSize) {
-        this.size = newSize
-        return ZERO
-      } else if (newSize > this.defaultMaxSize) {
-        this.size = this.defaultMaxSize
-      } else {
-        this.size = this.defaultMinSize
-      }
-    }
-
-    const left = Math.abs(this.size - newSize)
-    return left
+    this.restoreLimits()
+    this.setSize(newSize)
   }
 
   addVisibilitySize (sizeChange: number) {
