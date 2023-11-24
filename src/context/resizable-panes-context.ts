@@ -148,6 +148,13 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       return
     }
     const oldVisibilityMap = createMap(contextDetails.panesList, VISIBILITY)
+
+    const keys = Object.keys(oldVisibilityMap)
+    const isNoChange = keys.every((key) => oldVisibilityMap[key] === param[key])
+    if (isNoChange) {
+      return
+    }
+
     const newMap = {
       ...oldVisibilityMap,
       ...param
