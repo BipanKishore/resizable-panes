@@ -31,7 +31,8 @@ export interface IResizablePaneProviderProps extends IResizablePanesPropsBase {
   sessionStore?: boolean,
   resizer?: ReactNode,
   resizerSize?: number,
-  visibility?: IKeyToBoolMap
+  visibility?: IKeyToBoolMap,
+  vertical?: boolean
 
 }
 

@@ -9,19 +9,19 @@ export const Pane = (props: IPane) => {
   const context: any = useContext(ResizablePaneContext)
 
   const {
-    vertical, registerPane, getPaneSizeStyle,
+    vertical,
+    registerPane,
+    getPaneSizeStyle,
     props: {
       resizer: parentResizer
     }
   } = context
-  // const [destroy, setDestroy] = useState()
 
   const {
     className,
     children,
     resizer,
     id
-    // removeNodeOnHide
   } = props
 
   const [setPaneRef]: any = useHookWithRefCallback((node: HTMLElement) => {
@@ -30,25 +30,6 @@ export const Pane = (props: IPane) => {
     registerPane({
       setSize
     }, id)
-
-    // const onCloseFullSize = () => {
-    //   node.classList.remove('full-page-class')
-    // }
-
-    // const onFullSize = () => onCloseFullSize()
-
-    // const onFullPage = () => {
-    //   node.style.removeProperty('height')
-    //   node.style.removeProperty('width')
-    //   node.classList.add('full-page-class')
-    // }
-
-    // registerPane({
-    //   setSize,
-    //   onFullSize,
-    //   onFullPage,
-    //   onCloseFullSize
-    // }, id)
   })
 
   const classname = joinClassName({

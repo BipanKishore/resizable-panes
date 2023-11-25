@@ -18,16 +18,14 @@ export const joinClassName = (param: IJoinClassNameParam, notRequired: boolean |
   return keys.map((key) => param[key] ? key : '').join(' ')
 }
 
-export const getContainerClass = (vertical: boolean, className: string, unit: UnitTypes) => {
-  return joinClassName({
+export const getContainerClass = (vertical: boolean, className: string, unit: UnitTypes) =>
+  joinClassName({
     'd-flex': true,
-    'f-row w-fit-content': vertical,
+    'f-row w-fit-content h-100p': vertical,
     'f-column': !vertical,
-    'h-100p': vertical,
     'w-100p h-100p': unit === RATIO,
     [className]: className
   })
-}
 
 export const isTouchEvent = (event: any) => event.type.startsWith('touch')
 
