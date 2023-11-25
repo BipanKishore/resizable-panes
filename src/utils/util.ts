@@ -29,3 +29,13 @@ export const findIndex = (list: any[], value: any, key = 'id') =>
 
 export const ratioToNumber = (totalSize: number, maxRatioValue: number, size: number) =>
   Number((totalSize * (size / maxRatioValue)).toFixed(0))
+
+export const addDefaultProps = (props: any, defaultProps: any) => {
+  const keys = Object.keys({...props, ...defaultProps})
+  const newProps: any = {}
+
+  for (const key of keys) {
+    newProps[key] = props[key] === undefined ? defaultProps[key] : props[key]
+  }
+  return newProps
+}

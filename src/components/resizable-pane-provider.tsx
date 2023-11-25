@@ -1,18 +1,33 @@
 import React, {useEffect, useRef, useState} from 'react'
 import {ResizablePaneContext, getResizableContext} from '../context/resizable-panes-context'
 import {ResizablePanes} from './resizable-panes'
-import {noop} from '../utils/util'
+import {addDefaultProps, noop} from '../utils/util'
 import {useResizableApi} from '../hook/use-resizable-api'
 // import {useMountingConsole} from '../utils/development-util'
 import {onResizeClearSizesMapFromStore} from '../utils/storage'
 import {IResizablePaneProviderProps} from '../@types'
 
+const ResizablePaneProviderDefaultProps: any = {
+  onResize: noop,
+  onResizeStop: noop,
+  onReady: noop,
+  onChangeVisibility: noop,
+  vertical: false,
+  storeKey: '',
+  sessionStore: false,
+  unit: undefined,
+  resizer: undefined,
+  resizerSize: 2,
+  visibility: undefined
+}
+
 export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
-  const {storeKey, sessionStore, visibility} = props
-  const [context] = useState(getResizableContext(props))
+  const currentProps = addDefaultProps(props, ResizablePaneProviderDefaultProps) as IResizablePaneProviderProps
+  const {storeKey, sessionStore, visibility} = currentProps
+  const [context] = useState(getResizableContext(currentProps))
   const ref = useRef(true)
   // context.storage.readPaneChange(toArray(children), context)
-  useResizableApi(context, props)
+  useResizableApi(context, currentProps)
   useEffect(() => {
     onResizeClearSizesMapFromStore(storeKey as string, sessionStore as boolean)
   }, [])
@@ -31,21 +46,7 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   // useMountingConsole('ResizablePaneProvider')
   return (
     <ResizablePaneContext.Provider value={context} >
-      <ResizablePanes {...props}/>
+      <ResizablePanes {...currentProps}/>
     </ResizablePaneContext.Provider>
   )
-}
-
-ResizablePaneProvider.defaultProps = {
-  onResize: noop,
-  onResizeStop: noop,
-  onReady: noop,
-  onChangeVisibility: noop,
-  vertical: false,
-  storeKey: '',
-  sessionStore: false,
-  unit: undefined,
-  resizer: undefined,
-  resizerSize: 2,
-  visibility: undefined
 }

@@ -74,7 +74,3 @@ export const Pane = (props: IPane) => {
     </Fragment>
   )
 }
-
-Pane.defaultProps = {
-
-}
