@@ -2,7 +2,7 @@ import {
   IResizableEvent, IJoinClassNameParam,
   UnitTypes, IBooleanOrUndefined, ISizeStyle
 } from '../@types'
-import {DIRECTIONS, RATIO, ZERO} from '../constant'
+import {DIRECTIONS, RATIO} from '../constant'
 
 export const toPx = (size: number) => `${size}px`
 export const getSizeKey = (vertical: boolean) => vertical ? 'width' : 'height'
@@ -51,13 +51,12 @@ export const getResizableEventFromMouse = (e: any, vertical: boolean): IResizabl
   return vertical ? resizableEvent(clientX, movementX) : resizableEvent(clientY, movementY)
 }
 
-export const getResizableEvent = (e: any, vertical: boolean, previousTouchEvent: any): IResizableEvent => {
-  return isTouchEvent(e)
+export const getResizableEvent = (e: any, vertical: boolean, previousTouchEvent: any): IResizableEvent =>
+  isTouchEvent(e)
     ? getResizableEventFromTouch(e, vertical, previousTouchEvent)
     : getResizableEventFromMouse(e, vertical)
-}
 
-export const getDirection = (e: IResizableEvent) => e.movement < ZERO ? DIRECTIONS.UP : DIRECTIONS.DOWN
+export const getDirection = (e: IResizableEvent) => e.movement < 0 ? DIRECTIONS.UP : DIRECTIONS.DOWN
 
 export const toArray = (items: any) => Array.isArray(items) ? items : [items]
 
