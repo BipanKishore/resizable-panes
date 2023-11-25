@@ -161,14 +161,12 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     }
 
     const {
-      panesList, newVisibilityModel,
-      resizersList
+      panesList, newVisibilityModel
     } = contextDetails
 
     if (!newVisibilityModel) {
       contextDetails.newVisibilityModel = true
       panesList.forEach((pane: PaneModel) => pane.setOldVisibilityModel())
-      resizersList.forEach((resizer: ResizerModel) => resizer.setOldVisibilityModel())
     }
 
     setVisibilityFn(contextDetails, newMap)

@@ -1,4 +1,8 @@
-import {IBooleanOrUndefined, IPane, IResizablePaneProviderProps, IResizerApi, IStoreResizerModel} from '../@types'
+import {
+  IKeyToBoolMap,
+  IPane, IResizablePaneProviderProps,
+  IResizerApi, IStoreResizerModel
+} from '../@types'
 import {RESIZER} from '../constant'
 import {ResizeStorage} from '../utils/storage'
 
@@ -10,39 +14,35 @@ export class ResizerModel {
   isStorPresent: boolean
   oldVisibility: boolean
 
-  size: number
-  preSize: number // previousVisible
   resizerSize: number
   visibilityChangedLast: boolean
-  initialVisibility: IBooleanOrUndefined
+
+  visibilityMap: IKeyToBoolMap
 
   constructor (paneProps: IPane, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
     const {id} = paneProps
     const {resizerSize, visibility = {}} = resizableProps
-
-    this.initialVisibility = visibility[id]
+    this.visibilityMap = resizableProps.visibility as IKeyToBoolMap
     const show = visibility[id] !== undefined ? visibility[id] : true
     // console.log('show', show)
     this.id = `${RESIZER}-${id}`
     this.isStorPresent = !store.empty
-    this.resizerSize = paneProps.resizerSize || resizerSize as number
 
     if (this.isStorPresent) {
       const storedResizer = store.getStoredResizer(this.id)
       this.visibility = storedResizer.visibility
-      // this.preSize = storedResizer.preSize
-      // this.size = storedResizer.size
     } else {
       this.visibility = show as boolean
-      this.preSize = 0
-      this.size = 0
     }
+
+    this.resizerSize = paneProps.resizerSize || resizerSize as number
   }
 
   registerMe () {
     switch (true) {
       case !this.isRegistered:
         // this.api.setVisibility(this.visibility)
+        this.setUISize()
         break
       case this.isRegistered:
         this.visibility = this.api.visibility
@@ -53,12 +53,10 @@ export class ResizerModel {
   // This method never runs for last Element
   register (api: IResizerApi) {
     this.api = api
+    if (!this.visibilityMap) {
+      this.resizerSize = api.getVisibleSize()
+    }
     this.registerMe()
-    // if (this.initialVisibility === undefined) {
-    this.resizerSize = api.visibility ? api.getVisibleSize() : 0
-    // }
-
-    // console.log(this.resizerSize, this.id)
   }
 
   getSize () {
@@ -83,20 +81,23 @@ export class ResizerModel {
     }
   }
 
-  setVisibility (visibility: boolean) {
+  setVisibilityNew (visibility: boolean) {
     if (!this.isRegistered) {
       return 0
     }
+
     const localVisibility = this.visibility
     this.visibility = visibility
 
-    if (localVisibility !== visibility) {
-      // if (this.api) {
-      //   this.api.setVisibility(visibility)
-      // }
-      return this.resizerSize
+    if (localVisibility === visibility) {
+      return 0
+    } else {
+      if (visibility) {
+        return this.resizerSize
+      } else {
+        return -this.resizerSize
+      }
     }
-    return 0
   }
 
   getStoreModel (): IStoreResizerModel {
@@ -104,14 +105,5 @@ export class ResizerModel {
       id: this.id,
       visibility: this.visibility
     }
-  }
-
-  setOldVisibilityModel () {
-    this.oldVisibility = this.visibility
-  }
-
-  syncToOldVisibilityModel () {
-    // this.setVisibility(this.oldVisibility)
-    this.visibility = this.oldVisibility
   }
 }

@@ -116,6 +116,22 @@ export class PaneModel {
     }
   }
 
+  setSize2 (newSize: number) {
+    if (this.visibility) {
+      if (newSize >= this.minSize && newSize <= this.maxSize) {
+        this.size = newSize
+        return ZERO
+      } else if (newSize > this.maxSize) {
+        this.size = this.maxSize
+      } else {
+        this.size = this.minSize
+      }
+      return newSize - this.size
+    } else {
+      return newSize
+    }
+  }
+
   getSize () {
     if (this.visibility) {
       return this.size
@@ -125,7 +141,7 @@ export class PaneModel {
 
   setVisibilitySize (newSize: number) {
     this.restoreLimits()
-    return this.setSize(newSize)
+    return this.setSize2(newSize)
   }
 
   addVisibilitySize (sizeChange: number) {
@@ -277,15 +293,29 @@ export class PaneModel {
     }
   }
 
+  setVisibilityNew (visibility: boolean) {
+    const currentLocalVisibility = this.visibility
+    this.visibility = visibility
+
+    if (currentLocalVisibility === visibility) {
+      return 0
+    } else if (visibility) {
+      this.size = this.storedSize
+      return this.size
+    } else {
+      this.storedSize = this.size
+      this.size = 0
+      return -this.storedSize
+    }
+  }
+
   setOldVisibilityModel () {
     this.oldVisibleSize = this.size
     this.oldVisibility = this.visibility
-    this.oldStoredSize = this.storedSize
   }
 
   syncToOldVisibilityModel () {
     this.size = this.oldVisibleSize
     this.visibility = this.oldVisibility
-    this.storedSize = this.oldStoredSize
   }
 }

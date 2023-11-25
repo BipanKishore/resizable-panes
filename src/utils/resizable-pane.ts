@@ -4,7 +4,7 @@ import {PaneModel} from '../models/pane-model'
 import {getList, localConsole, setPaneList} from './development-util'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
-  getPanesSizeSum, getResizerSum, getSum, setUISizesOfAllElement, synPanesMaxToSize, synPanesMinToSize
+  getPanesSizeSum, getResizerSum, setUISizesOfAllElement, synPanesMaxToSize, synPanesMinToSize
 } from './panes'
 
 export const goingDownLogic = (e: IResizableEvent, {axisCoordinate, panesList, activeIndex}: IMovingLogicParams) => {
@@ -319,44 +319,19 @@ export const minMaxLogicDown = (
   minMaxLogicDown(panesList, <number>nextValue, nextAIndex, nextBIndex, sum, maxPaneSize)
 }
 
-export const visibilityOperation = (index: number, panesList: PaneModel[],
-  sizeChange: number, visibility: boolean) => {
-  const operationKey = visibility ? 'removeVisibilitySize' : 'addVisibilitySize'
-
-  for (let i = index - 1; i > MINUS_ONE; i--) {
-    sizeChange = panesList[i][operationKey](sizeChange)
-  }
-
-  for (let i = index + 1; i < panesList.length; i++) {
-    sizeChange = panesList[i][operationKey](sizeChange)
-  }
-}
-
-export const visibilityOperationHideResizer = (index: number, panesList: PaneModel[],
-  sizeChange: number, visibility: boolean) => {
-  const operationKey = visibility ? 'removeVisibilitySize' : 'addVisibilitySize'
-
-  for (let i = index; i > MINUS_ONE; i--) {
-    sizeChange = panesList[i][operationKey](sizeChange)
-  }
-
-  for (let i = index + 1; i < panesList.length; i++) {
-    sizeChange = panesList[i][operationKey](sizeChange)
-  }
-}
-
 export const getMaxContainerSizes = ({getContainerRect, vertical, panesList, resizersList} :IContextDetails) => {
   const {top, height, left, width} = getContainerRect()
   const maxTopAxis = vertical ? left : top
   const containerSize = (vertical ? width : height)
-  const maxPaneSize = containerSize - getResizerSum(resizersList, 0, panesList.length - 2)
-
+  const resizersSize = getResizerSum(resizersList, 0, panesList.length - 2)
+  const maxPaneSize = containerSize - resizersSize
   // console.log('mas Size limits', maxPaneSize,
   //   getPanesSizeSum(panesList, 0, panesList.length - 1), getResizerSum(resizersList, 0, panesList.length - 2))
   return {
     containerSize,
     maxTopAxis,
-    maxPaneSize
+    maxPaneSize,
+    resizersSize
   }
 }
 
@@ -368,7 +343,6 @@ export const registerContainer = (context: any) => (node: any) => {
 // export const toRatioModeFn = (panesList: PaneModel[], resizersList: ResizerModel[], containerSize: number) => {
 export const toRatioModeFn = (contextDetails: IContextDetails) => {
   const {panesList, resizersList} = contextDetails
-
   const {maxPaneSize} = getMaxContainerSizes(contextDetails)
 
   // add for last no visible pane also

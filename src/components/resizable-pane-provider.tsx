@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {ResizablePaneContext, getResizableContext} from '../context/resizable-panes-context'
 import {ResizablePanes} from './resizable-panes'
 import {noop} from '../utils/util'
@@ -10,6 +10,7 @@ import {IResizablePaneProviderProps} from '../@types'
 export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   const {storeKey, sessionStore, visibility} = props
   const [context] = useState(getResizableContext(props))
+  const ref = useRef(true)
   // context.storage.readPaneChange(toArray(children), context)
   useResizableApi(context, props)
   useEffect(() => {
@@ -17,8 +18,12 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   }, [])
 
   useEffect(() => {
-    context.setVisibility(visibility)
-  }, [visibility])
+    if (ref.current === false) {
+      context.setVisibility(visibility)
+    } else {
+      ref.current = false
+    }
+  }, [visibility, ref])
 
   // useEffect(() => {
   //   console.log('v-- contextDetails', context.contextDetails)
