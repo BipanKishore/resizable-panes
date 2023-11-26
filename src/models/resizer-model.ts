@@ -30,7 +30,9 @@ export class ResizerModel {
 
     if (this.isStorPresent) {
       const storedResizer = store.getStoredResizer(this.id)
-      this.visibility = storedResizer.visibility
+      if (storedResizer) {
+        this.visibility = storedResizer.visibility
+      }
     } else {
       this.visibility = show as boolean
     }
