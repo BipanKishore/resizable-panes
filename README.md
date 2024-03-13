@@ -2,6 +2,9 @@
 This library is highly customizable and can be used in
 various applications where flexible layout management is required.
 
+Author: [Vimal Sharma](https://vimalsharma.co.in/).
+I'm full time freelancer. Checkout my profile and feel free to contact me.
+
 ## Key Features
 
 * **Smooth Resizing:** Enjoy smooth and fast pane resizing without performance issues.
