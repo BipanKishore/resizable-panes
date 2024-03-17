@@ -85,6 +85,13 @@ export class ResizerModel {
 
   setVisibilityNew (visibility: boolean) {
     if (!this.isRegistered) {
+      return
+    }
+    this.visibility = visibility
+  }
+
+  setVisibilityNewOld1 (visibility: boolean) {
+    if (!this.isRegistered) {
       return 0
     }
 

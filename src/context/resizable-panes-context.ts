@@ -8,15 +8,14 @@ import {
   setUISizesOfAllElement, setUpMaxLimits, syncAxisSizesFn
 } from '../utils/panes'
 import {
-  calculateAxes, getMaxContainerSizes, goingDownLogic, goingUpLogic, setCurrentMinMax,
+  calculateAxes, goingDownLogic, goingUpLogic, setCurrentMinMax,
   toRatioModeFn
 } from '../utils/resizable-pane'
-import {minMaxTotal} from '../utils/development-util'
+import {getList, minMaxTotal} from '../utils/development-util'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
 import {IKeyToBoolMap, IResizableContext, IResizablePaneProviderProps} from '../@types'
 import {PaneModel} from '../models/pane-model'
-import {ResizerModel} from '../models/resizer-model'
 import {setVisibilityFn} from '../utils/api'
 
 export const getResizableContext = (props: IResizablePaneProviderProps): IResizableContext => {
@@ -143,6 +142,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     return getSizeStyle(vertical, size as number)
   }
 
+  // eslint-disable-next-line complexity
   const setVisibility = (param: IKeyToBoolMap) => {
     if (!param) {
       return
@@ -174,8 +174,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
     // storage.setStorage(contextDetails)
     const sisesMap = getIdToSizeMap()
-    onResizeStop(sisesMap)
-    onChangeVisibility(visibilityMap)
+    if (onResizeStop) { onResizeStop(sisesMap) }
+    if (onChangeVisibility) { onChangeVisibility(visibilityMap) }
   }
 
   return {

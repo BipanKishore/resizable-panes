@@ -4,6 +4,7 @@ import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
 import {ResizerModel} from '../models/resizer-model'
 import {PLUS} from '../constant'
+import {localConsole} from './development-util'
 
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
   panesList.forEach(pane => pane.syncAxisSize())
@@ -24,6 +25,7 @@ export function getSum <T> (list: T[], getNumber: (item:T) => number, start = 0,
   return sum
 }
 
+// may not required
 export const getSizeByIndexes = (panesList: PaneModel[], indexList: number[]) => {
   let sum = 0
   indexList.forEach((i) => {
@@ -38,18 +40,26 @@ export const synPanesMaxToSize = (panesList: PaneModel[], start: number, end: nu
 export const synPanesMinToSize = (panesList: PaneModel[], start: number, end: number) =>
   getSum(panesList, (pane) => pane.synMinToSize(), start, end)
 
-export const getPanesSizeSum = (panesList: PaneModel[], start: number, end: number) =>
+export const getPanesSizeSum = (panesList: PaneModel[], start?: number, end?: number) =>
   getSum(panesList, pane => pane.getSize(), start, end)
 
+// returns the visible resizer size
 export const getResizerSum = (resizersList: ResizerModel[], start: number, end: number) =>
   getSum(resizersList, resizer => resizer.getSize(), start, end)
 
 export const getMaxSizeSum = (panesList: PaneModel[], start: number, end: number) =>
-  getSum(panesList, (pane) => pane.maxSize, start, end)
+  getSum(panesList, (pane) => {
+    localConsole({
+      maxSize: pane.maxSize,
+      minL: pane.minSize
+    }, pane.id)
+    return pane.maxSize
+  }, start, end)
 
 export const getMinSizeSum = (panesList: PaneModel[], start: number, end: number) =>
   getSum(panesList, (pane) => pane.minSize, start, end)
 
+// It is used when we rapidly changes mouse movements
 export const setDownMaxLimits = (panesList: PaneModel[], index: number) => {
   for (let i = 0; i <= index; i++) {
     panesList[i].synSizeToMaxSize()
@@ -60,6 +70,7 @@ export const setDownMaxLimits = (panesList: PaneModel[], index: number) => {
   }
 }
 
+// It is used when we rapidly changes mouse movements
 export const setUpMaxLimits = (panesList: PaneModel[], index: number) => {
   for (let i = 0; i <= index; i++) {
     panesList[i].synSizeToMinSize()

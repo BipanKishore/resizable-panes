@@ -30,6 +30,10 @@ export const findIndex = (list: any[], value: any, key = 'id') =>
 export const ratioToNumber = (totalSize: number, maxRatioValue: number, size: number) =>
   Number((totalSize * (size / maxRatioValue)).toFixed(0))
 
+export const ratioAndRoundOff = (totalSize: number, maxRatioValue: number, size: number) => Math.round(
+  ratioToNumber(totalSize, maxRatioValue, size)
+)
+
 export const addDefaultProps = (props: any, defaultProps: any) => {
   const keys = Object.keys({...props, ...defaultProps})
   const newProps: any = {}

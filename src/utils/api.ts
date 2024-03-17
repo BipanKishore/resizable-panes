@@ -2,7 +2,10 @@ import {IContextDetails, IKeyToBoolMap, IServiceRef} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {ResizerModel} from '../models/resizer-model'
 import {getList} from './development-util'
-import {getSizeByIndexes, getSum, setUISizesFn, setUISizesOfAllElement} from './panes'
+import {
+  change1PixelToPanes, getPanesSizeSum,
+  getSizeByIndexes, getSum, setUISizesFn, setUISizesOfAllElement
+} from './panes'
 import {getMaxContainerSizes} from './resizable-pane'
 import {findIndex} from './util'
 
@@ -13,58 +16,48 @@ export const restoreDefaultFn = ({panesList, resizersList}: IServiceRef) => {
   setUISizesFn(panesList)
 }
 
-export const visibilityOperationFn = (panesList: PaneModel[],
-  sizeChange: number, sizeChangeSumResizers: number,
-  paneVisibilityList: number[], maxPaneSize: number
+export const visibilityOperationFn = (
+  panesList: PaneModel[],
+  actionList: number[],
+  maxPaneSize: number
 ) => {
-  const ratioSum = getSizeByIndexes(panesList, paneVisibilityList)
+  const currentPanesSize = getPanesSizeSum(panesList)
+  const sizeChange = maxPaneSize - currentPanesSize
 
-  const nextActionList: number[] = []
-  let totalRemainingSize = 0
-  paneVisibilityList.forEach((i) => {
-    const size = panesList[i].getSize()
-    const newSize = maxPaneSize * (size / ratioSum)
-    const remainingSize = panesList[i].setVisibilitySize(newSize)
-    if (remainingSize === 0) {
-      nextActionList.push(i)
-    }
-    totalRemainingSize += remainingSize
-  })
-
-  // const newSum = getSizeByIndexes(panesList, paneVisibilityList)
-  // totalRemainingSize += maxPaneSize - newSum
-  // console.log('After Ratio set', newSum, maxPaneSize, maxPaneSize - newSum)
-
-  changeSizeInRatio(panesList, nextActionList, totalRemainingSize)
-}
-
-export const changeSizeInRatio = (panesList: PaneModel[], actionList: number[], sizeChange: number) => {
   if (sizeChange === 0 || actionList.length === 0) {
     return
   }
+
+  changeSizeInRatio(panesList, actionList, sizeChange, maxPaneSize)
+}
+
+// eslint-disable-next-line max-len
+export const changeSizeInRatio = (panesList: PaneModel[], actionList: number[], sizeChange: number, maxPaneSize: number) => {
   const operationKey = sizeChange > 0 ? 'addVisibilitySize' : 'removeVisibilitySize'
-  // console.log('v-- changeSizeInRatio', actionList, sizeChange, operationKey)
+
+  const sizeChangeAbsolute = Math.abs(sizeChange)
+
+  if (sizeChangeAbsolute <= actionList.length) {
+    change1PixelToPanes(panesList, sizeChangeAbsolute, sizeChange > 0 ? '+' : '-')
+    return
+  }
 
   const ratioSum = getSizeByIndexes(panesList, actionList)
 
-  let totalRemainingSize = 0
   const nextActionList: number[] = []
   actionList.forEach((i) => {
     const size = panesList[i].getSize()
-    const newSize = Math.abs(sizeChange * (size / ratioSum))
+    const newSize = Math.round(sizeChangeAbsolute * (size / ratioSum))
+
     const remainingSize = panesList[i][operationKey](newSize)
     if (remainingSize === 0) {
       nextActionList.push(i)
     }
-    totalRemainingSize += remainingSize
-    // console.log('v-- remainingSize', remainingSize)
   })
 
-  // console.log('v--- nextActionListnextActionList', nextActionList)
-  changeSizeInRatio(panesList, nextActionList, totalRemainingSize)
+  visibilityOperationFn(panesList, nextActionList, maxPaneSize)
 }
 
-// eslint-disable-next-line complexity
 export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBoolMap) => {
   const {
     panesList, resizersList
@@ -74,49 +67,37 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
 
   // console.log('Before  ', getList(panesList, 'size'), getSum(panesList, n => n.getSize()))
 
-  let sizeChangeSum = 0
   const paneVisibilityList: number[] = []
 
   for (let i = 0; i < panesList.length; i++) {
     const pane = panesList[i]
     const {id} = pane
-    const visibility = Boolean(idMap[id])
+    const visibility = Boolean(idMap[id]) // may not required
     const index = findIndex(panesList, id)
 
     if (visibility) {
       paneVisibilityList.push(index)
     }
-
-    const sizeChange = pane.setVisibilityNew(visibility)
-    sizeChangeSum += sizeChange
+    pane.setVisibilityNew(visibility)
   }
-
-  let sizeChangeSumResizers = 0
 
   const lastVisibleIndex = [...paneVisibilityList].pop()
 
   for (let i = 0; i < panesList.length; i++) {
-    if (i === lastVisibleIndex) {
-      continue
-    }
     const pane = panesList[i]
     const {id} = pane
     const visibility = Boolean(idMap[id])
     const index = findIndex(panesList, id)
-
-    sizeChangeSumResizers += resizersList[index].setVisibilityNew(visibility)
+    if (i === lastVisibleIndex) {
+      resizersList[index].setVisibilityNew(false)
+    } else {
+      resizersList[index].setVisibilityNew(visibility)
+    }
   }
 
-  if (lastVisibleIndex !== undefined && resizersList[lastVisibleIndex].visibility) {
-    sizeChangeSumResizers += resizersList[lastVisibleIndex].setVisibilityNew(false)
-  }
+  const {maxPaneSize} = getMaxContainerSizes(contextDetails)
 
-  const {containerSize, resizersSize} = getMaxContainerSizes(contextDetails)
-  const maxPaneSize = containerSize - resizersSize
-
-  // console.log('v-- maxPaneSize', maxPaneSize, resizersSize)
-
-  visibilityOperationFn(panesList, sizeChangeSum, sizeChangeSumResizers, paneVisibilityList, maxPaneSize)
+  visibilityOperationFn(panesList, paneVisibilityList, maxPaneSize)
 
   setUISizesOfAllElement(panesList, resizersList)
 }

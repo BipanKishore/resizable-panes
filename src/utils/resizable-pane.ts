@@ -11,6 +11,8 @@ export const goingDownLogic = (e: IResizableEvent, {axisCoordinate, panesList, a
   let sizeChange = e.mouseCoordinate - <number>axisCoordinate
   if (sizeChange < 0) {
     // throw new Error('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+  } else if (sizeChange === 0) {
+    return
   }
 
   let sizeChangeUp = sizeChange
@@ -30,6 +32,8 @@ export const goingUpLogic = (e: any, {axisCoordinate, panesList, activeIndex}: I
   let sizeChange = axisCoordinate - e.mouseCoordinate
   if (sizeChange < 0) {
     // throw new Error('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+  } else if (sizeChange === 0) {
+    return
   }
   let sizeChangeUp = sizeChange
 
@@ -44,28 +48,35 @@ export const goingUpLogic = (e: any, {axisCoordinate, panesList, activeIndex}: I
   }
 }
 
+export const getVisiblePaneModels = (panesList: PaneModel[]) => {
+  return panesList.filter(item => item.visibility)
+}
+
 export const setCurrentMinMax = (serviceRefCurrent: IContextDetails, index?: number) => {
   const {panesList, activeIndex} = serviceRefCurrent
   const {maxPaneSize} = getMaxContainerSizes(serviceRefCurrent)
-  const idx = <number>(index || activeIndex)
+  const _idx = <number>(index || activeIndex)
+
+  const activePane = panesList[_idx]
+
+  const visiblePanesList = getVisiblePaneModels(panesList)
+  const idx = visiblePanesList.indexOf(activePane)
   const nextIdx = idx + 1
   const aMaxChangeUp = panesList[idx].getMinDiff()
-  const bMaxChangeUp = panesList[nextIdx].getMaxDiff()
+  const bMaxChangeUp = visiblePanesList[nextIdx].getMaxDiff()
+  setPaneList(visiblePanesList, ['minSize', 'maxSize'], null)
 
-  setPaneList(panesList, ['minSize', 'maxSize'], null)
+  minMaxLogicUp(visiblePanesList, aMaxChangeUp - bMaxChangeUp, idx, nextIdx, 0, maxPaneSize)
 
-  minMaxLogicUp(panesList, aMaxChangeUp - bMaxChangeUp, idx, nextIdx, 0, maxPaneSize)
-
-  localConsole(getList(panesList, 'minSize'), 'minSize')
-  localConsole(getList(panesList, 'maxSize'), 'maxSize')
-  // setPaneList(panesList, ['minSize', 'maxSize'], null)
-  const aMaxChangeDown = panesList[nextIdx].getMinDiff()
-  const bMaxChangeDown = panesList[idx].getMaxDiff()
-  minMaxLogicDown(panesList, bMaxChangeDown - aMaxChangeDown, idx, nextIdx, 0, maxPaneSize)
-  // paneConsole(panesList, 'minSize')
-  // paneConsole(panesList, 'maxSize')
-  // console.log('minSize ', getList(panesList, 'minSize'))
-  // console.log('maxSize ', getList(panesList, 'maxSize'))
+  // console.log('minSize ', getList(visiblePanesList, 'minSize'))
+  // console.log('maxSize ', getList(visiblePanesList, 'maxSize'))
+  const aMaxChangeDown = visiblePanesList[nextIdx].getMinDiff()
+  const bMaxChangeDown = visiblePanesList[idx].getMaxDiff()
+  minMaxLogicDown(visiblePanesList, bMaxChangeDown - aMaxChangeDown, idx, nextIdx, 0, maxPaneSize)
+  // paneConsole(visiblePanesList, 'minSize')
+  // paneConsole(visiblePanesList, 'maxSize')
+  // console.log('minSize ', getList(visiblePanesList, 'minSize'))
+  // console.log('maxSize ', getList(visiblePanesList, 'maxSize'))
 }
 
 export const calculateAxes = (serviceRefCurrent: any) => {
@@ -75,15 +86,17 @@ export const calculateAxes = (serviceRefCurrent: any) => {
   const idx = activeIndex
 
   const resizerSizeHalf = Math.floor(resizersList[idx].getSize() / 2)
+  // resizer half may cause problem when idx is 1
   const resizerAddon = getResizerSum(resizersList, 0, idx - 1) + resizerSizeHalf
 
   const bottomAxis = maxTopAxis + getMaxSizeSum(panesList, 0, idx) + resizerAddon
   const topAxis = maxTopAxis + getMinSizeSum(panesList, 0, idx) + resizerAddon
-  // localConsole({
-  //   resizerAddon,
-  //   bottomAxis,
-  //   topAxis
-  // }, 'calculateAxes')
+  localConsole({
+    activeIndex,
+    resizerAddon,
+    bottomAxis,
+    topAxis
+  }, 'calculateAxes')
   return {
     bottomAxis,
     topAxis
@@ -92,7 +105,9 @@ export const calculateAxes = (serviceRefCurrent: any) => {
 
 // eslint-disable-next-line complexity
 export const minMaxLogicUp = (
-  panesList: PaneModel[], value: number, aIndex: number, bIndex: number, sum = 0, maxPaneSize: number) => {
+  panesList: PaneModel[], value: number,
+  aIndex: number, bIndex: number,
+  sum = 0, maxPaneSize: number) => {
   // Failing for going up Reached Max
   const lastIndex = panesList.length - 1
 
@@ -209,7 +224,9 @@ export const minMaxLogicUp = (
 
 // eslint-disable-next-line complexity
 export const minMaxLogicDown = (
-  panesList: PaneModel[], value: number, aIndex: number, bIndex: number, sum = 0, maxPaneSize: number) => {
+  panesList: PaneModel[], value: number,
+  aIndex: number, bIndex: number, sum = 0,
+  maxPaneSize: number) => {
   const lastIndex = panesList.length - 1
   // keyConsole({aIndex, bIndex, value, sum})
   let nextValue: number | undefined
@@ -322,11 +339,14 @@ export const minMaxLogicDown = (
 export const getMaxContainerSizes = ({getContainerRect, vertical, panesList, resizersList} :IContextDetails) => {
   const {top, height, left, width} = getContainerRect()
   const maxTopAxis = vertical ? left : top
-  const containerSize = (vertical ? width : height)
+  const containerSize = Math.round(vertical ? width : height)
   const resizersSize = getResizerSum(resizersList, 0, panesList.length - 2)
   const maxPaneSize = containerSize - resizersSize
-  // console.log('mas Size limits', maxPaneSize,
-  //   getPanesSizeSum(panesList, 0, panesList.length - 1), getResizerSum(resizersList, 0, panesList.length - 2))
+
+  // localConsole({containerSize}, 'containerSize')
+  // localConsole({maxTopAxis}, 'maxTopAxis')
+  // localConsole({maxPaneSize}, 'maxPaneSize')
+  // localConsole({resizersSize}, 'resizersSize total')
   return {
     containerSize,
     maxTopAxis,
