@@ -1,7 +1,7 @@
 import {IContextDetails} from '../@types'
 import {IServiceRef} from '../@types/use-resizable-panes-types'
 import {PaneModel} from '../models/pane-model'
-import {getMaxContainerSizes, getVisiblePaneModels} from './resizable-pane'
+import {getMaxContainerSizes, getVisiblePaneModelsAndActiveIndex} from './resizable-pane'
 import {useEffect} from 'react'
 
 export const keyConsole = (obj: any = {}, add = 'v--') => {
@@ -17,7 +17,7 @@ export const localConsole = (obj: any = {}, key : string) => {
 
 export const minMaxTotal = (serviceRefCurrent: IContextDetails) => {
   const {panesList} = serviceRefCurrent
-  const visiblePanesList = getVisiblePaneModels(panesList)
+  const {visiblePanesList} = getVisiblePaneModelsAndActiveIndex(panesList, 0)
 
   const {maxPaneSize} = getMaxContainerSizes(serviceRefCurrent)
   let sum = 0

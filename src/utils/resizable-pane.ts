@@ -48,8 +48,15 @@ export const goingUpLogic = (e: any, {axisCoordinate, panesList, activeIndex}: I
   }
 }
 
-export const getVisiblePaneModels = (panesList: PaneModel[]) => {
-  return panesList.filter(item => item.visibility)
+export const getVisiblePaneModelsAndActiveIndex = (panesList: PaneModel[], _activeIndex: number) => {
+  const visiblePanesList = panesList.filter(item => item.visibility)
+  const activePane = panesList[_activeIndex]
+  const activeIndex = visiblePanesList.indexOf(activePane)
+
+  return {
+    visiblePanesList,
+    activeIndex
+  }
 }
 
 export const setCurrentMinMax = (serviceRefCurrent: IContextDetails, index?: number) => {
@@ -57,10 +64,7 @@ export const setCurrentMinMax = (serviceRefCurrent: IContextDetails, index?: num
   const {maxPaneSize} = getMaxContainerSizes(serviceRefCurrent)
   const _idx = <number>(index || activeIndex)
 
-  const activePane = panesList[_idx]
-
-  const visiblePanesList = getVisiblePaneModels(panesList)
-  const idx = visiblePanesList.indexOf(activePane)
+  const {visiblePanesList, activeIndex: idx} = getVisiblePaneModelsAndActiveIndex(panesList, _idx)
   const nextIdx = idx + 1
   const aMaxChangeUp = panesList[idx].getMinDiff()
   const bMaxChangeUp = visiblePanesList[nextIdx].getMaxDiff()
@@ -83,14 +87,13 @@ export const calculateAxes = (serviceRefCurrent: any) => {
   const {panesList, resizersList, activeIndex} = serviceRefCurrent
 
   const {maxTopAxis} = getMaxContainerSizes(serviceRefCurrent)
-  const idx = activeIndex
-
+  const {visiblePanesList, activeIndex: idx} = getVisiblePaneModelsAndActiveIndex(panesList, activeIndex)
   const resizerSizeHalf = Math.floor(resizersList[idx].getSize() / 2)
   // resizer half may cause problem when idx is 1
   const resizerAddon = getResizerSum(resizersList, 0, idx - 1) + resizerSizeHalf
 
-  const bottomAxis = maxTopAxis + getMaxSizeSum(panesList, 0, idx) + resizerAddon
-  const topAxis = maxTopAxis + getMinSizeSum(panesList, 0, idx) + resizerAddon
+  const bottomAxis = maxTopAxis + getMaxSizeSum(visiblePanesList, 0, idx) + resizerAddon
+  const topAxis = maxTopAxis + getMinSizeSum(visiblePanesList, 0, idx) + resizerAddon
   localConsole({
     activeIndex,
     resizerAddon,

@@ -14,6 +14,9 @@ export class PaneModel {
   // }
 
   // set _size (val:number) {
+  //   if (val === 63) {
+  //     debugger
+  //   }
   //   this.size = val
   // }
 
