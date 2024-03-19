@@ -16,6 +16,7 @@ export class ResizerModel {
   oldVisibility: boolean
 
   resizerSize: number
+  // Not required
   visibilityChangedLast: boolean
 
   visibilityMap: IKeyToBoolMap

@@ -174,8 +174,14 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
     // storage.setStorage(contextDetails)
     const sisesMap = getIdToSizeMap()
-    if (onResizeStop) { onResizeStop(sisesMap) }
-    if (onChangeVisibility) { onChangeVisibility(visibilityMap) }
+    if (onResizeStop) {
+      onResizeStop(sisesMap)
+    }
+    if (onChangeVisibility) {
+      onChangeVisibility(visibilityMap)
+    }
+
+    storage.setStorage(contextDetails)
   }
 
   return {
