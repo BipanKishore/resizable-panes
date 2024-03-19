@@ -19,7 +19,6 @@ import {PaneModel} from '../models/pane-model'
 import {setVisibilityFn} from '../utils/api'
 
 export const getResizableContext = (props: IResizablePaneProviderProps): IResizableContext => {
-  console.log('Runnging')
   const {
     vertical, children, unit,
     uniqueId, storageApi,
