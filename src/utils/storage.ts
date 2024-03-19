@@ -6,7 +6,7 @@ import {ResizerModel} from '../models/resizer-model'
 
 export const onResizeClearSizesMapFromStore = (uniqueId: string, storageApi: any) => {
   window.addEventListener('resize', function () {
-    storageApi.removeItem(uniqueId)
+    if (storageApi) { storageApi.removeItem(uniqueId) }
   })
 }
 
