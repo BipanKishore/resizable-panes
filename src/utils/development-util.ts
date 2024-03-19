@@ -3,6 +3,7 @@ import {IServiceRef} from '../@types/use-resizable-panes-types'
 import {PaneModel} from '../models/pane-model'
 import {getMaxContainerSizes, getVisiblePaneModelsAndActiveIndex} from './resizable-pane'
 import {useEffect} from 'react'
+import {getObj} from './util'
 
 export const keyConsole = (obj: any = {}, add = 'v--') => {
   const keys = Object.keys(obj)
@@ -49,9 +50,9 @@ export const setPaneList = (panesList: PaneModel[], keys: string[] = [], value: 
 }
 
 export const sizesConsole = (panesList: PaneModel[]) => {
-  const t = panesList.map((pane) => {
-    return pane.getObj('size', 'minSize', 'maxSize', 'defaultMinSize', 'defaultMaxSize')
-  })
+  // const t = panesList.map((pane) => {
+  //   return getObj(pane, 'size', 'minSize', 'maxSize', 'defaultMinSize', 'defaultMaxSize')
+  // })
 
   // localConsole(t, 'sizesConsole')
 }

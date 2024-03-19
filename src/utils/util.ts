@@ -45,3 +45,12 @@ export const addDefaultProps = (props: any, defaultProps: any) => {
   }
   return newProps
 }
+
+export const getObj = <T> (obj: T, ...keys: (keyof T)[]) => {
+  const retObj: any = {}
+  keys.forEach(key => {
+    retObj[key] = obj[key as keyof T]
+  })
+
+  return retObj
+}

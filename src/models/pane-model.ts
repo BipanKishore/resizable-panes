@@ -1,8 +1,8 @@
 /* eslint-disable complexity */
-import {IPaneNumericKeys, IStorePaneModel, addAndRemoveType, keyOfPaneModel} from '../@types'
+import {IPaneNumericKeys, IStorePaneModel, addAndRemoveType} from '../@types'
 import {ZERO} from '../constant'
 import {ResizeStorage} from '../utils/storage'
-import {ratioAndRoundOff} from '../utils/util'
+import {getObj, ratioAndRoundOff} from '../utils/util'
 
 export class PaneModel {
   id: string
@@ -87,24 +87,11 @@ export class PaneModel {
     this.visibility = visibility
   }
 
-  getObj (...keys: keyOfPaneModel[]) {
-    const obj: any = {}
-    keys.forEach(key => {
-      obj[key] = this[key as keyof this]
-    })
-
-    return obj
-  }
-
   getStoreObj (): IStorePaneModel {
+    const t = getObj(this, 'id', 'size', 'defaultSize', 'defaultMinSize', 'visibility', 'storedSize')
     return {
-      id: this.id,
-      size: this.size,
-      defaultSize: this.defaultSize,
-      defaultMinSize: this.defaultMinSize,
-      defaultMaxSize: this.defaultMaxSize.toString(),
-      visibility: this.visibility,
-      storedSize: this.storedSize
+      ...t,
+      defaultMaxSize: this.defaultMaxSize.toString()
     }
   }
 
