@@ -18,5 +18,4 @@ various applications where flexible layout management is required.
 
 ### [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
 
-Author: [Vimal Sharma](https://vimalsharma.co.in/).
-I'm full time freelancer. Checkout my profile and feel free to contact me.
+Author: [Vimal Sharma (Freelancer)](https://vimalsharma.co.in/).
