@@ -44,7 +44,7 @@ export class ResizeStorage {
     }
     this.store = objectToSave
 
-    if (storageApi) { storageApi.setItem(uniqueId, objectToSave) }
+    if (storageApi) { storageApi.setItem(uniqueId, JSON.stringify(objectToSave)) }
   }
 
   getStorage (): IStoreModel {
