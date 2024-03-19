@@ -5,6 +5,7 @@ import {
 } from '../@types'
 import {RESIZER} from '../constant'
 import {ResizeStorage} from '../utils/storage'
+import {getObj} from '../utils/util'
 
 export class ResizerModel {
   api: IResizerApi
@@ -90,29 +91,25 @@ export class ResizerModel {
     this.visibility = visibility
   }
 
-  setVisibilityNewOld1 (visibility: boolean) {
-    if (!this.isRegistered) {
-      return 0
-    }
+  // setVisibilityNewOld1 (visibility: boolean) {
+  //   if (!this.isRegistered) {
+  //     return 0
+  //   }
 
-    const localVisibility = this.visibility
-    this.visibility = visibility
+  //   const localVisibility = this.visibility
+  //   this.visibility = visibility
 
-    if (localVisibility === visibility) {
-      return 0
-    } else {
-      if (visibility) {
-        return this.resizerSize
-      } else {
-        return -this.resizerSize
-      }
-    }
-  }
+  //   if (localVisibility === visibility) {
+  //     return 0
+  //   } else {
+  //     if (visibility) {
+  //       return this.resizerSize
+  //     } else {
+  //       return -this.resizerSize
+  //     }
+  //   }
+  // }
 
-  getStoreModel (): IStoreResizerModel {
-    return {
-      id: this.id,
-      visibility: this.visibility
-    }
-  }
+  getStoreModel = (): IStoreResizerModel =>
+    getObj(this, 'id', 'visibility')
 }
