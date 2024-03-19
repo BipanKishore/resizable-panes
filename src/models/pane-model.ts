@@ -34,7 +34,6 @@ export class PaneModel {
 
   oldVisibleSize: number = 0
   oldVisibility: boolean = true
-  initiallyStorePresent: boolean = false
   // Development Variables
 
   constructor (paneProps: any, resizableProps: any, store: ResizeStorage) {
@@ -46,7 +45,6 @@ export class PaneModel {
 
     const storedPane = store.getStoredPane(id)
     if (storedPane) {
-      this.initiallyStorePresent = true
       const {size, defaultMaxSize, defaultMinSize, visibility, storedSize} = storedPane
       // keyConsole({size, defaultMaxSize, defaultMinSize, visibility, storedSize}, 'v--------- ' + typeof storedSize)
       this.initializeSizes(size, defaultMinSize, defaultMaxSize as number, storedSize, visibility)
