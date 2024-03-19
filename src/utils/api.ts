@@ -1,10 +1,9 @@
 import {IContextDetails, IKeyToBoolMap, IServiceRef} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {ResizerModel} from '../models/resizer-model'
-import {getList} from './development-util'
 import {
   change1PixelToPanes, getPanesSizeSum,
-  getSizeByIndexes, getSum, setUISizesFn, setUISizesOfAllElement
+  getSizeByIndexes, setUISizesFn, setUISizesOfAllElement
 } from './panes'
 import {getMaxContainerSizes} from './resizable-pane'
 import {findIndex} from './util'

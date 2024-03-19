@@ -7,6 +7,7 @@ function SingletonService () {
 
   const getService = (id: string, createService: () => IResizableContext) => {
     serviceMap[id] = serviceMap[id] ? serviceMap[id] : createService()
+    return serviceMap[id]
   }
 
   const clearService = (id: string) =>
