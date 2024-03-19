@@ -19,7 +19,8 @@ export const Resizer = (props: IResizer) => {
   const context: any = useContext(ResizablePaneContext)
   const {getIdToSizeMap, myChildren} = context
 
-  const {vertical, storeKey, sessionStore} = context.props
+  // storageApi may not required
+  const {vertical, uniqueId, storageApi} = context.props
   const index = findIndexInChildrenbyId(myChildren, id)
   const isNotLastIndex = index < (myChildren.length - 1)
   const previousTouchEvent:any = useRef()
@@ -48,7 +49,7 @@ export const Resizer = (props: IResizer) => {
     context.props.onResizeStop(resizeParams)
     document.removeEventListener('mouseup', onMoveEnd)
     document.removeEventListener('touchend', onMoveEnd)
-  }, [storeKey, sessionStore, onMouseMove, context, getIdToSizeMap])
+  }, [uniqueId, storageApi, onMouseMove, context, getIdToSizeMap])
 
   const onMouseDown = useCallback((e: any) => {
     setIsMouseDown(true)

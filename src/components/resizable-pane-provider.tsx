@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useRef} from 'react'
 import {ResizablePaneContext, getResizableContext} from '../context/resizable-panes-context'
 import {ResizablePanes} from './resizable-panes'
 import {addDefaultProps, noop} from '../utils/util'
@@ -6,6 +6,7 @@ import {useResizableApi} from '../hook/use-resizable-api'
 // import {useMountingConsole} from '../utils/development-util'
 import {onResizeClearSizesMapFromStore} from '../utils/storage'
 import {IResizablePaneProviderProps} from '../@types'
+import {singletonService} from '../services/singleton-service'
 
 const ResizablePaneProviderDefaultProps: any = {
   onResize: noop,
@@ -13,8 +14,7 @@ const ResizablePaneProviderDefaultProps: any = {
   onReady: noop,
   onChangeVisibility: noop,
   vertical: false,
-  storeKey: '',
-  sessionStore: false,
+  storageApi: undefined,
   unit: undefined,
   resizer: undefined,
   resizerSize: 2,
@@ -23,13 +23,14 @@ const ResizablePaneProviderDefaultProps: any = {
 
 export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   const currentProps = addDefaultProps(props, ResizablePaneProviderDefaultProps) as IResizablePaneProviderProps
-  const {storeKey, sessionStore, visibility} = currentProps
-  const [context] = useState(getResizableContext(currentProps))
+  const {uniqueId, visibility, storageApi} = currentProps
+
+  const context = singletonService.getService(props.uniqueId, () => getResizableContext(currentProps))
   const ref = useRef(true)
   // context.storage.readPaneChange(toArray(children), context)
   useResizableApi(context, currentProps)
   useEffect(() => {
-    onResizeClearSizesMapFromStore(storeKey as string, sessionStore as boolean)
+    onResizeClearSizesMapFromStore(uniqueId, storageApi)
   }, [])
 
   useEffect(() => {

@@ -19,15 +19,16 @@ import {PaneModel} from '../models/pane-model'
 import {setVisibilityFn} from '../utils/api'
 
 export const getResizableContext = (props: IResizablePaneProviderProps): IResizableContext => {
+  console.log('Runnging')
   const {
     vertical, children, unit,
-    storeKey, sessionStore,
+    uniqueId, storageApi,
     onResizeStop, onChangeVisibility
   } = props
 
   const myChildren = toArray(children)
 
-  const storage = new ResizeStorage(storeKey, sessionStore)
+  const storage = new ResizeStorage(uniqueId, storageApi)
   const panesList = createPaneModelList(myChildren, props, storage)
   const contextDetails: any = {
     vertical,

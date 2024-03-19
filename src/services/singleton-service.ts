@@ -1,21 +1,28 @@
-import {IServiceRef} from '../@types'
+import {IResizableContext} from '../@types'
 
-class SingletonService {
-  serviceMap: {
-    [key: string]: IServiceRef
+function SingletonService () {
+  const serviceMap: {
+    [key: string]: IResizableContext
   } = {}
 
-  getService (id: string) {
-    if (this.serviceMap[id]) {
-      return this.serviceMap[id]
+  const getService = (id: string, createService: () => IResizableContext) => {
+    if (serviceMap[id]) {
+      return serviceMap[id]
     }
 
-    return {}
+    const service = createService()
+    serviceMap[id] = service
+    return service
   }
 
-  clearService (id: string) {
-    delete this.serviceMap[id]
+  const clearService = (id: string) => {
+    delete serviceMap[id]
+  }
+
+  return {
+    getService,
+    clearService
   }
 }
 
-export const singletonService = new SingletonService()
+export const singletonService = SingletonService()

@@ -1,43 +1,30 @@
 import {ReactNode, isValidElement} from 'react'
-import {IBooleanOrUndefined, IContextDetails, IStoreModel, IStorePaneModel, IStringOrUndefined} from '../@types'
+import {IContextDetails, IStoreModel, IStorePaneModel} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {getResizerSum} from './panes'
 import {ResizerModel} from '../models/resizer-model'
 
-const setItem = (storeKey: IStringOrUndefined = '', session: IBooleanOrUndefined, value: IStoreModel) => {
-  const stringifyMap = JSON.stringify(value)
-  if (session) {
-    sessionStorage.setItem(storeKey, stringifyMap)
-  } else {
-    localStorage.setItem(storeKey, stringifyMap)
-  }
-}
-
-export const onResizeClearSizesMapFromStore = (storeKey: string, session: boolean) => {
+export const onResizeClearSizesMapFromStore = (uniqueId: string, storageApi: any) => {
   window.addEventListener('resize', function () {
-    if (session) {
-      sessionStorage.removeItem(storeKey)
-    } else {
-      localStorage.removeItem(storeKey)
-    }
+    storageApi.removeItem(uniqueId)
   })
 }
 
 export class ResizeStorage {
   store: any = null
-  storeKey: IStringOrUndefined
-  sessionStore: IBooleanOrUndefined
+  uniqueId: string
+  storageApi: any
   empty = false
 
-  constructor (storeKey: IStringOrUndefined, sessionStore: IBooleanOrUndefined) {
-    this.storeKey = storeKey
-    this.sessionStore = sessionStore
+  constructor (uniqueId: string, storageApi: any) {
+    this.uniqueId = uniqueId
+    this.storageApi = storageApi
     this.getStorage()
   }
 
   setStorage (contextDetails: IContextDetails, _containerSize?: number) {
     const {getContainerRect, panesList, vertical, resizersList} = contextDetails
-    const {storeKey, sessionStore} = this
+    const {uniqueId, storageApi} = this
     const {width, height} = getContainerRect()
 
     // Need to make sure if we are using it containerSize
@@ -56,22 +43,19 @@ export class ResizeStorage {
       containerSize
     }
     this.store = objectToSave
-    setItem(storeKey, sessionStore, objectToSave)
+
+    if (storageApi) { storageApi.setItem(uniqueId, objectToSave) }
   }
 
   getStorage (): IStoreModel {
-    const {store, storeKey, sessionStore} = this
+    const {store, uniqueId, storageApi} = this
     if (store) {
       return store
     }
 
     let value: any
-    if (storeKey) {
-      if (sessionStore) {
-        value = sessionStorage.getItem(storeKey)
-      } else {
-        value = localStorage.getItem(storeKey)
-      }
+    if (storageApi) {
+      value = storageApi.getItem(uniqueId)
       const parsedValue = JSON.parse(value, function (key, value) {
         if (key === 'defaultMaxSize') {
           return Number(value)
