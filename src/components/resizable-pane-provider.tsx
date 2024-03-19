@@ -25,7 +25,14 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   const currentProps = addDefaultProps(props, ResizablePaneProviderDefaultProps) as IResizablePaneProviderProps
   const {uniqueId, visibility, storageApi} = currentProps
 
-  const context = singletonService.getService(props.uniqueId, () => getResizableContext(currentProps))
+  const context = singletonService.getService(uniqueId, () => getResizableContext(currentProps))
+  
+  useEffect(() => {
+    return () => {
+      singletonService.clearService(uniqueId)
+    }
+  }, [uniqueId])
+
   const ref = useRef(true)
   // context.storage.readPaneChange(toArray(children), context)
   useResizableApi(context, currentProps)
