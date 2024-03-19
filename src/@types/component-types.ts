@@ -27,8 +27,8 @@ export interface IResizablePanesPropsBase {
 }
 
 export interface IResizablePaneProviderProps extends IResizablePanesPropsBase {
-  storeKey?: string,
-  sessionStore?: boolean,
+  uniqueId: string,
+  storageApi?: any,
   resizer?: ReactNode,
   resizerSize?: number,
   visibility?: IKeyToBoolMap,

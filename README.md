@@ -2,9 +2,6 @@
 This library is highly customizable and can be used in
 various applications where flexible layout management is required.
 
-Author: [Vimal Sharma](https://vimalsharma.co.in/).
-I'm full time freelancer. Checkout my profile and feel free to contact me.
-
 ## Key Features
 
 * **Smooth Resizing:** Enjoy smooth and fast pane resizing without performance issues.
@@ -20,3 +17,6 @@ I'm full time freelancer. Checkout my profile and feel free to contact me.
 * **Auto-Save Sizes:** Pane sizes are automatically saved in the browser's memory for consistent layouts across sessions.
 
 ### [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
+
+Author: [Vimal Sharma](https://vimalsharma.co.in/).
+I'm full time freelancer. Checkout my profile and feel free to contact me.

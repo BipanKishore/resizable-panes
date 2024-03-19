@@ -11,7 +11,7 @@ import {
   calculateAxes, goingDownLogic, goingUpLogic, setCurrentMinMax,
   toRatioModeFn
 } from '../utils/resizable-pane'
-import {getList, minMaxTotal} from '../utils/development-util'
+import {minMaxTotal} from '../utils/development-util'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
 import {IKeyToBoolMap, IResizableContext, IResizablePaneProviderProps} from '../@types'
@@ -21,13 +21,13 @@ import {setVisibilityFn} from '../utils/api'
 export const getResizableContext = (props: IResizablePaneProviderProps): IResizableContext => {
   const {
     vertical, children, unit,
-    storeKey, sessionStore,
+    uniqueId, storageApi,
     onResizeStop, onChangeVisibility
   } = props
 
   const myChildren = toArray(children)
 
-  const storage = new ResizeStorage(storeKey, sessionStore)
+  const storage = new ResizeStorage(uniqueId, storageApi)
   const panesList = createPaneModelList(myChildren, props, storage)
   const contextDetails: any = {
     vertical,
