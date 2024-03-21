@@ -18,7 +18,10 @@ export class ResizerModel {
 
   visibilityMap: IKeyToBoolMap
 
-  constructor (paneProps: IPane, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
+  constructor (
+    paneProps: IPane,
+    resizableProps: IResizablePaneProviderProps,
+    store: ResizeStorage) {
     const {id} = paneProps
     const {resizerSize, visibility = {}} = resizableProps
     this.visibilityMap = resizableProps.visibility as IKeyToBoolMap
