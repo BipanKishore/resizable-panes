@@ -13,7 +13,6 @@ export class ResizerModel {
   id: string
   isRegistered: boolean = false
   isStorPresent: boolean
-  oldVisibility: boolean
 
   resizerSize: number
 
@@ -24,7 +23,6 @@ export class ResizerModel {
     const {resizerSize, visibility = {}} = resizableProps
     this.visibilityMap = resizableProps.visibility as IKeyToBoolMap
     const show = visibility[id] !== undefined ? visibility[id] : true
-    // console.log('show', show)
     this.id = `${RESIZER}-${id}`
     this.isStorPresent = !store.empty
 
