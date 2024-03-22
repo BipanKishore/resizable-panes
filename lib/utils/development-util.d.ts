@@ -1,0 +1,10 @@
+import { IContextDetails } from '../@types';
+import { PaneModel } from '../models/pane-model';
+export declare const keyConsole: (obj?: any, add?: string) => void;
+export declare const localConsole: (obj: any, key: string) => void;
+export declare const minMaxTotal: (serviceRefCurrent: IContextDetails) => void;
+export declare const getList: (panesList: PaneModel[], key: string) => unknown[];
+export declare const paneConsole: (panesList: PaneModel[], key: string) => void;
+export declare const setPaneList: (panesList: PaneModel[], keys?: string[], value?: any) => void;
+export declare const sizesConsole: (panesList: PaneModel[]) => void;
+export declare const useMountingConsole: (name: string) => void;
