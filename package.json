@@ -14,8 +14,8 @@
     "build-prod-w": "webpack --config configs/webpack.prod.js",
     "build-watch-w": "webpack --watch --config configs/webpack.dev.js",
 
-    "build": "rimraf dist && rollup -c",
-    "build-prod": "rimraf dist && rollup -c",
+    "build": "rimraf lib && rollup -c",
+    "build-prod": "rimraf lib && rollup -c",
     "build-watch": "rollup -c -w",
 
     "link-local": "npm link",
