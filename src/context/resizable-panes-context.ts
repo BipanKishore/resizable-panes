@@ -29,10 +29,11 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const storage = new ResizeStorage(uniqueId, storageApi)
   const panesList = createPaneModelList(myChildren, props, storage)
+  const resizersList = createResizerModelList(myChildren, props, storage)
   const contextDetails: any = {
     vertical,
     panesList,
-    resizersList: createResizerModelList(myChildren, props, storage),
+    resizersList,
     isSetRatioMode: false,
     newVisibilityModel: false
   }

@@ -41,19 +41,18 @@ export class PaneModel {
       id, minSize = ZERO, size, maxSize = Infinity
     } = paneProps
 
-    const show = true
+    const {visibility = {}, vertical} = resizableProps
+    const show = visibility[id] !== undefined ? visibility[id] : true
 
     const storedPane = store.getStoredPane(id)
     if (storedPane) {
       const {size, defaultMaxSize, defaultMinSize, visibility, storedSize} = storedPane
-      // keyConsole({size, defaultMaxSize, defaultMinSize, visibility, storedSize}, 'v--------- ' + typeof storedSize)
       this.initializeSizes(size, defaultMinSize, defaultMaxSize as number, storedSize, visibility)
     } else {
       const freshSize = show ? size : 0
       this.initializeSizes(freshSize, minSize, maxSize, size, show)
     }
 
-    const {vertical} = resizableProps
     this.id = id
     this.vertical = vertical
 
