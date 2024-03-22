@@ -78,37 +78,15 @@ export class ResizerModel {
         }
       }
 
-      // console.log(this.id, uiSize, this.visibility)
-
       this.api.setSize(uiSize)
     }
   }
 
   setVisibilityNew (visibility: boolean) {
-    if (!this.isRegistered) {
-      return
+    if (this.isRegistered) {
+      this.visibility = visibility
     }
-    this.visibility = visibility
   }
-
-  // setVisibilityNewOld1 (visibility: boolean) {
-  //   if (!this.isRegistered) {
-  //     return 0
-  //   }
-
-  //   const localVisibility = this.visibility
-  //   this.visibility = visibility
-
-  //   if (localVisibility === visibility) {
-  //     return 0
-  //   } else {
-  //     if (visibility) {
-  //       return this.resizerSize
-  //     } else {
-  //       return -this.resizerSize
-  //     }
-  //   }
-  // }
 
   getStoreModel = (): IStoreResizerModel =>
     getObj(this, 'id', 'visibility')
