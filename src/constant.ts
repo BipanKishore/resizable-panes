@@ -1,7 +1,7 @@
 export const DIRECTIONS = {
-  DOWN: 'Down',
-  NONE: 'None',
-  UP: 'UP'
+  DOWN: -1,
+  NONE: 0,
+  UP: 1
 }
 
 export const RIGHT_BUTTON_VALUE = 0
