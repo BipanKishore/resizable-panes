@@ -7,7 +7,7 @@
       "lib": ["es2017", "es7", "es6", "dom"],
       "jsx": "react-jsx",
       "allowJs": true,
-      "moduleResolution": "node",
+      "moduleResolution": "Node",
       "sourceMap": true,
       "allowSyntheticDefaultImports": true,
       "declaration": true,
