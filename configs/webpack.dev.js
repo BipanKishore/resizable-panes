@@ -82,7 +82,7 @@ module.exports = {
         alias: {
             react: path.resolve('./node_modules/react')
         },
-        extensions: ['.tsx', '.ts', '.js'],
+        extensions: ['.tsx', '.ts'],
       },
     externals:nodeExternals()
 }

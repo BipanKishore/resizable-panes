@@ -26,7 +26,7 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   const {uniqueId, visibility, storageApi} = currentProps
 
   const context = singletonService.getService(uniqueId, () => getResizableContext(currentProps))
-  
+
   useEffect(() => {
     return () => {
       singletonService.clearService(uniqueId)
@@ -38,7 +38,7 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   useResizableApi(context, currentProps)
   useEffect(() => {
     onResizeClearSizesMapFromStore(uniqueId, storageApi)
-  }, [])
+  }, [uniqueId, storageApi])
 
   useEffect(() => {
     if (ref.current === false) {
