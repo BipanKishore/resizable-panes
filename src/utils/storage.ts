@@ -51,7 +51,7 @@ export class ResizeStorage {
     let value: any
     if (storageApi) {
       value = storageApi.getItem(uniqueId)
-      const parsedValue : IStoreModel = JSON.parse(value, function (key, value) {
+      const parsedValue = JSON.parse(value, function (key, value) {
         if (key === 'defaultMaxSize') {
           return Number(value)
         }
@@ -61,11 +61,17 @@ export class ResizeStorage {
       if (toString.call(parsedValue) === '[object Object]') {
         const {panes} = parsedValue
 
-        const allSameIds = this.panesComponents.every((comp: any, i) => comp?.props?.id === panes[i]?.id)
+        if (panes) {
+          const allSameIds = panes.every(
+            (pane: any, i: number) => (this.panesComponents[i] as any).props.id === pane[i].id
+          )
 
-        if (allSameIds && panes.length === this.panesComponents.length) {
-          this.store = parsedValue
-          return parsedValue
+          if (allSameIds && panes.length === this.panesComponents.length) {
+            this.store = parsedValue
+            return parsedValue
+          } else {
+            storageApi.removeItem(uniqueId)
+          }
         } else {
           storageApi.removeItem(uniqueId)
         }
