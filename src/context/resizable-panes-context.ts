@@ -77,7 +77,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   const setMouseDownDetails = ({mouseCoordinate}: any, id: string) => {
     const index = findIndexInChildrenbyId(myChildren, id)
     setActiveIndex(index)
-    contextDetails.prevDirection = DIRECTIONS.NONE
+    contextDetails.direction = DIRECTIONS.NONE
     contextDetails.axisCoordinate = mouseCoordinate
     syncAxisSizes()
   }
@@ -101,12 +101,12 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   const setDirection = (e: any) => {
-    const {prevDirection} = contextDetails
-    const direction = getDirection(e)
+    const {direction} = contextDetails
+    const currentDirection = getDirection(e)
 
-    if (prevDirection !== direction) {
+    if (currentDirection !== direction) {
+      contextDetails.direction = currentDirection
       directionChangeActions(e)
-      contextDetails.prevDirection = direction
     }
   }
 

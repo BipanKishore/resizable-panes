@@ -108,7 +108,7 @@ export interface IContextDetails {
   isSetRatioMode: boolean,
   activeIndex: number,
   axisCoordinate: number,
-  prevDirection: string,
+  direction: number,
   getContainerRect: any,
   newVisibilityModel: boolean,
   vertical: boolean

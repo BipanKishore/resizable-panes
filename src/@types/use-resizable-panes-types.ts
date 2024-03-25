@@ -17,7 +17,7 @@ export interface IServiceRef{
     getContainerRect?: any,
     panesList: PaneModel[],
     activeIndex?: number
-    prevDirection?: string,
+    direction?: number,
     axisCoordinate?: number,
     vertical?: boolean,
     resizersList?: any,

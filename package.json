@@ -17,6 +17,7 @@
     "build-prod": "rimraf lib && rollup -c",
     "build-watch": "rollup -c -w",
     "link-local": "npm link",
+    "start-w": "npm-run-all --serial  build-watch-w link-local",
     "start": "npm-run-all --serial  build-watch link-local",
     "predeploy": "npm-run-all --serial  build-prod",
     "deploy": "npm publish"

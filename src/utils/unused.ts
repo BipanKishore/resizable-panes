@@ -1,7 +1,7 @@
 import {DIRECTIONS, RIGHT_BUTTON_VALUE} from '../constant'
 
 // eslint-disable-next-line complexity
-export const directionBehaviourConsole = (direction: string, prevDirection: string) => {
+export const directionBehaviourConsole = (direction: number, prevDirection: number) => {
   switch (true) {
     case prevDirection === DIRECTIONS.NONE && direction === DIRECTIONS.UP:
       console.warn('direction we have starteed Up')
