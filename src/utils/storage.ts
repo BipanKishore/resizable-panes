@@ -1,4 +1,4 @@
-import {ReactNode, isValidElement} from 'react'
+import {ReactElement, ReactNode, isValidElement} from 'react'
 import {IContextDetails, IStoreModel, IStorePaneModel} from '../@types'
 import {getResizerSum} from './panes'
 import {findById} from './util'
@@ -10,12 +10,12 @@ export const onResizeClearSizesMapFromStore = (uniqueId: string, storageApi: any
 }
 
 export class ResizeStorage {
-  panesComponents: ReactNode[]
+  panesComponents: ReactElement[]
   store: any = null
   uniqueId: string
   storageApi: any
   empty = false
-  constructor (uniqueId: string, storageApi: any, panesComponents: ReactNode[]) {
+  constructor (uniqueId: string, storageApi: any, panesComponents: ReactElement[]) {
     this.uniqueId = uniqueId
     this.storageApi = storageApi
     this.panesComponents = panesComponents
@@ -51,7 +51,7 @@ export class ResizeStorage {
     let value: any
     if (storageApi) {
       value = storageApi.getItem(uniqueId)
-      const parsedValue = JSON.parse(value, function (key, value) {
+      const parsedValue: IStoreModel = JSON.parse(value, function (key, value) {
         if (key === 'defaultMaxSize') {
           return Number(value)
         }
@@ -62,9 +62,7 @@ export class ResizeStorage {
         const {panes} = parsedValue
 
         if (panes) {
-          const allSameIds = panes.every(
-            (pane: any, i: number) => (this.panesComponents[i] as any).props.id === pane[i].id
-          )
+          const allSameIds = panes.every((pane, i) => this.panesComponents[i]?.props.id === pane.id)
 
           if (allSameIds && panes.length === this.panesComponents.length) {
             this.store = parsedValue
