@@ -1,4 +1,5 @@
 import {IContextDetails, IKeyToBoolMap, IServiceRef} from '../@types'
+import {MINUS, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
 import {ResizerModel} from '../models/resizer-model'
 import {
@@ -32,12 +33,12 @@ export const visibilityOperationFn = (
 
 // eslint-disable-next-line max-len
 export const changeSizeInRatio = (panesList: PaneModel[], actionList: number[], sizeChange: number, maxPaneSize: number) => {
-  const operationKey = sizeChange > 0 ? 'addVisibilitySize' : 'removeVisibilitySize'
+  const operation = sizeChange > 0 ? PLUS : MINUS
 
   const sizeChangeAbsolute = Math.abs(sizeChange)
 
   if (sizeChangeAbsolute <= actionList.length) {
-    change1PixelToPanes(panesList, sizeChangeAbsolute, sizeChange > 0 ? '+' : '-')
+    change1PixelToPanes(panesList, sizeChangeAbsolute, operation)
     return
   }
 
@@ -48,7 +49,7 @@ export const changeSizeInRatio = (panesList: PaneModel[], actionList: number[], 
     const size = panesList[i].getSize()
     const newSize = Math.round(sizeChangeAbsolute * (size / ratioSum))
 
-    const remainingSize = panesList[i][operationKey](newSize)
+    const remainingSize = panesList[i].setVisibilitySize(newSize, operation)
     if (remainingSize === 0) {
       nextActionList.push(i)
     }

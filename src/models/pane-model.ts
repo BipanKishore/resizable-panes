@@ -1,6 +1,6 @@
 /* eslint-disable complexity */
 import {IPaneNumericKeys, IStorePaneModel, addAndRemoveType} from '../@types'
-import {ZERO} from '../constant'
+import {PLUS, ZERO} from '../constant'
 import {ResizeStorage} from '../utils/storage'
 import {getObj, ratioAndRoundOff} from '../utils/util'
 
@@ -94,22 +94,6 @@ export class PaneModel {
     }
   }
 
-  // setSize (newSize: number) {
-  //   if (this.visibility) {
-  //     if (newSize >= this.minSize && newSize <= this.maxSize) {
-  //       this.size = newSize
-  //       return ZERO
-  //     } else if (newSize > this.maxSize) {
-  //       this.size = this.maxSize
-  //     } else {
-  //       this.size = this.minSize
-  //     }
-  //     return Math.abs(this.size - newSize)
-  //   } else {
-  //     return 0
-  //   }
-  // }
-
   getSize () {
     if (this.visibility) {
       return this.size
@@ -117,7 +101,8 @@ export class PaneModel {
     return 0
   }
 
-  setVisibilitySize (newSize: number) {
+  setVisibilitySize (sizeChange: number, operation: addAndRemoveType) {
+    const newSize = this.size + (operation === PLUS ? sizeChange : -sizeChange)
     this.restoreLimits()
     if (this.visibility) {
       if (newSize >= this.minSize && newSize <= this.maxSize) {
@@ -134,18 +119,8 @@ export class PaneModel {
     }
   }
 
-  addVisibilitySize (sizeChange: number) {
-    const newSize = this.size + sizeChange
-    return this.setVisibilitySize(newSize)
-  }
-
-  removeVisibilitySize (sizeChange: number) {
-    const newSize = this.size - sizeChange
-    return this.setVisibilitySize(newSize)
-  }
-
   changeSize (sizeChange: number, operation: addAndRemoveType) {
-    const newSize = this.axisSize + (operation === '+' ? sizeChange : -sizeChange)
+    const newSize = this.axisSize + (operation === PLUS ? sizeChange : -sizeChange)
     if (this.visibility) {
       if (newSize >= this.minSize && newSize <= this.maxSize) {
         this.size = newSize
