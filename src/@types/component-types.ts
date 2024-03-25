@@ -48,14 +48,10 @@ export interface IPane {
   minSize?: number,
   resizer?: ReactNode,
   resizerSize?: number
-  // destroyOnHide?: boolean
 }
 
 export interface IPaneRef {
-  setSize: (size: number) => void,
-  // onFullSize: () => void,
-  // onFullPage: () => void,
-  // onCloseFullSize: () => void,
+  setSize: (size: number) => void
 }
 
 export interface IResizer {
@@ -86,17 +82,6 @@ export interface IStoreModel {
   resizers: IStoreResizerModel[],
   containerSize?: number
 }
-
-// export interface IPreviousVisibilityModel {
-//   id: string,
-//   size: number,
-//   visibility: boolean,
-//   storedSize: number
-// }
-
-// export interface IPreviousVisibilityModelMap {
-//   [key: string]: IPreviousVisibilityModel[]
-// }
 
 export interface IContextDetails {
   panesList: PaneModel[],
