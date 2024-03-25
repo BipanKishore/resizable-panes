@@ -33,7 +33,6 @@ export interface IResizablePaneProviderProps extends IResizablePanesPropsBase {
   resizerSize?: number,
   visibility?: IKeyToBoolMap,
   vertical?: boolean
-
 }
 
 export interface IResizablePanesProps extends IResizablePanesPropsBase {
@@ -62,19 +61,17 @@ export interface IResizer {
   children?: ReactNode
 }
 
-export interface IStorePaneModel {
-  id:string,
+export interface IStoreResizerModel {
+  id: string,
+  visibility: boolean
+}
+
+export interface IStorePaneModel extends IStoreResizerModel {
   size: number,
   defaultSize: number,
   defaultMinSize: number,
   defaultMaxSize: string | number,
-  visibility: boolean,
   storedSize: number
-}
-
-export interface IStoreResizerModel {
-  id: string,
-  visibility: boolean
 }
 
 export interface IStoreModel {
