@@ -186,7 +186,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   return {
-    setActiveIndex,
     registerPane,
     registerResizer,
     registerContainer,
