@@ -10,14 +10,15 @@ export const onResizeClearSizesMapFromStore = (uniqueId: string, storageApi: any
 }
 
 export class ResizeStorage {
+  panesComponents: ReactNode[]
   store: any = null
   uniqueId: string
   storageApi: any
   empty = false
-
-  constructor (uniqueId: string, storageApi: any) {
+  constructor (uniqueId: string, storageApi: any, panesComponents: ReactNode[]) {
     this.uniqueId = uniqueId
     this.storageApi = storageApi
+    this.panesComponents = panesComponents
     this.getStorage()
   }
 
@@ -40,6 +41,7 @@ export class ResizeStorage {
     if (storageApi) { storageApi.setItem(uniqueId, JSON.stringify(objectToSave)) }
   }
 
+  // eslint-disable-next-line complexity
   getStorage (): IStoreModel {
     const {store, uniqueId, storageApi} = this
     if (store) {
@@ -49,7 +51,7 @@ export class ResizeStorage {
     let value: any
     if (storageApi) {
       value = storageApi.getItem(uniqueId)
-      const parsedValue = JSON.parse(value, function (key, value) {
+      const parsedValue : IStoreModel = JSON.parse(value, function (key, value) {
         if (key === 'defaultMaxSize') {
           return Number(value)
         }
@@ -57,9 +59,16 @@ export class ResizeStorage {
       })
 
       if (toString.call(parsedValue) === '[object Object]') {
-        this.store = parsedValue
-        // console.log('parsedValueparsedValueparsedValue', parsedValue)
-        return parsedValue
+        const {panes} = parsedValue
+
+        const allSameIds = this.panesComponents.every((comp: any, i) => comp?.props?.id === panes[i]?.id)
+
+        if (allSameIds && panes.length === this.panesComponents.length) {
+          this.store = parsedValue
+          return parsedValue
+        } else {
+          storageApi.removeItem(uniqueId)
+        }
       }
     }
     this.empty = true

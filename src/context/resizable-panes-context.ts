@@ -27,7 +27,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const myChildren = toArray(children)
 
-  const storage = new ResizeStorage(uniqueId, storageApi)
+  const storage = new ResizeStorage(uniqueId, storageApi, myChildren)
   const panesList = createPaneModelList(myChildren, props, storage)
   const resizersList = createResizerModelList(myChildren, props, storage)
   const contextDetails: any = {
