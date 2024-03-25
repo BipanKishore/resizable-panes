@@ -1,8 +1,7 @@
 import {ReactNode, isValidElement} from 'react'
 import {IContextDetails, IStoreModel, IStorePaneModel} from '../@types'
-import {PaneModel} from '../models/pane-model'
 import {getResizerSum} from './panes'
-import {ResizerModel} from '../models/resizer-model'
+import {findById} from './util'
 
 export const onResizeClearSizesMapFromStore = (uniqueId: string, storageApi: any) => {
   window.addEventListener('resize', function () {
@@ -32,14 +31,8 @@ export class ResizeStorage {
     getResizerSum(resizersList, 0, resizersList.length - 1)
 
     const objectToSave = {
-      panesMap: panesList.reduce((acc: any, pane: PaneModel) => {
-        acc[pane.id] = pane.getStoreObj()
-        return acc
-      }, {}),
-      resizerMap: resizersList.reduce((acc: any, resizer: ResizerModel) => {
-        acc[resizer.id] = resizer.getStoreModel()
-        return acc
-      }, {}),
+      panes: panesList.map(item => item.getStoreObj()),
+      resizers: resizersList.map(item => item.getStoreModel()),
       containerSize
     }
     this.store = objectToSave
@@ -71,24 +64,24 @@ export class ResizeStorage {
     }
     this.empty = true
     return {
-      panesMap: {},
-      resizerMap: {}
+      panes: [],
+      resizers: []
     } as IStoreModel
   }
 
   // Removed from Call
   getStoredPane (id: keyof IStorePaneModel): IStorePaneModel | null {
-    const {panesMap} = this.getStorage()
-    return panesMap[id] ?? null
+    const {panes} = this.getStorage()
+    return findById(panes, id) ?? null
   }
 
   getStoredResizer (id: string) {
-    const {resizerMap} = this.getStorage()
-    return resizerMap[id] ?? null
+    const {resizers} = this.getStorage()
+    return findById(resizers, id) ?? null
   }
 
   readPaneChange (children: ReactNode[], context: any) {
-    const {panesMap, containerSize} = this.getStorage()
+    const {panes, containerSize} = this.getStorage()
     if (!containerSize) {
       return
     }
@@ -104,7 +97,7 @@ export class ResizeStorage {
         pane.visibility = visibility
         isVisibilityChanged = true
       }
-      pane.size = panesMap[pane.id].size
+      pane.size = findById(panes, pane.id).size
     })
 
     if (isVisibilityChanged) {

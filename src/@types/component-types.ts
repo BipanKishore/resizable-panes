@@ -82,13 +82,9 @@ export interface IStoreResizerModel {
 }
 
 export interface IStoreModel {
-  panesMap: {
-    [keyof: string]: IStorePaneModel
-  },
-  resizerMap: {
-    [key: string]: IStoreResizerModel
-  }
-  containerSize: number
+  panes: IStorePaneModel[],
+  resizers: IStoreResizerModel[],
+  containerSize?: number
 }
 
 // export interface IPreviousVisibilityModel {
