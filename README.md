@@ -16,7 +16,7 @@ various applications where flexible layout management is required.
 
 * **Responsive:** In ratio mode, It adjusts pane sizes responsively to fit in available space, making it perfect for dynamic layouts.
 
-* **Auto-Save Sizes:** Pane sizes and visibilities are automatically saved in the browser's memory for consistent layouts across sessions.
+* **Auto-Save Sizes:** Pane size and visibility are automatically saved in the browser's memory for consistent layouts across sessions.
 
 ### [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
 
