@@ -143,12 +143,10 @@ export class PaneModel {
   setUISize () {
     if (this.pane) {
       this.pane.setSize(this.visibility ? this.size : 0)
-      // return not required
-      return this.size
     }
   }
 
-  registerRef (pane: any) {
+  register (pane: any) {
     if (this.pane) {
       this.pane = pane
       this.setUISize()
