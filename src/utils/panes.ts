@@ -1,4 +1,4 @@
-import {ReactNode, isValidElement} from 'react'
+import {ReactElement} from 'react'
 import {IResizablePaneProviderProps, IResizablePanesProps, addAndRemoveType} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
@@ -116,27 +116,17 @@ export const change1PixelToPanes = (panesList: PaneModel[], sizeChange: number,
   }
 }
 
-export const createPaneModelList = (children: ReactNode[], props: IResizablePanesProps, store: ResizeStorage) => {
-  const paneList: PaneModel[] = []
-  for (const child of children) {
-    if (isValidElement(child)) {
-      paneList.push(
-        new PaneModel(child.props, props, store)
-      )
-    }
-  }
-  return paneList
-}
+export const createPaneModelList = (
+  children: ReactElement[], props: IResizablePanesProps, store: ResizeStorage) =>
+  children.map((child) =>
+    new PaneModel(child.props, props, store)
+  )
 
-export const createResizerModelList = (children: ReactNode[],
+export const createResizerModelList = (children: ReactElement[],
   resizerSize: IResizablePaneProviderProps, store: ResizeStorage) => {
-  const resizersList: ResizerModel[] = []
-  for (const child of children) {
-    if (isValidElement(child)) {
-      resizersList.push(
-        new ResizerModel(child.props, resizerSize, store)
-      )
-    }
-  }
+  const resizersList: ResizerModel[] = children.map((child) =>
+    new ResizerModel(child.props, resizerSize, store)
+  )
+  resizersList.pop()
   return resizersList
 }

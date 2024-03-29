@@ -1,15 +1,14 @@
 import {IContextDetails} from '../@types'
-import {IServiceRef} from '../@types/use-resizable-panes-types'
 import {PaneModel} from '../models/pane-model'
 import {getMaxContainerSizes, getVisiblePaneModelsAndActiveIndex} from './resizable-pane'
 import {useEffect} from 'react'
 import {getObj} from './util'
 
-export const keyConsole = (obj: any = {}, add = 'v--') => {
-  const keys = Object.keys(obj)
-  const str = keys.reduce((p, v) => p + ' ' + v + ': ' + obj[v], add)
-  // console.log(str)
-}
+// export const keyConsole = (obj: any = {}, add = 'v--') => {
+//   const keys = Object.keys(obj)
+//   const str = keys.reduce((p, v) => p + ' ' + v + ': ' + obj[v], add)
+//   // console.log(str)
+// }
 
 export const localConsole = (obj: any = {}, key : string) => {
   // console.log(key, obj)

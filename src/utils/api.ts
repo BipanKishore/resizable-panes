@@ -1,4 +1,4 @@
-import {IContextDetails, IKeyToBoolMap, IServiceRef} from '../@types'
+import {IContextDetails, IKeyToBoolMap} from '../@types'
 import {MINUS, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
 import {ResizerModel} from '../models/resizer-model'
@@ -10,8 +10,8 @@ import {getMaxContainerSizes} from './resizable-pane'
 import {findIndex} from './util'
 
 // Need to check for hidden element
-export const restoreDefaultFn = ({panesList, resizersList}: IServiceRef) => {
-  panesList.forEach((pane) => pane.restore())
+export const restoreDefaultFn = ({panesList, resizersList}: any) => {
+  panesList.forEach((pane: PaneModel) => pane.restore())
   setResizersVisibility(resizersList, true)
   setUISizesFn(panesList)
 }
@@ -58,6 +58,7 @@ export const changeSizeInRatio = (panesList: PaneModel[], actionList: number[], 
   visibilityOperationFn(panesList, nextActionList, maxPaneSize)
 }
 
+// eslint-disable-next-line complexity
 export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBoolMap) => {
   const {
     panesList, resizersList
@@ -88,6 +89,9 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
     const {id} = pane
     const visibility = Boolean(idMap[id])
     const index = findIndex(panesList, id)
+    if (!resizersList[index]) {
+      continue
+    }
     if (i === lastVisibleIndex) {
       resizersList[index].setVisibilityNew(false)
     } else {

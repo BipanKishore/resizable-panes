@@ -6,21 +6,8 @@ export type keyOfPaneModel = keyof PaneModel
 export type IPaneNumericKeys = 'size' | 'defaultSize' | 'minSize' | 'maxSize' | 'defaultMinSize' | 'defaultMaxSize'
 
 export interface IResizableApi {
-    toFullSize: (paneId: string) => void,
-    closeFullSize: () => void,
     restoreDefault: () => void,
-    toFullPage: (paneId: string) => void,
     setVisibility: (map: IKeyToBoolMap) => void
-}
-
-export interface IServiceRef{
-    getContainerRect?: any,
-    panesList: PaneModel[],
-    activeIndex?: number
-    direction?: number,
-    axisCoordinate?: number,
-    vertical?: boolean,
-    resizersList?: any,
 }
 
 export interface IUseResizablePanesParams {
@@ -45,10 +32,4 @@ export interface IResizerApi {
     getVisibleSize: () => number,
     visibility: boolean,
     setSize: (size: number) => void
-  }
-
-export interface IMovingLogicParams {
-    axisCoordinate: number,
-    panesList: PaneModel[],
-    activeIndex: number
   }

@@ -1,13 +1,13 @@
-import {IContextDetails, IMovingLogicParams, IResizableEvent} from '../@types'
+import {IContextDetails, IResizableEvent} from '../@types'
 import {MINUS, MINUS_ONE, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
-import {getList, localConsole, setPaneList} from './development-util'
+import {localConsole, setPaneList} from './development-util'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
   getPanesSizeSum, getResizerSum, setUISizesOfAllElement, synPanesMaxToSize, synPanesMinToSize
 } from './panes'
 
-export const goingDownLogic = (e: IResizableEvent, {axisCoordinate, panesList, activeIndex}: IMovingLogicParams) => {
+export const goingDownLogic = (e: IResizableEvent, {axisCoordinate, panesList, activeIndex}: any) => {
   let sizeChange = e.mouseCoordinate - <number>axisCoordinate
   if (sizeChange < 0) {
     // throw new Error('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
@@ -28,7 +28,7 @@ export const goingDownLogic = (e: IResizableEvent, {axisCoordinate, panesList, a
   }
 }
 
-export const goingUpLogic = (e: any, {axisCoordinate, panesList, activeIndex}: IMovingLogicParams) => {
+export const goingUpLogic = (e: IResizableEvent, {axisCoordinate, panesList, activeIndex}: any) => {
   let sizeChange = axisCoordinate - e.mouseCoordinate
   if (sizeChange < 0) {
     // throw new Error('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')

@@ -83,9 +83,7 @@ export class ResizerModel {
   }
 
   setVisibilityNew (visibility: boolean) {
-    if (this.isRegistered) {
-      this.visibility = visibility
-    }
+    this.visibility = visibility
   }
 
   getStoreModel = (): IStoreResizerModel =>
