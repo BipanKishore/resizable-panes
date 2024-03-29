@@ -117,13 +117,16 @@ export const change1PixelToPanes = (panesList: PaneModel[], sizeChange: number,
 }
 
 export const createPaneModelList = (
-  children: ReactElement[], props: IResizablePanesProps, store: ResizeStorage) =>
-  children.map(child =>
-    new PaneModel(child.props, props, store)
-  )
+  children: ReactElement[],
+  props: IResizablePanesProps,
+  store: ResizeStorage) =>
+  children.map(child => new PaneModel(child.props, props, store))
 
-export const createResizerModelList = (children: ReactElement[],
-  resizerSize: IResizablePaneProviderProps, store: ResizeStorage) => {
+export const createResizerModelList = (
+  children: ReactElement[],
+  resizerSize: IResizablePaneProviderProps,
+  store: ResizeStorage
+) => {
   const resizersList: ResizerModel[] = children.map(child => new ResizerModel(child.props, resizerSize, store))
   resizersList.pop()
   return resizersList
