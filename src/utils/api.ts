@@ -79,7 +79,7 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
     if (visibility) {
       paneVisibilityList.push(index)
     }
-    pane.setVisibilityNew(visibility)
+    pane.setVisibility(visibility)
   }
 
   const lastVisibleIndex = [...paneVisibilityList].pop()
@@ -93,9 +93,9 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
       continue
     }
     if (i === lastVisibleIndex) {
-      resizersList[index].setVisibilityNew(false)
+      resizersList[index].setVisibility(false)
     } else {
-      resizersList[index].setVisibilityNew(visibility)
+      resizersList[index].setVisibility(visibility)
     }
   }
 
@@ -108,6 +108,6 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
 
 export const setResizersVisibility = (resizersList: ResizerModel[], visibility: boolean) => {
   for (const resizer of resizersList) {
-    resizer.setVisibilityNew(visibility)
+    resizer.setVisibility(visibility)
   }
 }

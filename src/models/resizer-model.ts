@@ -1,44 +1,37 @@
 import {
   IKeyToBoolMap,
   IPane, IResizablePaneProviderProps,
-  IResizerApi, IStoreResizerModel
+  IResizerApi
 } from '../@types'
 import {RESIZER} from '../constant'
 import {ResizeStorage} from '../utils/storage'
-import {getObj} from '../utils/util'
+import {PaneModel} from './pane-model'
 
-export class ResizerModel {
+export class ResizerModel extends PaneModel {
   api: IResizerApi
-  visibility: boolean
-  id: string
-  isRegistered: boolean = false
-  isStorPresent: boolean
-
   resizerSize: number
 
-  visibilityMap: IKeyToBoolMap
+  initialVisibility: IKeyToBoolMap
 
   constructor (
     paneProps: IPane,
     resizableProps: IResizablePaneProviderProps,
-    store: ResizeStorage) {
+    store: ResizeStorage, panesList: PaneModel[]) {
+    super(paneProps, resizableProps, store)
+    this.isRegistered = true
+    this.isHandle = true
+
     const {id} = paneProps
     const {resizerSize, visibility = {}} = resizableProps
-    this.visibilityMap = resizableProps.visibility as IKeyToBoolMap
-    const show = visibility[id] !== undefined ? visibility[id] : true
+    this.initialVisibility = resizableProps.visibility as IKeyToBoolMap
     this.id = `${RESIZER}-${id}`
-    this.isStorPresent = !store.empty
 
-    if (this.isStorPresent) {
-      const storedResizer = store.getStoredResizer(this.id)
-      if (storedResizer) {
-        this.visibility = storedResizer.visibility
-      }
-    } else {
-      this.visibility = show as boolean
-    }
+    const storedResizer = store.getStoredResizer(this.id)
+    const show = visibility[id] !== undefined ? visibility[id] : true
+    this.visibility = storedResizer ? storedResizer.visibility : show as boolean
 
-    this.resizerSize = paneProps.resizerSize || resizerSize as number
+    this.size = paneProps.resizerSize || resizerSize as number
+    this.resizerSize = this.size
   }
 
   registerMe () {
@@ -56,36 +49,16 @@ export class ResizerModel {
   // This method never runs for last Element
   register (api: IResizerApi) {
     this.api = api
-    if (!this.visibilityMap) {
-      this.resizerSize = api.getVisibleSize()
+    if (!this.initialVisibility) {
+      this.size = api.getVisibleSize()
     }
+    this.initializeSizes(this.size, 0, this.size as number, this.size, this.visibility)
     this.registerMe()
   }
 
-  getSize () {
-    return this.isRegistered ? (this.visibility ? this.resizerSize : 0) : 0
-  }
-
-  setUISize () {
-    if (this.api) {
-      let uiSize = 0
-
-      if (this.visibility) {
-        if (this.resizerSize) {
-          uiSize = this.resizerSize
-        } else {
-          uiSize = this.api.getVisibleSize()
-        }
-      }
-
-      this.api.setSize(uiSize)
+  setVisibilityHelper = () => {
+    if (this.visibility) {
+      this.size = this.resizerSize ? this.resizerSize : this.api.getVisibleSize()
     }
   }
-
-  setVisibilityNew (visibility: boolean) {
-    this.visibility = visibility
-  }
-
-  getStoreModel = (): IStoreResizerModel =>
-    getObj(this, 'id', 'visibility')
 }

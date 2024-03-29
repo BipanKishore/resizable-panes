@@ -61,12 +61,9 @@ export interface IResizer {
   children?: ReactNode
 }
 
-export interface IStoreResizerModel {
+export interface IStoreResizableItemsModel {
   id: string,
   visibility: boolean
-}
-
-export interface IStorePaneModel extends IStoreResizerModel {
   size: number,
   defaultSize: number,
   defaultMinSize: number,
@@ -75,8 +72,8 @@ export interface IStorePaneModel extends IStoreResizerModel {
 }
 
 export interface IStoreModel {
-  panes: IStorePaneModel[],
-  resizers: IStoreResizerModel[],
+  panes: IStoreResizableItemsModel[],
+  resizers: IStoreResizableItemsModel[],
   containerSize?: number
 }
 
@@ -107,3 +104,5 @@ export interface IResizableContext {
   getPaneSizeStyle: (id: string) => void,
   setVisibility: any
 }
+
+export type IResizableItem = PaneModel | ResizerModel

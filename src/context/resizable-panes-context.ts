@@ -2,8 +2,7 @@ import {createContext} from 'react'
 import {createMap, findById} from '../utils/util'
 import {DIRECTIONS, RATIO, SIZE, VISIBILITY, ZERO} from '../constant'
 import {
-  createPaneModelList,
-  createResizerModelList,
+  createPaneModelListAndResizerModelList,
   findIndexInChildrenbyId, setDownMaxLimits,
   setUISizesOfAllElement, setUpMaxLimits, syncAxisSizesFn
 } from '../utils/panes'
@@ -30,9 +29,13 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   // reference will never change for these items: storage,
   // panesList, PaneModels, resizersList, ResizerModels
   const storage = new ResizeStorage(uniqueId, storageApi, myChildren)
-  const panesList = createPaneModelList(myChildren, props, storage)
-  const resizersList = createResizerModelList(myChildren, props, storage)
+  const [panesList, resizersList] = createPaneModelListAndResizerModelList(myChildren, props, storage)
+  // const resizersList = createResizerModelList(myChildren, props, storage)
   // reference will never change for these items: storage, panesList, resizersList
+
+  console.log(
+    resizersList
+  )
 
   const contextDetails: any = {
     vertical,

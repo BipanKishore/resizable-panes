@@ -1,13 +1,18 @@
 /* eslint-disable complexity */
-import {IPaneNumericKeys, IStorePaneModel, addAndRemoveType} from '../@types'
+import {
+  IPaneNumericKeys, IResizablePaneProviderProps,
+  IStoreResizableItemsModel, addAndRemoveType
+} from '../@types'
 import {PLUS, ZERO} from '../constant'
 import {ResizeStorage} from '../utils/storage'
-import {getObj, ratioAndRoundOff} from '../utils/util'
+import {getObj, noop, ratioAndRoundOff} from '../utils/util'
 
 export class PaneModel {
+  isRegistered = true
+  isHandle = false
   id: string
   // index
-  pane: any
+  api: any
   size: number
   // get _size () {
   //   return this.size
@@ -36,7 +41,7 @@ export class PaneModel {
   oldVisibility: boolean = true
   // Development Variables
 
-  constructor (paneProps: any, resizableProps: any, store: ResizeStorage) {
+  constructor (paneProps: any, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
     const {
       id, minSize = ZERO, size, maxSize = Infinity
     } = paneProps
@@ -54,7 +59,7 @@ export class PaneModel {
     }
 
     this.id = id
-    this.vertical = vertical
+    this.vertical = vertical as boolean
 
     if (size < minSize) {
       throw Error('Size can not be smaller than minSize for pane id ' + id)
@@ -86,7 +91,7 @@ export class PaneModel {
     this.visibility = visibility
   }
 
-  getStoreObj (): IStorePaneModel {
+  getStoreModel (): IStoreResizableItemsModel {
     const t = getObj(this, 'id', 'size', 'defaultSize', 'defaultMinSize', 'visibility', 'storedSize')
     return {
       ...t,
@@ -95,10 +100,7 @@ export class PaneModel {
   }
 
   getSize () {
-    if (this.visibility) {
-      return this.size
-    }
-    return 0
+    return this.isRegistered && this.visibility ? this.size : 0
   }
 
   setVisibilitySize (sizeChange: number, operation: addAndRemoveType) {
@@ -141,17 +143,17 @@ export class PaneModel {
   }
 
   setUISize () {
-    if (this.pane) {
-      this.pane.setSize(this.visibility ? this.size : 0)
+    if (this.api) {
+      this.api.setSize(this.visibility ? this.size : 0)
     }
   }
 
   register (pane: any) {
-    if (this.pane) {
-      this.pane = pane
+    if (this.api) {
+      this.api = pane
       this.setUISize()
     }
-    this.pane = pane
+    this.api = pane
   }
 
   synPreservedSize () {
@@ -252,7 +254,9 @@ export class PaneModel {
     }
   }
 
-  setVisibilityNew (visibility: boolean) {
+  setVisibilityHelper = () => {}
+
+  setVisibility (visibility: boolean) {
     this.visibility = visibility
     if (visibility) {
       this.maxSize = this.defaultMaxSize
@@ -261,6 +265,7 @@ export class PaneModel {
       this.maxSize = 0
       this.minSize = 0
     }
+    this.setVisibilityHelper()
   }
 
   setOldVisibilityModel () {

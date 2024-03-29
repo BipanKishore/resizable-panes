@@ -1,5 +1,5 @@
 import {ReactElement} from 'react'
-import {IResizablePaneProviderProps, IResizablePanesProps, addAndRemoveType} from '../@types'
+import {IResizableItem, IResizablePaneProviderProps, addAndRemoveType} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
 import {ResizerModel} from '../models/resizer-model'
@@ -9,8 +9,8 @@ import {localConsole} from './development-util'
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
   panesList.forEach(pane => pane.syncAxisSize())
 
-export const setUISizesFn = (modelList: PaneModel[] | ResizerModel[]) =>
-  modelList.forEach((pane: PaneModel | ResizerModel) => pane.setUISize())
+export const setUISizesFn = (modelList: IResizableItem[]) =>
+  modelList.forEach((pane: IResizableItem) => pane.setUISize())
 
 export const setUISizesOfAllElement = (panesList: PaneModel[], resizersList: ResizerModel[]) => {
   setUISizesFn(panesList)
@@ -116,18 +116,13 @@ export const change1PixelToPanes = (panesList: PaneModel[], sizeChange: number,
   }
 }
 
-export const createPaneModelList = (
+export const createPaneModelListAndResizerModelList = (
   children: ReactElement[],
-  props: IResizablePaneProviderProps,
-  store: ResizeStorage) =>
-  children.map(child => new PaneModel(child.props, props, store))
-
-export const createResizerModelList = (
-  children: ReactElement[],
-  resizerSize: IResizablePaneProviderProps,
+  resizableProps: IResizablePaneProviderProps,
   store: ResizeStorage
-) => {
-  const resizersList: ResizerModel[] = children.map(child => new ResizerModel(child.props, resizerSize, store))
+): [PaneModel[], ResizerModel[]] => {
+  const panesList = children.map(child => new PaneModel(child.props, resizableProps, store))
+  const resizersList = children.map(child => new ResizerModel(child.props, resizableProps, store, panesList))
   resizersList.pop()
-  return resizersList
+  return [panesList, resizersList]
 }
