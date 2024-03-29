@@ -1,4 +1,4 @@
-import {ReactElement, ReactNode, isValidElement} from 'react'
+import {ReactElement} from 'react'
 import {IContextDetails, IStoreModel, IStorePaneModel} from '../@types'
 import {getResizerSum} from './panes'
 import {findById} from './util'
@@ -93,7 +93,7 @@ export class ResizeStorage {
     return findById(resizers, id) ?? null
   }
 
-  readPaneChange (children: ReactNode[], context: any) {
+  readPaneChange (children: ReactElement[], context: any) {
     const {panes, containerSize} = this.getStorage()
     if (!containerSize) {
       return
@@ -102,7 +102,7 @@ export class ResizeStorage {
     const {panesList} = context.contextDetails
     let isVisibilityChanged = false
 
-    const visibleIds = children.filter((child: ReactNode) => isValidElement(child)).map((child: any) => child.props.id)
+    const visibleIds = children.map((child: any) => child.props.id)
 
     panesList.forEach((pane: any) => {
       const visibility = visibleIds.includes(pane.id)
