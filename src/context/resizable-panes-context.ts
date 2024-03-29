@@ -28,11 +28,11 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   const myChildren = toArray(children)
 
   // reference will never change for these items: storage,
-  // panesList, PaneModels, resizersList, ResizerModels, contextDetails
+  // panesList, PaneModels, resizersList, ResizerModels
   const storage = new ResizeStorage(uniqueId, storageApi, myChildren)
   const panesList = createPaneModelList(myChildren, props, storage)
   const resizersList = createResizerModelList(myChildren, props, storage)
-  // reference will never change for these items: storage, panesList, resizersList, contextDetails
+  // reference will never change for these items: storage, panesList, resizersList
 
   const contextDetails: any = {
     vertical,

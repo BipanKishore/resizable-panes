@@ -118,7 +118,7 @@ export const change1PixelToPanes = (panesList: PaneModel[], sizeChange: number,
 
 export const createPaneModelList = (
   children: ReactElement[],
-  props: IResizablePanesProps,
+  props: IResizablePaneProviderProps,
   store: ResizeStorage) =>
   children.map(child => new PaneModel(child.props, props, store))
 
