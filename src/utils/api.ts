@@ -61,10 +61,10 @@ export const changeSizeInRatio = (panesList: PaneModel[], actionList: number[], 
 // eslint-disable-next-line complexity
 export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBoolMap) => {
   const {
-    panesList, resizersList
+    panesList, resizersList, items
   } = contextDetails
 
-  panesList.forEach((pane) => pane.syncToOldVisibilityModel())
+  panesList.forEach(pane => pane.syncToOldVisibilityModel())
 
   // console.log('Before  ', getList(panesList, 'size'), getSum(panesList, n => n.getSize()))
 
@@ -103,7 +103,7 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
 
   visibilityOperationFn(panesList, paneVisibilityList, maxPaneSize)
 
-  setUISizesOfAllElement(panesList, resizersList)
+  setUISizesOfAllElement(items)
 }
 
 export const setResizersVisibility = (resizersList: ResizerModel[], visibility: boolean) => {

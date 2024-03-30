@@ -12,9 +12,8 @@ export const syncAxisSizesFn = (panesList: PaneModel[]) =>
 export const setUISizesFn = (modelList: IResizableItem[]) =>
   modelList.forEach((pane: IResizableItem) => pane.setUISize())
 
-export const setUISizesOfAllElement = (panesList: PaneModel[], resizersList: ResizerModel[]) => {
-  setUISizesFn(panesList)
-  setUISizesFn(resizersList)
+export const setUISizesOfAllElement = (items: IResizableItem[]) => {
+  setUISizesFn(items)
 }
 
 export function getSum <T> (list: T[], getNumber: (item:T) => number, start = 0, end = list.length - 1) {
@@ -116,13 +115,27 @@ export const change1PixelToPanes = (panesList: PaneModel[], sizeChange: number,
   }
 }
 
+export const getPanesAndResizers = (items: IResizableItem[]) => {
+  const panesList = items.filter((item) => !item.isHandle)
+  const resizersList = items.filter((item) => item.isHandle) as ResizerModel[]
+  return {
+    panesList,
+    resizersList
+  }
+}
+
 export const createPaneModelListAndResizerModelList = (
   children: ReactElement[],
   resizableProps: IResizablePaneProviderProps,
   store: ResizeStorage
-): [PaneModel[], ResizerModel[]] => {
-  const panesList = children.map(child => new PaneModel(child.props, resizableProps, store))
-  const resizersList = children.map(child => new ResizerModel(child.props, resizableProps, store, panesList))
-  resizersList.pop()
-  return [panesList, resizersList]
+): IResizableItem[] => {
+  const items: IResizableItem[] = []
+  children.forEach((child) => {
+    items.push(
+      new PaneModel(child.props, resizableProps, store),
+      new ResizerModel(child.props, resizableProps, store)
+    )
+  })
+  items.pop()
+  return items
 }

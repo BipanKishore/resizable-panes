@@ -1,5 +1,4 @@
 import {
-  IKeyToBoolMap,
   IPane, IResizablePaneProviderProps,
   IResizerApi
 } from '../@types'
@@ -11,33 +10,28 @@ export class ResizerModel extends PaneModel {
   api: IResizerApi
   resizerSize: number
 
-  initialVisibility: IKeyToBoolMap
-
   constructor (
     paneProps: IPane,
     resizableProps: IResizablePaneProviderProps,
-    store: ResizeStorage, panesList: PaneModel[]) {
+    store: ResizeStorage) {
     super(paneProps, resizableProps, store)
-    this.isRegistered = true
+    this.isRegistered = false
     this.isHandle = true
 
     const {id} = paneProps
     const {resizerSize, visibility = {}} = resizableProps
-    this.initialVisibility = resizableProps.visibility as IKeyToBoolMap
+    const show = visibility[id] !== undefined ? visibility[id] : true
     this.id = `${RESIZER}-${id}`
 
     const storedResizer = store.getStoredResizer(this.id)
-    const show = visibility[id] !== undefined ? visibility[id] : true
     this.visibility = storedResizer ? storedResizer.visibility : show as boolean
 
-    this.size = paneProps.resizerSize || resizerSize as number
-    this.resizerSize = this.size
+    this.resizerSize = paneProps.resizerSize || resizerSize as number
   }
 
   registerMe () {
     switch (true) {
       case !this.isRegistered:
-        // this.api.setVisibility(this.visibility)
         this.setUISize()
         break
       case this.isRegistered:
@@ -46,11 +40,12 @@ export class ResizerModel extends PaneModel {
     this.isRegistered = true
   }
 
-  // This method never runs for last Element
   register (api: IResizerApi) {
     this.api = api
-    if (!this.initialVisibility) {
-      this.size = api.getVisibleSize()
+    if (this.visibility) {
+      this.size = this.resizerSize ? this.resizerSize : api.getVisibleSize()
+    } else {
+      // this.resizerSize = api.getVisibleSize()
     }
     this.initializeSizes(this.size, 0, this.size as number, this.size, this.visibility)
     this.registerMe()

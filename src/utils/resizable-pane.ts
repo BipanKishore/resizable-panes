@@ -365,7 +365,7 @@ export const registerContainer = (context: any) => (node: any) => {
 // getMaxContainerSizes need to use this
 // export const toRatioModeFn = (panesList: PaneModel[], resizersList: ResizerModel[], containerSize: number) => {
 export const toRatioModeFn = (contextDetails: IContextDetails) => {
-  const {panesList, resizersList} = contextDetails
+  const {panesList, items} = contextDetails
   const {maxPaneSize} = getMaxContainerSizes(contextDetails)
 
   // add for last no visible pane also
@@ -374,14 +374,14 @@ export const toRatioModeFn = (contextDetails: IContextDetails) => {
 
   const maxRatioValue = getPanesSizeSum(panesList, 0, panesList.length - 1)
   panesList
-    .forEach((pane: PaneModel) => {
+    .forEach((pane: PaneModel) =>
       pane.toRatioMode(maxPaneSize, maxRatioValue)
-    })
+    )
 
   const sizeSum = getPanesSizeSum(panesList, 0, panesList.length - 1)
   const leftOverTotalSize = maxPaneSize - sizeSum
   const changeOperation = leftOverTotalSize < 0 ? MINUS : PLUS
   change1PixelToPanes(panesList, Math.abs(leftOverTotalSize), changeOperation)
 
-  setUISizesOfAllElement(panesList, resizersList)
+  setUISizesOfAllElement(items)
 }

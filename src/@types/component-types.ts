@@ -5,6 +5,8 @@ import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from '../utils/storage'
 import {ResizerModel} from '../models/resizer-model'
 
+export type IResizableItem = PaneModel | ResizerModel
+
 export type onResizeType = (param: IMapIdToSize) => void
 export type onReadyType = (api: IResizableApi) => void
 export type UnitTypes = 'ratio' | 'pixel' | undefined
@@ -78,6 +80,7 @@ export interface IStoreModel {
 }
 
 export interface IContextDetails {
+  items: IResizableItem[],
   panesList: PaneModel[],
   resizersList: ResizerModel[],
   isSetRatioMode: boolean,
@@ -104,5 +107,3 @@ export interface IResizableContext {
   getPaneSizeStyle: (id: string) => void,
   setVisibility: any
 }
-
-export type IResizableItem = PaneModel | ResizerModel

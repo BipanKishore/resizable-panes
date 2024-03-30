@@ -3,7 +3,7 @@ import {createMap, findById} from '../utils/util'
 import {DIRECTIONS, RATIO, SIZE, VISIBILITY, ZERO} from '../constant'
 import {
   createPaneModelListAndResizerModelList,
-  findIndexInChildrenbyId, setDownMaxLimits,
+  findIndexInChildrenbyId, getPanesAndResizers, setDownMaxLimits,
   setUISizesOfAllElement, setUpMaxLimits, syncAxisSizesFn
 } from '../utils/panes'
 import {
@@ -29,25 +29,27 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   // reference will never change for these items: storage,
   // panesList, PaneModels, resizersList, ResizerModels
   const storage = new ResizeStorage(uniqueId, storageApi, myChildren)
-  const [panesList, resizersList] = createPaneModelListAndResizerModelList(myChildren, props, storage)
+  const items = createPaneModelListAndResizerModelList(myChildren, props, storage)
   // const resizersList = createResizerModelList(myChildren, props, storage)
   // reference will never change for these items: storage, panesList, resizersList
 
+  const {panesList, resizersList} = getPanesAndResizers(items)
   console.log(
     resizersList
   )
 
   const contextDetails: any = {
     vertical,
+    items,
     panesList,
     resizersList,
     isSetRatioMode: false,
     newVisibilityModel: false
   }
 
-  const syncAxisSizes = () => syncAxisSizesFn(panesList)
+  const syncAxisSizes = () => syncAxisSizesFn(items)
 
-  const setUISizes = () => setUISizesOfAllElement(panesList, resizersList)
+  const setUISizes = () => setUISizesOfAllElement(items)
 
   const setCurrentMinMaxAndAxes = (index?: number) => {
     setCurrentMinMax(contextDetails, index)
@@ -65,10 +67,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const registerResizer = (resizer: any, id: string) => {
     const index = findIndexInChildrenbyId(myChildren, id)
-
-    if (index < (myChildren).length - 1) {
-      resizersList[index].register(resizer)
-    }
+    resizersList[index].register(resizer)
   }
 
   const registerContainer = ({getContainerRect}: any) => {
