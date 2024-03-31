@@ -1,4 +1,5 @@
 import {IAnyMap, IPaneModelKey} from '../@types'
+import {DIRECTIONS} from '../constant'
 import {PaneModel} from '../models/pane-model'
 
 export type INoop = (_: any) => any
@@ -54,3 +55,5 @@ export const getObj = <T> (obj: T, ...keys: (keyof T)[]) => {
 
   return retObj
 }
+
+export const isItUp = (direction: number) => direction === DIRECTIONS.UP

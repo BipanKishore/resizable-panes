@@ -4,6 +4,7 @@ import {DIRECTIONS, RATIO, SIZE, VISIBILITY, ZERO} from '../constant'
 import {
   createPaneModelListAndResizerModelList,
   findIndexInChildrenbyId, getPanesAndResizers, setDownMaxLimits,
+  setResizersLimits,
   setUISizesOfAllElement, setUpMaxLimits, syncAxisSizesFn
 } from '../utils/panes'
 import {
@@ -34,9 +35,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   // reference will never change for these items: storage, panesList, resizersList
 
   const {panesList, resizersList} = getPanesAndResizers(items)
-  console.log(
-    resizersList
-  )
 
   const contextDetails: any = {
     vertical,
@@ -51,13 +49,9 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const setUISizes = () => setUISizesOfAllElement(items)
 
-  const setCurrentMinMaxAndAxes = (index?: number) => {
-    setCurrentMinMax(contextDetails, index)
-    minMaxTotal(contextDetails)
-  }
-
   const setActiveIndex = (index: number) => {
-    contextDetails.activeIndex = index
+    // Pane Index before resizer
+    contextDetails.activeIndex = 2 * index
   }
 
   const registerPane = (pane: any, id:string) => {
@@ -118,24 +112,22 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const directionChangeActions = (e: any) => {
     contextDetails.axisCoordinate = e.mouseCoordinate
+    setResizersLimits(contextDetails)
     syncAxisSizes()
-    setCurrentMinMaxAndAxes()
+    setCurrentMinMax(contextDetails)
+    calculateAxes(contextDetails)
   }
 
   const setAxisConfig = (e: any) => {
-    const {activeIndex} = contextDetails
-    const {
-      bottomAxis,
-      topAxis
-    } = calculateAxes(contextDetails)
+    const {activeIndex, topAxis, bottomAxis} = contextDetails
 
     if (e.mouseCoordinate <= topAxis) {
-      setUpMaxLimits(panesList, activeIndex)
+      setUpMaxLimits(items, activeIndex)
       syncAxisSizes()
       contextDetails.axisCoordinate = topAxis
       return false
     } else if (e.mouseCoordinate >= bottomAxis) {
-      setDownMaxLimits(panesList, activeIndex)
+      setDownMaxLimits(items, activeIndex)
       syncAxisSizes()
       contextDetails.axisCoordinate = bottomAxis
       return false

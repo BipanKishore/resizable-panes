@@ -1,10 +1,11 @@
 import {ReactElement} from 'react'
-import {IResizableItem, IResizablePaneProviderProps, addAndRemoveType} from '../@types'
+import {IContextDetails, IResizableItem, IResizablePaneProviderProps, addAndRemoveType} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
 import {ResizerModel} from '../models/resizer-model'
 import {PLUS} from '../constant'
-import {localConsole} from './development-util'
+import {getList, localConsole} from './development-util'
+import {isItUp} from './util'
 
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
   panesList.forEach(pane => pane.syncAxisSize())
@@ -43,7 +44,7 @@ export const getPanesSizeSum = (panesList: PaneModel[], start?: number, end?: nu
   getSum(panesList, pane => pane.getSize(), start, end)
 
 // returns the visible resizer size
-export const getResizerSum = (resizersList: ResizerModel[], start: number, end: number) =>
+export const getResizerSum = (resizersList: ResizerModel[], start?: number, end?: number) =>
   getSum(resizersList, resizer => resizer.getSize(), start, end)
 
 export const getMaxSizeSum = (panesList: PaneModel[], start: number, end: number) =>
@@ -138,4 +139,54 @@ export const createPaneModelListAndResizerModelList = (
   })
   items.pop()
   return items
+}
+
+// eslint-disable-next-line complexity
+export const setResizersLimits = (contextDetails: IContextDetails) => {
+  const {activeIndex, direction, items} = contextDetails
+
+  if (isItUp(direction)) {
+    for (let i = activeIndex; i > -1; i -= 2) {
+      const pane = items[i]
+      const resizer = items[i - 1] as ResizerModel
+      if (pane && resizer) {
+        resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
+      }
+    }
+
+    const resizerHandle = items[activeIndex + 1] as ResizerModel
+    resizerHandle.defaultMinSize = resizerHandle.defaultSize
+    resizerHandle.defaultMaxSize = resizerHandle.defaultSize
+
+    for (let i = activeIndex + 2; i < items.length; i += 2) {
+      const pane = items[i]
+      const resizer = items[i + 1] as ResizerModel
+      if (pane && resizer) {
+        resizer.defaultMinSize = 0
+      }
+    }
+  } else {
+    for (let i = activeIndex; i > -1; i -= 2) {
+      const pane = items[i]
+      const resizer = items[i - 1] as ResizerModel
+      if (pane && resizer) {
+        resizer.defaultMinSize = 0
+      }
+    }
+
+    const resizerHandle = items[activeIndex + 1] as ResizerModel
+    resizerHandle.defaultMinSize = resizerHandle.defaultSize
+    resizerHandle.defaultMaxSize = resizerHandle.defaultSize
+    // console.log('resizerHandle', resizerHandle)
+
+    for (let i = activeIndex + 2; i < items.length; i += 2) {
+      const pane = items[i]
+      const resizer = items[i + 1] as ResizerModel
+      if (pane && resizer) {
+        resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
+      }
+    }
+  }
+  // console.log('defaultMinSize ', getList(resizersList, 'defaultMinSize'))
+  // console.log('defaultMaxSize ', getList(resizersList, 'defaultMaxSize'))
 }

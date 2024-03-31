@@ -17,7 +17,8 @@ const ResizablePaneProviderDefaultProps: any = {
   storageApi: undefined,
   unit: undefined,
   resizer: undefined,
-  resizerSize: 2,
+  resizerSize: 0,
+  // resizerSize: 2,
   visibility: undefined
 }
 

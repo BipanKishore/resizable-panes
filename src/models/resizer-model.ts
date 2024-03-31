@@ -44,7 +44,9 @@ export class ResizerModel extends PaneModel {
     this.api = api
     if (this.visibility) {
       this.size = this.resizerSize ? this.resizerSize : api.getVisibleSize()
+      this.defaultMaxSize = this.size
     } else {
+      this.defaultMaxSize = this.resizerSize
       // this.resizerSize = api.getVisibleSize()
     }
     this.initializeSizes(this.size, 0, this.size as number, this.size, this.visibility)

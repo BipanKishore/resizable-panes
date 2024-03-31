@@ -12,7 +12,7 @@ import {getObj} from './util'
 
 export const localConsole = (obj: any = {}, key : string) => {
   // console.log(key, obj)
-  // localStorage.setItem(key, JSON.stringify(obj))
+  localStorage.setItem(key, JSON.stringify(obj))
 }
 
 export const minMaxTotal = (serviceRefCurrent: IContextDetails) => {
