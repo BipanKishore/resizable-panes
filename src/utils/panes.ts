@@ -162,7 +162,7 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
       const pane = items[i]
       const resizer = items[i + 1] as ResizerModel
       if (pane && resizer) {
-        resizer.defaultMinSize = 0
+        resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
       }
     }
   } else {
@@ -170,7 +170,7 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
       const pane = items[i]
       const resizer = items[i - 1] as ResizerModel
       if (pane && resizer) {
-        resizer.defaultMinSize = 0
+        resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
       }
     }
 
