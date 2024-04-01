@@ -106,8 +106,5 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
   setUISizesOfAllElement(items)
 }
 
-export const setResizersVisibility = (resizersList: ResizerModel[], visibility: boolean) => {
-  for (const resizer of resizersList) {
-    resizer.setVisibility(visibility)
-  }
-}
+export const setResizersVisibility = (resizersList: ResizerModel[], visibility: boolean) =>
+  resizersList.forEach(resizer => resizer.setVisibility(visibility))
