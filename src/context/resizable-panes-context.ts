@@ -3,9 +3,9 @@ import {INoop, createMap, findById} from '../utils/util'
 import {DIRECTIONS, RATIO, SIZE, VISIBILITY, ZERO} from '../constant'
 import {
   createPaneModelListAndResizerModelList,
-  findIndexInChildrenbyId, fixPartialHiddenResizer, getPanesAndResizers, setDownMaxLimits,
+  findIndexInChildrenbyId, afterMathOfResizerOverlapping, getPanesAndResizers, setDownMaxLimits,
   setResizersLimits,
-  setUISizesOfAllElement, setUpMaxLimits, syncAxisSizesFn
+  setUISizesOfAllElement, setUpMaxLimits, syncAxisSizesFn, attachResizersToPaneModels
 } from '../utils/panes'
 import {
   calculateAxes, goingDownLogic, goingUpLogic, setCurrentMinMax,
@@ -44,6 +44,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     isSetRatioMode: false,
     newVisibilityModel: false
   }
+
+  attachResizersToPaneModels(contextDetails)
 
   const syncAxisSizes = () => syncAxisSizesFn(items)
 
@@ -97,7 +99,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       }
       contextDetails.newVisibilityModel = false
       setUISizes()
-      console.log('visPartiallyHidden ', getList(resizersList, 'isPartiallyHidden'))
+      // console.log('visPartiallyHidden ', getList(resizersList, 'isPartiallyHidden'))
       // console.log('maxSize ', getList(resizersList, 'maxSize'))
     }
   }
@@ -190,7 +192,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       onResizeStop(resizeParams)
     }
 
-    fixPartialHiddenResizer(contextDetails)
+    afterMathOfResizerOverlapping(contextDetails)
     storage.setStorage(contextDetails)
   }
 

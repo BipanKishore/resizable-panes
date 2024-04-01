@@ -2,7 +2,9 @@ import {IContextDetails, IKeyToBoolMap} from '../@types'
 import {MINUS, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
 import {ResizerModel} from '../models/resizer-model'
+import {getList} from './development-util'
 import {
+  attachResizersToPaneModels,
   change1PixelToPanes, getPanesSizeSum,
   getSizeByIndexes, setUISizesFn, setUISizesOfAllElement
 } from './panes'
@@ -64,40 +66,37 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
     panesList, resizersList, items
   } = contextDetails
 
-  panesList.forEach(pane => pane.syncToOldVisibilityModel())
-
-  // console.log('Before  ', getList(panesList, 'size'), getSum(panesList, n => n.getSize()))
-
   const paneVisibilityList: number[] = []
 
-  for (let i = 0; i < panesList.length; i++) {
-    const pane = panesList[i]
+  panesList.forEach((pane, i) => {
+    pane.syncToOldVisibilityModel()
     const {id} = pane
     const visibility = Boolean(idMap[id]) // may not required
-    const index = findIndex(panesList, id)
-
     if (visibility) {
-      paneVisibilityList.push(index)
+      paneVisibilityList.push(i)
     }
     pane.setVisibility(visibility)
-  }
+  })
 
   const lastVisibleIndex = [...paneVisibilityList].pop()
+  attachResizersToPaneModels(contextDetails)
 
-  for (let i = 0; i < panesList.length; i++) {
+  console.log('attachedResizer ', getList(panesList, 'attachedResizer'))
+
+  const attachedResizerList = getList(panesList, 'attachedResizer').filter(i => i)
+
+  for (let i = 0; i < panesList.length - 1; i++) {
     const pane = panesList[i]
-    const {id} = pane
+    const {id, attachedResizer} = pane
     const visibility = Boolean(idMap[id])
-    const index = findIndex(panesList, id)
-    if (!resizersList[index]) {
-      continue
-    }
-    if (i === lastVisibleIndex) {
-      resizersList[index].setVisibility(false)
-    } else {
-      resizersList[index].setVisibility(visibility)
+
+    const resizer = attachedResizer || (attachedResizerList.includes(resizersList[i]) ? null : resizersList[i])
+
+    if (resizer) {
+      resizer.setVisibility(i === lastVisibleIndex ? false : visibility)
     }
   }
+  console.log('attachedResizer ', getList(panesList, 'attachedResizer'))
 
   const {maxPaneSize} = getMaxContainerSizes(contextDetails)
 

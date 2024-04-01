@@ -221,3 +221,39 @@ export const fixPartialHiddenResizer = (contextDetails: IContextDetails) => {
     setUISizesFn(items)
   }
 }
+
+export const findNextVisibleResizer = (items: IResizableItem[], index: number) => {
+  for (let i = index; i < items.length; i++) {
+    const resizer = items[i]
+    if (!resizer.isPartiallyHidden) {
+      return resizer
+    }
+  }
+}
+
+export const attachResizersToPaneModels = (contextDetails: IContextDetails) => {
+  const {panesList, resizersList} = contextDetails
+
+  const attachedList: any[] = []
+
+  panesList.forEach((item, index) => {
+    let nextResizer = findNextVisibleResizer(resizersList, index) as ResizerModel | undefined
+
+    if (attachedList.includes(nextResizer)) {
+      nextResizer = undefined
+    }
+    attachedList.push(nextResizer)
+    if (item.visibility) {
+      item.attachedResizer = nextResizer
+    }
+  })
+
+  console.log(
+    'attachResizersToPaneModels', panesList
+  )
+}
+
+export const afterMathOfResizerOverlapping = (contextDetails: IContextDetails) => {
+  fixPartialHiddenResizer(contextDetails)
+  attachResizersToPaneModels(contextDetails)
+}

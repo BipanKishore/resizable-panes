@@ -6,12 +6,15 @@ import {
 import {PLUS, ZERO} from '../constant'
 import {ResizeStorage} from '../utils/storage'
 import {getObj, noop, ratioAndRoundOff} from '../utils/util'
+import {ResizerModel} from './resizer-model'
 
 export class PaneModel {
   isRegistered = true
   isHandle = false
   isPartiallyHidden: boolean = false
   resizerSize: number
+
+  attachedResizer: ResizerModel | undefined
 
   id: string
   // index
