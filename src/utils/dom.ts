@@ -46,15 +46,16 @@ export const getResizableEventFromTouch = (e: any, vertical: boolean, previousTo
 }
 
 export const getResizableEventFromMouse = (e: any, vertical: boolean): IResizableEvent => {
-  e.preventDefault()
   const {clientX, clientY, movementX, movementY} = e
   return vertical ? resizableEvent(clientX, movementX) : resizableEvent(clientY, movementY)
 }
 
-export const getResizableEvent = (e: any, vertical: boolean, previousTouchEvent: any): IResizableEvent =>
-  isTouchEvent(e)
+export const getResizableEvent = (e: any, vertical: boolean, previousTouchEvent: any): IResizableEvent => {
+  e.preventDefault()
+  return isTouchEvent(e)
     ? getResizableEventFromTouch(e, vertical, previousTouchEvent)
     : getResizableEventFromMouse(e, vertical)
+}
 
 export const getDirection = (e: IResizableEvent) => e.movement < 0 ? DIRECTIONS.UP : DIRECTIONS.DOWN
 

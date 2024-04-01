@@ -10,6 +10,9 @@ import {getObj, noop, ratioAndRoundOff} from '../utils/util'
 export class PaneModel {
   isRegistered = true
   isHandle = false
+  isPartiallyHidden: boolean = false
+  resizerSize: number
+
   id: string
   // index
   api: any
@@ -121,6 +124,12 @@ export class PaneModel {
     }
   }
 
+  setPartialHidden () {
+    if (this.isHandle) {
+      this.isPartiallyHidden = this.size < this.defaultSize
+    }
+  }
+
   changeSize (sizeChange: number, operation: addAndRemoveType) {
     const newSize = this.axisSize + (operation === PLUS ? sizeChange : -sizeChange)
     if (this.visibility) {
@@ -145,6 +154,7 @@ export class PaneModel {
   setUISize () {
     if (this.api) {
       this.api.setSize(this.visibility ? this.size : 0)
+      this.setPartialHidden()
     }
   }
 
@@ -254,18 +264,24 @@ export class PaneModel {
     }
   }
 
-  setVisibilityHelper = () => {}
+  setVisibilityHelper () {
+    if (this.isHandle) {
+      this.size = this.isPartiallyHidden
+        ? 0
+        : this.resizerSize ? this.resizerSize : this.api.getVisibleSize()
+    }
+  }
 
   setVisibility (visibility: boolean) {
     this.visibility = visibility
     if (visibility) {
       this.maxSize = this.defaultMaxSize
       this.minSize = this.defaultMinSize
+      this.setVisibilityHelper()
     } else {
       this.maxSize = 0
       this.minSize = 0
     }
-    this.setVisibilityHelper()
   }
 
   setOldVisibilityModel () {

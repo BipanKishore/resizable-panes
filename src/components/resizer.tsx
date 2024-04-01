@@ -17,7 +17,7 @@ export const Resizer = (props: IResizer) => {
   } = props
 
   const context: any = useContext(ResizablePaneContext)
-  const {getIdToSizeMap, myChildren} = context
+  const {getIdToSizeMap, myChildren, onMoveEndFn} = context
 
   const {vertical, uniqueId} = context.props
   const index = findIndexInChildrenbyId(myChildren, id)
@@ -33,19 +33,13 @@ export const Resizer = (props: IResizer) => {
     context.props.onResize(resizeParams)
   }, [vertical, getIdToSizeMap, context])
 
-  const onTouchMove = useCallback((e:any) => {
-    e.preventDefault()
-    onMouseMove(e)
-  }, [onMouseMove])
-
   const onMoveEnd = useCallback(() => {
     document.removeEventListener('mousemove', onMouseMove)
-    document.removeEventListener('touchmove', onTouchMove)
+    document.removeEventListener('touchmove', onMouseMove)
 
-    const resizeParams = getIdToSizeMap()
-    context.storage.setStorage(context.contextDetails)
+    onMoveEndFn()
+
     setIsMouseDown(false)
-    context.props.onResizeStop(resizeParams)
     document.removeEventListener('mouseup', onMoveEnd)
     document.removeEventListener('touchend', onMoveEnd)
   }, [uniqueId, onMouseMove, context, getIdToSizeMap])
@@ -55,13 +49,12 @@ export const Resizer = (props: IResizer) => {
     const resizableEvent = getResizableEvent(e, vertical, previousTouchEvent)
     context.setMouseDownDetails(resizableEvent, id)
     document.addEventListener('mousemove', onMouseMove)
-    document.addEventListener('touchmove', onTouchMove, {passive: false})
+    document.addEventListener('touchmove', onMouseMove, {passive: false})
     document.addEventListener('mouseup', onMoveEnd)
     document.addEventListener('touchend', onMoveEnd)
   }, [
     context,
     onMouseMove,
-    onTouchMove,
     vertical,
     id,
     onMoveEnd

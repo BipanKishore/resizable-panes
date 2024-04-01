@@ -24,7 +24,12 @@ export class ResizerModel extends PaneModel {
     this.id = `${RESIZER}-${id}`
 
     const storedResizer = store.getStoredResizer(this.id)
-    this.visibility = storedResizer ? storedResizer.visibility : show as boolean
+    if (storedResizer) {
+      this.visibility = storedResizer.visibility
+      this.isPartiallyHidden = this.visibility ? !storedResizer.size : false
+    } else {
+      this.visibility = show as boolean
+    }
 
     this.resizerSize = paneProps.resizerSize || resizerSize as number
   }
@@ -32,6 +37,9 @@ export class ResizerModel extends PaneModel {
   registerMe () {
     switch (true) {
       case !this.isRegistered:
+        if (this.isPartiallyHidden) {
+          this.size = 0
+        }
         this.setUISize()
         break
       case this.isRegistered:
@@ -51,11 +59,5 @@ export class ResizerModel extends PaneModel {
     }
     this.initializeSizes(this.size, 0, this.size as number, this.size, this.visibility)
     this.registerMe()
-  }
-
-  setVisibilityHelper = () => {
-    if (this.visibility) {
-      this.size = this.resizerSize ? this.resizerSize : this.api.getVisibleSize()
-    }
   }
 }

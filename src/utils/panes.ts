@@ -190,3 +190,34 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
   // console.log('defaultMinSize ', getList(resizersList, 'defaultMinSize'))
   // console.log('defaultMaxSize ', getList(resizersList, 'defaultMaxSize'))
 }
+
+export const fixPartialHiddenResizer = (contextDetails: IContextDetails) => {
+  const {activeIndex, direction, items} = contextDetails
+
+  const index = items.findIndex((item) => item.isHandle && item.defaultSize !== item.size && item.size)
+
+  if (index !== -1) {
+    let sizeChange = items[index].size
+    items[index].size = 0
+
+    const resizingOrder: IResizableItem[] = []
+
+    if (isItUp(direction)) {
+      const resizingOrderLeftOver = items.slice(0, index).reverse()
+      resizingOrder.push(...items.slice(index + 1), ...resizingOrderLeftOver)
+    } else {
+      const resizingOrderLeftOver = items.slice(index + 1)
+      resizingOrder.push(...items.slice(0, index).reverse(), ...resizingOrderLeftOver)
+    }
+
+    const visibleItems = resizingOrder.filter((item) => item.size)
+    visibleItems.forEach((item) => item.syncAxisSize())
+
+    visibleItems.forEach((item) => {
+      item.restoreLimits()
+      sizeChange = item.changeSize(sizeChange, PLUS)
+    })
+
+    setUISizesFn(items)
+  }
+}

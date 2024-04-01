@@ -1,9 +1,9 @@
 import {createContext} from 'react'
-import {createMap, findById} from '../utils/util'
+import {INoop, createMap, findById} from '../utils/util'
 import {DIRECTIONS, RATIO, SIZE, VISIBILITY, ZERO} from '../constant'
 import {
   createPaneModelListAndResizerModelList,
-  findIndexInChildrenbyId, getPanesAndResizers, setDownMaxLimits,
+  findIndexInChildrenbyId, fixPartialHiddenResizer, getPanesAndResizers, setDownMaxLimits,
   setResizersLimits,
   setUISizesOfAllElement, setUpMaxLimits, syncAxisSizesFn
 } from '../utils/panes'
@@ -11,7 +11,7 @@ import {
   calculateAxes, goingDownLogic, goingUpLogic, setCurrentMinMax,
   toRatioModeFn
 } from '../utils/resizable-pane'
-import {minMaxTotal} from '../utils/development-util'
+import {getList, minMaxTotal} from '../utils/development-util'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
 import {IKeyToBoolMap, IResizableContext, IResizablePaneProviderProps} from '../@types'
@@ -97,6 +97,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       }
       contextDetails.newVisibilityModel = false
       setUISizes()
+      console.log('visPartiallyHidden ', getList(resizersList, 'isPartiallyHidden'))
+      // console.log('maxSize ', getList(resizersList, 'maxSize'))
     }
   }
 
@@ -182,7 +184,18 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     storage.setStorage(contextDetails)
   }
 
+  const onMoveEndFn = () => {
+    const resizeParams = getIdToSizeMap()
+    if (onResizeStop) {
+      onResizeStop(resizeParams)
+    }
+
+    fixPartialHiddenResizer(contextDetails)
+    storage.setStorage(contextDetails)
+  }
+
   return {
+    onMoveEndFn,
     registerPane,
     registerResizer,
     registerContainer,
