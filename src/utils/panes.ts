@@ -10,12 +10,8 @@ import {isItUp} from './util'
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
   panesList.forEach(pane => pane.syncAxisSize())
 
-export const setUISizesFn = (modelList: IResizableItem[]) =>
-  modelList.forEach((pane: IResizableItem) => pane.setUISize())
-
-export const setUISizesOfAllElement = (items: IResizableItem[]) => {
-  setUISizesFn(items)
-}
+export const setUISizesFn = (modelList: IResizableItem[], direction: number) =>
+  modelList.forEach((pane: IResizableItem) => pane.setUISize(direction))
 
 export function getSum <T> (list: T[], getNumber: (item:T) => number, start = 0, end = list.length - 1) {
   let sum = 0
@@ -131,69 +127,63 @@ export const createPaneModelListAndResizerModelList = (
   store: ResizeStorage
 ): IResizableItem[] => {
   const items: IResizableItem[] = []
-  children.forEach((child) => {
+  children.forEach(child =>
     items.push(
       new PaneModel(child.props, resizableProps, store),
       new ResizerModel(child.props, resizableProps, store)
     )
-  })
+  )
   items.pop()
   return items
 }
 
 // eslint-disable-next-line complexity
 export const setResizersLimits = (contextDetails: IContextDetails) => {
-  const {activeIndex, direction, items} = contextDetails
+  const {activeIndex, direction, virtualOrderList, resizersList} = contextDetails
+
+  const resizerHandle = virtualOrderList[activeIndex] as ResizerModel
+  resizerHandle.defaultMinSize = resizerHandle.defaultSize
+  resizerHandle.defaultMaxSize = resizerHandle.defaultSize
 
   if (isItUp(direction)) {
-    for (let i = activeIndex; i > -1; i -= 2) {
-      const pane = items[i]
-      const resizer = items[i - 1] as ResizerModel
+    for (let i = activeIndex - 2; i > -1; i -= 2) {
+      const pane = virtualOrderList[i]
+      const resizer = virtualOrderList[i - 1] as ResizerModel
       if (pane && resizer) {
         resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
       }
     }
 
-    const resizerHandle = items[activeIndex + 1] as ResizerModel
-    resizerHandle.defaultMinSize = resizerHandle.defaultSize
-    resizerHandle.defaultMaxSize = resizerHandle.defaultSize
-
-    for (let i = activeIndex + 2; i < items.length; i += 2) {
-      const pane = items[i]
-      const resizer = items[i + 1] as ResizerModel
+    for (let i = activeIndex + 2; i < virtualOrderList.length; i += 2) {
+      const pane = virtualOrderList[i]
+      const resizer = virtualOrderList[i + 1] as ResizerModel
       if (pane && resizer) {
         resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
       }
     }
   } else {
-    for (let i = activeIndex; i > -1; i -= 2) {
-      const pane = items[i]
-      const resizer = items[i - 1] as ResizerModel
+    for (let i = activeIndex - 2; i > -1; i -= 2) {
+      const pane = virtualOrderList[i]
+      const resizer = virtualOrderList[i - 1] as ResizerModel
       if (pane && resizer) {
         resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
       }
     }
 
-    const resizerHandle = items[activeIndex + 1] as ResizerModel
-    resizerHandle.defaultMinSize = resizerHandle.defaultSize
-    resizerHandle.defaultMaxSize = resizerHandle.defaultSize
-    // console.log('resizerHandle', resizerHandle)
-
-    for (let i = activeIndex + 2; i < items.length; i += 2) {
-      const pane = items[i]
-      const resizer = items[i + 1] as ResizerModel
+    for (let i = activeIndex + 2; i < virtualOrderList.length; i += 2) {
+      const pane = virtualOrderList[i]
+      const resizer = virtualOrderList[i + 1] as ResizerModel
       if (pane && resizer) {
         resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
       }
     }
   }
-  // console.log('defaultMinSize ', getList(resizersList, 'defaultMinSize'))
-  // console.log('defaultMaxSize ', getList(resizersList, 'defaultMaxSize'))
+  console.log('defaultMinSize ', getList(resizersList, 'defaultMinSize'))
+  console.log('defaultMaxSize ', getList(resizersList, 'defaultMaxSize'))
 }
 
 export const fixPartialHiddenResizer = (contextDetails: IContextDetails) => {
-  const {activeIndex, direction, items} = contextDetails
-
+  const {direction, items} = contextDetails
   const index = items.findIndex((item) => item.isHandle && item.defaultSize !== item.size && item.size)
 
   if (index !== -1) {
@@ -218,7 +208,7 @@ export const fixPartialHiddenResizer = (contextDetails: IContextDetails) => {
       sizeChange = item.changeSize(sizeChange, PLUS)
     })
 
-    setUISizesFn(items)
+    setUISizesFn(items, direction)
   }
 }
 
@@ -249,11 +239,12 @@ export const attachResizersToPaneModels = (contextDetails: IContextDetails) => {
   })
 
   console.log(
-    'attachResizersToPaneModels', panesList
+    'attachResizersToPaneModels',
+    getList(panesList, 'attachedResizer').map((r:any) => r?.id)
   )
 }
 
 export const afterMathOfResizerOverlapping = (contextDetails: IContextDetails) => {
   fixPartialHiddenResizer(contextDetails)
-  attachResizersToPaneModels(contextDetails)
+  // attachResizersToPaneModels(contextDetails)
 }

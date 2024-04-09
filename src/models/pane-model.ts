@@ -3,7 +3,7 @@ import {
   IPaneNumericKeys, IResizablePaneProviderProps,
   IStoreResizableItemsModel, addAndRemoveType
 } from '../@types'
-import {PLUS, ZERO} from '../constant'
+import {DIRECTIONS, PLUS, ZERO} from '../constant'
 import {ResizeStorage} from '../utils/storage'
 import {getObj, noop, ratioAndRoundOff} from '../utils/util'
 import {ResizerModel} from './resizer-model'
@@ -12,6 +12,7 @@ export class PaneModel {
   isRegistered = true
   isHandle = false
   isPartiallyHidden: boolean = false
+  partialHiddenDirection: number
   resizerSize: number
 
   attachedResizer: ResizerModel | undefined
@@ -127,9 +128,17 @@ export class PaneModel {
     }
   }
 
-  setPartialHidden () {
+  setPartialHidden (direction: number) {
     if (this.isHandle) {
+      const previousDirection = this.isPartiallyHidden
       this.isPartiallyHidden = this.size < this.defaultSize
+      if (this.isPartiallyHidden) {
+        if (previousDirection !== this.isPartiallyHidden) {
+          this.partialHiddenDirection = direction
+        }
+      } else {
+        this.partialHiddenDirection = DIRECTIONS.NONE
+      }
     }
   }
 
@@ -154,17 +163,17 @@ export class PaneModel {
     this.size = size
   }
 
-  setUISize () {
+  setUISize (direction: number) {
     if (this.api) {
       this.api.setSize(this.visibility ? this.size : 0)
-      this.setPartialHidden()
+      this.setPartialHidden(direction)
     }
   }
 
   register (pane: any) {
     if (this.api) {
       this.api = pane
-      this.setUISize()
+      this.setUISize(DIRECTIONS.DOWN)
     }
     this.api = pane
   }

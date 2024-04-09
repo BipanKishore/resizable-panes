@@ -2,8 +2,9 @@ import {
   IPane, IResizablePaneProviderProps,
   IResizerApi
 } from '../@types'
-import {RESIZER} from '../constant'
+import {DIRECTIONS} from '../constant'
 import {ResizeStorage} from '../utils/storage'
+import {getResizerId} from '../utils/util'
 import {PaneModel} from './pane-model'
 
 export class ResizerModel extends PaneModel {
@@ -21,7 +22,7 @@ export class ResizerModel extends PaneModel {
     const {id} = paneProps
     const {resizerSize, visibility = {}} = resizableProps
     const show = visibility[id] !== undefined ? visibility[id] : true
-    this.id = `${RESIZER}-${id}`
+    this.id = getResizerId(id)
 
     const storedResizer = store.getStoredResizer(this.id)
     if (storedResizer) {
@@ -40,7 +41,7 @@ export class ResizerModel extends PaneModel {
         if (this.isPartiallyHidden) {
           this.size = 0
         }
-        this.setUISize()
+        this.setUISize(DIRECTIONS.DOWN)
         break
       case this.isRegistered:
         this.visibility = this.api.visibility

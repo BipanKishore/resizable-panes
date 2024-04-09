@@ -6,7 +6,7 @@ import React, {
 import {ResizablePaneContext} from '../context/resizable-panes-context'
 import {getResizableEvent, getSetSize, getSizeKey, joinClassName} from '../utils/dom'
 import {findIndexInChildrenbyId} from '../utils/panes'
-import {noop} from '../utils/util'
+import {getResizerId, noop} from '../utils/util'
 import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
 import {IResizer} from '../@types'
 
@@ -47,7 +47,7 @@ export const Resizer = (props: IResizer) => {
   const onMouseDown = useCallback((e: any) => {
     setIsMouseDown(true)
     const resizableEvent = getResizableEvent(e, vertical, previousTouchEvent)
-    context.setMouseDownDetails(resizableEvent, id)
+    context.setMouseDownDetails(resizableEvent, getResizerId(id))
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('touchmove', onMouseMove, {passive: false})
     document.addEventListener('mouseup', onMoveEnd)

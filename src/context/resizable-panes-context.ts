@@ -5,10 +5,10 @@ import {
   createPaneModelListAndResizerModelList,
   findIndexInChildrenbyId, afterMathOfResizerOverlapping, getPanesAndResizers, setDownMaxLimits,
   setResizersLimits,
-  setUISizesOfAllElement, setUpMaxLimits, syncAxisSizesFn, attachResizersToPaneModels
+  setUISizesFn, setUpMaxLimits, syncAxisSizesFn, attachResizersToPaneModels
 } from '../utils/panes'
 import {
-  calculateAxes, goingDownLogic, goingUpLogic, setCurrentMinMax,
+  calculateAxes, setVirtualOrderList, goingDownLogic, goingUpLogic, setCurrentMinMax,
   toRatioModeFn
 } from '../utils/resizable-pane'
 import {getList, minMaxTotal} from '../utils/development-util'
@@ -49,11 +49,9 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const syncAxisSizes = () => syncAxisSizesFn(items)
 
-  const setUISizes = () => setUISizesOfAllElement(items)
-
   const setActiveIndex = (index: number) => {
     // Pane Index before resizer
-    contextDetails.activeIndex = 2 * index
+    contextDetails.activeIndex = index
   }
 
   const registerPane = (pane: any, id:string) => {
@@ -76,9 +74,15 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const getIdToSizeMap = () => createMap(panesList, SIZE)
 
-  const setMouseDownDetails = ({mouseCoordinate}: any, id: string) => {
-    const index = findIndexInChildrenbyId(myChildren, id)
+  const setMouseDownDetails = ({mouseCoordinate}: any, resizerId: string) => {
+    const resizer = findById(items, resizerId)
+    const index = items.indexOf(resizer)
+
+    console.log(
+      'setActiveIndex ', resizerId, 'index:', index
+    )
     setActiveIndex(index)
+    contextDetails.handleId = resizerId
     contextDetails.direction = DIRECTIONS.NONE
     contextDetails.axisCoordinate = mouseCoordinate
     syncAxisSizes()
@@ -98,7 +102,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
         }
       }
       contextDetails.newVisibilityModel = false
-      setUISizes()
+      setUISizesFn(items, contextDetails.direction)
       // console.log('visPartiallyHidden ', getList(resizersList, 'isPartiallyHidden'))
       // console.log('maxSize ', getList(resizersList, 'maxSize'))
     }
@@ -116,6 +120,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const directionChangeActions = (e: any) => {
     contextDetails.axisCoordinate = e.mouseCoordinate
+
+    setVirtualOrderList(contextDetails)
     setResizersLimits(contextDetails)
     syncAxisSizes()
     setCurrentMinMax(contextDetails)
@@ -194,6 +200,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
     afterMathOfResizerOverlapping(contextDetails)
     storage.setStorage(contextDetails)
+
+    console.log('partialHiddenDirection ', getList(resizersList, 'partialHiddenDirection'))
   }
 
   return {

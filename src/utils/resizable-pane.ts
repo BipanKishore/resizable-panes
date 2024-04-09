@@ -4,12 +4,18 @@ import {PaneModel} from '../models/pane-model'
 import {getList, localConsole, setPaneList} from './development-util'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
-  getPanesSizeSum, getResizerSum, setResizersLimits, setUISizesOfAllElement, synPanesMaxToSize, synPanesMinToSize
+  getPanesSizeSum, getResizerSum, setResizersLimits, setUISizesFn, synPanesMaxToSize, synPanesMinToSize
 } from './panes'
-import {isItUp} from './util'
+import {findIndex, isItUp} from './util'
 
-// eslint-disable-next-line complexity
-export const goingDownLogic = (e: IResizableEvent, {axisCoordinate, panesList, activeIndex, items}: any) => {
+const reverse = <T>(list: T[]): T[] => [...list].reverse()
+const filterEmpty = (list: any[]) => list.filter(_ => _)
+
+export const goingDownLogic = (e: IResizableEvent, {
+  axisCoordinate,
+  decreasingItems,
+  increasingItems
+}: IContextDetails) => {
   let sizeChange = e.mouseCoordinate - <number>axisCoordinate
   if (sizeChange < 0) {
     // throw new Error('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
@@ -19,111 +25,133 @@ export const goingDownLogic = (e: IResizableEvent, {axisCoordinate, panesList, a
 
   let sizeChangeUp = sizeChange
 
-  for (let i = activeIndex; i > MINUS_ONE; i -= 2) {
-    const resizer = items[i - 1]
-    if (resizer) {
-      sizeChangeUp = resizer.changeSize(sizeChangeUp, PLUS)
-    }
-    sizeChangeUp = items[i].changeSize(sizeChangeUp, PLUS)
-  }
+  decreasingItems.forEach(item => {
+    sizeChange = item.changeSize(sizeChange, MINUS)
+  })
 
-  sizeChange -= sizeChangeUp
+  sizeChangeUp -= sizeChange
 
-  for (let i = activeIndex + 1; i < items.length; i += 1) {
-    sizeChange = items[i].changeSize(sizeChange, MINUS)
-  }
+  reverse(increasingItems).forEach(item => {
+    sizeChangeUp = item.changeSize(sizeChangeUp, PLUS)
+  })
+
+  // ---------
+
+  // for (let i = idx + 1; i > MINUS_ONE; i--) {
+  //   sizeChangeUp = virtualOrderList[i].changeSize(sizeChangeUp, PLUS)
+  // }
+
+  // sizeChange -= sizeChangeUp
+
+  // for (let i = idx + 2; i < virtualOrderList.length; i += 1) {
+  //   sizeChange = virtualOrderList[i].changeSize(sizeChange, MINUS)
+  // }
 }
 
-// eslint-disable-next-line complexity
-export const goingUpLogic = (e: IResizableEvent, {axisCoordinate, panesList, activeIndex, items}: any) => {
+export const goingUpLogic = (e: IResizableEvent, {
+  axisCoordinate,
+  decreasingItems,
+  increasingItems
+}: IContextDetails) => {
   let sizeChange = axisCoordinate - e.mouseCoordinate
   if (sizeChange < 0) {
     // throw new Error('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
   } else if (sizeChange === 0) {
     return
   }
+
   let sizeChangeUp = sizeChange
 
-  for (let i = activeIndex + 2; i < items.length; i += 2) {
-    const resizer = items[i + 1]
-    if (resizer) {
-      sizeChangeUp = resizer.changeSize(sizeChangeUp, PLUS)
-    }
-    sizeChangeUp = items[i].changeSize(sizeChangeUp, PLUS)
-  }
+  reverse(decreasingItems).forEach(item => {
+    sizeChange = item.changeSize(sizeChange, MINUS)
+  })
 
-  sizeChange -= sizeChangeUp
+  sizeChangeUp -= sizeChange
 
-  for (let i = activeIndex; i > MINUS_ONE; i -= 1) {
-    sizeChange = items[i].changeSize(sizeChange, MINUS)
-  }
+  increasingItems.forEach(item => {
+    sizeChangeUp = item.changeSize(sizeChangeUp, PLUS)
+  })
+
+  // console.log('goingUpLogic', idx, getList(virtualOrderList, 'id'))
+  // for (let i = idx + 2; i < virtualOrderList.length; i += 1) {
+  //   sizeChangeUp = virtualOrderList[i].changeSize(sizeChangeUp, PLUS)
+  // }
+
+  // sizeChange -= sizeChangeUp
+
+  // for (let i = idx; i > MINUS_ONE; i -= 1) {
+  //   sizeChange = virtualOrderList[i].changeSize(sizeChange, MINUS)
+  // }
 }
 
-export const getVisiblePaneModelsAndActiveIndex = (panesList: PaneModel[], _activeIndex: number) => {
-  const visiblePanesList = panesList.filter(item => item.visibility)
-  const activePane = panesList[_activeIndex]
-  const activeIndex = visiblePanesList.indexOf(activePane)
-
-  return {
-    visiblePanesList,
-    activeIndex
-  }
-}
+const removeHidden = (list: IResizableItem[]) => list.filter(item => item.visibility)
 
 // eslint-disable-next-line complexity
-const getVirtualOrderList = (items: IResizableItem[], direction: number, idx: number) => {
+export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) => {
+  const {items, direction, activeIndex, handleId} = serviceRefCurrent
+
+  // const visiblePanesList = panesList.filter(item => item.visibility)
+
+  const decreasingItems: (IResizableItem | undefined)[] = []
+  let increasingItems: (IResizableItem | undefined)[] = []
+  let virtualOrderList: (IResizableItem | undefined)[]
+
   if (isItUp(direction)) {
-    const virtualUpList: IResizableItem[] = items.slice(0, idx + 2)
-    for (let i = idx + 2; i < items.length; i += 2) {
-      const resizer = items[i + 1]
-      if (resizer) {
-        virtualUpList.push(resizer)
+    for (let i = 0; i < items.length; i += 2) {
+      if (i <= activeIndex) {
+        decreasingItems.push(items[i], items[i + 1])
+      } else {
+        increasingItems.push(items[i + 1], items[i])
       }
-      virtualUpList.push(items[i])
     }
-    console.log('virtualUpList', virtualUpList.slice(0, idx + 2), virtualUpList.slice(idx + 2, items.length))
-    return virtualUpList
+    virtualOrderList = [...decreasingItems, ...increasingItems]
+    console.log('UP <<<<<<<<<<<<<<<<<<<<<<<<<<')
+  } else {
+    increasingItems = [items[0]]
+
+    let i = 2
+
+    while (i < activeIndex) {
+      increasingItems.push(items[i], items[i - 1])
+      i += 2
+    }
+    increasingItems.push(items[activeIndex])
+
+    for (; i < items.length; i += 2) {
+      decreasingItems.push(items[i], items[i + 1])
+    }
+
+    virtualOrderList = [...increasingItems, ...decreasingItems]
+    console.log('Down>>>>>>>>>>>>>>>>>>>>>')
   }
 
-  const virtualDownList: IResizableItem[] = items.slice(idx + 1, items.length)
+  serviceRefCurrent.virtualOrderList = removeHidden(filterEmpty(virtualOrderList))
+  serviceRefCurrent.increasingItems = removeHidden(filterEmpty(increasingItems))
+  serviceRefCurrent.decreasingItems = removeHidden(filterEmpty(decreasingItems))
+  serviceRefCurrent.activeIndex = findIndex(serviceRefCurrent.virtualOrderList, handleId)
 
-  for (let i = idx; i > -1; i -= 2) {
-    const resizer = items[i - 1]
-    if (resizer) {
-      virtualDownList.unshift(resizer)
-    }
-    virtualDownList.unshift(items[i])
-  }
-  console.log('virtualDownList', virtualDownList.slice(0, idx + 1),
-    virtualDownList.slice(idx + 1, items.length))
-  return virtualDownList
+  console.log('increasingItems', getList((serviceRefCurrent.increasingItems), 'id'))
+  console.log('decreasingItems', getList(serviceRefCurrent.decreasingItems, 'id'))
 }
 
 export const setCurrentMinMax = (serviceRefCurrent: IContextDetails) => {
-  const {resizersList, activeIndex, items, direction} = serviceRefCurrent
+  // const {panesList, resizersList, activeIndex, items, direction} = serviceRefCurrent
   const {containerSize} = getMaxContainerSizes(serviceRefCurrent)
-  const _idx = <number>(activeIndex)
 
-  const {visiblePanesList, activeIndex: idx} = getVisiblePaneModelsAndActiveIndex(items, _idx)
-  const virtualOrderList = getVirtualOrderList(visiblePanesList, direction, idx)
+  const {virtualOrderList, activeIndex} = serviceRefCurrent
 
-  console.log('defaultMinSize ', getList(resizersList, 'defaultMinSize'))
-  console.log('defaultMaxSize ', getList(resizersList, 'defaultMaxSize'))
-
-  const nextIdx = idx + 1
-  const aMaxChangeUp = virtualOrderList[idx].getMinDiff()
+  const nextIdx = activeIndex + 1
+  const aMaxChangeUp = virtualOrderList[activeIndex].getMinDiff()
   const bMaxChangeUp = virtualOrderList[nextIdx].getMaxDiff()
   setPaneList(virtualOrderList, ['minSize', 'maxSize'], null)
 
-  minMaxLogicUp(virtualOrderList, aMaxChangeUp - bMaxChangeUp, idx, nextIdx, 0, containerSize)
+  minMaxLogicUp(virtualOrderList, aMaxChangeUp - bMaxChangeUp, activeIndex, nextIdx, 0, containerSize)
 
-  // console.log('minSize ', getList(virtualOrderList, 'minSize'))
-  // console.log('maxSize ', getList(virtualOrderList, 'maxSize'))
   const aMaxChangeDown = virtualOrderList[nextIdx].getMinDiff()
-  const bMaxChangeDown = virtualOrderList[idx].getMaxDiff()
-  minMaxLogicDown(virtualOrderList, bMaxChangeDown - aMaxChangeDown, idx, nextIdx, 0, containerSize)
-  // paneConsole(virtualOrderList, 'minSize')
-  // paneConsole(virtualOrderList, 'maxSize')
+  const bMaxChangeDown = virtualOrderList[activeIndex].getMaxDiff()
+  minMaxLogicDown(virtualOrderList, bMaxChangeDown - aMaxChangeDown, activeIndex, nextIdx, 0, containerSize)
+
+  console.log('items ', getList(virtualOrderList, 'id'))
   console.log('minSize ', getList(virtualOrderList, 'minSize'))
   console.log('maxSize ', getList(virtualOrderList, 'maxSize'))
 }
@@ -131,24 +159,13 @@ export const setCurrentMinMax = (serviceRefCurrent: IContextDetails) => {
 export const calculateAxes = (contextDetails: any) => {
   const {items, activeIndex} = contextDetails
   const {maxTopAxis} = getMaxContainerSizes(contextDetails)
-  setResizersLimits(contextDetails)
+  const visibleItemsList = items.filter((item : IResizableItem) => item.visibility)
 
-  const {visiblePanesList, activeIndex: idx} = getVisiblePaneModelsAndActiveIndex(items, activeIndex)
-
-  const bottomAxis = maxTopAxis + getMaxSizeSum(visiblePanesList, 0, idx)
-  const topAxis = maxTopAxis + getMinSizeSum(visiblePanesList, 0, idx)
-
-  localConsole({
-    idx,
-    maxTopAxis,
-    bottomAxis,
-    topAxis
-  }, 'calculateAxes')
-
-  contextDetails.bottomAxis = bottomAxis
-  contextDetails.topAxis = topAxis
+  contextDetails.bottomAxis = maxTopAxis + getMaxSizeSum(visibleItemsList, 0, activeIndex - 1)
+  contextDetails.topAxis = maxTopAxis + getMinSizeSum(visibleItemsList, 0, activeIndex - 1)
 }
 
+// aIndex will decrease and bIndex will increase
 // eslint-disable-next-line complexity
 export const minMaxLogicUp = (
   panesList: PaneModel[], value: number,
@@ -389,10 +406,6 @@ export const getMaxContainerSizes = ({getContainerRect, vertical, panesList, res
   const resizersSize = getResizerSum(resizersList)
   const maxPaneSize = containerSize - resizersSize
 
-  // localConsole({containerSize}, 'containerSize')
-  // localConsole({maxTopAxis}, 'maxTopAxis')
-  // localConsole({maxPaneSize}, 'maxPaneSize')
-  // localConsole({resizersSize}, 'resizersSize total')
   return {
     containerSize,
     maxTopAxis,
@@ -426,5 +439,5 @@ export const toRatioModeFn = (contextDetails: IContextDetails) => {
   const changeOperation = leftOverTotalSize < 0 ? MINUS : PLUS
   change1PixelToPanes(panesList, Math.abs(leftOverTotalSize), changeOperation)
 
-  setUISizesOfAllElement(items)
+  setUISizesFn(items, DIRECTIONS.DOWN)
 }

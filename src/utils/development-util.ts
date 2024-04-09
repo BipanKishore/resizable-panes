@@ -1,6 +1,6 @@
 import {IContextDetails} from '../@types'
 import {PaneModel} from '../models/pane-model'
-import {getMaxContainerSizes, getVisiblePaneModelsAndActiveIndex} from './resizable-pane'
+import {getMaxContainerSizes} from './resizable-pane'
 import {useEffect} from 'react'
 import {getObj} from './util'
 
@@ -16,27 +16,27 @@ export const localConsole = (obj: any = {}, key : string) => {
 }
 
 export const minMaxTotal = (serviceRefCurrent: IContextDetails) => {
-  const {panesList} = serviceRefCurrent
-  const {visiblePanesList} = getVisiblePaneModelsAndActiveIndex(panesList, 0)
+  // const {panesList} = serviceRefCurrent
+  // const {visiblePanesList} = getVisiblePaneModelsAndActiveIndex(panesList, 0)
 
-  const {maxPaneSize} = getMaxContainerSizes(serviceRefCurrent)
-  let sum = 0
-  visiblePanesList
-    .forEach(({minSize, maxSize}) => {
-      maxSize = Number.isFinite(maxSize) ? maxSize : 0
-      sum += ((maxSize || 0) + (minSize || 0))
-    })
+  // const {maxPaneSize} = getMaxContainerSizes(serviceRefCurrent)
+  // let sum = 0
+  // visiblePanesList
+  //   .forEach(({minSize, maxSize}) => {
+  //     maxSize = Number.isFinite(maxSize) ? maxSize : 0
+  //     sum += ((maxSize || 0) + (minSize || 0))
+  //   })
 
-  // const paneSizeTotal = sum
-  const paneSizeTotal = sum / 2
-  console.warn(`Valid Sum: [${sum}, ${paneSizeTotal}], value :${maxPaneSize}`)
-  if ((Math.trunc(maxPaneSize) !== Math.trunc(sum) && Math.trunc(maxPaneSize) !== Math.trunc(paneSizeTotal))) {
-    throw new Error(`Max Pane sum total: ${maxPaneSize} = ${sum} or ${maxPaneSize} = ${paneSizeTotal}`)
-  }
+  // // const paneSizeTotal = sum
+  // const paneSizeTotal = sum / 2
+  // console.warn(`Valid Sum: [${sum}, ${paneSizeTotal}], value :${maxPaneSize}`)
+  // if ((Math.trunc(maxPaneSize) !== Math.trunc(sum) && Math.trunc(maxPaneSize) !== Math.trunc(paneSizeTotal))) {
+  //   throw new Error(`Max Pane sum total: ${maxPaneSize} = ${sum} or ${maxPaneSize} = ${paneSizeTotal}`)
+  // }
 }
 
-export const getList = (panesList: PaneModel[], key: string): unknown[] => {
-  return panesList.map((pane: any) => pane[key])
+export const getList = (panesList: PaneModel[] | any[], key: string): unknown[] => {
+  return panesList.map((pane: any) => pane?.[key])
 }
 
 export const paneConsole = (panesList: PaneModel[], key: string) => {

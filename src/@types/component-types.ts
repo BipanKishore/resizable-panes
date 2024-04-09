@@ -89,7 +89,10 @@ export interface IContextDetails {
   direction: number,
   getContainerRect: any,
   newVisibilityModel: boolean,
-  vertical: boolean
+  vertical: boolean,
+  virtualOrderList: IResizableItem[],
+  decreasingItems: IResizableItem[],
+  increasingItems: IResizableItem[]
 }
 
 export interface IResizableContext {
