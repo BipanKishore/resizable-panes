@@ -65,31 +65,23 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
     panesList, resizersList, items
   } = contextDetails
 
-  const paneVisibilityList: number[] = []
+  const visiblePanesIndexes: number[] = []
 
   panesList.forEach((pane, i) => {
     pane.syncToOldVisibilityModel()
     const {id} = pane
     const visibility = idMap[id]
     if (visibility) {
-      paneVisibilityList.push(i)
+      visiblePanesIndexes.push(i)
     }
     pane.setVisibility(visibility)
   })
 
-  const lastVisibleIndex = [...paneVisibilityList].pop()
-  // attachResizersToPaneModels(contextDetails)
-
-  // console.log('attachedResizer ', getList(panesList, 'attachedResizer'))
-
-  const attachedResizerList = getList(panesList, 'attachedResizer').filter(i => i)
-
   hideResizers(contextDetails)
-  // console.log('attachedResizer ', getList(panesList, 'attachedResizer'))
 
   const {maxPaneSize} = getMaxContainerSizes(contextDetails)
 
-  visibilityOperationFn(panesList, paneVisibilityList, maxPaneSize)
+  visibilityOperationFn(panesList, visiblePanesIndexes, maxPaneSize)
 
   setUISizesFn(items, DIRECTIONS.NONE)
 }
