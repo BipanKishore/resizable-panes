@@ -88,7 +88,7 @@ const removeHidden = (list: IResizableItem[]) => list.filter(item => item.visibi
 
 // eslint-disable-next-line complexity
 export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) => {
-  const {items, direction, activeIndex, handleId} = serviceRefCurrent
+  const {items, direction, handleId} = serviceRefCurrent
 
   const visibleItems = removeHidden(items)
   const visibleActiveIndex = findIndex(visibleItems, handleId)
@@ -99,19 +99,30 @@ export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) =>
   let virtualOrderList: (IResizableItem | undefined)[]
 
   if (isItUp(direction)) {
-    for (let i = 0; i < visibleItems.length; i += 2) {
-      if (i <= visibleActiveIndex) {
-        decreasingItems.push(visibleItems[i], visibleItems[i + 1])
+    for (let i = visibleActiveIndex - 1; i > -1; i -= 2) {
+      decreasingItems.push(visibleItems[i], visibleItems[i - 1])
+    }
+    decreasingItems.reverse()
+
+    increasingItems = [visibleItems[visibleActiveIndex]]
+
+    for (let i = visibleActiveIndex + 1; i < visibleItems.length; i += 2) {
+      const pane = visibleItems[i]
+      if (pane.size) {
+        increasingItems[i] = pane
+        increasingItems[i + 1] = visibleItems[i + 1]
       } else {
-        increasingItems.push(visibleItems[i + 1], visibleItems[i])
+        increasingItems[i] = visibleItems[i + 1]
+        increasingItems[i + 1] = pane
       }
     }
+
     virtualOrderList = [...decreasingItems, ...increasingItems]
     console.log('UP <<<<<<<<<<<<<<<<<<<<<<<<<<')
   } else {
     increasingItems = [visibleItems[0]]
 
-    for (let i = visibleActiveIndex - 1; i > -1; i -= 2) {
+    for (let i = visibleActiveIndex - 1; i > 0; i -= 2) {
       const pane = visibleItems[i]
       if (pane.size) {
         increasingItems[i] = pane
