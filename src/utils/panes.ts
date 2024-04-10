@@ -147,34 +147,38 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
 
   if (isItUp(direction)) {
     for (let i = activeIndex - 2; i > -1; i -= 2) {
-      const pane = virtualOrderList[i]
-      const resizer = virtualOrderList[i - 1] as ResizerModel
+      const resizer = virtualOrderList[i]
+      const pane = virtualOrderList[i - 1] as ResizerModel
       if (pane && resizer) {
         resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
+        resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
       }
     }
 
     for (let i = activeIndex + 2; i < virtualOrderList.length; i += 2) {
-      const pane = virtualOrderList[i]
-      const resizer = virtualOrderList[i + 1] as ResizerModel
+      const resizer = virtualOrderList[i]
+      const pane = virtualOrderList[i + 1] as ResizerModel
       if (pane && resizer) {
         resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
+        resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
       }
     }
   } else {
     for (let i = activeIndex - 2; i > -1; i -= 2) {
-      const pane = virtualOrderList[i]
-      const resizer = virtualOrderList[i - 1] as ResizerModel
+      const resizer = virtualOrderList[i]
+      const pane = virtualOrderList[i - 1] as ResizerModel
       if (pane && resizer) {
         resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
+        resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
       }
     }
 
     for (let i = activeIndex + 2; i < virtualOrderList.length; i += 2) {
-      const pane = virtualOrderList[i]
-      const resizer = virtualOrderList[i + 1] as ResizerModel
+      const resizer = virtualOrderList[i]
+      const pane = virtualOrderList[i + 1] as ResizerModel
       if (pane && resizer) {
         resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
+        resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
       }
     }
   }

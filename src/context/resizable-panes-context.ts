@@ -11,7 +11,7 @@ import {
   calculateAxes, setVirtualOrderList, goingDownLogic, goingUpLogic, setCurrentMinMax,
   toRatioModeFn
 } from '../utils/resizable-pane'
-import {getList, minMaxTotal} from '../utils/development-util'
+import {getList} from '../utils/development-util'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
 import {IKeyToBoolMap, IResizableContext, IResizablePaneProviderProps} from '../@types'
@@ -78,9 +78,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     const resizer = findById(items, resizerId)
     const index = items.indexOf(resizer)
 
-    console.log(
-      'setActiveIndex ', resizerId, 'index:', index
-    )
+    console.log('setActiveIndex ', resizerId, 'index:', index)
+
     setActiveIndex(index)
     contextDetails.handleId = resizerId
     contextDetails.direction = DIRECTIONS.NONE
