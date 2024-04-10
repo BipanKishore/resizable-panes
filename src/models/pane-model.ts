@@ -12,7 +12,6 @@ export class PaneModel {
   isRegistered = true
   isHandle = false
   isPartiallyHidden: boolean = false
-  partialHiddenDirection: number
   resizerSize: number
 
   attachedResizer: ResizerModel | undefined
@@ -128,17 +127,9 @@ export class PaneModel {
     }
   }
 
-  setPartialHidden (direction: number) {
+  setPartialHidden (direction: number) { // Will have to remove direction
     if (this.isHandle) {
-      const previousDirection = this.isPartiallyHidden
       this.isPartiallyHidden = this.size < this.defaultSize
-      if (this.isPartiallyHidden) {
-        if (previousDirection !== this.isPartiallyHidden) {
-          this.partialHiddenDirection = direction
-        }
-      } else {
-        this.partialHiddenDirection = DIRECTIONS.NONE
-      }
     }
   }
 

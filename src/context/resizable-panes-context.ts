@@ -199,8 +199,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
     afterMathOfResizerOverlapping(contextDetails)
     storage.setStorage(contextDetails)
-
-    console.log('partialHiddenDirection ', getList(resizersList, 'partialHiddenDirection'))
   }
 
   return {
