@@ -90,39 +90,46 @@ const removeHidden = (list: IResizableItem[]) => list.filter(item => item.visibi
 export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) => {
   const {items, direction, activeIndex, handleId} = serviceRefCurrent
 
-  // const visiblePanesList = panesList.filter(item => item.visibility)
+  const visibleItems = removeHidden(items)
+  const visibleActiveIndex = findIndex(visibleItems, handleId)
+  // console.log('visibleItems', getList(visibleItems, 'id'))
 
   const decreasingItems: (IResizableItem | undefined)[] = []
   let increasingItems: (IResizableItem | undefined)[] = []
   let virtualOrderList: (IResizableItem | undefined)[]
 
   if (isItUp(direction)) {
-    for (let i = 0; i < items.length; i += 2) {
-      if (i <= activeIndex) {
-        decreasingItems.push(items[i], items[i + 1])
+    for (let i = 0; i < visibleItems.length; i += 2) {
+      if (i <= visibleActiveIndex) {
+        decreasingItems.push(visibleItems[i], visibleItems[i + 1])
       } else {
-        increasingItems.push(items[i + 1], items[i])
+        increasingItems.push(visibleItems[i + 1], visibleItems[i])
       }
     }
     virtualOrderList = [...decreasingItems, ...increasingItems]
     console.log('UP <<<<<<<<<<<<<<<<<<<<<<<<<<')
   } else {
-    increasingItems = [items[0]]
+    increasingItems = [visibleItems[0]]
 
-    let i = 2
-
-    while (i < activeIndex) {
-      increasingItems.push(items[i], items[i - 1])
-      i += 2
+    for (let i = visibleActiveIndex - 1; i > -1; i -= 2) {
+      const pane = visibleItems[i]
+      if (pane.size) {
+        increasingItems[i] = pane
+        increasingItems[i - 1] = visibleItems[i - 1]
+      } else {
+        increasingItems[i] = visibleItems[i - 1]
+        increasingItems[i - 1] = pane
+      }
     }
-    increasingItems.push(items[activeIndex])
 
-    for (; i < items.length; i += 2) {
-      decreasingItems.push(items[i], items[i + 1])
+    increasingItems.push(visibleItems[visibleActiveIndex])
+
+    for (let i = visibleActiveIndex + 1; i < visibleItems.length; i += 2) {
+      decreasingItems.push(visibleItems[i], visibleItems[i + 1])
     }
 
     virtualOrderList = [...increasingItems, ...decreasingItems]
-    console.log('Down>>>>>>>>>>>>>>>>>>>>>')
+    console.log('Down >>>>>>>>>>>>>>>>>>>>>')
   }
 
   serviceRefCurrent.virtualOrderList = removeHidden(filterEmpty(virtualOrderList))
@@ -131,8 +138,14 @@ export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) =>
 
   serviceRefCurrent.virtualActiveIndex = findIndex(serviceRefCurrent.virtualOrderList, handleId)
 
+  console.log(
+    'visibleActiveIndex', visibleActiveIndex,
+    serviceRefCurrent.virtualActiveIndex
+  )
+
   console.log('increasingItems', getList((serviceRefCurrent.increasingItems), 'id'))
   console.log('decreasingItems', getList(serviceRefCurrent.decreasingItems, 'id'))
+  console.log('virtualOrderList', getList(serviceRefCurrent.virtualOrderList, 'id'))
 }
 
 export const setCurrentMinMax = (serviceRefCurrent: IContextDetails) => {

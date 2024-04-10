@@ -44,7 +44,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     newVisibilityModel: false
   }
 
-  attachResizersToPaneModels(contextDetails)
+  // attachResizersToPaneModels(contextDetails)
 
   const syncAxisSizes = () => syncAxisSizesFn(items)
 
@@ -127,15 +127,17 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   const setAxisConfig = (e: any) => {
-    const {virtualActiveIndex, topAxis, bottomAxis} = contextDetails
+    const {virtualActiveIndex, virtualOrderList, topAxis, bottomAxis} = contextDetails
 
     if (e.mouseCoordinate <= topAxis) {
-      setUpMaxLimits(items, virtualActiveIndex)
+      setUpMaxLimits(virtualOrderList, virtualActiveIndex)
+      console.log('setUpMaxLimits setUpMaxLimits')
       syncAxisSizes()
       contextDetails.axisCoordinate = topAxis
       return false
     } else if (e.mouseCoordinate >= bottomAxis) {
-      setDownMaxLimits(items, virtualActiveIndex)
+      setDownMaxLimits(virtualOrderList, virtualActiveIndex)
+      console.log('setDownMaxLimits setDownMaxLimits')
       syncAxisSizes()
       contextDetails.axisCoordinate = bottomAxis
       return false

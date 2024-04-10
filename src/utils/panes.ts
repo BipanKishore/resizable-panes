@@ -137,56 +137,121 @@ export const createPaneModelListAndResizerModelList = (
   return items
 }
 
-// eslint-disable-next-line complexity
 export const setResizersLimits = (contextDetails: IContextDetails) => {
   const {virtualActiveIndex, direction, virtualOrderList, resizersList} = contextDetails
 
+  resizersList.forEach((item) => {
+    item.defaultMinSize = 0
+    item.defaultMaxSize = item.defaultSize
+  })
+
+  // The bellow logic wont be required if we will put the virtualActiveIndex in increasing side
   const resizerHandle = virtualOrderList[virtualActiveIndex] as ResizerModel
   resizerHandle.defaultMinSize = resizerHandle.defaultSize
   resizerHandle.defaultMaxSize = resizerHandle.defaultSize
 
-  if (isItUp(direction)) {
-    for (let i = virtualActiveIndex - 2; i > -1; i -= 2) {
-      const resizer = virtualOrderList[i]
-      const pane = virtualOrderList[i - 1] as ResizerModel
-      if (pane && resizer) {
-        resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
-        resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
-      }
-    }
+  // if (isItUp(direction)) {
+  //   for (let i = virtualActiveIndex - 2; i > -1; i -= 2) {
+  //     const resizer = virtualOrderList[i]
+  //     const pane = virtualOrderList[i - 1] as ResizerModel
+  //     if (pane && resizer) {
+  //       resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
+  //       resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
+  //     }
+  //   }
 
-    for (let i = virtualActiveIndex + 2; i < virtualOrderList.length; i += 2) {
-      const resizer = virtualOrderList[i]
-      const pane = virtualOrderList[i + 1] as ResizerModel
-      if (pane && resizer) {
-        resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
-        resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
-      }
-    }
-  } else {
-    for (let i = virtualActiveIndex - 2; i > -1; i -= 2) {
-      const resizer = virtualOrderList[i]
-      const pane = virtualOrderList[i - 1] as ResizerModel
-      if (pane && resizer) {
-        resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
-        resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
-      }
-    }
+  //   for (let i = virtualActiveIndex + 2; i < virtualOrderList.length; i += 2) {
+  //     const resizer = virtualOrderList[i]
+  //     const pane = virtualOrderList[i + 1] as ResizerModel
+  //     if (pane && resizer) {
+  //       resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
+  //       resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
+  //     }
+  //   }
+  // } else {
+  //   for (let i = virtualActiveIndex - 2; i > -1; i -= 2) {
+  //     const resizer = virtualOrderList[i]
+  //     const pane = virtualOrderList[i - 1] as ResizerModel
+  //     if (pane && resizer) {
+  //       resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
+  //       resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
+  //     }
+  //   }
 
-    for (let i = virtualActiveIndex + 2; i < virtualOrderList.length; i += 2) {
-      const resizer = virtualOrderList[i]
-      const pane = virtualOrderList[i + 1] as ResizerModel
-      if (pane && resizer) {
-        resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
-        resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
-      }
-    }
-  }
-  console.log('defaultMinSize ', getList(resizersList, 'defaultMinSize'))
-  console.log('defaultMaxSize ', getList(resizersList, 'defaultMaxSize'))
+  //   for (let i = virtualActiveIndex + 2; i < virtualOrderList.length; i += 2) {
+  //     const resizer = virtualOrderList[i]
+  //     const pane = virtualOrderList[i + 1] as ResizerModel
+  //     if (pane && resizer) {
+  //       resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
+  //       resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
+  //     }
+  //   }
+  // }
+  // console.log('defaultMinSize ', getList(resizersList, 'defaultMinSize'))
+  // console.log('defaultMaxSize ', getList(resizersList, 'defaultMaxSize'))
 }
 
+// We increases the size of element in opposite direction than in the direction
 export const fixPartialHiddenResizer = (contextDetails: IContextDetails) => {
+  const {items} = contextDetails
+
+  let sizeChange = 0
+  items.forEach(
+    (item, index) => {
+      if (item.isHandle && item.defaultSize !== item.size && item.size) {
+        sizeChange = item.size
+        item.size = 0
+
+        const resizingOrder: IResizableItem[] = []
+
+        if (isItUp(item.partialHiddenDirection)) {
+          const resizingOrderLeftOver = items.slice(0, index).reverse()
+          resizingOrder.push(...items.slice(index + 1), ...resizingOrderLeftOver)
+        } else {
+          const resizingOrderLeftOver = items.slice(index + 1)
+          resizingOrder.push(...items.slice(0, index).reverse(), ...resizingOrderLeftOver)
+        }
+
+        const visibleItems = resizingOrder.filter((item) => item.size)
+        visibleItems.forEach((item) => item.syncAxisSize())
+
+        visibleItems.forEach((item) => {
+          item.restoreLimits()
+          sizeChange = item.changeSize(sizeChange, PLUS)
+        })
+
+        setUISizesFn(items, item.partialHiddenDirection)
+      }
+    }
+  )
+
+  // const index = items.findIndex((item) => item.isHandle && item.defaultSize !== item.size && item.size)
+
+  // if (sizeChange) {
+
+  //   const resizingOrder: IResizableItem[] = []
+
+  //   if (isItUp(direction)) {
+  //     const resizingOrderLeftOver = items.slice(0, index).reverse()
+  //     resizingOrder.push(...items.slice(index + 1), ...resizingOrderLeftOver)
+  //   } else {
+  //     const resizingOrderLeftOver = items.slice(index + 1)
+  //     resizingOrder.push(...items.slice(0, index).reverse(), ...resizingOrderLeftOver)
+  //   }
+
+  //   const visibleItems = resizingOrder.filter((item) => item.size)
+  //   visibleItems.forEach((item) => item.syncAxisSize())
+
+  //   visibleItems.forEach((item) => {
+  //     item.restoreLimits()
+  //     sizeChange = item.changeSize(sizeChange, PLUS)
+  //   })
+  //   setUISizesFn(items, direction)
+  // }
+}
+
+// We increases the size of element in opposite direction than in the direction
+export const fixPartialHiddenResizer123 = (contextDetails: IContextDetails) => {
   const {direction, items} = contextDetails
   const index = items.findIndex((item) => item.isHandle && item.defaultSize !== item.size && item.size)
 
@@ -225,7 +290,7 @@ export const findNextVisibleResizer = (items: IResizableItem[], index: number) =
   }
 }
 
-export const attachResizersToPaneModels = (contextDetails: IContextDetails) => {
+export const attachResizersToPaneModels = (contextDetails: IContextDetails) => { // Not using
   const {panesList, resizersList} = contextDetails
 
   const attachedList: any[] = []
