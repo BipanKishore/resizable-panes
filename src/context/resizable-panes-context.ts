@@ -11,7 +11,6 @@ import {
   calculateAxes, setVirtualOrderList, goingDownLogic, goingUpLogic, setCurrentMinMax,
   toRatioModeFn
 } from '../utils/resizable-pane'
-import {getList} from '../utils/development-util'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
 import {IKeyToBoolMap, IResizableContext, IResizablePaneProviderProps} from '../@types'
@@ -128,15 +127,15 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   const setAxisConfig = (e: any) => {
-    const {activeIndex, topAxis, bottomAxis} = contextDetails
+    const {virtualActiveIndex, topAxis, bottomAxis} = contextDetails
 
     if (e.mouseCoordinate <= topAxis) {
-      setUpMaxLimits(items, activeIndex)
+      setUpMaxLimits(items, virtualActiveIndex)
       syncAxisSizes()
       contextDetails.axisCoordinate = topAxis
       return false
     } else if (e.mouseCoordinate >= bottomAxis) {
-      setDownMaxLimits(items, activeIndex)
+      setDownMaxLimits(items, virtualActiveIndex)
       syncAxisSizes()
       contextDetails.axisCoordinate = bottomAxis
       return false

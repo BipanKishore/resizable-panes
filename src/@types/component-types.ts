@@ -84,6 +84,7 @@ export interface IContextDetails {
   panesList: PaneModel[],
   resizersList: ResizerModel[],
   isSetRatioMode: boolean,
+  virtualActiveIndex: number,
   activeIndex: number,
   axisCoordinate: number,
   direction: number,

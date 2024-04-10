@@ -128,7 +128,8 @@ export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) =>
   serviceRefCurrent.virtualOrderList = removeHidden(filterEmpty(virtualOrderList))
   serviceRefCurrent.increasingItems = removeHidden(filterEmpty(increasingItems))
   serviceRefCurrent.decreasingItems = removeHidden(filterEmpty(decreasingItems))
-  serviceRefCurrent.activeIndex = findIndex(serviceRefCurrent.virtualOrderList, handleId)
+
+  serviceRefCurrent.virtualActiveIndex = findIndex(serviceRefCurrent.virtualOrderList, handleId)
 
   console.log('increasingItems', getList((serviceRefCurrent.increasingItems), 'id'))
   console.log('decreasingItems', getList(serviceRefCurrent.decreasingItems, 'id'))
@@ -138,31 +139,31 @@ export const setCurrentMinMax = (serviceRefCurrent: IContextDetails) => {
   // const {panesList, resizersList, activeIndex, items, direction} = serviceRefCurrent
   const {containerSize} = getMaxContainerSizes(serviceRefCurrent)
 
-  const {virtualOrderList, activeIndex} = serviceRefCurrent
+  const {virtualOrderList, virtualActiveIndex} = serviceRefCurrent
 
-  const nextIdx = activeIndex + 1
-  const aMaxChangeUp = virtualOrderList[activeIndex].getMinDiff()
+  const nextIdx = virtualActiveIndex + 1
+  const aMaxChangeUp = virtualOrderList[virtualActiveIndex].getMinDiff()
   const bMaxChangeUp = virtualOrderList[nextIdx].getMaxDiff()
   setPaneList(virtualOrderList, ['minSize', 'maxSize'], null)
 
-  minMaxLogicUp(virtualOrderList, aMaxChangeUp - bMaxChangeUp, activeIndex, nextIdx, 0, containerSize)
+  minMaxLogicUp(virtualOrderList, aMaxChangeUp - bMaxChangeUp, virtualActiveIndex, nextIdx, 0, containerSize)
 
   const aMaxChangeDown = virtualOrderList[nextIdx].getMinDiff()
-  const bMaxChangeDown = virtualOrderList[activeIndex].getMaxDiff()
-  minMaxLogicDown(virtualOrderList, bMaxChangeDown - aMaxChangeDown, activeIndex, nextIdx, 0, containerSize)
+  const bMaxChangeDown = virtualOrderList[virtualActiveIndex].getMaxDiff()
+  minMaxLogicDown(virtualOrderList, bMaxChangeDown - aMaxChangeDown, virtualActiveIndex, nextIdx, 0, containerSize)
 
   console.log('items ', getList(virtualOrderList, 'id'))
   console.log('minSize ', getList(virtualOrderList, 'minSize'))
   console.log('maxSize ', getList(virtualOrderList, 'maxSize'))
 }
-
+// virtualActiveIndex
 export const calculateAxes = (contextDetails: any) => {
-  const {items, activeIndex} = contextDetails
+  const {items, virtualActiveIndex} = contextDetails
   const {maxTopAxis} = getMaxContainerSizes(contextDetails)
   const visibleItemsList = items.filter((item : IResizableItem) => item.visibility)
 
-  contextDetails.bottomAxis = maxTopAxis + getMaxSizeSum(visibleItemsList, 0, activeIndex - 1)
-  contextDetails.topAxis = maxTopAxis + getMinSizeSum(visibleItemsList, 0, activeIndex - 1)
+  contextDetails.bottomAxis = maxTopAxis + getMaxSizeSum(visibleItemsList, 0, virtualActiveIndex - 1)
+  contextDetails.topAxis = maxTopAxis + getMinSizeSum(visibleItemsList, 0, virtualActiveIndex - 1)
 }
 
 // aIndex will decrease and bIndex will increase

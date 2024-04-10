@@ -139,14 +139,14 @@ export const createPaneModelListAndResizerModelList = (
 
 // eslint-disable-next-line complexity
 export const setResizersLimits = (contextDetails: IContextDetails) => {
-  const {activeIndex, direction, virtualOrderList, resizersList} = contextDetails
+  const {virtualActiveIndex, direction, virtualOrderList, resizersList} = contextDetails
 
-  const resizerHandle = virtualOrderList[activeIndex] as ResizerModel
+  const resizerHandle = virtualOrderList[virtualActiveIndex] as ResizerModel
   resizerHandle.defaultMinSize = resizerHandle.defaultSize
   resizerHandle.defaultMaxSize = resizerHandle.defaultSize
 
   if (isItUp(direction)) {
-    for (let i = activeIndex - 2; i > -1; i -= 2) {
+    for (let i = virtualActiveIndex - 2; i > -1; i -= 2) {
       const resizer = virtualOrderList[i]
       const pane = virtualOrderList[i - 1] as ResizerModel
       if (pane && resizer) {
@@ -155,7 +155,7 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
       }
     }
 
-    for (let i = activeIndex + 2; i < virtualOrderList.length; i += 2) {
+    for (let i = virtualActiveIndex + 2; i < virtualOrderList.length; i += 2) {
       const resizer = virtualOrderList[i]
       const pane = virtualOrderList[i + 1] as ResizerModel
       if (pane && resizer) {
@@ -164,7 +164,7 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
       }
     }
   } else {
-    for (let i = activeIndex - 2; i > -1; i -= 2) {
+    for (let i = virtualActiveIndex - 2; i > -1; i -= 2) {
       const resizer = virtualOrderList[i]
       const pane = virtualOrderList[i - 1] as ResizerModel
       if (pane && resizer) {
@@ -173,7 +173,7 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
       }
     }
 
-    for (let i = activeIndex + 2; i < virtualOrderList.length; i += 2) {
+    for (let i = virtualActiveIndex + 2; i < virtualOrderList.length; i += 2) {
       const resizer = virtualOrderList[i]
       const pane = virtualOrderList[i + 1] as ResizerModel
       if (pane && resizer) {
