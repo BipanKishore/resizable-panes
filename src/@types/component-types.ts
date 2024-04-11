@@ -5,6 +5,8 @@ import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from '../utils/storage'
 import {ResizerModel} from '../models/resizer-model'
 
+export type IResizableItem = PaneModel | ResizerModel
+
 export type onResizeType = (param: IMapIdToSize) => void
 export type onReadyType = (api: IResizableApi) => void
 export type UnitTypes = 'ratio' | 'pixel' | undefined
@@ -61,12 +63,9 @@ export interface IResizer {
   children?: ReactNode
 }
 
-export interface IStoreResizerModel {
+export interface IStoreResizableItemsModel {
   id: string,
   visibility: boolean
-}
-
-export interface IStorePaneModel extends IStoreResizerModel {
   size: number,
   defaultSize: number,
   defaultMinSize: number,
@@ -75,24 +74,30 @@ export interface IStorePaneModel extends IStoreResizerModel {
 }
 
 export interface IStoreModel {
-  panes: IStorePaneModel[],
-  resizers: IStoreResizerModel[],
+  panes: IStoreResizableItemsModel[],
+  resizers: IStoreResizableItemsModel[],
   containerSize?: number
 }
 
 export interface IContextDetails {
+  items: IResizableItem[],
   panesList: PaneModel[],
   resizersList: ResizerModel[],
   isSetRatioMode: boolean,
+  virtualActiveIndex: number,
   activeIndex: number,
   axisCoordinate: number,
   direction: number,
   getContainerRect: any,
   newVisibilityModel: boolean,
-  vertical: boolean
+  vertical: boolean,
+  virtualOrderList: IResizableItem[],
+  decreasingItems: IResizableItem[],
+  increasingItems: IResizableItem[]
 }
 
 export interface IResizableContext {
+  onMoveEndFn: any,
   registerPane: any,
   registerResizer: any,
   registerContainer: any,

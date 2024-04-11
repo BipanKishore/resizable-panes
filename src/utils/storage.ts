@@ -1,5 +1,5 @@
 import {ReactElement} from 'react'
-import {IContextDetails, IStoreModel, IStorePaneModel} from '../@types'
+import {IContextDetails, IStoreModel, IStoreResizableItemsModel} from '../@types'
 import {getResizerSum} from './panes'
 import {findById} from './util'
 
@@ -32,7 +32,7 @@ export class ResizeStorage {
     getResizerSum(resizersList, 0, resizersList.length - 1)
 
     const objectToSave = {
-      panes: panesList.map(item => item.getStoreObj()),
+      panes: panesList.map(item => item.getStoreModel()),
       resizers: resizersList.map(item => item.getStoreModel()),
       containerSize
     }
@@ -83,7 +83,7 @@ export class ResizeStorage {
   }
 
   // Removed from Call
-  getStoredPane (id: keyof IStorePaneModel): IStorePaneModel | null {
+  getStoredPane (id: string): IStoreResizableItemsModel | null {
     const {panes} = this.getStorage()
     return findById(panes, id) ?? null
   }

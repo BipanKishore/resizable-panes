@@ -1,14 +1,27 @@
 /* eslint-disable complexity */
-import {IPaneNumericKeys, IStorePaneModel, addAndRemoveType} from '../@types'
-import {PLUS, ZERO} from '../constant'
+import {
+  IPaneNumericKeys, IResizablePaneProviderProps,
+  IStoreResizableItemsModel, addAndRemoveType
+} from '../@types'
+import {DIRECTIONS, PLUS, ZERO} from '../constant'
 import {ResizeStorage} from '../utils/storage'
-import {getObj, ratioAndRoundOff} from '../utils/util'
+import {getObj, noop, ratioAndRoundOff} from '../utils/util'
+import {ResizerModel} from './resizer-model'
 
 export class PaneModel {
+  isRegistered = true
+  isHandle = false
+  isPartiallyHidden: boolean = false
+  partialHiddenDirection = DIRECTIONS.NONE
+  resizerSize: number
+
+  attachedResizer: ResizerModel | undefined
+
   id: string
   // index
-  pane: any
+  api: any
   size: number
+  preSize: number
   // get _size () {
   //   return this.size
   // }
@@ -36,7 +49,7 @@ export class PaneModel {
   oldVisibility: boolean = true
   // Development Variables
 
-  constructor (paneProps: any, resizableProps: any, store: ResizeStorage) {
+  constructor (paneProps: any, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
     const {
       id, minSize = ZERO, size, maxSize = Infinity
     } = paneProps
@@ -54,7 +67,7 @@ export class PaneModel {
     }
 
     this.id = id
-    this.vertical = vertical
+    this.vertical = vertical as boolean
 
     if (size < minSize) {
       throw Error('Size can not be smaller than minSize for pane id ' + id)
@@ -86,7 +99,7 @@ export class PaneModel {
     this.visibility = visibility
   }
 
-  getStoreObj (): IStorePaneModel {
+  getStoreModel (): IStoreResizableItemsModel {
     const t = getObj(this, 'id', 'size', 'defaultSize', 'defaultMinSize', 'visibility', 'storedSize')
     return {
       ...t,
@@ -95,10 +108,7 @@ export class PaneModel {
   }
 
   getSize () {
-    if (this.visibility) {
-      return this.size
-    }
-    return 0
+    return this.isRegistered && this.visibility ? this.size : 0
   }
 
   setVisibilitySize (sizeChange: number, operation: addAndRemoveType) {
@@ -117,6 +127,21 @@ export class PaneModel {
     } else {
       return newSize
     }
+  }
+
+  setPartialHidden (direction: number) { // Will have to remove direction
+    if (this.isHandle) {
+      this.isPartiallyHidden = this.size < this.defaultSize
+      if (this.isPartiallyHidden) {
+        if (this.size !== this.preSize) {
+          this.partialHiddenDirection = direction
+        }
+      } else {
+        this.partialHiddenDirection = DIRECTIONS.NONE
+      }
+    }
+
+    this.preSize = this.size
   }
 
   changeSize (sizeChange: number, operation: addAndRemoveType) {
@@ -140,18 +165,19 @@ export class PaneModel {
     this.size = size
   }
 
-  setUISize () {
-    if (this.pane) {
-      this.pane.setSize(this.visibility ? this.size : 0)
+  setUISize (direction: number) {
+    if (this.api) {
+      this.api.setSize(this.visibility ? this.size : 0)
+      this.setPartialHidden(direction)
     }
   }
 
   register (pane: any) {
-    if (this.pane) {
-      this.pane = pane
-      this.setUISize()
+    if (this.api) {
+      this.api = pane
+      this.setUISize(DIRECTIONS.DOWN)
     }
-    this.pane = pane
+    this.api = pane
   }
 
   synPreservedSize () {
@@ -252,11 +278,20 @@ export class PaneModel {
     }
   }
 
-  setVisibilityNew (visibility: boolean) {
+  setVisibilityHelper () {
+    if (this.isHandle) {
+      this.size = this.isPartiallyHidden
+        ? 0
+        : this.resizerSize ? this.resizerSize : this.api.getVisibleSize()
+    }
+  }
+
+  setVisibility (visibility: boolean) {
     this.visibility = visibility
     if (visibility) {
       this.maxSize = this.defaultMaxSize
       this.minSize = this.defaultMinSize
+      this.setVisibilityHelper()
     } else {
       this.maxSize = 0
       this.minSize = 0

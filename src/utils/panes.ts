@@ -1,21 +1,17 @@
 import {ReactElement} from 'react'
-import {IResizablePaneProviderProps, IResizablePanesProps, addAndRemoveType} from '../@types'
+import {IContextDetails, IResizableItem, IResizablePaneProviderProps, addAndRemoveType} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
 import {ResizerModel} from '../models/resizer-model'
 import {PLUS} from '../constant'
-import {localConsole} from './development-util'
+import {getList, localConsole} from './development-util'
+import {isItUp} from './util'
 
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
   panesList.forEach(pane => pane.syncAxisSize())
 
-export const setUISizesFn = (modelList: PaneModel[] | ResizerModel[]) =>
-  modelList.forEach((pane: PaneModel | ResizerModel) => pane.setUISize())
-
-export const setUISizesOfAllElement = (panesList: PaneModel[], resizersList: ResizerModel[]) => {
-  setUISizesFn(panesList)
-  setUISizesFn(resizersList)
-}
+export const setUISizesFn = (modelList: IResizableItem[], direction: number) =>
+  modelList.forEach((pane: IResizableItem) => pane.setUISize(direction))
 
 export function getSum <T> (list: T[], getNumber: (item:T) => number, start = 0, end = list.length - 1) {
   let sum = 0
@@ -44,7 +40,7 @@ export const getPanesSizeSum = (panesList: PaneModel[], start?: number, end?: nu
   getSum(panesList, pane => pane.getSize(), start, end)
 
 // returns the visible resizer size
-export const getResizerSum = (resizersList: ResizerModel[], start: number, end: number) =>
+export const getResizerSum = (resizersList: ResizerModel[], start?: number, end?: number) =>
   getSum(resizersList, resizer => resizer.getSize(), start, end)
 
 export const getMaxSizeSum = (panesList: PaneModel[], start: number, end: number) =>
@@ -116,18 +112,208 @@ export const change1PixelToPanes = (panesList: PaneModel[], sizeChange: number,
   }
 }
 
-export const createPaneModelList = (
-  children: ReactElement[],
-  props: IResizablePaneProviderProps,
-  store: ResizeStorage) =>
-  children.map(child => new PaneModel(child.props, props, store))
+export const getPanesAndResizers = (items: IResizableItem[]) => {
+  const panesList = items.filter((item) => !item.isHandle)
+  const resizersList = items.filter((item) => item.isHandle) as ResizerModel[]
+  return {
+    panesList,
+    resizersList
+  }
+}
 
-export const createResizerModelList = (
+export const createPaneModelListAndResizerModelList = (
   children: ReactElement[],
-  resizerSize: IResizablePaneProviderProps,
+  resizableProps: IResizablePaneProviderProps,
   store: ResizeStorage
-) => {
-  const resizersList: ResizerModel[] = children.map(child => new ResizerModel(child.props, resizerSize, store))
-  resizersList.pop()
-  return resizersList
+): IResizableItem[] => {
+  const items: IResizableItem[] = []
+  children.forEach(child =>
+    items.push(
+      new PaneModel(child.props, resizableProps, store),
+      new ResizerModel(child.props, resizableProps, store)
+    )
+  )
+  items.pop()
+  return items
+}
+
+export const setResizersLimits = (contextDetails: IContextDetails) => {
+  const {virtualActiveIndex, direction, virtualOrderList, resizersList} = contextDetails
+
+  resizersList.forEach((item) => {
+    item.defaultMinSize = 0
+    item.defaultMaxSize = item.defaultSize
+  })
+
+  // The bellow logic wont be required if we will put the virtualActiveIndex in increasing side
+  const resizerHandle = virtualOrderList[virtualActiveIndex] as ResizerModel
+  resizerHandle.defaultMinSize = resizerHandle.defaultSize
+  resizerHandle.defaultMaxSize = resizerHandle.defaultSize
+
+  // if (isItUp(direction)) {
+  //   for (let i = virtualActiveIndex - 2; i > -1; i -= 2) {
+  //     const resizer = virtualOrderList[i]
+  //     const pane = virtualOrderList[i - 1] as ResizerModel
+  //     if (pane && resizer) {
+  //       resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
+  //       resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
+  //     }
+  //   }
+
+  //   for (let i = virtualActiveIndex + 2; i < virtualOrderList.length; i += 2) {
+  //     const resizer = virtualOrderList[i]
+  //     const pane = virtualOrderList[i + 1] as ResizerModel
+  //     if (pane && resizer) {
+  //       resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
+  //       resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
+  //     }
+  //   }
+  // } else {
+  //   for (let i = virtualActiveIndex - 2; i > -1; i -= 2) {
+  //     const resizer = virtualOrderList[i]
+  //     const pane = virtualOrderList[i - 1] as ResizerModel
+  //     if (pane && resizer) {
+  //       resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
+  //       resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
+  //     }
+  //   }
+
+  //   for (let i = virtualActiveIndex + 2; i < virtualOrderList.length; i += 2) {
+  //     const resizer = virtualOrderList[i]
+  //     const pane = virtualOrderList[i + 1] as ResizerModel
+  //     if (pane && resizer) {
+  //       resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
+  //       resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
+  //     }
+  //   }
+  // }
+  // console.log('defaultMinSize ', getList(resizersList, 'defaultMinSize'))
+  // console.log('defaultMaxSize ', getList(resizersList, 'defaultMaxSize'))
+}
+
+// We increases the size of element in opposite direction than in the direction
+export const fixPartialHiddenResizer = (contextDetails: IContextDetails) => {
+  const {items} = contextDetails
+
+  let sizeChange = 0
+  items.forEach(
+    (item, index) => {
+      if (item.isHandle && item.defaultSize !== item.size && item.size) {
+        sizeChange = item.size
+        item.size = 0
+
+        const resizingOrder: IResizableItem[] = []
+
+        if (isItUp(item.partialHiddenDirection)) {
+          const resizingOrderLeftOver = items.slice(0, index).reverse()
+          resizingOrder.push(...items.slice(index + 1), ...resizingOrderLeftOver)
+        } else {
+          const resizingOrderLeftOver = items.slice(index + 1)
+          resizingOrder.push(...items.slice(0, index).reverse(), ...resizingOrderLeftOver)
+        }
+
+        const visibleItems = resizingOrder.filter((item) => item.size)
+        visibleItems.forEach((item) => item.syncAxisSize())
+
+        visibleItems.forEach((item) => {
+          item.restoreLimits()
+          sizeChange = item.changeSize(sizeChange, PLUS)
+        })
+
+        setUISizesFn(items, item.partialHiddenDirection)
+      }
+    }
+  )
+
+  // const index = items.findIndex((item) => item.isHandle && item.defaultSize !== item.size && item.size)
+
+  // if (sizeChange) {
+
+  //   const resizingOrder: IResizableItem[] = []
+
+  //   if (isItUp(direction)) {
+  //     const resizingOrderLeftOver = items.slice(0, index).reverse()
+  //     resizingOrder.push(...items.slice(index + 1), ...resizingOrderLeftOver)
+  //   } else {
+  //     const resizingOrderLeftOver = items.slice(index + 1)
+  //     resizingOrder.push(...items.slice(0, index).reverse(), ...resizingOrderLeftOver)
+  //   }
+
+  //   const visibleItems = resizingOrder.filter((item) => item.size)
+  //   visibleItems.forEach((item) => item.syncAxisSize())
+
+  //   visibleItems.forEach((item) => {
+  //     item.restoreLimits()
+  //     sizeChange = item.changeSize(sizeChange, PLUS)
+  //   })
+  //   setUISizesFn(items, direction)
+  // }
+}
+
+// We increases the size of element in opposite direction than in the direction
+export const fixPartialHiddenResizer123 = (contextDetails: IContextDetails) => {
+  const {direction, items} = contextDetails
+  const index = items.findIndex((item) => item.isHandle && item.defaultSize !== item.size && item.size)
+
+  if (index !== -1) {
+    let sizeChange = items[index].size
+    items[index].size = 0
+
+    const resizingOrder: IResizableItem[] = []
+
+    if (isItUp(direction)) {
+      const resizingOrderLeftOver = items.slice(0, index).reverse()
+      resizingOrder.push(...items.slice(index + 1), ...resizingOrderLeftOver)
+    } else {
+      const resizingOrderLeftOver = items.slice(index + 1)
+      resizingOrder.push(...items.slice(0, index).reverse(), ...resizingOrderLeftOver)
+    }
+
+    const visibleItems = resizingOrder.filter((item) => item.size)
+    visibleItems.forEach((item) => item.syncAxisSize())
+
+    visibleItems.forEach((item) => {
+      item.restoreLimits()
+      sizeChange = item.changeSize(sizeChange, PLUS)
+    })
+
+    setUISizesFn(items, direction)
+  }
+}
+
+export const findNextVisibleResizer = (items: IResizableItem[], index: number) => {
+  for (let i = index; i < items.length; i++) {
+    const resizer = items[i]
+    if (!resizer.isPartiallyHidden) {
+      return resizer
+    }
+  }
+}
+
+export const attachResizersToPaneModels = (contextDetails: IContextDetails) => { // Not using
+  const {panesList, resizersList} = contextDetails
+
+  const attachedList: any[] = []
+
+  panesList.forEach((item, index) => {
+    let nextResizer = findNextVisibleResizer(resizersList, index) as ResizerModel | undefined
+
+    if (attachedList.includes(nextResizer)) {
+      nextResizer = undefined
+    }
+    attachedList.push(nextResizer)
+    if (item.visibility) {
+      item.attachedResizer = nextResizer
+    }
+  })
+
+  console.log(
+    'attachResizersToPaneModels',
+    getList(panesList, 'attachedResizer').map((r:any) => r?.id)
+  )
+}
+
+export const afterMathOfResizerOverlapping = (contextDetails: IContextDetails) => {
+  fixPartialHiddenResizer(contextDetails)
+  // attachResizersToPaneModels(contextDetails)
 }

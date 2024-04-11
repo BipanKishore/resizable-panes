@@ -1,17 +1,16 @@
 import {createContext} from 'react'
-import {createMap, findById} from '../utils/util'
+import {INoop, createMap, findById} from '../utils/util'
 import {DIRECTIONS, RATIO, SIZE, VISIBILITY, ZERO} from '../constant'
 import {
-  createPaneModelList,
-  createResizerModelList,
-  findIndexInChildrenbyId, setDownMaxLimits,
-  setUISizesOfAllElement, setUpMaxLimits, syncAxisSizesFn
+  createPaneModelListAndResizerModelList,
+  findIndexInChildrenbyId, afterMathOfResizerOverlapping, getPanesAndResizers, setDownMaxLimits,
+  setResizersLimits,
+  setUISizesFn, setUpMaxLimits, syncAxisSizesFn, attachResizersToPaneModels
 } from '../utils/panes'
 import {
-  calculateAxes, goingDownLogic, goingUpLogic, setCurrentMinMax,
+  calculateAxes, setVirtualOrderList, goingDownLogic, goingUpLogic, setCurrentMinMax,
   toRatioModeFn
 } from '../utils/resizable-pane'
-import {minMaxTotal} from '../utils/development-util'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
 import {IKeyToBoolMap, IResizableContext, IResizablePaneProviderProps} from '../@types'
@@ -30,28 +29,27 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   // reference will never change for these items: storage,
   // panesList, PaneModels, resizersList, ResizerModels
   const storage = new ResizeStorage(uniqueId, storageApi, myChildren)
-  const panesList = createPaneModelList(myChildren, props, storage)
-  const resizersList = createResizerModelList(myChildren, props, storage)
+  const items = createPaneModelListAndResizerModelList(myChildren, props, storage)
+  // const resizersList = createResizerModelList(myChildren, props, storage)
   // reference will never change for these items: storage, panesList, resizersList
+
+  const {panesList, resizersList} = getPanesAndResizers(items)
 
   const contextDetails: any = {
     vertical,
+    items,
     panesList,
     resizersList,
     isSetRatioMode: false,
     newVisibilityModel: false
   }
 
-  const syncAxisSizes = () => syncAxisSizesFn(panesList)
+  // attachResizersToPaneModels(contextDetails)
 
-  const setUISizes = () => setUISizesOfAllElement(panesList, resizersList)
-
-  const setCurrentMinMaxAndAxes = (index?: number) => {
-    setCurrentMinMax(contextDetails, index)
-    minMaxTotal(contextDetails)
-  }
+  const syncAxisSizes = () => syncAxisSizesFn(items)
 
   const setActiveIndex = (index: number) => {
+    // Pane Index before resizer
     contextDetails.activeIndex = index
   }
 
@@ -62,10 +60,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const registerResizer = (resizer: any, id: string) => {
     const index = findIndexInChildrenbyId(myChildren, id)
-
-    if (index < (myChildren).length - 1) {
-      resizersList[index].register(resizer)
-    }
+    resizersList[index].register(resizer)
   }
 
   const registerContainer = ({getContainerRect}: any) => {
@@ -78,9 +73,14 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const getIdToSizeMap = () => createMap(panesList, SIZE)
 
-  const setMouseDownDetails = ({mouseCoordinate}: any, id: string) => {
-    const index = findIndexInChildrenbyId(myChildren, id)
+  const setMouseDownDetails = ({mouseCoordinate}: any, resizerId: string) => {
+    const resizer = findById(items, resizerId)
+    const index = items.indexOf(resizer)
+
+    console.log('setActiveIndex ', resizerId, 'index:', index)
+
     setActiveIndex(index)
+    contextDetails.handleId = resizerId
     contextDetails.direction = DIRECTIONS.NONE
     contextDetails.axisCoordinate = mouseCoordinate
     syncAxisSizes()
@@ -100,7 +100,9 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
         }
       }
       contextDetails.newVisibilityModel = false
-      setUISizes()
+      setUISizesFn(items, contextDetails.direction)
+      // console.log('visPartiallyHidden ', getList(resizersList, 'isPartiallyHidden'))
+      // console.log('maxSize ', getList(resizersList, 'maxSize'))
     }
   }
 
@@ -116,24 +118,26 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const directionChangeActions = (e: any) => {
     contextDetails.axisCoordinate = e.mouseCoordinate
+
+    setVirtualOrderList(contextDetails)
+    setResizersLimits(contextDetails)
     syncAxisSizes()
-    setCurrentMinMaxAndAxes()
+    setCurrentMinMax(contextDetails)
+    calculateAxes(contextDetails)
   }
 
   const setAxisConfig = (e: any) => {
-    const {activeIndex} = contextDetails
-    const {
-      bottomAxis,
-      topAxis
-    } = calculateAxes(contextDetails)
+    const {virtualActiveIndex, virtualOrderList, topAxis, bottomAxis} = contextDetails
 
     if (e.mouseCoordinate <= topAxis) {
-      setUpMaxLimits(panesList, activeIndex)
+      setUpMaxLimits(virtualOrderList, virtualActiveIndex)
+      console.log('setUpMaxLimits setUpMaxLimits')
       syncAxisSizes()
       contextDetails.axisCoordinate = topAxis
       return false
     } else if (e.mouseCoordinate >= bottomAxis) {
-      setDownMaxLimits(panesList, activeIndex)
+      setDownMaxLimits(virtualOrderList, virtualActiveIndex)
+      console.log('setDownMaxLimits setDownMaxLimits')
       syncAxisSizes()
       contextDetails.axisCoordinate = bottomAxis
       return false
@@ -188,7 +192,18 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     storage.setStorage(contextDetails)
   }
 
+  const onMoveEndFn = () => {
+    const resizeParams = getIdToSizeMap()
+    if (onResizeStop) {
+      onResizeStop(resizeParams)
+    }
+
+    afterMathOfResizerOverlapping(contextDetails)
+    storage.setStorage(contextDetails)
+  }
+
   return {
+    onMoveEndFn,
     registerPane,
     registerResizer,
     registerContainer,

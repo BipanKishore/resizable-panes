@@ -1,13 +1,13 @@
 {
   "name": "resizable-panes-react",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "A simple library for resizing elements in the browser",
-  "main": "./lib/index.cjs.js",
+  "main": "./lib/index.js",
   "module": "./lib/index.esm.js",
   "types": "./lib/index.d.ts",
   "exports": {
     "require": "./lib/index.cjs.js",
-    "import": "./lib/index.esm.js"
+    "import": "./lib/index.js"
   },
   "scripts": {
     "build-w": "webpack --config configs/webpack.dev.js",
