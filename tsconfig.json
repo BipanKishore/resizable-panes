@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./",
+        "outDir": "../lib/",
+        "noImplicitAny": true,
+        "module": "ES2015",
+        "target": "es5",
+        "lib": [
+            "es2017",
+            "es7",
+            "es6",
+            "dom"
+        ],
+        "jsx": "react-jsx",
+        "allowJs": true,
+        "moduleResolution": "Node",
+        "sourceMap": true,
+        "allowSyntheticDefaultImports": true,
+        "declaration": true,
+        "removeComments": true,
+        "disableSizeLimit": true
+    },
+    "include": ["src", "cypress"],
+    "files": [
+        "./src/index.ts"
+    ],
+    "exclude": [
+        "config",
+        "./node_modules"
+    ]
+}

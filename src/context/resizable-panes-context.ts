@@ -77,7 +77,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     const resizer = findById(items, resizerId)
     const index = items.indexOf(resizer)
 
-    console.log('setActiveIndex ', resizerId, 'index:', index)
+    console.log('setMouseDownDetails ', resizerId, 'index:', index, mouseCoordinate)
 
     setActiveIndex(index)
     contextDetails.handleId = resizerId

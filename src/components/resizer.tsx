@@ -16,6 +16,8 @@ export const Resizer = (props: IResizer) => {
     id
   } = props
 
+  const resizerId = getResizerId(id)
+
   const context: any = useContext(ResizablePaneContext)
   const {getIdToSizeMap, myChildren, onMoveEndFn} = context
 
@@ -28,6 +30,7 @@ export const Resizer = (props: IResizer) => {
 
   const onMouseMove = useCallback((e: any) => {
     const resizableEvent = getResizableEvent(e, vertical, previousTouchEvent)
+    console.log('resizableEvent', resizableEvent)
     context.calculateAndSetHeight(resizableEvent)
     const resizeParams = getIdToSizeMap()
     context.props.onResize(resizeParams)
@@ -47,7 +50,7 @@ export const Resizer = (props: IResizer) => {
   const onMouseDown = useCallback((e: any) => {
     setIsMouseDown(true)
     const resizableEvent = getResizableEvent(e, vertical, previousTouchEvent)
-    context.setMouseDownDetails(resizableEvent, getResizerId(id))
+    context.setMouseDownDetails(resizableEvent, resizerId)
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('touchmove', onMouseMove, {passive: false})
     document.addEventListener('mouseup', onMoveEnd)
@@ -71,7 +74,6 @@ export const Resizer = (props: IResizer) => {
   const onNewRef = (node: any) => {
     // need to work for default resizer
     const setSize = getSetSize(node, vertical, true, children ? 0 : 12)
-
     context.registerResizer({
       getVisibleSize: () => getVisibleSize(node),
       setSize,
@@ -97,8 +99,8 @@ export const Resizer = (props: IResizer) => {
       // @ts-ignore
       onMouseDown,
       onTouchStartCapture: onMouseDown,
-      isMouseDown
-
+      isMouseDown,
+      id: `custom-${resizerId}`
     })
   }
 
@@ -108,8 +110,10 @@ export const Resizer = (props: IResizer) => {
     return (
       <div
         className={className}
+        data-cy={resizerId}
         ref={setResizerRef}
         onMouseDown={onMouseDownElement}
+
         onTouchStartCapture={onMouseDownElement}
       >
         {cloneChild}
