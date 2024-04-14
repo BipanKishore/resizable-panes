@@ -18,6 +18,7 @@ export interface IGetMaP {
 }
 
 export interface IResizablePanesPropsBase {
+  uniqueId: string,
   className?: string,
   vertical?: boolean,
   unit?: UnitTypes,
@@ -29,7 +30,6 @@ export interface IResizablePanesPropsBase {
 }
 
 export interface IResizablePaneProviderProps extends IResizablePanesPropsBase {
-  uniqueId: string,
   storageApi?: any,
   resizer?: ReactNode,
   resizerSize?: number,

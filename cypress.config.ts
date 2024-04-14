@@ -1,9 +1,15 @@
 import {defineConfig} from 'cypress'
+// import We
 
 export default defineConfig({
+  projectId: 'resizable-panes',
+  retries: {
+    runMode: 2
+  },
   // setupNodeEvents can be defined in either
   // the e2e or component configuration
   e2e: {
+    baseUrl: 'http://localhost:9000/',
     setupNodeEvents (on, config) {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       require('@cypress/code-coverage/task')(on, config)

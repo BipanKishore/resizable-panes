@@ -16,6 +16,8 @@ export const Resizer = (props: IResizer) => {
     id
   } = props
 
+  const resizerId = getResizerId(id)
+
   const context: any = useContext(ResizablePaneContext)
   const {getIdToSizeMap, myChildren, onMoveEndFn} = context
 
@@ -97,7 +99,8 @@ export const Resizer = (props: IResizer) => {
       // @ts-ignore
       onMouseDown,
       onTouchStartCapture: onMouseDown,
-      isMouseDown
+      isMouseDown,
+      id: `custom-${resizerId}`
 
     })
   }
@@ -108,6 +111,7 @@ export const Resizer = (props: IResizer) => {
     return (
       <div
         className={className}
+        data-cy={resizerId}
         ref={setResizerRef}
         onMouseDown={onMouseDownElement}
         onTouchStartCapture={onMouseDownElement}

@@ -1,0 +1,127 @@
+
+
+
+.h-300{
+    height: 300px;
+}
+
+
+.bg-slate-200{
+    background-color: rgb(226 232 240);
+}
+
+.bg-slate-300	{
+    background-color: rgb(203 213 225);
+}
+
+.bg-slate-500	{
+    background-color: rgb(100 116 139);
+}
+
+
+.bg-red-500	{
+    background-color: rgb(239 68 68);
+}
+
+.bg-orange-500 {
+    background-color: rgb(249 115 22);
+}
+
+.bg-amber-500{
+    background-color: rgb(245 158 11);
+}
+
+.bg-lime-500	{
+    background-color: rgb(132 204 22);
+}
+
+.justify-context{
+  justify-content: center;
+}
+
+
+.d-flex {
+  display: flex;
+}
+
+
+.br-5{
+    border-radius: 5px;
+}
+
+.f-weight-800{
+    font-weight: 800;
+}
+
+.white {
+    color: white;
+  }
+
+  .h-70p {
+    height: 70%;
+  }
+
+  .w-100p {
+    width: 100%;
+  }
+
+  .vertical-cursur:hover {
+    cursor: col-resize;
+}
+  
+.resizer-text-vertical {
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    text-align: center;
+    line-height: 0.7;
+  }
+
+  .w-70p {
+    width: 70%;
+  } 
+  
+  .h-100p {
+    height: 100%;
+  }
+
+  .horizontal-cursur:hover {
+    cursor: row-resize;
+}
+
+.f-size-8 {
+    font-size: 8px;
+  }
+  
+  .f-size-10 {
+    font-size: 10px;
+  }
+
+  .custom-resizer-1st-parent {
+    background-color: white;
+    justify-content: center;
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.p-2px{
+    padding: 2px;
+}
+
+.p-3px{
+    padding: 3px;
+}
+
+.h-10 {
+    height: 10px;
+  }
+
+  .w-10 {
+    width: 10px;
+  }

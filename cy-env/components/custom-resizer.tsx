@@ -1,5 +1,5 @@
 import React from 'react'
-import {joinClassName} from '../../../src/utils/dom'
+import {joinClassName} from '../../src/utils/dom'
 
 export interface ICustomResizerProp {
   horizontal?: boolean,
