@@ -4,7 +4,7 @@ import {defineConfig} from 'cypress'
 export default defineConfig({
   projectId: 'resizable-panes',
   retries: {
-    runMode: 2
+    runMode: 0
   },
   // setupNodeEvents can be defined in either
   // the e2e or component configuration

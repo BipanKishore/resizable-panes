@@ -107,11 +107,6 @@ export class CyMoveEvent {
     })
   }
 
-  async getRect (cyId:string): Promise<any> {
-    const element:any = await this.getDOMElement(cyId)
-    return element.getBoundingClientRect()
-  }
-
   moveElement (cyId: string, firstEvent: IMoveEvent, secondEvent: IMoveEvent) {
     cy.get(`[data-cy=${cyId}]`)
       .trigger('mousedown')
@@ -132,33 +127,91 @@ export class CyMoveEvent {
     this.moveElement(cyId, firstEvent, secondEvent)
   }
 
-  async moveResizer (cyResizerId: string, cyId:string) {
-    const resizerRect = await this.getRect(cyResizerId)
-    const cyIdRect = await this.getRect(cyId)
-    const {x: resizerX, width} = resizerRect
-    const widthHalf = width / 2
-    const mouseDownX = resizerX + widthHalf
-    const {x: cyIdX} = cyIdRect
-    // console.log('moveResizerToStart', mouseDownX, X_START_CONTAINER)
-    // console.log('resizerRect cyIdRect', resizerRect, cyIdRect)
+  // async moveResizer (cyResizerId: string, cyId:string) {
+  //   const resizerRect = await this.getRect(cyResizerId)
+  //   const cyIdRect = await this.getRect(cyId)
+  //   const {x: resizerX, width} = resizerRect
+  //   const widthHalf = width / 2
+  //   const mouseDownX = resizerX + widthHalf
+  //   const {x: cyIdX} = cyIdRect
+  //   // console.log('moveResizerToStart', mouseDownX, X_START_CONTAINER)
+  //   // console.log('resizerRect cyIdRect', resizerRect, cyIdRect)
 
-    if (resizerX < cyIdX) {
-      const {right} = cyIdRect
-      this.moveElementRight(cyResizerId, mouseDownX + widthHalf - 1, right)
-    } else {
-      const {left} = cyIdRect
-      this.moveElementLeft(cyResizerId, mouseDownX - widthHalf + 1, left)
-    }
-    cy.wait(100)
+  //   if (resizerX < cyIdX) {
+  //     const {right} = cyIdRect
+  //     this.moveElementRight(cyResizerId, mouseDownX + widthHalf - 1, right)
+  //   } else {
+  //     const {left} = cyIdRect
+  //     this.moveElementLeft(cyResizerId, mouseDownX - widthHalf + 1, left)
+  //   }
+  //   cy.wait(100)
+  // }
+
+  getRect (cyId:string) {
+    return cy.document().then((doc) => {
+      const sourceElement = doc.querySelector(`[data-cy=${cyId}]`)
+      if (!sourceElement) {
+        throw new Error(`Cyid: ${cyId} does not exist`)
+      }
+
+      const sourceRect = sourceElement.getBoundingClientRect()
+      return sourceRect
+    })
+  }
+
+  getRects (sourceCyId: string, targetCyId: string) {
+    return cy.document().then((doc) => {
+      const sourceElement = doc.querySelector(`[data-cy=${sourceCyId}]`)
+      const targetElement = doc.querySelector(`[data-cy=${targetCyId}]`)
+      if (!sourceElement) {
+        throw new Error(`Cyid: ${sourceCyId} does not exist`)
+      }
+
+      if (!targetElement) {
+        throw new Error(`Cyid: ${targetElement} does not exist`)
+      }
+
+      const sourceRect = sourceElement.getBoundingClientRect()
+      const targetRect = targetElement.getBoundingClientRect()
+      return {
+        sourceRect,
+        targetRect
+      }
+    })
+  }
+
+  moveItem (sourceCyId: string, targetCyId: string) {
+    this.getRects(sourceCyId, targetCyId)
+      .then(({
+        sourceRect,
+        targetRect
+      }: any) => {
+        console.log(sourceRect, targetRect)
+
+        const {x: resizerX, width} = sourceRect
+        const widthHalf = width / 2
+        const mouseDownX = resizerX + widthHalf
+        const {x: cyIdX} = targetRect
+        // console.log('moveResizerToStart', mouseDownX, X_START_CONTAINER)
+        // console.log('resizerRect cyIdRect', resizerRect, cyIdRect)
+
+        if (resizerX < cyIdX) {
+          const {right} = targetRect
+          this.moveElementRight(sourceCyId, mouseDownX + widthHalf - 1, right)
+        } else {
+          const {left} = targetRect
+          this.moveElementLeft(sourceCyId, mouseDownX - widthHalf + 1, left)
+        }
+      })
   }
 
   async moveResizerToStart (cyResizerId: string) {
-    const resizerRect = await this.getRect(cyResizerId)
-
-    const {x, width} = resizerRect
-    const mouseDownX = x + width / 2
-    console.log('moveResizerToStart', mouseDownX, X_START_CONTAINER)
-    this.moveElementLeft(cyResizerId, mouseDownX, X_START_CONTAINER)
-    cy.wait(100)
+    this.getRect(cyResizerId)
+      .then((resizerRect) => {
+        const {x, width} = resizerRect
+        const mouseDownX = x + width / 2
+        console.log('moveResizerToStart', mouseDownX, X_START_CONTAINER)
+        this.moveElementLeft(cyResizerId, mouseDownX, X_START_CONTAINER)
+      })
   }
 }

@@ -1,8 +1,6 @@
-import React from 'react'
-import {mount} from 'cypress/react18'
-import {CyMoveEvent, moveResizer} from '../utils/events'
+import {CyMoveEvent, moveItem} from '../utils/events'
 import {checkWidthsAndSum} from '../utils/check-widths'
-import {SimpleVisibilityOperations, ENUMS, getResizableIds, mountingWithRetry} from '../utils'
+import {SimpleVisibilityOperations, ENUMS, getResizableIds} from '../utils'
 
 const VERTICAL_CONTAINER_WIDTH = 1000 + 4 * 10
 const VIEW_PORT_WIDTH = VERTICAL_CONTAINER_WIDTH + 16
@@ -25,15 +23,36 @@ const cyMoveEvent = new CyMoveEvent({
 
 const checkWidths = checkWidthsAndSum.bind(null, VERTICAL_CONTAINER_WIDTH)
 
-describe('Simple visibility operations', () => {
+describe('Overlapping resizer to another', () => {
   beforeEach(() => {
+    cy.viewport(VIEW_PORT_WIDTH, 500)
     cy.visit('')
   })
 
   describe('Single Resizer Movements', () => {
     describe('R0 Movements', () => {
       it('Overlap R0 to R1', () => {
-        cyMoveEvent.moveResizer(R0, R1)
+        cyMoveEvent.moveItem(R0, R1)
+        checkWidths({
+          [P0]: 410,
+          [P1]: 0,
+          [P2]: 200,
+          [P3]: 300,
+          [P4]: 100,
+          [R0]: RESIZER_WIDTH,
+          [R1]: 0,
+          [R2]: RESIZER_WIDTH,
+          [R3]: RESIZER_WIDTH
+        })
+      })
+    })
+  })
+
+  describe('Single Resizer Movements', () => {
+    describe('R0 Movements', () => {
+      it('Overlap R0 to R1', () => {
+        cyMoveEvent.moveItem(R0, R1)
+
         checkWidths({
           [P0]: 410,
           [P1]: 0,
@@ -48,7 +67,7 @@ describe('Simple visibility operations', () => {
       })
 
       it('Overlap R2 to R1', () => {
-        cyMoveEvent.moveResizer(R2, R1)
+        cyMoveEvent.moveItem(R2, R1)
         checkWidths({
           [P0]: 100,
           [P1]: 300,
@@ -63,7 +82,7 @@ describe('Simple visibility operations', () => {
       })
 
       it('Overlap R2 to R3', () => {
-        cyMoveEvent.moveResizer(R2, R3)
+        cyMoveEvent.moveItem(R2, R3)
         checkWidths({
           [P0]: 100,
           [P1]: 300,
@@ -78,7 +97,7 @@ describe('Simple visibility operations', () => {
       })
 
       it('Overlap R0 to R1 >> R0 to Start', () => {
-        cyMoveEvent.moveResizer(R0, R1)
+        cyMoveEvent.moveItem(R0, R1)
         cyMoveEvent.moveResizerToStart(R0)
         checkWidths({
           [P0]: 0,
@@ -94,7 +113,7 @@ describe('Simple visibility operations', () => {
       })
 
       it('Overlap R0 to R3 >> R0 to start >> R1 to start >> R2 to start >> R3 to start', () => {
-        cyMoveEvent.moveResizer(R0, R3)
+        cyMoveEvent.moveItem(R0, R3)
 
         checkWidths({
           [P0]: 930,
