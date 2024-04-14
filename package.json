@@ -20,7 +20,9 @@
     "start-w": "npm-run-all --serial  build-watch-w link-local",
     "start": "npm-run-all --serial  build-watch link-local",
     "predeploy": "npm-run-all --serial  build-prod",
-    "deploy": "npm publish"
+    "deploy": "npm publish",    
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "keywords": [
     "resizable",
@@ -48,6 +50,8 @@
     "@babel/eslint-parser": "^7.22.11",
     "@babel/preset-env": "^7.22.10",
     "@babel/preset-react": "^7.22.5",
+    "@babel/preset-typescript": "^7.24.1",
+    "@cypress/code-coverage": "^3.12.34",
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@rollup/plugin-terser": "^0.4.0",
@@ -57,8 +61,10 @@
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
     "babel-loader": "^9.1.3",
+    "babel-plugin-istanbul": "^6.1.1",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.8.1",
+    "cypress": "^13.7.3",
     "eslint": "^8.48.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-config-standard-react": "^13.0.0",

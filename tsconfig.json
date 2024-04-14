@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "baseUrl": "/",
+      "outDir": "../../build/",
+      "noImplicitAny": true,
+      "module": "ES2020",
+      "target": "es6",
+      "jsx": "react",
+      "allowJs": true,
+      "moduleResolution": "node",
+      // "sourceMap": true,
+      "allowSyntheticDefaultImports": true,
+      "types": ["cypress"]
+    },
+      "exclude": [
+      "node_modules"
+    ]
+  }
