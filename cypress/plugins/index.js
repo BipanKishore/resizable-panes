@@ -1,6 +1,13 @@
-import task from '@cypress/code-coverage/task'
+export * as default from '@cypress/code-coverage/task'
 
-export default (on, config) => {
-  task(on, config)
-  return config
-}
+// import cypressPluginsMethod from './cypress/plugins'
+
+// console.log(
+//   'task', task,
+//   task.registerCodeCoverageTasks
+// )
+
+// export default (on, config) => {
+//   task(on, config)
+//   return config
+// }

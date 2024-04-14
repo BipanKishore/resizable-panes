@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {ResizablePanes, Panes} from '../../../src'
-import {CustomResizerFirst} from '../../cy-env/components/custom-resizer'
+import {CustomResizerFirst} from '../components/custom-resizer'
 
 const VERTICAL_CONTAINER_WIDTH = 1000 + 4 * 10
 const VIEW_PORT_WIDTH = VERTICAL_CONTAINER_WIDTH + 16
@@ -47,7 +47,11 @@ export const SimpleVisibilityOperations = () => {
 
   return (
     <div className='h-100p w-100p' >
-      <div className='h-300'>
+      <div
+        className='h-300' style={{
+          width: '1000px'
+        }}
+      >
         <ResizablePanes
           className=''
           resizer={

@@ -7,6 +7,9 @@
 
 # testing
 /coverage
+./nyc_output
+/cypress/screenshots
+/instrumented
 
 # production
 /lib

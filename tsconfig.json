@@ -11,10 +11,10 @@
             "es6",
             "dom"
         ],
-        "jsx": "react-jsx",
+        "jsx": "react",
         "allowJs": true,
         "moduleResolution": "Node",
-        "sourceMap": true,
+        // "sourceMap": true,
         "allowSyntheticDefaultImports": true,
         "declaration": true,
         "removeComments": true,

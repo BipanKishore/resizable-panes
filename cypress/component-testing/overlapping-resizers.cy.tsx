@@ -3,7 +3,7 @@ import {ResizablePanes, Panes} from '../../src'
 import '../styles/style.css'
 import {CyMoveEvent, moveResizer} from '../utils/events'
 import {checkWidths} from '../utils/check-widths'
-import {CustomResizerFirst} from '../utils/components/custom-resizer'
+import {CustomResizerFirst} from '../cy-env/components/custom-resizer'
 
 const uniqueIdResizablePanes = 'overlapping-resizer'
 const VERTICAL_CONTAINER_WIDTH = 1000 + 4 * 10
