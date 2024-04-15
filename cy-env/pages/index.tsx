@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useRef, useState} from 'react'
 import {ResizablePanes, Panes} from '../../src'
 import {CustomResizerFirst} from '../components/custom-resizer'
 import {toPx} from '../../src/utils/dom'
@@ -38,6 +38,8 @@ export const SimpleVisibilityOperations = () => {
   const [visibilityMap, setVisibilityMap] = useState<IIDMap>(ENUMS.initialVisibility)
   const [resizablePanesVisibility, setResizablePanesVisibility] = useState(true)
 
+  const apiRef = useRef <any>({})
+
   const updateVisibilityMap = (e: any) => {
     const {name, checked} = e.currentTarget
     const newVisibilityMap = {
@@ -55,6 +57,8 @@ export const SimpleVisibilityOperations = () => {
       >Hide All
       </button>
 
+      <button data-cy="restore-default" onClick={() => apiRef.current.restoreDefault()} >Restore Default</button>
+
       <div
         className='h-100p w-100p'
       >
@@ -71,6 +75,9 @@ export const SimpleVisibilityOperations = () => {
             unit='ratio'
             vertical
             visibility={visibilityMap}
+            onReady={(api) => {
+              apiRef.current = api
+            }}
           >
             <Panes className='bg-red-500' id='P0' size={1}>
             </Panes>

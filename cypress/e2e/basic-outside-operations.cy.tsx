@@ -1,4 +1,4 @@
-import {CyMoveEvent, moveResizer} from '../utils/events'
+import {CyMoveEvent} from '../utils/events'
 import {checkWidths} from '../utils/check-widths'
 import {ENUMS} from '../../cy-env/pages'
 import {getResizableIds} from '../utils'
@@ -13,6 +13,12 @@ const {
   paneIds: [P0, P1, P2, P3, P4]
 } = getResizableIds(5)
 
+const cyMoveEvent = new CyMoveEvent({
+  maxPaneSize: 1000,
+  paneIds: [],
+  resizerSize: 10
+})
+
 const INITIAL_SIZES: any = {
   [uniqueIdResizablePanes]: VERTICAL_CONTAINER_WIDTH,
   'resizer-P0': 10,
@@ -26,7 +32,11 @@ const INITIAL_SIZES: any = {
   P4: 100
 }
 
-describe('Overlapping Resizers', () => {
+const cyGet = (cyId: string) => {
+  return cy.get(`[data-cy=${cyId}]`)
+}
+
+describe('Basic outside operations', () => {
   beforeEach(() => {
     cy.visit('')
     cy.viewport(VIEW_PORT_WIDTH, 500)
@@ -40,5 +50,17 @@ describe('Overlapping Resizers', () => {
     cy.get('[data-cy=hide-resizable-panes]').click()
       .wait(50)
     cy.get('[data-cy=hide-resizable-panes]').click()
+  })
+
+  describe('API operations', () => {
+    it('should restore to default view', () => {
+      cyMoveEvent.moveItem(R0, R1)
+
+      cyMoveEvent.moveItem(R3, R2)
+      cyGet('restore-default')
+        .click()
+
+      checkWidths(INITIAL_SIZES)
+    })
   })
 })
