@@ -1,7 +1,7 @@
 import {checkWidths} from '../utils/check-widths'
-import {ENUMS, SimpleVisibilityOperations} from '../../cy-env/pages'
 import React from 'react'
 import {RCy} from '../utils'
+import {ENUMS, TestComponentWrapper} from '../components/test-component-wrapper'
 
 const uniqueIdResizablePanes = ENUMS.resizablePanesId
 
@@ -31,7 +31,7 @@ describe('Basic outside operations', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
-      <SimpleVisibilityOperations />
+      <TestComponentWrapper />
     )
   })
 

@@ -1,8 +1,8 @@
 import React, {useRef, useState} from 'react'
-import {ResizablePanes, Panes} from '../../src'
-import {CustomResizerFirst} from '../components/custom-resizer'
-import {toPx} from '../../src/utils/dom'
-import '../styles/style.css'
+
+import '../../styles/style.css'
+import {Panes, ResizablePanes} from '../../../src'
+import {CustomResizerFirst} from '../custom-resizer'
 
 const VERTICAL_CONTAINER_WIDTH = 1000 + 4 * 10
 const VIEW_PORT_WIDTH = VERTICAL_CONTAINER_WIDTH + 16
@@ -35,7 +35,7 @@ interface IIDMap {
   [id: string]: boolean
 }
 
-export const SimpleVisibilityOperations = () => {
+export const TestComponentWrapper = () => {
   const [visibilityMap, setVisibilityMap] = useState<IIDMap>(ENUMS.initialVisibility)
   const [resizablePanesVisibility, setResizablePanesVisibility] = useState(true)
 

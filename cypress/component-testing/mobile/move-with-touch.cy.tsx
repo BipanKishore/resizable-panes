@@ -1,7 +1,7 @@
 import React from 'react'
-import {ENUMS, SimpleVisibilityOperations} from '../../../cy-env/pages'
 import {RCy} from '../../utils'
 import {checkWidths} from '../../utils/check-widths'
+import {ENUMS, TestComponentWrapper} from '../../components/test-component-wrapper'
 
 const uniqueIdResizablePanes = ENUMS.resizablePanesId
 const rCy = new RCy({
@@ -31,7 +31,7 @@ describe('Move Panes on', () => {
   beforeEach(() => {
     cy.viewport('iphone-x')
     cy.mount(
-      <SimpleVisibilityOperations />
+      <TestComponentWrapper />
     )
   })
 

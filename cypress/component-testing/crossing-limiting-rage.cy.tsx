@@ -1,5 +1,5 @@
 import {checkWidths} from '../utils/check-widths'
-import {ENUMS, SimpleVisibilityOperations} from '../../cy-env/pages'
+import {ENUMS, TestComponentWrapper} from '../components/test-component-wrapper'
 import {RCy} from '../utils'
 import React from 'react'
 
@@ -31,7 +31,7 @@ describe('Overlapping Resizers', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
-      <SimpleVisibilityOperations />
+      <TestComponentWrapper />
     )
   })
 

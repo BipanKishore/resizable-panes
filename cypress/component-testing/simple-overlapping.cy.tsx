@@ -1,6 +1,6 @@
 import React from 'react'
 import {RCy} from '../utils'
-import {SimpleVisibilityOperations} from '../../cy-env/pages'
+import {ENUMS, TestComponentWrapper} from '../components/test-component-wrapper'
 
 const rCy = new RCy()
 const {resizerSize} = rCy
@@ -14,7 +14,7 @@ describe('Overlapping resizer to another', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
-      <SimpleVisibilityOperations />
+      <TestComponentWrapper />
     )
   })
 

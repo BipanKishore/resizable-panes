@@ -1,5 +1,5 @@
 import React from 'react'
-import {ENUMS, SimpleVisibilityOperations} from '../../cy-env/pages'
+import {ENUMS, TestComponentWrapper} from '../components/test-component-wrapper'
 import {RCy} from '../utils'
 
 const uniqueIdResizablePanes = ENUMS.resizablePanesId
@@ -29,7 +29,7 @@ describe('Overlapping Resizers', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
-      <SimpleVisibilityOperations />
+      <TestComponentWrapper />
     )
   })
 

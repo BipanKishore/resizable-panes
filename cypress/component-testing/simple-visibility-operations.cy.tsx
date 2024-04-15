@@ -1,6 +1,6 @@
-import {ENUMS, RCy} from '../utils'
-import {SimpleVisibilityOperations} from '../../cy-env/pages'
+import {ENUMS, TestComponentWrapper} from '../components/test-component-wrapper'
 import React from 'react'
+import {RCy} from '../utils'
 
 const rCy = new RCy()
 const {resizerSize} = rCy
@@ -15,7 +15,7 @@ describe('Simple visibility operations', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
-      <SimpleVisibilityOperations />
+      <TestComponentWrapper />
     )
   })
 
