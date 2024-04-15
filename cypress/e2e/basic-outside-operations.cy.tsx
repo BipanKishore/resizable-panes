@@ -62,5 +62,10 @@ describe('Basic outside operations', () => {
 
       checkWidths(INITIAL_SIZES)
     })
+
+    it('should call api method getMap', () => {
+      cyGet('get-map')
+        .click()
+    })
   })
 })

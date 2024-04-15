@@ -57,7 +57,19 @@ export const SimpleVisibilityOperations = () => {
       >Hide All
       </button>
 
-      <button data-cy="restore-default" onClick={() => apiRef.current.restoreDefault()} >Restore Default</button>
+      <button
+        data-cy="restore-default"
+        onClick={() => apiRef.current.restoreDefault()}
+      >
+        Restore Default
+      </button>
+
+      <button
+        data-cy="get-map"
+        onClick={() => apiRef.current.getMap('size')}
+      >
+        Restore Default
+      </button>
 
       <div
         className='h-100p w-100p'
