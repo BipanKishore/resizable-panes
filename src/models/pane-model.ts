@@ -112,6 +112,7 @@ export class PaneModel {
   }
 
   setVisibilitySize (sizeChange: number, operation: addAndRemoveType) {
+    // we are never reducing here
     const newSize = this.size + (operation === PLUS ? sizeChange : -sizeChange)
     this.restoreLimits()
     if (this.visibility) {
