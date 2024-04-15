@@ -115,77 +115,56 @@ export class CyMoveEvent {
       .trigger('mouseup')
   }
 
-  moveElementRight (cyId: string, start: number, end: number) {
+  moveElementWithTouch (cyId: string, firstEvent: IMoveEvent, secondEvent: IMoveEvent) {
+    cy.get(`[data-cy=${cyId}]`)
+    // onTouchStartCapture
+      .trigger('touchstart')
+      .trigger('touchmove', firstEvent)
+      .trigger('touchmove', secondEvent)
+      .trigger('touchend')
+  }
+
+  moveElementRight (cyId: string, start: number, end: number, isTouch = false) {
     const firstEvent = this.moveRightEvent(start + 1)
     const secondEvent = this.moveRightEvent(end)
-    this.moveElement(cyId, firstEvent, secondEvent)
+
+    if (isTouch) {
+      this.moveElementWithTouch(cyId, firstEvent, secondEvent)
+    } else {
+      this.moveElement(cyId, firstEvent, secondEvent)
+    }
   }
 
-  moveElementLeft (cyId: string, start: number, end: number) {
+  moveElementLeft (cyId: string, start: number, end: number, isTouch = false) {
     const firstEvent = this.moveLeftEvent(start - 1)
     const secondEvent = this.moveLeftEvent(end)
-    this.moveElement(cyId, firstEvent, secondEvent)
+
+    if (isTouch) {
+      this.moveElementWithTouch(cyId, firstEvent, secondEvent)
+    } else {
+      this.moveElement(cyId, firstEvent, secondEvent)
+    }
   }
 
-  // async moveResizer (cyResizerId: string, cyId:string) {
-  //   const resizerRect = await this.getRect(cyResizerId)
-  //   const cyIdRect = await this.getRect(cyId)
-  //   const {x: resizerX, width} = resizerRect
-  //   const widthHalf = width / 2
-  //   const mouseDownX = resizerX + widthHalf
-  //   const {x: cyIdX} = cyIdRect
-  //   // console.log('moveResizerToStart', mouseDownX, X_START_CONTAINER)
-  //   // console.log('resizerRect cyIdRect', resizerRect, cyIdRect)
-
-  //   if (resizerX < cyIdX) {
-  //     const {right} = cyIdRect
-  //     this.moveElementRight(cyResizerId, mouseDownX + widthHalf - 1, right)
-  //   } else {
-  //     const {left} = cyIdRect
-  //     this.moveElementLeft(cyResizerId, mouseDownX - widthHalf + 1, left)
-  //   }
-  //   cy.wait(100)
-  // }
-
-  getRect (cyId:string) {
+  getRects (...cyIds: string[]) {
     return cy.document().then((doc) => {
-      const sourceElement = doc.querySelector(`[data-cy=${cyId}]`)
-      if (!sourceElement) {
-        throw new Error(`Cyid: ${cyId} does not exist`)
-      }
+      return cyIds.map((cyId) => {
+        const element = doc.querySelector(`[data-cy=${cyId}]`)
+        if (!element) {
+          throw new Error(`Cyid: ${cyId} does not exist`)
+        }
 
-      const sourceRect = sourceElement.getBoundingClientRect()
-      return sourceRect
+        return element.getBoundingClientRect()
+      })
     })
   }
 
-  getRects (sourceCyId: string, targetCyId: string) {
-    return cy.document().then((doc) => {
-      const sourceElement = doc.querySelector(`[data-cy=${sourceCyId}]`)
-      const targetElement = doc.querySelector(`[data-cy=${targetCyId}]`)
-      if (!sourceElement) {
-        throw new Error(`Cyid: ${sourceCyId} does not exist`)
-      }
-
-      if (!targetElement) {
-        throw new Error(`Cyid: ${targetElement} does not exist`)
-      }
-
-      const sourceRect = sourceElement.getBoundingClientRect()
-      const targetRect = targetElement.getBoundingClientRect()
-      return {
-        sourceRect,
-        targetRect
-      }
-    })
-  }
-
-  moveItem (sourceCyId: string, targetCyId: string) {
+  moveItem (sourceCyId: string, targetCyId: string, isTouch = false) {
     this.getRects(sourceCyId, targetCyId)
-      .then(({
+      .then(([
         sourceRect,
         targetRect
-      }: any) => {
+      ]: any) => {
         console.log(sourceRect, targetRect)
 
         const {x: resizerX, width} = sourceRect
@@ -197,17 +176,17 @@ export class CyMoveEvent {
 
         if (resizerX < cyIdX) {
           const {right} = targetRect
-          this.moveElementRight(sourceCyId, mouseDownX + widthHalf - 1, right)
+          this.moveElementRight(sourceCyId, mouseDownX + widthHalf - 1, right, isTouch)
         } else {
           const {left} = targetRect
-          this.moveElementLeft(sourceCyId, mouseDownX - widthHalf + 1, left)
+          this.moveElementLeft(sourceCyId, mouseDownX - widthHalf + 1, left, isTouch)
         }
       })
   }
 
   async moveResizerToStart (cyResizerId: string) {
-    this.getRect(cyResizerId)
-      .then((resizerRect) => {
+    this.getRects(cyResizerId)
+      .then(([resizerRect]) => {
         const {x, width} = resizerRect
         const mouseDownX = x + width / 2
         console.log('moveResizerToStart', mouseDownX, X_START_CONTAINER)
