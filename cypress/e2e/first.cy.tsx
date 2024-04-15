@@ -1,22 +1,27 @@
 import {CyMoveEvent, moveResizer} from '../utils/events'
 import {checkWidths} from '../utils/check-widths'
 import {ENUMS} from '../../cy-env/pages'
+import {getResizableIds} from '../utils'
 
 const uniqueIdResizablePanes = ENUMS.resizablePanesId
-const VERTICAL_CONTAINER_WIDTH = 1000 + 4 * 10
-const VIEW_PORT_WIDTH = VERTICAL_CONTAINER_WIDTH + 16
 
-const R0 = 'resizer-P0'
-const R1 = 'resizer-P1'
-const R2 = 'resizer-P2'
-const R3 = 'resizer-P3'
+const {
+  resizerIds: [R0, R1, R2, R3],
+  checkboxIds: [CK0, CK1, CK2, CK3, CK4],
+  paneIds: [P0, P1, P2, P3, P4],
+  viewPortDimention,
+  resizerSize,
+  containerSize
+} = getResizableIds(5)
+
+const [VIEW_PORT_WIDTH] = viewPortDimention
 
 const INITIAL_SIZES: any = {
-  [uniqueIdResizablePanes]: VERTICAL_CONTAINER_WIDTH,
-  'resizer-P0': 10,
-  'resizer-P1': 10,
-  'resizer-P2': 10,
-  'resizer-P3': 10,
+  [uniqueIdResizablePanes]: containerSize,
+  'resizer-P0': resizerSize,
+  'resizer-P1': resizerSize,
+  'resizer-P2': resizerSize,
+  'resizer-P3': resizerSize,
   P0: 100,
   P1: 300,
   P2: 200,
@@ -26,6 +31,7 @@ const INITIAL_SIZES: any = {
 
 describe('Overlapping Resizers', () => {
   beforeEach(() => {
+    cy.viewport(...viewPortDimention)
     cy.visit('')
   })
 
@@ -40,11 +46,11 @@ describe('Overlapping Resizers', () => {
   it('R2 to most Left', () => {
     moveResizer('resizer-P2', CyMoveEvent.toMostLeft())
     checkWidths({
-      [uniqueIdResizablePanes]: VERTICAL_CONTAINER_WIDTH,
+      [uniqueIdResizablePanes]: containerSize,
       [R0]: 0,
       [R1]: 0,
-      [R2]: 10,
-      [R3]: 10,
+      [R2]: resizerSize,
+      [R3]: resizerSize,
       P0: 0,
       P1: 0,
       P2: 0,
@@ -56,9 +62,9 @@ describe('Overlapping Resizers', () => {
   it('R1 to most Right', () => {
     moveResizer(R1, CyMoveEvent.toMostRight(VIEW_PORT_WIDTH))
     checkWidths({
-      [uniqueIdResizablePanes]: VERTICAL_CONTAINER_WIDTH,
-      [R0]: 10,
-      [R1]: 10,
+      [uniqueIdResizablePanes]: containerSize,
+      [R0]: resizerSize,
+      [R1]: resizerSize,
       [R2]: 0,
       [R3]: 0,
       P0: 100,
