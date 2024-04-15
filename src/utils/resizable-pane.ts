@@ -292,8 +292,7 @@ export const minMaxLogicUp = (
       console.error('v---------------------------------------------------------------')
       break
   }
-  // paneConsole('minSize')
-  // paneConsole('maxSize')
+
   minMaxLogicUp(panesList, <number>nextValue, nextAIndex, nextBIndex, sum, maxPaneSize)
 }
 

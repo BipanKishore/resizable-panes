@@ -3,7 +3,6 @@ import {ResizablePaneContext, getResizableContext} from '../context/resizable-pa
 import {ResizablePanes} from './resizable-panes'
 import {addDefaultProps, noop} from '../utils/util'
 import {useResizableApi} from '../hook/use-resizable-api'
-// import {useMountingConsole} from '../utils/development-util'
 import {onResizeClearSizesMapFromStore} from '../utils/storage'
 import {IResizablePaneProviderProps} from '../@types'
 import {singletonService} from '../services/singleton-service'
@@ -49,10 +48,6 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
     }
   }, [visibility, ref])
 
-  // useEffect(() => {
-  //   console.log('v-- contextDetails', context.contextDetails)
-  // }, [context])
-  // useMountingConsole('ResizablePaneProvider')
   return (
     <ResizablePaneContext.Provider value={context} >
       <ResizablePanes {...currentProps}/>
