@@ -3,5 +3,3 @@ export {
   Pane,
   ResizablePanes
 } from './components'
-
-export {IResizableApi} from './@types'

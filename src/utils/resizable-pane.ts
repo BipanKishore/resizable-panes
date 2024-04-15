@@ -107,30 +107,18 @@ export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) =>
     increasingItems = [visibleItems[visibleActiveIndex]]
 
     for (let i = visibleActiveIndex + 1; i < visibleItems.length; i += 2) {
-      const pane = visibleItems[i]
-      if (pane.size) {
-        increasingItems[i] = pane
-        increasingItems[i + 1] = visibleItems[i + 1]
-      } else {
-        increasingItems[i] = visibleItems[i + 1]
-        increasingItems[i + 1] = pane
-      }
+      increasingItems[i] = visibleItems[i + 1]
+      increasingItems[i + 1] = visibleItems[i] // it is pane
     }
 
     virtualOrderList = [...decreasingItems, ...increasingItems]
-    console.log('UP <<<<<<<<<<<<<<<<<<<<<<<<<<')
   } else {
     increasingItems = [visibleItems[0]]
 
     for (let i = visibleActiveIndex - 1; i > 0; i -= 2) {
       const pane = visibleItems[i]
-      if (pane.size) {
-        increasingItems[i] = pane
-        increasingItems[i - 1] = visibleItems[i - 1]
-      } else {
-        increasingItems[i] = visibleItems[i - 1]
-        increasingItems[i - 1] = pane
-      }
+      increasingItems[i] = visibleItems[i - 1]
+      increasingItems[i - 1] = pane
     }
 
     increasingItems.push(visibleItems[visibleActiveIndex])
@@ -140,7 +128,6 @@ export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) =>
     }
 
     virtualOrderList = [...increasingItems, ...decreasingItems]
-    console.log('Down >>>>>>>>>>>>>>>>>>>>>')
   }
 
   serviceRefCurrent.virtualOrderList = removeHidden(filterEmpty(virtualOrderList))

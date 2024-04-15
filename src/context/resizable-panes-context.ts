@@ -44,8 +44,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     newVisibilityModel: false
   }
 
-  // attachResizersToPaneModels(contextDetails)
-
   const syncAxisSizes = () => syncAxisSizesFn(items)
 
   const setActiveIndex = (index: number) => {

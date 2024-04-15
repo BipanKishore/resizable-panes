@@ -127,6 +127,55 @@ export const moveItem = (sourceCyId: string, targetCyId: string, isTouch = false
     })
 }
 
+export const move = (sourceCyId: string, targetCyId: string,
+  position: 'right' | 'left' | 'top' | 'bottom' = 'right',
+  addOn: number = 0) => {
+  getRects(sourceCyId, targetCyId)
+    .then(([
+      sourceRect,
+      targetRect
+    ]: any) => {
+      console.log(sourceRect, targetRect)
+
+      const {x: resizerX, width} = sourceRect
+      const widthHalf = width / 2
+      const mouseDownX = resizerX + widthHalf
+      const {x: cyIdX} = targetRect
+      // console.log('moveResizerToStart', mouseDownX, X_START_CONTAINER)
+      // console.log('resizerRect cyIdRect', resizerRect, cyIdRect)
+      const finalCoordinate = targetRect[position] + addOn
+
+      if (resizerX < cyIdX) {
+        moveElementRight(sourceCyId, mouseDownX + widthHalf - 1, finalCoordinate)
+      } else {
+        moveElementLeft(sourceCyId, mouseDownX - widthHalf + 1, finalCoordinate)
+      }
+    })
+}
+
+export const moveNPixel = (cyId:string,
+  nPixel : number,
+  position: 'right' | 'left' | 'top' | 'bottom' = 'right'
+) => {
+  getRects(cyId)
+    .then(([
+      sourceRect
+    ]: any) => {
+      const {x: resizerX, width} = sourceRect
+      const widthHalf = width / 2
+      const mouseDownX = resizerX + widthHalf
+
+      // console.log('moveResizerToStart', mouseDownX, X_START_CONTAINER)
+      // console.log('resizerRect cyIdRect', resizerRect, cyIdRect)
+
+      if (position === 'right') {
+        moveElementRight(cyId, mouseDownX - 1, mouseDownX + nPixel)
+      } else {
+        moveElementLeft(cyId, mouseDownX + 1, mouseDownX - nPixel)
+      }
+    })
+}
+
 export const swiftMove = (cyHook: string, event: any) => {
   cy.get(`[data-cy=${cyHook}]`)
     .trigger('mousedown')

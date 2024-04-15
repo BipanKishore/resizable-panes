@@ -1,9 +1,13 @@
 import {checkWidths, checkWidthsAndSum} from './check-widths'
 import {VIEW_PORT_PADDING} from './constants'
 import {ISizeMap} from './types'
-import {getPaneIds, getRects, moveElementLeft, moveItem, moveLeftEvent, moveRightEvent, swiftMove} from './utils'
+import {
+  getPaneIds, getRects, move, moveElementLeft,
+  moveItem, moveLeftEvent, moveNPixel, moveRightEvent, swiftMove
+} from './utils'
 
 interface IRCy {
+  containerId?: string,
     resizerSize?: number,
     maxInitialPaneSize?: number,
     len?: number,
@@ -26,17 +30,22 @@ export class RCy {
   viewPortYLen: number
   viewPortstart = 0 // always be zero
 
+  containerId: string
+
   get viewPortDimention () {
     return [this.viewPortXLen, this.viewPortYLen]
   }
 
   constructor (model: IRCy = {}) {
     const {
+      containerId,
       resizerSize = 10,
       maxInitialPaneSize = 1000,
       height = 500,
       len = 5
     } = model
+
+    this.containerId = containerId
 
     this.resizerSize = resizerSize
     this.maxInitialPaneSize = maxInitialPaneSize
@@ -50,6 +59,10 @@ export class RCy {
 
     this.containerXStart = VIEW_PORT_PADDING + 1
     this.containerXEnd = VIEW_PORT_PADDING + this.containerXLen
+  }
+
+  checkContainerWidth () {
+    checkWidths({[this.containerId]: this.containerXLen})
   }
 
   getDimentions () {
@@ -88,6 +101,8 @@ export class RCy {
 
   swiftMove = swiftMove
   moveItem = moveItem
+  move = move
+  moveNPixel = moveNPixel
 
   moveResizerToStart (cyResizerId: string) {
     getRects(cyResizerId)
