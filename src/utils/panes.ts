@@ -138,7 +138,7 @@ export const createPaneModelListAndResizerModelList = (
 }
 
 export const setResizersLimits = (contextDetails: IContextDetails) => {
-  const {virtualActiveIndex, direction, virtualOrderList, resizersList} = contextDetails
+  const {virtualActiveIndex, items, direction, virtualOrderList, resizersList} = contextDetails
 
   resizersList.forEach((item) => {
     item.defaultMinSize = 0
@@ -149,6 +149,34 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
   const resizerHandle = virtualOrderList[virtualActiveIndex] as ResizerModel
   resizerHandle.defaultMinSize = resizerHandle.defaultSize
   resizerHandle.defaultMaxSize = resizerHandle.defaultSize
+  console.log('setResizersLimits')
+  if (isItUp(direction)) {
+    items.forEach((item, index) => {
+      if (item.isHandle) {
+        if (index < virtualActiveIndex) {
+          item.defaultMinSize = items[index - 1].defaultMinSize === 0 ? 0 : item.defaultSize
+          item.defaultMaxSize = item.defaultSize
+        }
+        if (index > virtualActiveIndex) {
+          item.defaultMinSize = 0
+          item.defaultMaxSize = item.defaultSize
+        }
+      }
+    })
+  } else {
+    items.forEach((item, index) => {
+      if (item.isHandle) {
+        if (index < virtualActiveIndex) {
+          item.defaultMinSize = 0
+          item.defaultMaxSize = item.defaultSize
+        }
+        if (index > virtualActiveIndex) {
+          item.defaultMinSize = items[index - 1].defaultMinSize === 0 ? 0 : item.defaultSize
+          item.defaultMaxSize = item.defaultSize
+        }
+      }
+    })
+  }
 
   // if (isItUp(direction)) {
   //   for (let i = virtualActiveIndex - 2; i > -1; i -= 2) {

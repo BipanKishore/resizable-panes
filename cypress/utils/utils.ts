@@ -140,12 +140,10 @@ export const move = (sourceCyId: string, targetCyId: string,
       const {x: resizerX, width} = sourceRect
       const widthHalf = width / 2
       const mouseDownX = resizerX + widthHalf
-      const {x: cyIdX} = targetRect
-      // console.log('moveResizerToStart', mouseDownX, X_START_CONTAINER)
-      // console.log('resizerRect cyIdRect', resizerRect, cyIdRect)
+
       const finalCoordinate = targetRect[position] + addOn
 
-      if (resizerX < cyIdX) {
+      if (resizerX < finalCoordinate) {
         moveElementRight(sourceCyId, mouseDownX + widthHalf - 1, finalCoordinate)
       } else {
         moveElementLeft(sourceCyId, mouseDownX - widthHalf + 1, finalCoordinate)
