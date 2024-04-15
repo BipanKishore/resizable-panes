@@ -12,10 +12,9 @@ import {getMaxContainerSizes} from './resizable-pane'
 import {findIndex, getResizerId, isItDown, isItUp} from './util'
 
 // Need to check for hidden element
-export const restoreDefaultFn = ({panesList, resizersList}: any) => {
-  panesList.forEach((pane: PaneModel) => pane.restore())
-  setResizersVisibility(resizersList, true)
-  setUISizesFn(panesList, DIRECTIONS.DOWN)
+export const restoreDefaultFn = ({items}: any) => {
+  items.forEach((pane: PaneModel) => pane.restore())
+  setUISizesFn(items, DIRECTIONS.DOWN)
 }
 
 export const visibilityOperationFn = (
@@ -225,6 +224,3 @@ export const searchAndMakeVisiblePartialHiddenResizer = (contextDetails: IContex
     }
   }
 }
-
-export const setResizersVisibility = (resizersList: ResizerModel[], visibility: boolean) =>
-  resizersList.forEach(resizer => resizer.setVisibility(visibility))
