@@ -1,35 +1,29 @@
-import {CyMoveEvent} from '../utils/events'
-import {checkWidthsAndSum} from '../utils/check-widths'
-import {getResizableIds} from '../utils'
+import React from 'react'
+import {RCy} from '../utils'
+import {SimpleVisibilityOperations} from '../../cy-env/pages'
+
+const rCy = new RCy()
+const {resizerSize} = rCy
 
 const {
-  containerSize,
-  resizerSize,
-  viewPortDimention,
   resizerIds: [R0, R1, R2, R3],
-  checkboxIds: [CK0, CK1, CK2, CK3, CK4],
   paneIds: [P0, P1, P2, P3, P4]
-} = getResizableIds(5)
-
-const cyMoveEvent = new CyMoveEvent({
-  maxPaneSize: 1000,
-  paneIds: [],
-  resizerSize: 10
-})
-
-const checkWidths = checkWidthsAndSum.bind(null, containerSize)
+} = rCy.getResizableIds()
 
 describe('Overlapping resizer to another', () => {
   beforeEach(() => {
-    cy.viewport(...viewPortDimention)
-    cy.visit('')
+    rCy.setViewPort()
+    cy.mount(
+      <SimpleVisibilityOperations />
+    )
   })
 
   describe('Single Resizer Movements', () => {
     describe('R0 Movements', () => {
       it('Overlap R0 to R1', () => {
-        cyMoveEvent.moveItem(R0, R1)
-        checkWidths({
+        rCy.moveItem(R0, R1)
+
+        rCy.checkWidthsAndSum({
           [P0]: 410,
           [P1]: 0,
           [P2]: 200,
@@ -47,9 +41,9 @@ describe('Overlapping resizer to another', () => {
   describe('Single Resizer Movements', () => {
     describe('R0 Movements', () => {
       it('Overlap R0 to R1', () => {
-        cyMoveEvent.moveItem(R0, R1)
+        rCy.moveItem(R0, R1)
 
-        checkWidths({
+        rCy.checkWidthsAndSum({
           [P0]: 410,
           [P1]: 0,
           [P2]: 200,
@@ -63,8 +57,8 @@ describe('Overlapping resizer to another', () => {
       })
 
       it('Overlap R2 to R1', () => {
-        cyMoveEvent.moveItem(R2, R1)
-        checkWidths({
+        rCy.moveItem(R2, R1)
+        rCy.checkWidthsAndSum({
           [P0]: 100,
           [P1]: 300,
           [P2]: 0,
@@ -78,8 +72,8 @@ describe('Overlapping resizer to another', () => {
       })
 
       it('Overlap R2 to R3', () => {
-        cyMoveEvent.moveItem(R2, R3)
-        checkWidths({
+        rCy.moveItem(R2, R3)
+        rCy.checkWidthsAndSum({
           [P0]: 100,
           [P1]: 300,
           [P2]: 510,
@@ -93,9 +87,9 @@ describe('Overlapping resizer to another', () => {
       })
 
       it('Overlap R0 to R1 >> R0 to Start', () => {
-        cyMoveEvent.moveItem(R0, R1)
-        cyMoveEvent.moveResizerToStart(R0)
-        checkWidths({
+        rCy.moveItem(R0, R1)
+        rCy.moveResizerToStart(R0)
+        rCy.checkWidthsAndSum({
           [P0]: 0,
           [P1]: 400,
           [P2]: 200,
@@ -109,9 +103,9 @@ describe('Overlapping resizer to another', () => {
       })
 
       it('Overlap R0 to R3 >> R0 to start >> R1 to start >> R2 to start >> R3 to start', () => {
-        cyMoveEvent.moveItem(R0, R3)
+        rCy.moveItem(R0, R3)
 
-        checkWidths({
+        rCy.checkWidthsAndSum({
           [P0]: 930,
           [P1]: 0,
           [P2]: 0,
@@ -123,9 +117,9 @@ describe('Overlapping resizer to another', () => {
           [R3]: 0
         })
 
-        cyMoveEvent.moveResizerToStart(R0)
+        rCy.moveResizerToStart(R0)
 
-        checkWidths({
+        rCy.checkWidthsAndSum({
           [P0]: 0,
           [P1]: 920,
           [P2]: 0,
@@ -137,8 +131,8 @@ describe('Overlapping resizer to another', () => {
           [R3]: 0
         })
 
-        cyMoveEvent.moveResizerToStart(R1)
-        checkWidths({
+        rCy.moveResizerToStart(R1)
+        rCy.checkWidthsAndSum({
           [P0]: 0,
           [P1]: 0,
           [P2]: 920,
@@ -150,8 +144,8 @@ describe('Overlapping resizer to another', () => {
           [R3]: 0
         })
 
-        cyMoveEvent.moveResizerToStart(R2)
-        checkWidths({
+        rCy.moveResizerToStart(R2)
+        rCy.checkWidthsAndSum({
           [P0]: 0,
           [P1]: 0,
           [P2]: 0,
@@ -163,8 +157,8 @@ describe('Overlapping resizer to another', () => {
           [R3]: resizerSize
         })
 
-        cyMoveEvent.moveResizerToStart(R3)
-        checkWidths({
+        rCy.moveResizerToStart(R3)
+        rCy.checkWidthsAndSum({
           [P0]: 0,
           [P1]: 0,
           [P2]: 0,

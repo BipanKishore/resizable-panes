@@ -41,7 +41,7 @@ describe('Overlapping Resizers', () => {
     rCy.cyGet('hide-resizable-panes').click()
   })
 
-  it('R2 to most Left', () => {
+  it('Resize Panes then hide and show resizalbe comonent, all the sizes should be same', () => {
     rCy.toMostLeft(R2)
     rCy.checkWidthsAndSum({
       [R0]: 0,
@@ -58,21 +58,17 @@ describe('Overlapping Resizers', () => {
     rCy.cyGet('hide-resizable-panes').click()
       .wait(50)
     rCy.cyGet('hide-resizable-panes').click()
-  })
-
-  it('R1 to most Right', () => {
-    rCy.toMostRight(R1)
 
     rCy.checkWidthsAndSum({
-      [R0]: resizerSize,
-      [R1]: resizerSize,
-      [R2]: 0,
-      [R3]: 0,
-      P0: 100,
-      P1: 920,
+      [R0]: 0,
+      [R1]: 0,
+      [R2]: resizerSize,
+      [R3]: resizerSize,
+      P0: 0,
+      P1: 0,
       P2: 0,
-      P3: 0,
-      P4: 0
+      P3: 920,
+      P4: 100
     })
   })
 })
