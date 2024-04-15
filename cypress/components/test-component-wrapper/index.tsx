@@ -67,7 +67,7 @@ export const TestComponentWrapper = () => {
 
       <button
         data-cy="get-map"
-        onClick={() => apiRef.current.getMap('size')}
+        onClick={() => apiRef.current.getState()}
       >
         Restore Default
       </button>

@@ -13,14 +13,14 @@ export const useResizableApi = (context: IResizableContext, props: any) => {
 
   const restoreDefault = () => restoreDefaultFn(contextDetails)
 
-  const getMap = (...keys: IGetMapApiParam[]): IGetMaP =>
-    createMap(contextDetails.panesList, ...keys)
+  const getState = (): IGetMaP =>
+    createMap(contextDetails.panesList, 'size', 'visibility', 'defaultMinSize', 'defaultMaxSize')
 
   useEffect(() => {
     const api = {
       restoreDefault,
       setVisibility,
-      getMap
+      getState
     }
 
     onReady(api)
