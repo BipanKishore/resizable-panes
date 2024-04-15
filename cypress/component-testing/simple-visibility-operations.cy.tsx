@@ -1,29 +1,32 @@
-import {checkWidths} from '../utils/check-widths'
-import {ENUMS, getResizableIds} from '../utils'
+import {ENUMS, RCy} from '../utils'
+import {SimpleVisibilityOperations} from '../../cy-env/pages'
+import React from 'react'
+
+const rCy = new RCy()
+const {resizerSize} = rCy
 
 const {
   resizerIds: [R0, R1, R2, R3],
   checkboxIds: [CK0, CK1, CK2, CK3, CK4],
-  paneIds: [P0, P1, P2, P3, P4],
-  viewPortDimention,
-  resizerSize
-} = getResizableIds(5)
+  paneIds: [P0, P1, P2, P3, P4]
+} = rCy.getResizableIds()
 
 describe('Simple visibility operations', () => {
   beforeEach(() => {
-    cy.viewport(...viewPortDimention)
-    cy.visit('')
-    // cy.wait(10000000)
+    rCy.setViewPort()
+    cy.mount(
+      <SimpleVisibilityOperations />
+    )
   })
 
   it('Check initial size', () => {
-    checkWidths(ENUMS.initialSize)
+    rCy.checkWidths(ENUMS.initialSize)
   })
 
   describe('Hide single Pane', () => {
     it('hide P0', () => {
       cy.get(`[data-cy=${CK0}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 0,
         [P1]: 337,
         [P2]: 224,
@@ -38,7 +41,7 @@ describe('Simple visibility operations', () => {
 
     it('hide P1', () => {
       cy.get(`[data-cy=${CK1}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 144,
         [P1]: 0,
         [P2]: 289,
@@ -53,7 +56,7 @@ describe('Simple visibility operations', () => {
 
     it('hide P2', () => {
       cy.get(`[data-cy=${CK2}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 126,
         [P1]: 379,
         [P2]: 0,
@@ -68,7 +71,7 @@ describe('Simple visibility operations', () => {
 
     it('hide P3', () => {
       cy.get(`[data-cy=${CK3}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 144,
         [P1]: 433,
         [P2]: 289,
@@ -83,7 +86,7 @@ describe('Simple visibility operations', () => {
 
     it('hide P4', () => {
       cy.get(`[data-cy=${CK4}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 112,
         [P1]: 337,
         [P2]: 224,
@@ -101,7 +104,7 @@ describe('Simple visibility operations', () => {
     it('hide P0>> P1', () => {
       cy.get(`[data-cy=${CK0}]`).uncheck()
       cy.get(`[data-cy=${CK1}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 0,
         [P1]: 0,
         [P2]: 340,
@@ -117,7 +120,7 @@ describe('Simple visibility operations', () => {
     it('hide P1>> P2', () => {
       cy.get(`[data-cy=${CK1}]`).uncheck()
       cy.get(`[data-cy=${CK2}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 204,
         [P1]: 0,
         [P2]: 0,
@@ -133,7 +136,7 @@ describe('Simple visibility operations', () => {
     it('hide P2>> P3', () => {
       cy.get(`[data-cy=${CK2}]`).uncheck()
       cy.get(`[data-cy=${CK3}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 204,
         [P1]: 612,
         [P2]: 0,
@@ -149,7 +152,7 @@ describe('Simple visibility operations', () => {
     it('hide P3>> P4', () => {
       cy.get(`[data-cy=${CK3}]`).uncheck()
       cy.get(`[data-cy=${CK4}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 170,
         [P1]: 510,
         [P2]: 340,
@@ -168,7 +171,7 @@ describe('Simple visibility operations', () => {
       cy.get(`[data-cy=${CK0}]`).uncheck()
       cy.get(`[data-cy=${CK1}]`).uncheck()
       cy.get(`[data-cy=${CK2}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 0,
         [P1]: 0,
         [P2]: 0,
@@ -185,7 +188,7 @@ describe('Simple visibility operations', () => {
       cy.get(`[data-cy=${CK1}]`).uncheck()
       cy.get(`[data-cy=${CK2}]`).uncheck()
       cy.get(`[data-cy=${CK3}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 515,
         [P1]: 0,
         [P2]: 0,
@@ -202,7 +205,7 @@ describe('Simple visibility operations', () => {
       cy.get(`[data-cy=${CK2}]`).uncheck()
       cy.get(`[data-cy=${CK3}]`).uncheck()
       cy.get(`[data-cy=${CK4}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 257,
         [P1]: 773,
         [P2]: 0,
@@ -222,7 +225,7 @@ describe('Simple visibility operations', () => {
       cy.get(`[data-cy=${CK1}]`).uncheck()
       cy.get(`[data-cy=${CK2}]`).uncheck()
       cy.get(`[data-cy=${CK3}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 0,
         [P1]: 0,
         [P2]: 0,
@@ -242,7 +245,7 @@ describe('Simple visibility operations', () => {
       cy.get(`[data-cy=${CK1}]`).uncheck()
       cy.get(`[data-cy=${CK2}]`).uncheck()
       cy.get(`[data-cy=${CK3}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 0,
         [P1]: 0,
         [P2]: 0,
@@ -263,7 +266,7 @@ describe('Simple visibility operations', () => {
       cy.get(`[data-cy=${CK2}]`).uncheck()
       cy.get(`[data-cy=${CK3}]`).uncheck()
       cy.get(`[data-cy=${CK4}]`).uncheck()
-      checkWidths({
+      rCy.checkWidths({
         [P0]: 0,
         [P1]: 0,
         [P2]: 0,
@@ -281,7 +284,7 @@ describe('Simple visibility operations', () => {
     it('hide P0 >> P4', () => {
       cy.get(`[data-cy=${CK0}]`).uncheck()
       cy.get(`[data-cy=${CK4}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 0,
         [P1]: 382,
         [P2]: 255,
@@ -297,7 +300,7 @@ describe('Simple visibility operations', () => {
     it('hide P1 >> P2', () => {
       cy.get(`[data-cy=${CK1}]`).uncheck()
       cy.get(`[data-cy=${CK3}]`).uncheck()
-      checkWidths({
+      rCy.checkWidthsAndSum({
         [P0]: 255,
         [P1]: 0,
         [P2]: 510,

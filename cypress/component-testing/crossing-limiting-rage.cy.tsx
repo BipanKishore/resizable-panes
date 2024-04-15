@@ -1,23 +1,21 @@
-import {CyMoveEvent, moveResizer} from '../utils/events'
 import {checkWidths} from '../utils/check-widths'
-import {ENUMS} from '../../cy-env/pages'
-import {getResizableIds} from '../utils'
+import {ENUMS, SimpleVisibilityOperations} from '../../cy-env/pages'
+import {RCy} from '../utils'
+import React from 'react'
 
 const uniqueIdResizablePanes = ENUMS.resizablePanesId
+
+const rCy = new RCy()
+const {resizerSize, containerXLen} = rCy
 
 const {
   resizerIds: [R0, R1, R2, R3],
   checkboxIds: [CK0, CK1, CK2, CK3, CK4],
-  paneIds: [P0, P1, P2, P3, P4],
-  viewPortDimention,
-  resizerSize,
-  containerSize
-} = getResizableIds(5)
-
-const [VIEW_PORT_WIDTH] = viewPortDimention
+  paneIds: [P0, P1, P2, P3, P4]
+} = rCy.getResizableIds()
 
 const INITIAL_SIZES: any = {
-  [uniqueIdResizablePanes]: containerSize,
+  [uniqueIdResizablePanes]: containerXLen,
   'resizer-P0': resizerSize,
   'resizer-P1': resizerSize,
   'resizer-P2': resizerSize,
@@ -31,8 +29,10 @@ const INITIAL_SIZES: any = {
 
 describe('Overlapping Resizers', () => {
   beforeEach(() => {
-    cy.viewport(...viewPortDimention)
-    cy.visit('')
+    rCy.setViewPort()
+    cy.mount(
+      <SimpleVisibilityOperations />
+    )
   })
 
   it('Check initial size', () => {
@@ -44,9 +44,13 @@ describe('Overlapping Resizers', () => {
   })
 
   it('R2 to most Left', () => {
-    moveResizer('resizer-P2', CyMoveEvent.toMostLeft())
-    checkWidths({
-      [uniqueIdResizablePanes]: containerSize,
+    rCy.toMostLeft(R2)
+
+    rCy.checkWidths({
+      [uniqueIdResizablePanes]: containerXLen
+    })
+
+    rCy.checkWidthsAndSum({
       [R0]: 0,
       [R1]: 0,
       [R2]: resizerSize,
@@ -60,9 +64,13 @@ describe('Overlapping Resizers', () => {
   })
 
   it('R1 to most Right', () => {
-    moveResizer(R1, CyMoveEvent.toMostRight(VIEW_PORT_WIDTH))
-    checkWidths({
-      [uniqueIdResizablePanes]: containerSize,
+    rCy.toMostRight(R1)
+
+    rCy.checkWidths({
+      [uniqueIdResizablePanes]: containerXLen
+    })
+
+    rCy.checkWidthsAndSum({
       [R0]: resizerSize,
       [R1]: resizerSize,
       [R2]: 0,

@@ -77,11 +77,11 @@ export class RCy {
   getResizableIds () {
     const paneIds = getPaneIds(this.len)
     const resizerIds = paneIds.map((id) => `resizer-${id}`)
-    // const checkboxIds = paneIds.map((id) => `checkbox-${id}`)
+    const checkboxIds = paneIds.map((id) => `checkbox-${id}`)
 
     return {
       resizerIds,
-      //   checkboxIds,
+      checkboxIds,
       paneIds
     }
   }

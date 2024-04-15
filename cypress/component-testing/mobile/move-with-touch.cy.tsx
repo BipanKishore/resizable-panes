@@ -1,22 +1,18 @@
-import {ENUMS} from '../../../cy-env/pages'
-import {getResizableIds} from '../../utils'
+import React from 'react'
+import {ENUMS, SimpleVisibilityOperations} from '../../../cy-env/pages'
+import {RCy} from '../../utils'
 import {checkWidths} from '../../utils/check-widths'
-import {CyMoveEvent} from '../../utils/events'
 
 const uniqueIdResizablePanes = ENUMS.resizablePanesId
+const rCy = new RCy({
+})
+const {resizerSize} = rCy
 
 const {
-  resizerSize,
   resizerIds: [R0, R1, R2, R3],
   checkboxIds: [CK0, CK1, CK2, CK3, CK4],
   paneIds: [P0, P1, P2, P3, P4]
-} = getResizableIds(5)
-
-const cyMoveEvent = new CyMoveEvent({
-  maxPaneSize: 1000,
-  paneIds: [],
-  resizerSize: 10
-})
+} = rCy.getResizableIds()
 
 const INITIAL_SIZES: any = {
   [uniqueIdResizablePanes]: 359,
@@ -33,8 +29,10 @@ const INITIAL_SIZES: any = {
 
 describe('Move Panes on', () => {
   beforeEach(() => {
-    cy.visit('')
     cy.viewport('iphone-x')
+    cy.mount(
+      <SimpleVisibilityOperations />
+    )
   })
 
   it('should check Initial Sizes', () => {
@@ -44,7 +42,7 @@ describe('Move Panes on', () => {
   describe('Single Resizer Movements', () => {
     describe('R0 Movements', () => {
       it('Overlap R0 to R1', () => {
-        cyMoveEvent.moveItem(R0, R1)
+        rCy.moveItem(R0, R1)
         checkWidths({
           [P0]: 137,
           [P1]: 0,
