@@ -1,33 +1,19 @@
-import {CyMoveEvent, moveResizer} from '../utils/events'
 import {checkWidths} from '../utils/check-widths'
-import {SimpleVisibilityOperations, ENUMS} from '../utils'
-
-const VERTICAL_CONTAINER_WIDTH = 1000 + 4 * 10
-const VIEW_PORT_WIDTH = VERTICAL_CONTAINER_WIDTH + 16
-
-const RESIZER_WIDTH = 10
-
-const paneIds = ['P0', 'P1', 'P2', 'P3', 'P4']
-
-const getResizableIds = (paneIds: string[]) => {
-  const resizerIds = paneIds.map((id) => `resizer-${id}`)
-  const checkboxIds = paneIds.map((id) => `checkbox-${id}`)
-  return {
-    resizerIds,
-    checkboxIds,
-    paneIds
-  }
-}
+import {ENUMS, getResizableIds} from '../utils'
 
 const {
   resizerIds: [R0, R1, R2, R3],
   checkboxIds: [CK0, CK1, CK2, CK3, CK4],
-  paneIds: [P0, P1, P2, P3, P4]
-} = getResizableIds(paneIds)
+  paneIds: [P0, P1, P2, P3, P4],
+  viewPortDimention,
+  resizerSize
+} = getResizableIds(5)
 
 describe('Simple visibility operations', () => {
   beforeEach(() => {
+    cy.viewport(...viewPortDimention)
     cy.visit('')
+    // cy.wait(10000000)
   })
 
   it('Check initial size', () => {
@@ -44,9 +30,9 @@ describe('Simple visibility operations', () => {
         [P3]: 337,
         [P4]: 112,
         [R0]: 0,
-        [R1]: RESIZER_WIDTH,
-        [R2]: RESIZER_WIDTH,
-        [R3]: RESIZER_WIDTH
+        [R1]: resizerSize,
+        [R2]: resizerSize,
+        [R3]: resizerSize
       })
     })
 
@@ -59,9 +45,9 @@ describe('Simple visibility operations', () => {
         [P3]: 433,
         [P4]: 144,
         [R0]: 0,
-        [R1]: RESIZER_WIDTH,
-        [R2]: RESIZER_WIDTH,
-        [R3]: RESIZER_WIDTH
+        [R1]: resizerSize,
+        [R2]: resizerSize,
+        [R3]: resizerSize
       })
     })
 
@@ -73,10 +59,10 @@ describe('Simple visibility operations', () => {
         [P2]: 0,
         [P3]: 379,
         [P4]: 126,
-        [R0]: RESIZER_WIDTH,
+        [R0]: resizerSize,
         [R1]: 0,
-        [R2]: RESIZER_WIDTH,
-        [R3]: RESIZER_WIDTH
+        [R2]: resizerSize,
+        [R3]: resizerSize
       })
     })
 
@@ -88,10 +74,10 @@ describe('Simple visibility operations', () => {
         [P2]: 289,
         [P3]: 0,
         [P4]: 144,
-        [R0]: RESIZER_WIDTH,
-        [R1]: RESIZER_WIDTH,
+        [R0]: resizerSize,
+        [R1]: resizerSize,
         [R2]: 0,
-        [R3]: RESIZER_WIDTH
+        [R3]: resizerSize
       })
     })
 
@@ -103,9 +89,9 @@ describe('Simple visibility operations', () => {
         [P2]: 224,
         [P3]: 337,
         [P4]: 0,
-        [R0]: RESIZER_WIDTH,
-        [R1]: RESIZER_WIDTH,
-        [R2]: RESIZER_WIDTH,
+        [R0]: resizerSize,
+        [R1]: resizerSize,
+        [R2]: resizerSize,
         [R3]: 0
       })
     })
@@ -123,8 +109,8 @@ describe('Simple visibility operations', () => {
         [P4]: 170,
         [R0]: 0,
         [R1]: 0,
-        [R2]: RESIZER_WIDTH,
-        [R3]: RESIZER_WIDTH
+        [R2]: resizerSize,
+        [R3]: resizerSize
       })
     })
 
@@ -139,8 +125,8 @@ describe('Simple visibility operations', () => {
         [P4]: 204,
         [R0]: 0,
         [R1]: 0,
-        [R2]: RESIZER_WIDTH,
-        [R3]: RESIZER_WIDTH
+        [R2]: resizerSize,
+        [R3]: resizerSize
       })
     })
 
@@ -153,10 +139,10 @@ describe('Simple visibility operations', () => {
         [P2]: 0,
         [P3]: 0,
         [P4]: 204,
-        [R0]: RESIZER_WIDTH,
+        [R0]: resizerSize,
         [R1]: 0,
         [R2]: 0,
-        [R3]: RESIZER_WIDTH
+        [R3]: resizerSize
       })
     })
 
@@ -169,8 +155,8 @@ describe('Simple visibility operations', () => {
         [P2]: 340,
         [P3]: 0,
         [P4]: 0,
-        [R0]: RESIZER_WIDTH,
-        [R1]: RESIZER_WIDTH,
+        [R0]: resizerSize,
+        [R1]: resizerSize,
         [R2]: 0,
         [R3]: 0
       })
@@ -191,7 +177,7 @@ describe('Simple visibility operations', () => {
         [R0]: 0,
         [R1]: 0,
         [R2]: 0,
-        [R3]: RESIZER_WIDTH
+        [R3]: resizerSize
       })
     })
 
@@ -208,7 +194,7 @@ describe('Simple visibility operations', () => {
         [R0]: 0,
         [R1]: 0,
         [R2]: 0,
-        [R3]: RESIZER_WIDTH
+        [R3]: resizerSize
       })
     })
 
@@ -222,7 +208,7 @@ describe('Simple visibility operations', () => {
         [P2]: 0,
         [P3]: 0,
         [P4]: 0,
-        [R0]: RESIZER_WIDTH,
+        [R0]: resizerSize,
         [R1]: 0,
         [R2]: 0,
         [R3]: 0
@@ -302,8 +288,8 @@ describe('Simple visibility operations', () => {
         [P3]: 383,
         [P4]: 0,
         [R0]: 0,
-        [R1]: RESIZER_WIDTH,
-        [R2]: RESIZER_WIDTH,
+        [R1]: resizerSize,
+        [R2]: resizerSize,
         [R3]: 0
       }, 1040)
     })
@@ -318,9 +304,9 @@ describe('Simple visibility operations', () => {
         [P3]: 0,
         [P4]: 255,
         [R0]: 0,
-        [R1]: RESIZER_WIDTH,
+        [R1]: resizerSize,
         [R2]: 0,
-        [R3]: RESIZER_WIDTH
+        [R3]: resizerSize
       }, 1040)
     })
   })

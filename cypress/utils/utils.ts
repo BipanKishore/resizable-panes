@@ -1,7 +1,32 @@
-export const getResizableIds = (paneIds: string[]) => {
+export const getPaneIds = (length: number) => {
+  const paneIds = []
+  for (let i = 0; i < length; i++) {
+    paneIds.push('P' + i)
+  }
+
+  return paneIds
+}
+
+export const getResizableIds = (len: number = 5, model: any = {}) => {
+  const {
+    resizerSize = 10,
+    maxInitialPaneSize = 1000,
+    height = 500
+  } = model
+
+  const containerSize = maxInitialPaneSize + (len - 1) * resizerSize
+  const viewPortWidth = containerSize + 16
+
+  const viewPortDimention: [number, number] = [viewPortWidth, height]
+
+  const paneIds = getPaneIds(len)
+
   const resizerIds = paneIds.map((id) => `resizer-${id}`)
   const checkboxIds = paneIds.map((id) => `checkbox-${id}`)
   return {
+    containerSize,
+    resizerSize,
+    viewPortDimention,
     resizerIds,
     checkboxIds,
     paneIds

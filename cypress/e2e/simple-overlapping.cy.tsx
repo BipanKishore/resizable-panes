@@ -1,31 +1,27 @@
-import {CyMoveEvent, moveItem} from '../utils/events'
+import {CyMoveEvent} from '../utils/events'
 import {checkWidthsAndSum} from '../utils/check-widths'
-import {SimpleVisibilityOperations, ENUMS, getResizableIds} from '../utils'
-
-const VERTICAL_CONTAINER_WIDTH = 1000 + 4 * 10
-const VIEW_PORT_WIDTH = VERTICAL_CONTAINER_WIDTH + 16
-
-const RESIZER_WIDTH = 10
-
-const paneIds = ['P0', 'P1', 'P2', 'P3', 'P4']
+import {getResizableIds} from '../utils'
 
 const {
+  containerSize,
+  resizerSize,
+  viewPortDimention,
   resizerIds: [R0, R1, R2, R3],
   checkboxIds: [CK0, CK1, CK2, CK3, CK4],
   paneIds: [P0, P1, P2, P3, P4]
-} = getResizableIds(paneIds)
+} = getResizableIds(5)
 
 const cyMoveEvent = new CyMoveEvent({
   maxPaneSize: 1000,
-  paneIds,
+  paneIds: [],
   resizerSize: 10
 })
 
-const checkWidths = checkWidthsAndSum.bind(null, VERTICAL_CONTAINER_WIDTH)
+const checkWidths = checkWidthsAndSum.bind(null, containerSize)
 
 describe('Overlapping resizer to another', () => {
   beforeEach(() => {
-    cy.viewport(VIEW_PORT_WIDTH, 500)
+    cy.viewport(...viewPortDimention)
     cy.visit('')
   })
 
@@ -39,10 +35,10 @@ describe('Overlapping resizer to another', () => {
           [P2]: 200,
           [P3]: 300,
           [P4]: 100,
-          [R0]: RESIZER_WIDTH,
+          [R0]: resizerSize,
           [R1]: 0,
-          [R2]: RESIZER_WIDTH,
-          [R3]: RESIZER_WIDTH
+          [R2]: resizerSize,
+          [R3]: resizerSize
         })
       })
     })
@@ -59,10 +55,10 @@ describe('Overlapping resizer to another', () => {
           [P2]: 200,
           [P3]: 300,
           [P4]: 100,
-          [R0]: RESIZER_WIDTH,
+          [R0]: resizerSize,
           [R1]: 0,
-          [R2]: RESIZER_WIDTH,
-          [R3]: RESIZER_WIDTH
+          [R2]: resizerSize,
+          [R3]: resizerSize
         })
       })
 
@@ -74,10 +70,10 @@ describe('Overlapping resizer to another', () => {
           [P2]: 0,
           [P3]: 510,
           [P4]: 100,
-          [R0]: RESIZER_WIDTH,
+          [R0]: resizerSize,
           [R1]: 0,
-          [R2]: RESIZER_WIDTH,
-          [R3]: RESIZER_WIDTH
+          [R2]: resizerSize,
+          [R3]: resizerSize
         })
       })
 
@@ -89,9 +85,9 @@ describe('Overlapping resizer to another', () => {
           [P2]: 510,
           [P3]: 0,
           [P4]: 100,
-          [R0]: RESIZER_WIDTH,
-          [R1]: RESIZER_WIDTH,
-          [R2]: RESIZER_WIDTH,
+          [R0]: resizerSize,
+          [R1]: resizerSize,
+          [R2]: resizerSize,
           [R3]: 0
         })
       })
@@ -105,10 +101,10 @@ describe('Overlapping resizer to another', () => {
           [P2]: 200,
           [P3]: 300,
           [P4]: 100,
-          [R0]: RESIZER_WIDTH,
-          [R1]: RESIZER_WIDTH,
-          [R2]: RESIZER_WIDTH,
-          [R3]: RESIZER_WIDTH
+          [R0]: resizerSize,
+          [R1]: resizerSize,
+          [R2]: resizerSize,
+          [R3]: resizerSize
         })
       })
 
@@ -121,7 +117,7 @@ describe('Overlapping resizer to another', () => {
           [P2]: 0,
           [P3]: 0,
           [P4]: 100,
-          [R0]: RESIZER_WIDTH,
+          [R0]: resizerSize,
           [R1]: 0,
           [R2]: 0,
           [R3]: 0
@@ -135,8 +131,8 @@ describe('Overlapping resizer to another', () => {
           [P2]: 0,
           [P3]: 0,
           [P4]: 100,
-          [R0]: RESIZER_WIDTH,
-          [R1]: RESIZER_WIDTH,
+          [R0]: resizerSize,
+          [R1]: resizerSize,
           [R2]: 0,
           [R3]: 0
         })
@@ -149,8 +145,8 @@ describe('Overlapping resizer to another', () => {
           [P3]: 0,
           [P4]: 100,
           [R0]: 0,
-          [R1]: RESIZER_WIDTH,
-          [R2]: RESIZER_WIDTH,
+          [R1]: resizerSize,
+          [R2]: resizerSize,
           [R3]: 0
         })
 
@@ -163,8 +159,8 @@ describe('Overlapping resizer to another', () => {
           [P4]: 100,
           [R0]: 0,
           [R1]: 0,
-          [R2]: RESIZER_WIDTH,
-          [R3]: RESIZER_WIDTH
+          [R2]: resizerSize,
+          [R3]: resizerSize
         })
 
         cyMoveEvent.moveResizerToStart(R3)
@@ -177,7 +173,7 @@ describe('Overlapping resizer to another', () => {
           [R0]: 0,
           [R1]: 0,
           [R2]: 0,
-          [R3]: RESIZER_WIDTH
+          [R3]: resizerSize
         })
       })
     })

@@ -86,30 +86,30 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
   setUISizesFn(items, DIRECTIONS.NONE)
 }
 
-export const findLeftVisibleAdjasentResizer = (items: IResizableItem[], id: string) => {
-  const itemIndex = findIndex(items, id)
+// export const findLeftVisibleAdjasentResizer = (items: IResizableItem[], id: string) => {
+//   const itemIndex = findIndex(items, id)
 
-  const RIGHT = 1
-  const LEFT = 2
+//   const RIGHT = 1
+//   const LEFT = 2
 
-  const find = (index: number, direction: number): any => {
-    const resizer = items[index + (direction === RIGHT ? 1 : -1)] as ResizerModel
-    if (resizer) {
-      if (resizer.visibility) {
-        return resizer
-      } else {
-        return find(index + (direction === RIGHT ? 2 : -2), direction)
-      }
-    }
-  }
+//   const find = (index: number, direction: number): any => {
+//     const resizer = items[index + (direction === RIGHT ? 1 : -1)] as ResizerModel
+//     if (resizer) {
+//       if (resizer.visibility) {
+//         return resizer
+//       } else {
+//         return find(index + (direction === RIGHT ? 2 : -2), direction)
+//       }
+//     }
+//   }
 
-  const leftResizer = find(itemIndex, LEFT)
-  const rightResizer = find(itemIndex, RIGHT)
-  return {
-    leftResizer,
-    rightResizer
-  }
-}
+//   const leftResizer = find(itemIndex, LEFT)
+//   const rightResizer = find(itemIndex, RIGHT)
+//   return {
+//     leftResizer,
+//     rightResizer
+//   }
+// }
 
 // aIndex - PreviousIndex
 // bIndex - NextIndex

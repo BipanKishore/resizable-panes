@@ -30,12 +30,13 @@ export const ENUMS = {
   }
 }
 
-interface IIDMap{
-    [id: string]: boolean
+interface IIDMap {
+  [id: string]: boolean
 }
 
 export const SimpleVisibilityOperations = () => {
   const [visibilityMap, setVisibilityMap] = useState<IIDMap>(ENUMS.initialVisibility)
+  const [resizablePanesVisibility, setResizablePanesVisibility] = useState(true)
 
   const updateVisibilityMap = (e: any) => {
     const {name, checked} = e.currentTarget
@@ -48,39 +49,47 @@ export const SimpleVisibilityOperations = () => {
 
   return (
     <div className='h-100p w-100p' >
+      <button
+        data-cy="hide-resizable-panes"
+        onClick={() => setResizablePanesVisibility(!resizablePanesVisibility)}
+      >Hide All
+      </button>
+
       <div
-        className='h-300' style={{
-          height: '300px',
-          width: toPx(VERTICAL_CONTAINER_WIDTH)
-        }}
+        className='h-100p w-100p'
       >
-        <ResizablePanes
-          className=''
-          resizer={
-            <CustomResizerFirst size={10} />
-                    }
-          resizerSize={10}
-          uniqueId={ENUMS.resizablePanesId}
-          unit='ratio'
-          vertical
-          visibility={visibilityMap}
-        >
-          <Panes className='bg-red-500' id='P0' size={1}>
-          </Panes>
 
-          <Panes className='bg-orange-500' id='P1' size={3}>
-          </Panes>
+        {
+          resizablePanesVisibility &&
+          <ResizablePanes
+            className=''
+            resizer={
+              <CustomResizerFirst size={10} />
+            }
+            resizerSize={10}
+            uniqueId={ENUMS.resizablePanesId}
+            unit='ratio'
+            vertical
+            visibility={visibilityMap}
+          >
+            <Panes className='bg-red-500' id='P0' size={1}>
+            </Panes>
 
-          <Panes className='bg-lime-500' id='P2' size={2}>
-          </Panes>
+            <Panes className='bg-orange-500' id='P1' size={3}>
+            </Panes>
 
-          <Panes className='bg-orange-500' id='P3' size={3}>
-          </Panes>
+            <Panes className='bg-lime-500' id='P2' size={2}>
+            </Panes>
 
-          <Panes className='bg-red-500' id='P4' size={1}>
-          </Panes>
+            <Panes className='bg-orange-500' id='P3' size={3}>
+            </Panes>
 
-        </ResizablePanes>
+            <Panes className='bg-red-500' id='P4' size={1}>
+            </Panes>
+
+          </ResizablePanes>
+        }
+
       </div>
 
       <div className=' d-flex justify-context'>
