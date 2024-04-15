@@ -5,7 +5,7 @@ import {
   createPaneModelListAndResizerModelList,
   findIndexInChildrenbyId, afterMathOfResizerOverlapping, getPanesAndResizers, setDownMaxLimits,
   setResizersLimits,
-  setUISizesFn, setUpMaxLimits, syncAxisSizesFn, attachResizersToPaneModels
+  setUISizesFn, setUpMaxLimits, syncAxisSizesFn
 } from '../utils/panes'
 import {
   calculateAxes, setVirtualOrderList, goingDownLogic, goingUpLogic, setCurrentMinMax,
@@ -150,11 +150,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     return getSizeStyle(vertical, size as number)
   }
 
-  // eslint-disable-next-line complexity
-  const setVisibility = (param: IKeyToBoolMap) => {
-    if (!param) {
-      return
-    }
+  const setVisibility = (param: IKeyToBoolMap = {}) => {
     const oldVisibilityMap = createMap(panesList, VISIBILITY)
 
     const keys = Object.keys(oldVisibilityMap)

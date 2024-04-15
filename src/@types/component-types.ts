@@ -110,5 +110,5 @@ export interface IResizableContext {
   myChildren: ReactNode[],
   storage: ResizeStorage,
   getPaneSizeStyle: (id: string) => void,
-  setVisibility: any
+  setVisibility: (param: IKeyToBoolMap) => void
 }
