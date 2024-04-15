@@ -7,6 +7,7 @@ import {DIRECTIONS, PLUS, ZERO} from '../constant'
 import {ResizeStorage} from '../utils/storage'
 import {getObj, noop, ratioAndRoundOff} from '../utils/util'
 import {ResizerModel} from './resizer-model'
+import {checkPaneModelErrors} from './utils'
 
 export class PaneModel {
   isRegistered = true
@@ -69,17 +70,7 @@ export class PaneModel {
     this.id = id
     this.vertical = vertical as boolean
 
-    if (size < minSize) {
-      throw Error('Size can not be smaller than minSize for pane id ' + id)
-    }
-
-    if (size > maxSize) {
-      throw Error('Size can not be greatter than maxSize for pane id ' + id)
-    }
-
-    if (minSize > maxSize) {
-      throw Error('minSize can not be greatter than maxSize for pane id ' + id)
-    }
+    checkPaneModelErrors(size, minSize, maxSize, id)
   }
 
   initializeSize (size: number) {
