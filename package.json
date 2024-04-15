@@ -23,7 +23,7 @@
     "deploy": "npm publish",
     "e2e:serve": "webpack-dev-server --progress --watch --config webpack.e2e.js",
     "cypress:open": "cypress open --config-file cypress.config.ts browser --e2e --browser chrome",
-    "cypress:run": "cypress run --config-file cypress.config.ts browser --e2e --browser chrome"
+    "cypress:run": "cypress run --component --config-file cypress.config.ts browser --browser chrome"
   },
   "keywords": [
     "resizable",

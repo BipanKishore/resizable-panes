@@ -2,6 +2,7 @@ import React, {useRef, useState} from 'react'
 import {ResizablePanes, Panes} from '../../src'
 import {CustomResizerFirst} from '../components/custom-resizer'
 import {toPx} from '../../src/utils/dom'
+import '../styles/style.css'
 
 const VERTICAL_CONTAINER_WIDTH = 1000 + 4 * 10
 const VIEW_PORT_WIDTH = VERTICAL_CONTAINER_WIDTH + 16
@@ -83,6 +84,7 @@ export const SimpleVisibilityOperations = () => {
               <CustomResizerFirst size={10} />
             }
             resizerSize={10}
+            storageApi={localStorage}
             uniqueId={ENUMS.resizablePanesId}
             unit='ratio'
             vertical
