@@ -4,4 +4,4 @@ export {
   ResizablePanes
 } from './components'
 
-// export {IResizableApi} from './@types'
+export {IResizableApi} from './@types'

@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-// import '../style.css'
+import '../style.css'
 import {IResizablePanesProps} from '../@types'
 import {getContainerClass} from '../utils/dom'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
