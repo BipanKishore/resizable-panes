@@ -1,6 +1,5 @@
 /* eslint-disable */
 const path = require('path')
-const HTMLWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 var WebpackNotifierPlugin = require('webpack-notifier');
 const autoprefixer = require('autoprefixer')
