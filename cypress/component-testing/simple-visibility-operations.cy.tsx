@@ -294,7 +294,7 @@ describe('Simple visibility operations', () => {
         [R1]: resizerSize,
         [R2]: resizerSize,
         [R3]: 0
-      }, 1040)
+      })
     })
 
     it('hide P1 >> P2', () => {
@@ -310,7 +310,7 @@ describe('Simple visibility operations', () => {
         [R1]: resizerSize,
         [R2]: 0,
         [R3]: resizerSize
-      }, 1040)
+      })
     })
   })
 })

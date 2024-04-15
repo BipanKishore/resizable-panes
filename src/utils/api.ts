@@ -4,7 +4,6 @@ import {PaneModel} from '../models/pane-model'
 import {ResizerModel} from '../models/resizer-model'
 import {getList} from './development-util'
 import {
-  attachResizersToPaneModels,
   change1PixelToPanes, getPanesSizeSum,
   getSizeByIndexes, setUISizesFn
 } from './panes'
@@ -40,11 +39,6 @@ export const changeSizeInRatio = (panesList: PaneModel[], actionList: number[], 
 
   if (sizeChangeAbsolute <= actionList.length) {
     change1PixelToPanes(panesList, sizeChangeAbsolute, operation)
-    return
-  } else if (actionList.length === 1) {
-    const lastPane = panesList[actionList[0]]
-    const size = lastPane.getSize()
-    lastPane.setVisibilitySize(size + sizeChange, PLUS)
     return
   }
 

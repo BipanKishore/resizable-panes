@@ -250,68 +250,37 @@ export const fixPartialHiddenResizer = (contextDetails: IContextDetails) => {
   // }
 }
 
-// We increases the size of element in opposite direction than in the direction
-export const fixPartialHiddenResizer123 = (contextDetails: IContextDetails) => {
-  const {direction, items} = contextDetails
-  const index = items.findIndex((item) => item.isHandle && item.defaultSize !== item.size && item.size)
+// export const findNextVisibleResizer = (items: IResizableItem[], index: number) => {
+//   for (let i = index; i < items.length; i++) {
+//     const resizer = items[i]
+//     if (!resizer.isPartiallyHidden) {
+//       return resizer
+//     }
+//   }
+// }
 
-  if (index !== -1) {
-    let sizeChange = items[index].size
-    items[index].size = 0
+// export const attachResizersToPaneModels = (contextDetails: IContextDetails) => { // Not using
+//   const {panesList, resizersList} = contextDetails
 
-    const resizingOrder: IResizableItem[] = []
+//   const attachedList: any[] = []
 
-    if (isItUp(direction)) {
-      const resizingOrderLeftOver = items.slice(0, index).reverse()
-      resizingOrder.push(...items.slice(index + 1), ...resizingOrderLeftOver)
-    } else {
-      const resizingOrderLeftOver = items.slice(index + 1)
-      resizingOrder.push(...items.slice(0, index).reverse(), ...resizingOrderLeftOver)
-    }
+//   panesList.forEach((item, index) => {
+//     let nextResizer = findNextVisibleResizer(resizersList, index) as ResizerModel | undefined
 
-    const visibleItems = resizingOrder.filter((item) => item.size)
-    visibleItems.forEach((item) => item.syncAxisSize())
+//     if (attachedList.includes(nextResizer)) {
+//       nextResizer = undefined
+//     }
+//     attachedList.push(nextResizer)
+//     if (item.visibility) {
+//       item.attachedResizer = nextResizer
+//     }
+//   })
 
-    visibleItems.forEach((item) => {
-      item.restoreLimits()
-      sizeChange = item.changeSize(sizeChange, PLUS)
-    })
-
-    setUISizesFn(items, direction)
-  }
-}
-
-export const findNextVisibleResizer = (items: IResizableItem[], index: number) => {
-  for (let i = index; i < items.length; i++) {
-    const resizer = items[i]
-    if (!resizer.isPartiallyHidden) {
-      return resizer
-    }
-  }
-}
-
-export const attachResizersToPaneModels = (contextDetails: IContextDetails) => { // Not using
-  const {panesList, resizersList} = contextDetails
-
-  const attachedList: any[] = []
-
-  panesList.forEach((item, index) => {
-    let nextResizer = findNextVisibleResizer(resizersList, index) as ResizerModel | undefined
-
-    if (attachedList.includes(nextResizer)) {
-      nextResizer = undefined
-    }
-    attachedList.push(nextResizer)
-    if (item.visibility) {
-      item.attachedResizer = nextResizer
-    }
-  })
-
-  console.log(
-    'attachResizersToPaneModels',
-    getList(panesList, 'attachedResizer').map((r:any) => r?.id)
-  )
-}
+//   console.log(
+//     'attachResizersToPaneModels',
+//     getList(panesList, 'attachedResizer').map((r:any) => r?.id)
+//   )
+// }
 
 export const afterMathOfResizerOverlapping = (contextDetails: IContextDetails) => {
   fixPartialHiddenResizer(contextDetails)
