@@ -196,6 +196,8 @@ export class PaneModel {
   }
 
   restore () {
+    // Need to access both the values from props
+    this.setVisibility(true)
     this.size = this.defaultSize
   }
 

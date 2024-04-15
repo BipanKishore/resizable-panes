@@ -4,35 +4,9 @@ import {getMaxContainerSizes} from './resizable-pane'
 import {useEffect} from 'react'
 import {getObj} from './util'
 
-// export const keyConsole = (obj: any = {}, add = 'v--') => {
-//   const keys = Object.keys(obj)
-//   const str = keys.reduce((p, v) => p + ' ' + v + ': ' + obj[v], add)
-//   // console.log(str)
-// }
-
 export const localConsole = (obj: any = {}, key : string) => {
   // console.log(key, obj)
   localStorage.setItem(key, JSON.stringify(obj))
-}
-
-export const minMaxTotal = (serviceRefCurrent: IContextDetails) => {
-  // const {panesList} = serviceRefCurrent
-  // const {visiblePanesList} = getVisiblePaneModelsAndActiveIndex(panesList, 0)
-
-  // const {maxPaneSize} = getMaxContainerSizes(serviceRefCurrent)
-  // let sum = 0
-  // visiblePanesList
-  //   .forEach(({minSize, maxSize}) => {
-  //     maxSize = Number.isFinite(maxSize) ? maxSize : 0
-  //     sum += ((maxSize || 0) + (minSize || 0))
-  //   })
-
-  // // const paneSizeTotal = sum
-  // const paneSizeTotal = sum / 2
-  // console.warn(`Valid Sum: [${sum}, ${paneSizeTotal}], value :${maxPaneSize}`)
-  // if ((Math.trunc(maxPaneSize) !== Math.trunc(sum) && Math.trunc(maxPaneSize) !== Math.trunc(paneSizeTotal))) {
-  //   throw new Error(`Max Pane sum total: ${maxPaneSize} = ${sum} or ${maxPaneSize} = ${paneSizeTotal}`)
-  // }
 }
 
 export const getList = (panesList: PaneModel[] | any[], key: string): unknown[] => {
@@ -45,15 +19,6 @@ export const paneConsole = (panesList: PaneModel[], key: string) => {
 
 export const setPaneList = (panesList: PaneModel[], keys: string[] = [], value: any = null) => {
   panesList.forEach((pane: any) => keys.forEach((key: string) => (pane[key] = value)))
-  // keys.forEach((key) => paneConsole(panesList, key))
-}
-
-export const sizesConsole = (panesList: PaneModel[]) => {
-  // const t = panesList.map((pane) => {
-  //   return getObj(pane, 'size', 'minSize', 'maxSize', 'defaultMinSize', 'defaultMaxSize')
-  // })
-
-  // localConsole(t, 'sizesConsole')
 }
 
 export const useMountingConsole = (name: string) => {

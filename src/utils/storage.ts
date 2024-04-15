@@ -93,29 +93,30 @@ export class ResizeStorage {
     return findById(resizers, id) ?? null
   }
 
-  readPaneChange (children: ReactElement[], context: any) {
-    const {panes, containerSize} = this.getStorage()
-    if (!containerSize) {
-      return
-    }
+  // Need to check this
+  // readPaneChange (children: ReactElement[], context: any) {
+  //   const {panes, containerSize} = this.getStorage()
+  //   if (!containerSize) {
+  //     return
+  //   }
 
-    const {panesList} = context.contextDetails
-    let isVisibilityChanged = false
+  //   const {panesList} = context.contextDetails
+  //   let isVisibilityChanged = false
 
-    const visibleIds = children.map((child: any) => child.props.id)
+  //   const visibleIds = children.map((child: any) => child.props.id)
 
-    panesList.forEach((pane: any) => {
-      const visibility = visibleIds.includes(pane.id)
-      if (pane.visibility !== visibility) {
-        pane.visibility = visibility
-        isVisibilityChanged = true
-      }
-      pane.size = findById(panes, pane.id).size
-    })
+  //   panesList.forEach((pane: any) => {
+  //     const visibility = visibleIds.includes(pane.id)
+  //     if (pane.visibility !== visibility) {
+  //       pane.visibility = visibility
+  //       isVisibilityChanged = true
+  //     }
+  //     pane.size = findById(panes, pane.id).size
+  //   })
 
-    if (isVisibilityChanged) {
-      // toRatioModeFn(panesList, containerSize)
-      context.contextDetails.isSetRatioMode = true
-    }
-  }
+  //   if (isVisibilityChanged) {
+  //     // toRatioModeFn(panesList, containerSize)
+  //     context.contextDetails.isSetRatioMode = true
+  //   }
+  // }
 }

@@ -43,6 +43,7 @@ export const Pane = (props: IPane) => {
     <Fragment>
       <div
         className={classname}
+        data-cy={id}
         key={id}
         ref={setPaneRef}
         style={style}

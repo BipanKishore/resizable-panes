@@ -7,9 +7,12 @@
 
 # testing
 /coverage
+/.nyc_output
+/cypress/screenshots
 
 # production
 /lib
+
 
 # misc
 .DS_Store
