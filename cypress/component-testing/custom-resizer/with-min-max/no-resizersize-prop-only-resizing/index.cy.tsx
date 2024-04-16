@@ -1,8 +1,8 @@
-import {ENUMS} from '../components/test-component-wrapper'
+import {ENUMS} from '../../../../components/test-component-wrapper'
 import React from 'react'
-import {RCy} from '../utils'
-import {Pane, ResizablePanes} from '../../src'
-import {CustomResizerFirst} from '../components/custom-resizer'
+import {RCy} from '../../../../utils'
+import {Pane, ResizablePanes} from '../../../../../src'
+import {CustomResizerFirst} from '../../../../components/custom-resizer'
 
 const containerId = ENUMS.resizablePanesId
 

@@ -1,6 +1,6 @@
-import {checkWidths} from '../utils/check-widths'
-import {ENUMS, TestComponentWrapper} from '../components/test-component-wrapper'
-import {RCy} from '../utils'
+import {checkWidths} from '../../../utils/check-widths'
+import {ENUMS, TestComponentWrapper} from '../../../components/test-component-wrapper'
+import {RCy} from '../../../utils'
 import React from 'react'
 
 const uniqueIdResizablePanes = ENUMS.resizablePanesId

@@ -1,6 +1,6 @@
-import {ENUMS, TestComponentWrapper} from '../components/test-component-wrapper'
+import {ENUMS, TestComponentWrapper} from '../../../components/test-component-wrapper'
 import React from 'react'
-import {RCy} from '../utils'
+import {RCy} from '../../../utils'
 
 const rCy = new RCy()
 const {resizerSize} = rCy
@@ -11,16 +11,12 @@ const {
   paneIds: [P0, P1, P2, P3, P4]
 } = rCy.getResizableIds()
 
-describe('Simple visibility operations', () => {
+describe('Only visibility operations', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
       <TestComponentWrapper />
     )
-  })
-
-  it('Check initial size', () => {
-    rCy.checkWidths(ENUMS.initialSize)
   })
 
   describe('Hide single Pane', () => {

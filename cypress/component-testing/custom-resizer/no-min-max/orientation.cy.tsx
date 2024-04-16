@@ -1,6 +1,6 @@
 import React from 'react'
-import {ENUMS, TestComponentWrapper} from '../components/test-component-wrapper'
-import {RCy} from '../utils'
+import {ENUMS, TestComponentWrapper} from '../../../components/test-component-wrapper'
+import {RCy} from '../../../utils'
 
 const containerId = ENUMS.resizablePanesId
 
