@@ -4,7 +4,7 @@ import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
 import {ResizerModel} from '../models/resizer-model'
 import {PLUS} from '../constant'
-import {getList, localConsole} from './development-util/development-util'
+import {getList, localConsole} from './development-util'
 import {isItUp} from './util'
 
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>

@@ -1,8 +1,4 @@
-import {IContextDetails} from '../../@types'
 import {PaneModel} from '../../models/pane-model'
-import {getMaxContainerSizes} from '../resizable-pane'
-import {useEffect} from 'react'
-import {getObj} from '../util'
 
 export const localConsole = (obj: any, key : string) => {
   // console.log(key, obj)
