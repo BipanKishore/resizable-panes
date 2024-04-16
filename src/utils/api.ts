@@ -8,7 +8,7 @@ import {
   getSizeByIndexes, setUISizesFn
 } from './panes'
 import {getMaxContainerSizes} from './resizable-pane'
-import {findIndex, getResizerId, isItDown, isItUp} from './util'
+import {findIndex, getResizerId, isItUp} from './util'
 
 // Need to check for hidden element
 export const restoreDefaultFn = ({items}: any) => {

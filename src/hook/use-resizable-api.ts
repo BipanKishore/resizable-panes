@@ -2,7 +2,7 @@ import {useEffect} from 'react'
 import {
   restoreDefaultFn
 } from '../utils/api'
-import {IGetMaP, IGetMapApiParam, IResizableContext} from '../@types'
+import {IGetMaP, IGetMapApiParam, IPaneModelKey, IResizableContext} from '../@types'
 import {createMap} from '../utils/util'
 
 export const useResizableApi = (context: IResizableContext, props: any) => {
@@ -20,7 +20,8 @@ export const useResizableApi = (context: IResizableContext, props: any) => {
     const api = {
       restoreDefault,
       setVisibility,
-      getState
+      getState,
+      getMap: (...keys: IPaneModelKey[]) => createMap(contextDetails.panesList, ...keys)
     }
 
     onReady(api)

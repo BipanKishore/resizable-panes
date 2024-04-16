@@ -1,6 +1,6 @@
 import {createContext} from 'react'
 import {INoop, createMap, findById} from '../utils/util'
-import {DIRECTIONS, RATIO, SIZE, VISIBILITY, ZERO} from '../constant'
+import {DIRECTIONS, RATIO, SIZE, VISIBILITY} from '../constant'
 import {
   createPaneModelListAndResizerModelList,
   findIndexInChildrenbyId, afterMathOfResizerOverlapping, getPanesAndResizers, setDownMaxLimits,
@@ -8,7 +8,7 @@ import {
   setUISizesFn, setUpMaxLimits, syncAxisSizesFn
 } from '../utils/panes'
 import {
-  calculateAxes, setVirtualOrderList, goingDownLogic, goingUpLogic, setCurrentMinMax,
+  calculateAxes, setVirtualOrderList, movingLogic, setCurrentMinMax,
   toRatioModeFn
 } from '../utils/resizable-pane'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
@@ -92,11 +92,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       const isChangeRequired = setAxisConfig(e)
 
       if (isChangeRequired) {
-        if (movement > ZERO) {
-          goingDownLogic(e, contextDetails)
-        } else if (movement < ZERO) {
-          goingUpLogic(e, contextDetails)
-        }
+        movingLogic(e, contextDetails)
       }
       contextDetails.newVisibilityModel = false
       setUISizesFn(items, contextDetails.direction)

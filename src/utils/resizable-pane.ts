@@ -1,87 +1,51 @@
 import {IContextDetails, IResizableEvent, IResizableItem} from '../@types'
-import {DIRECTIONS, MINUS, MINUS_ONE, PLUS} from '../constant'
+import {DIRECTIONS, MINUS, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
-import {getList, localConsole, setPaneList} from './development-util/development-util'
+import {getList, setPaneList} from './development-util/development-util'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
-  getPanesSizeSum, getResizerSum, setResizersLimits, setUISizesFn, synPanesMaxToSize, synPanesMinToSize
+  getPanesSizeSum, getResizerSum, setUISizesFn, synPanesMaxToSize, synPanesMinToSize
 } from './panes'
 import {findIndex, isItUp} from './util'
 
 const reverse = <T>(list: T[]): T[] => [...list].reverse()
 const filterEmpty = (list: any[]) => list.filter(_ => _)
 
-export const goingDownLogic = (e: IResizableEvent, {
+export const movingLogic = (e: IResizableEvent, {
   axisCoordinate,
   decreasingItems,
-  increasingItems
+  increasingItems,
+  direction
 }: IContextDetails) => {
-  let sizeChange = e.mouseCoordinate - <number>axisCoordinate
+  let sizeChange: number
+  let decreasingItemsLocal = decreasingItems
+  let increasingItemsLocal = increasingItems
+  if (isItUp(direction)) {
+    sizeChange = axisCoordinate - e.mouseCoordinate
+    decreasingItemsLocal = reverse(decreasingItems)
+  } else {
+    sizeChange = e.mouseCoordinate - <number>axisCoordinate
+
+    increasingItemsLocal = reverse(increasingItems)
+  }
+
   if (sizeChange < 0) {
     // throw new Error('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
   } else if (sizeChange === 0) {
     return
   }
 
-  let sizeChangeUp = sizeChange
+  let reverseSizeChange = sizeChange
 
-  decreasingItems.forEach(item => {
+  decreasingItemsLocal.forEach(item => {
     sizeChange = item.changeSize(sizeChange, MINUS)
   })
 
-  sizeChangeUp -= sizeChange
+  reverseSizeChange -= sizeChange
 
-  reverse(increasingItems).forEach(item => {
-    sizeChangeUp = item.changeSize(sizeChangeUp, PLUS)
+  increasingItemsLocal.forEach(item => {
+    reverseSizeChange = item.changeSize(reverseSizeChange, PLUS)
   })
-
-  // ---------
-
-  // for (let i = idx + 1; i > MINUS_ONE; i--) {
-  //   sizeChangeUp = virtualOrderList[i].changeSize(sizeChangeUp, PLUS)
-  // }
-
-  // sizeChange -= sizeChangeUp
-
-  // for (let i = idx + 2; i < virtualOrderList.length; i += 1) {
-  //   sizeChange = virtualOrderList[i].changeSize(sizeChange, MINUS)
-  // }
-}
-
-export const goingUpLogic = (e: IResizableEvent, {
-  axisCoordinate,
-  decreasingItems,
-  increasingItems
-}: IContextDetails) => {
-  let sizeChange = axisCoordinate - e.mouseCoordinate
-  if (sizeChange < 0) {
-    // throw new Error('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
-  } else if (sizeChange === 0) {
-    return
-  }
-
-  let sizeChangeUp = sizeChange
-
-  reverse(decreasingItems).forEach(item => {
-    sizeChange = item.changeSize(sizeChange, MINUS)
-  })
-
-  sizeChangeUp -= sizeChange
-
-  increasingItems.forEach(item => {
-    sizeChangeUp = item.changeSize(sizeChangeUp, PLUS)
-  })
-
-  // console.log('goingUpLogic', idx, getList(virtualOrderList, 'id'))
-  // for (let i = idx + 2; i < virtualOrderList.length; i += 1) {
-  //   sizeChangeUp = virtualOrderList[i].changeSize(sizeChangeUp, PLUS)
-  // }
-
-  // sizeChange -= sizeChangeUp
-
-  // for (let i = idx; i > MINUS_ONE; i -= 1) {
-  //   sizeChange = virtualOrderList[i].changeSize(sizeChange, MINUS)
-  // }
 }
 
 const removeHidden = (list: IResizableItem[]) => list.filter(item => item.visibility)
