@@ -102,23 +102,20 @@ export class PaneModel {
     return this.isRegistered && this.visibility ? this.size : 0
   }
 
+  // No visibility check required here, we are only using this method for visible panes
   setVisibilitySize (sizeChange: number, operation: addAndRemoveType) {
     // we are never reducing here
     const newSize = this.size + (operation === PLUS ? sizeChange : -sizeChange)
     this.restoreLimits()
-    if (this.visibility) {
-      if (newSize >= this.minSize && newSize <= this.maxSize) {
-        this.size = newSize
-        return ZERO
-      } else if (newSize > this.maxSize) {
-        this.size = this.maxSize
-      } else {
-        this.size = this.minSize
-      }
-      return newSize - this.size
+    if (newSize >= this.minSize && newSize <= this.maxSize) {
+      this.size = newSize
+      return ZERO
+    } else if (newSize > this.maxSize) {
+      this.size = this.maxSize
     } else {
-      return newSize
+      this.size = this.minSize
     }
+    return newSize - this.size
   }
 
   setPartialHidden (direction: number) { // Will have to remove direction
@@ -151,10 +148,6 @@ export class PaneModel {
     } else {
       return sizeChange
     }
-  }
-
-  setFixSize (size: number) {
-    this.size = size
   }
 
   setUISize (direction: number) {

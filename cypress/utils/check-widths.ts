@@ -30,13 +30,4 @@ export const checkWidthsAndSum = (sizesSum:number, sizeMap: ISizeMap) => {
     cy.get(`[data-cy=${key}]`)
       .should('have.css', 'width', toPx(sizeMap[key]))
   })
-
-  let _sizeSum = 0
-  keys.forEach((key) => {
-    _sizeSum += sizeMap[key]
-  })
-
-  cy.wrap({
-    _sizeSum
-  }).its('_sizeSum').should('equal', sizesSum)
 }

@@ -25,7 +25,7 @@ export const createMap = (paneList: PaneModel[], ...keys: IPaneModelKey[]) => {
   return map
 }
 
-export const isUndefinedOrNull = (value: any) => value === undefined || value === null
+// export const isUndefinedOrNull = (value: any) => value === undefined || value === null
 
 export const findIndex = (list: any[], value: any, key = 'id') =>
   list.findIndex((item) => item[key] === value)
@@ -57,6 +57,6 @@ export const getObj = <T> (obj: T, ...keys: (keyof T)[]) => {
 }
 
 export const isItUp = (direction: number) => direction === DIRECTIONS.UP
-export const isItDown = (direction: number) => direction === DIRECTIONS.DOWN
+// export const isItDown = (direction: number) => direction === DIRECTIONS.DOWN
 
 export const getResizerId = (paneId: string) => `${RESIZER}-${paneId}`

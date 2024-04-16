@@ -13,6 +13,7 @@ interface IRCy {
     maxInitialPaneSize?: number,
     len?: number,
     height?: number,
+    plainResizer?:boolean
 }
 
 export class RCy {
@@ -37,6 +38,7 @@ export class RCy {
   paneIds: string[]
   resizerIds: string[]
   vertical: boolean
+  plainResizer: boolean
 
   get viewPortDimention () {
     return [this.viewPortXLen, this.viewPortYLen]
@@ -49,11 +51,13 @@ export class RCy {
       maxInitialPaneSize = 1000,
       height = 500,
       len = 5,
-      vertical
+      vertical,
+      plainResizer = false
     } = model
 
     this.vertical = vertical
     this.containerId = containerId
+    this.plainResizer = plainResizer
 
     this.resizerSize = resizerSize
     this.maxInitialPaneSize = maxInitialPaneSize
@@ -61,7 +65,7 @@ export class RCy {
 
     this.containerYLen = height
     this.containerXLen = this.maxInitialPaneSize + (this.len - 1) * this.resizerSize
-
+    console.log('containerXLen', this.containerXLen)
     this.viewPortXLen = this.containerXLen + (2 * VIEW_PORT_PADDING)
     this.viewPortYLen = this.containerYLen + (2 * VIEW_PORT_PADDING)
 
@@ -87,23 +91,47 @@ export class RCy {
     return cy.get(`[data-cy=${cyId}]`)
   }
 
-  checkWidths (sizes: ISizeMap | number[]) {
-    console.log('this.itemItems', this.itemItems)
-
+  toSizeMap (sizes: ISizeMap | number[], checkSum = false) {
+    let sizeMap : any = {}
+    let _sizeSum = 0
     if (Array.isArray(sizes)) {
-      const sizeMap : any = {}
       this.itemItems.forEach((id, i) => {
-        sizeMap[id] = sizes[i]
+        let size = sizes[i]
+        _sizeSum += size
+        if (this.plainResizer && i % 2) {
+          if (size === 2) {
+            size = 12
+          } if (size === 0) {
+            size = 10
+          }
+        }
+        sizeMap[id] = size
       })
-
-      checkWidths(sizeMap, this.vertical)
     } else {
-      checkWidths(sizes, this.vertical)
+      sizeMap = sizes
+      Object.keys(sizeMap).forEach((key) => {
+        _sizeSum += sizeMap[key]
+      })
     }
+
+    if (checkSum) {
+      cy.wrap({
+        _sizeSum
+      }).its('_sizeSum').should('equal', this.containerXLen)
+    }
+
+    return sizeMap
   }
 
-  checkWidthsAndSum (sizeMap: ISizeMap) {
-    checkWidthsAndSum(this.containerXLen, sizeMap)
+  checkWidths (sizes: ISizeMap | number[]) {
+    const sizeMap = this.toSizeMap(sizes)
+    checkWidths(sizeMap, this.vertical)
+  }
+
+  checkWidthsAndSum (sizes: ISizeMap | number[]) {
+    const sizeMap = this.toSizeMap(sizes, true)
+
+    checkWidths(sizeMap, this.vertical)
   }
 
   getResizableIds () {
