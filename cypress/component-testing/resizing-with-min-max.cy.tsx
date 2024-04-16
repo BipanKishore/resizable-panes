@@ -1,9 +1,12 @@
 import {ENUMS} from '../components/test-component-wrapper'
 import React from 'react'
 import {RCy} from '../utils'
-import {TestComponentWrapperWithMinMax} from '../components/test-component-wrapper-with-min-max'
+import {Pane, ResizablePanes} from '../../src'
+import {CustomResizerFirst} from '../components/custom-resizer'
 
-const rCy = new RCy()
+const containerId = ENUMS.resizablePanesId
+
+const rCy = new RCy({containerId})
 const {resizerSize} = rCy
 
 const {
@@ -12,11 +15,42 @@ const {
   paneIds: [P0, P1, P2, P3, P4]
 } = rCy.getResizableIds()
 
-describe('Rezing with min max limits', () => {
+describe('Resizing with min max limits with no resizerSize', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
-      <TestComponentWrapperWithMinMax />
+      <div
+        className='h-100p w-100p'
+      >
+
+        <ResizablePanes
+          className=''
+          resizer={
+            <CustomResizerFirst size={10} />
+            }
+          storageApi={localStorage}
+          uniqueId={containerId}
+          unit='ratio'
+          vertical
+        >
+          <Pane className='bg-red-500' id='P0' maxSize={3} minSize={0.1} size={1}>
+          </Pane>
+
+          <Pane className='bg-orange-500' id='P1' minSize={1} size={3}>
+          </Pane>
+
+          <Pane className='bg-lime-500' id='P2' maxSize={3} minSize={1} size={2}>
+          </Pane>
+
+          <Pane className='bg-orange-500' id='P3' minSize={1} size={3}>
+          </Pane>
+
+          <Pane className='bg-red-500' id='P4' maxSize={3} minSize={0.1} size={1}>
+          </Pane>
+
+        </ResizablePanes>
+
+      </div>
     )
   })
 

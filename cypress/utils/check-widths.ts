@@ -4,12 +4,14 @@ export interface ISizeMap {
     [key:string]: number
   }
 
-export const checkWidths = (sizeMap: ISizeMap, sizesSum?:number) => {
+export const checkWidths = (sizeMap: ISizeMap, vertical = true, sizesSum?:number) => {
   const keys = Object.keys(sizeMap)
+
+  const sizeKey = vertical ? 'width' : 'height'
 
   keys.forEach((key) => {
     cy.get(`[data-cy=${key}]`)
-      .should('have.css', 'width', toPx(sizeMap[key]))
+      .should('have.css', sizeKey, toPx(sizeMap[key]))
   })
 
   if (sizesSum) {

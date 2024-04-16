@@ -7,6 +7,7 @@ import {
 } from './utils'
 
 interface IRCy {
+  vertical?: boolean,
   containerId?: string,
     resizerSize?: number,
     maxInitialPaneSize?: number,
@@ -35,6 +36,7 @@ export class RCy {
   itemItems: string[]
   paneIds: string[]
   resizerIds: string[]
+  vertical: boolean
 
   get viewPortDimention () {
     return [this.viewPortXLen, this.viewPortYLen]
@@ -46,9 +48,11 @@ export class RCy {
       resizerSize = 10,
       maxInitialPaneSize = 1000,
       height = 500,
-      len = 5
+      len = 5,
+      vertical
     } = model
 
+    this.vertical = vertical
     this.containerId = containerId
 
     this.resizerSize = resizerSize
@@ -92,14 +96,10 @@ export class RCy {
         sizeMap[id] = sizes[i]
       })
 
-      checkWidths(sizeMap)
+      checkWidths(sizeMap, this.vertical)
     } else {
-      checkWidths(sizes)
+      checkWidths(sizes, this.vertical)
     }
-  }
-
-  checkWidthInArray (sizes: number[]) {
-    console.log('this.itemItems', this.itemItems)
   }
 
   checkWidthsAndSum (sizeMap: ISizeMap) {

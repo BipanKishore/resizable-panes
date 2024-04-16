@@ -5,6 +5,10 @@
     height: 300px;
 }
 
+.h-500{
+  height: 500px;
+}
+
 
 .bg-slate-200{
     background-color: rgb(226 232 240);
@@ -37,6 +41,14 @@
 
 .justify-context{
   justify-content: center;
+}
+
+.justify-content-center{
+  justify-content: center;
+}
+
+.m-10{
+  margin: 10px;
 }
 
 
@@ -110,6 +122,10 @@
     flex-direction: row;
 }
 
+
+.border-box {
+  box-sizing: border-box;
+}
 .p-2px{
     padding: 2px;
 }

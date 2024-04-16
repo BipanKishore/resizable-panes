@@ -35,7 +35,8 @@ interface IIDMap {
   [id: string]: boolean
 }
 
-export const TestComponentWrapper = () => {
+export const TestComponentWrapper = (props: any) => {
+  const {vertical = true} = props
   const [visibilityMap, setVisibilityMap] = useState<IIDMap>(ENUMS.initialVisibility)
   const [resizablePanesVisibility, setResizablePanesVisibility] = useState(true)
 
@@ -52,28 +53,31 @@ export const TestComponentWrapper = () => {
 
   return (
     <div className='h-100p w-100p' >
-      <button
-        data-cy="hide-resizable-panes"
-        onClick={() => setResizablePanesVisibility(!resizablePanesVisibility)}
-      >Hide All
-      </button>
 
-      <button
-        data-cy="restore-default"
-        onClick={() => apiRef.current.restoreDefault()}
-      >
-        Restore Default
-      </button>
+      <div className='d-flex justify-content-center m-10'>
+        <button
+          data-cy="hide-resizable-panes"
+          onClick={() => setResizablePanesVisibility(!resizablePanesVisibility)}
+        >Hide All
+        </button>
 
-      <button
-        data-cy="get-map"
-        onClick={() => apiRef.current.getState()}
-      >
-        Restore Default
-      </button>
+        <button
+          data-cy="restore-default"
+          onClick={() => apiRef.current.restoreDefault()}
+        >
+          Restore Default
+        </button>
+
+        <button
+          data-cy="get-map"
+          onClick={() => apiRef.current.getState()}
+        >
+          Get State
+        </button>
+      </div>
 
       <div
-        className='h-100p w-100p'
+        className='h-300 w-100p'
       >
 
         {
@@ -81,31 +85,36 @@ export const TestComponentWrapper = () => {
           <ResizablePanes
             className=''
             resizer={
-              <CustomResizerFirst size={10} />
+              <CustomResizerFirst horizontal={!vertical} size={10} />
             }
             resizerSize={10}
             storageApi={localStorage}
             uniqueId={ENUMS.resizablePanesId}
             unit='ratio'
-            vertical
+            vertical={vertical}
             visibility={visibilityMap}
             onReady={(api) => {
               apiRef.current = api
             }}
           >
             <Panes className='bg-red-500' id='P0' size={1}>
+              P0
             </Panes>
 
             <Panes className='bg-orange-500' id='P1' size={3}>
+              P1
             </Panes>
 
             <Panes className='bg-lime-500' id='P2' size={2}>
+              P2
             </Panes>
 
             <Panes className='bg-orange-500' id='P3' size={3}>
+              P3
             </Panes>
 
             <Panes className='bg-red-500' id='P4' size={1}>
+              P4
             </Panes>
 
           </ResizablePanes>
