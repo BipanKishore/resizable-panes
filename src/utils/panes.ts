@@ -140,7 +140,7 @@ export const createPaneModelListAndResizerModelList = (
 }
 
 export const setResizersLimits = (contextDetails: IContextDetails) => {
-  const {virtualActiveIndex, items, direction, virtualOrderList, resizersList} = contextDetails
+  const {virtualActiveIndex, direction, virtualOrderList, resizersList} = contextDetails
 
   resizersList.forEach((item) => {
     item.defaultMinSize = 0
@@ -180,43 +180,6 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
     })
   }
 
-  // if (isItUp(direction)) {
-  //   for (let i = virtualActiveIndex - 2; i > -1; i -= 2) {
-  //     const resizer = virtualOrderList[i]
-  //     const pane = virtualOrderList[i - 1] as ResizerModel
-  //     if (pane && resizer) {
-  //       resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
-  //       resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
-  //     }
-  //   }
-
-  //   for (let i = virtualActiveIndex + 2; i < virtualOrderList.length; i += 2) {
-  //     const resizer = virtualOrderList[i]
-  //     const pane = virtualOrderList[i + 1] as ResizerModel
-  //     if (pane && resizer) {
-  //       resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
-  //       resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
-  //     }
-  //   }
-  // } else {
-  //   for (let i = virtualActiveIndex - 2; i > -1; i -= 2) {
-  //     const resizer = virtualOrderList[i]
-  //     const pane = virtualOrderList[i - 1] as ResizerModel
-  //     if (pane && resizer) {
-  //       resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
-  //       resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
-  //     }
-  //   }
-
-  //   for (let i = virtualActiveIndex + 2; i < virtualOrderList.length; i += 2) {
-  //     const resizer = virtualOrderList[i]
-  //     const pane = virtualOrderList[i + 1] as ResizerModel
-  //     if (pane && resizer) {
-  //       resizer.defaultMinSize = pane.defaultMinSize === 0 ? 0 : resizer.defaultSize
-  //       resizer.defaultMaxSize = resizer.visibility ? resizer.defaultMaxSize : 0
-  //     }
-  //   }
-  // }
   console.log('defaultMinSize ', getList(resizersList, 'defaultMinSize'))
   console.log('defaultMaxSize ', getList(resizersList, 'defaultMaxSize'))
 }

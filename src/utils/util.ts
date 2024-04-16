@@ -1,4 +1,4 @@
-import {IAnyMap, IPaneModelKey, IResizableItem} from '../@types'
+import {IAnyMap, IPaneModelKey} from '../@types'
 import {DIRECTIONS, RESIZER} from '../constant'
 import {PaneModel} from '../models/pane-model'
 
@@ -47,7 +47,7 @@ export const addDefaultProps = (props: any, defaultProps: any) => {
   return newProps
 }
 
-export const getObj = <T> (obj: T, ...keys: (keyof T)[]) => {
+export const filterKeys = <T> (obj: T, ...keys: (keyof T)[]) => {
   const retObj: any = {}
   keys.forEach(key => {
     retObj[key] = obj[key as keyof T]

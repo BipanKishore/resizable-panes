@@ -5,7 +5,7 @@ import {
 } from '../@types'
 import {DIRECTIONS, PLUS, ZERO} from '../constant'
 import {ResizeStorage} from '../utils/storage'
-import {getObj, noop, ratioAndRoundOff} from '../utils/util'
+import {filterKeys, noop, ratioAndRoundOff} from '../utils/util'
 import {ResizerModel} from './resizer-model'
 import {checkPaneModelErrors} from './utils'
 
@@ -91,7 +91,7 @@ export class PaneModel {
   }
 
   getStoreModel (): IStoreResizableItemsModel {
-    const t = getObj(this, 'id', 'size', 'defaultSize', 'defaultMinSize', 'visibility', 'storedSize')
+    const t = filterKeys(this, 'id', 'size', 'defaultSize', 'defaultMinSize', 'visibility', 'storedSize')
     return {
       ...t,
       defaultMaxSize: this.defaultMaxSize.toString()

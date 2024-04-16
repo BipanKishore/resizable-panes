@@ -58,7 +58,7 @@ export const changeSizeInRatio = (panesList: PaneModel[], actionList: number[], 
 
 export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBoolMap) => {
   const {
-    panesList, resizersList, items
+    panesList, items
   } = contextDetails
 
   const visiblePanesIndexes: number[] = []
