@@ -1,11 +1,12 @@
 import {createContext} from 'react'
-import {INoop, createMap, findById} from '../utils/util'
+import {createMap, findById} from '../utils/util'
 import {DIRECTIONS, RATIO, SIZE, VISIBILITY} from '../constant'
 import {
   createPaneModelListAndResizerModelList,
-  findIndexInChildrenbyId, afterMathOfResizerOverlapping, getPanesAndResizers, setDownMaxLimits,
+  findIndexInChildrenbyId, getPanesAndResizers, setDownMaxLimits,
   setResizersLimits,
-  setUISizesFn, setUpMaxLimits, syncAxisSizesFn
+  setUISizesFn, setUpMaxLimits, syncAxisSizesFn,
+  fixPartialHiddenResizer
 } from '../utils/panes'
 import {
   calculateAxes, setVirtualOrderList, movingLogic, setCurrentMinMax,
@@ -16,7 +17,6 @@ import {ResizeStorage} from '../utils/storage'
 import {IKeyToBoolMap, IResizableContext, IResizablePaneProviderProps} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {setVisibilityFn} from '../utils/api'
-import {getList} from '../utils/development-util/development-util'
 
 export const getResizableContext = (props: IResizablePaneProviderProps): IResizableContext => {
   const {
@@ -188,7 +188,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       onResizeStop(resizeParams)
     }
 
-    afterMathOfResizerOverlapping(contextDetails)
+    fixPartialHiddenResizer(contextDetails)
     storage.setStorage(contextDetails)
   }
 

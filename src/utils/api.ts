@@ -1,14 +1,12 @@
-import {IContextDetails, IKeyToBoolMap, IResizableItem} from '../@types'
+import {IContextDetails, IKeyToBoolMap} from '../@types'
 import {DIRECTIONS, MINUS, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
 import {ResizerModel} from '../models/resizer-model'
-import {getList} from './development-util/development-util'
 import {
   change1PixelToPanes, getPanesSizeSum,
   getSizeByIndexes, setUISizesFn
 } from './panes'
 import {getMaxContainerSizes} from './resizable-pane'
-import {findIndex, getResizerId, isItUp} from './util'
 
 // Need to check for hidden element
 export const restoreDefaultFn = ({items}: any) => {
@@ -83,31 +81,6 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
 
   setUISizesFn(items, DIRECTIONS.NONE)
 }
-
-// export const findLeftVisibleAdjasentResizer = (items: IResizableItem[], id: string) => {
-//   const itemIndex = findIndex(items, id)
-
-//   const RIGHT = 1
-//   const LEFT = 2
-
-//   const find = (index: number, direction: number): any => {
-//     const resizer = items[index + (direction === RIGHT ? 1 : -1)] as ResizerModel
-//     if (resizer) {
-//       if (resizer.visibility) {
-//         return resizer
-//       } else {
-//         return find(index + (direction === RIGHT ? 2 : -2), direction)
-//       }
-//     }
-//   }
-
-//   const leftResizer = find(itemIndex, LEFT)
-//   const rightResizer = find(itemIndex, RIGHT)
-//   return {
-//     leftResizer,
-//     rightResizer
-//   }
-// }
 
 // aIndex - PreviousIndex
 // bIndex - NextIndex
