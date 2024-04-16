@@ -4,14 +4,16 @@ import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
 import {ResizerModel} from '../models/resizer-model'
 import {PLUS} from '../constant'
-import {getList, localConsole} from './development-util'
+import {getList, localConsole} from './development-util/development-util'
 import {isItUp} from './util'
 
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
   panesList.forEach(pane => pane.syncAxisSize())
 
-export const setUISizesFn = (modelList: IResizableItem[], direction: number) =>
+export const setUISizesFn = (modelList: IResizableItem[], direction: number) => {
   modelList.forEach((pane: IResizableItem) => pane.setUISize(direction))
+  console.log('>>>>>>>>>>>>>>>>>>size ', modelList.map((r) => r.getSize()))
+}
 
 export function getSum <T> (list: T[], getNumber: (item:T) => number, start = 0, end = list.length - 1) {
   let sum = 0
@@ -151,10 +153,10 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
   resizerHandle.defaultMaxSize = resizerHandle.defaultSize
   console.log('setResizersLimits')
   if (isItUp(direction)) {
-    items.forEach((item, index) => {
+    virtualOrderList.forEach((item, index) => {
       if (item.isHandle) {
         if (index < virtualActiveIndex) {
-          item.defaultMinSize = items[index - 1].defaultMinSize === 0 ? 0 : item.defaultSize
+          item.defaultMinSize = virtualOrderList[index - 1].defaultMinSize === 0 ? 0 : item.defaultSize
           item.defaultMaxSize = item.defaultSize
         }
         if (index > virtualActiveIndex) {
@@ -164,14 +166,14 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
       }
     })
   } else {
-    items.forEach((item, index) => {
+    virtualOrderList.forEach((item, index) => {
       if (item.isHandle) {
         if (index < virtualActiveIndex) {
           item.defaultMinSize = 0
           item.defaultMaxSize = item.defaultSize
         }
         if (index > virtualActiveIndex) {
-          item.defaultMinSize = items[index - 1].defaultMinSize === 0 ? 0 : item.defaultSize
+          item.defaultMinSize = virtualOrderList[index - 1].defaultMinSize === 0 ? 0 : item.defaultSize
           item.defaultMaxSize = item.defaultSize
         }
       }
@@ -215,8 +217,8 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
   //     }
   //   }
   // }
-  // console.log('defaultMinSize ', getList(resizersList, 'defaultMinSize'))
-  // console.log('defaultMaxSize ', getList(resizersList, 'defaultMaxSize'))
+  console.log('defaultMinSize ', getList(resizersList, 'defaultMinSize'))
+  console.log('defaultMaxSize ', getList(resizersList, 'defaultMaxSize'))
 }
 
 // We increases the size of element in opposite direction than in the direction

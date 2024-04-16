@@ -1,7 +1,7 @@
 import {IContextDetails, IResizableEvent, IResizableItem} from '../@types'
 import {DIRECTIONS, MINUS, MINUS_ONE, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
-import {getList, localConsole, setPaneList} from './development-util'
+import {getList, localConsole, setPaneList} from './development-util/development-util'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
   getPanesSizeSum, getResizerSum, setResizersLimits, setUISizesFn, synPanesMaxToSize, synPanesMinToSize

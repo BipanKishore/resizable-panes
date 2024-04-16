@@ -2,7 +2,7 @@ import {IContextDetails, IKeyToBoolMap, IResizableItem} from '../@types'
 import {DIRECTIONS, MINUS, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
 import {ResizerModel} from '../models/resizer-model'
-import {getList} from './development-util'
+import {getList} from './development-util/development-util'
 import {
   change1PixelToPanes, getPanesSizeSum,
   getSizeByIndexes, setUISizesFn

@@ -32,6 +32,10 @@ export class RCy {
 
   containerId: string
 
+  itemItems: string[]
+  paneIds: string[]
+  resizerIds: string[]
+
   get viewPortDimention () {
     return [this.viewPortXLen, this.viewPortYLen]
   }
@@ -79,8 +83,23 @@ export class RCy {
     return cy.get(`[data-cy=${cyId}]`)
   }
 
-  checkWidths (sizeMap: ISizeMap) {
-    checkWidths(sizeMap)
+  checkWidths (sizes: ISizeMap | number[]) {
+    console.log('this.itemItems', this.itemItems)
+
+    if (Array.isArray(sizes)) {
+      const sizeMap : any = {}
+      this.itemItems.forEach((id, i) => {
+        sizeMap[id] = sizes[i]
+      })
+
+      checkWidths(sizeMap)
+    } else {
+      checkWidths(sizes)
+    }
+  }
+
+  checkWidthInArray (sizes: number[]) {
+    console.log('this.itemItems', this.itemItems)
   }
 
   checkWidthsAndSum (sizeMap: ISizeMap) {
@@ -90,7 +109,21 @@ export class RCy {
   getResizableIds () {
     const paneIds = getPaneIds(this.len)
     const resizerIds = paneIds.map((id) => `resizer-${id}`)
+    resizerIds.pop()
     const checkboxIds = paneIds.map((id) => `checkbox-${id}`)
+
+    this.paneIds = paneIds
+    this.resizerIds = resizerIds
+
+    const itemItems: string[] = []
+
+    paneIds.forEach((id, i) => {
+      itemItems.push(id, resizerIds[i])
+    })
+
+    itemItems.pop()
+
+    this.itemItems = itemItems
 
     return {
       resizerIds,

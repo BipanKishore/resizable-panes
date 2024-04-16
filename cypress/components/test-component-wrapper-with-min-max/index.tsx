@@ -96,13 +96,13 @@ export const TestComponentWrapperWithMinMax = () => {
             <Panes className='bg-red-500' id='P0' maxSize={3} minSize={0.1} size={1}>
             </Panes>
 
-            <Panes className='bg-orange-500' id='P1' maxSize={10} minSize={1} size={3}>
+            <Panes className='bg-orange-500' id='P1' minSize={1} size={3}>
             </Panes>
 
             <Panes className='bg-lime-500' id='P2' maxSize={3} minSize={1} size={2}>
             </Panes>
 
-            <Panes className='bg-orange-500' id='P3' maxSize={10} minSize={1} size={3}>
+            <Panes className='bg-orange-500' id='P3' minSize={1} size={3}>
             </Panes>
 
             <Panes className='bg-red-500' id='P4' maxSize={3} minSize={0.1} size={1}>

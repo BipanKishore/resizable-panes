@@ -3,6 +3,6 @@
         "@babel/preset-typescript", "@babel/preset-env", "@babel/preset-react"
     ],
     "plugins": [["istanbul", {
-        "exclude": ["cypress", "cy-env"]
+        "exclude": ["cypress", "src/utils/development-util"]
       }]]
 }

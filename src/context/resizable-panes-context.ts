@@ -16,6 +16,7 @@ import {ResizeStorage} from '../utils/storage'
 import {IKeyToBoolMap, IResizableContext, IResizablePaneProviderProps} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {setVisibilityFn} from '../utils/api'
+import {getList} from '../utils/development-util/development-util'
 
 export const getResizableContext = (props: IResizablePaneProviderProps): IResizableContext => {
   const {
@@ -100,7 +101,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       contextDetails.newVisibilityModel = false
       setUISizesFn(items, contextDetails.direction)
       // console.log('visPartiallyHidden ', getList(resizersList, 'isPartiallyHidden'))
-      // console.log('maxSize ', getList(resizersList, 'maxSize'))
     }
   }
 
