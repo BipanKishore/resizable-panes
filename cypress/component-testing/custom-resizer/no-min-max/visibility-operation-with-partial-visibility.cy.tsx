@@ -41,7 +41,6 @@ describe('Move Panes on', () => {
       }
         resizerSize={10}
         uniqueId={ENUMS.resizablePanesId}
-        unit='ratio'
         vertical
       />
     )
