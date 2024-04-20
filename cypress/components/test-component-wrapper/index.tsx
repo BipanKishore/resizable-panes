@@ -90,7 +90,6 @@ export const TestComponentWrapper = (props: any) => {
             resizerSize={10}
             storageApi={localStorage}
             uniqueId={ENUMS.resizablePanesId}
-            unit='ratio'
             vertical={vertical}
             visibility={visibilityMap}
             onReady={(api) => {
