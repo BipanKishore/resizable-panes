@@ -15,7 +15,6 @@ export class PaneModel {
   isPartiallyHidden: boolean = false
   partialHiddenDirection = DIRECTIONS.NONE
   hiddenResizer: IHiddenResizer = 'none'
-  prevHiddenResizer: IHiddenResizer = 'none'
   resizerSize: number
 
   id: string
@@ -118,26 +117,6 @@ export class PaneModel {
     return newSize - this.size
   }
 
-  // setPartialHidden (direction: number) { // Will have to remove direction
-  //   if (this.isHandle) {
-  //     this.isPartiallyHidden = this.size < this.defaultSize
-  //     console.log(this.id, this.isPartiallyHidden, this.size, this.defaultSize)
-  //     if (this.isPartiallyHidden) {
-  //       if (this.size !== this.preSize) {
-  //         this.partialHiddenDirection = direction
-  //       }
-  //     } else {
-  //       this.partialHiddenDirection = DIRECTIONS.NONE
-  //     }
-  //   }
-
-  //   this.preSize = this.size
-  // }
-
-  setPrevHiddenResizer () {
-    this.prevHiddenResizer = this.hiddenResizer
-  }
-
   setHiddenResizer (newSize: number, direction: number) {
     if (!this.isHandle) {
       if (newSize < 0) {
@@ -185,9 +164,7 @@ export class PaneModel {
   setUISize (direction: number) {
     if (this.api) {
       this.api.setSize(this.visibility ? this.size : 0)
-      // this.setPartialHidden(direction)
     }
-    // this.setPartialForPane(direction)
     this.preSize = this.size
   }
 
@@ -301,16 +278,6 @@ export class PaneModel {
       this[key] = this[key] + change
     }
   }
-
-  // setPartialVisibleSize (isPartiallyHidden: boolean) {
-  //   if (this.isPartiallyHidden) {
-  //     return
-  //   }
-  //   this.isPartiallyHidden = isPartiallyHidden
-  //   this.size = isPartiallyHidden
-  //     ? 0
-  //     : this.resizerSize ? this.resizerSize : this.api.getVisibleSize()
-  // }
 
   setVisibilityHelper (isPartiallyHidden: boolean = false) {
     if (this.isHandle) {
