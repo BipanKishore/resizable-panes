@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import {
   IHiddenResizer,
   IPaneNumericKeys, IResizablePaneProviderProps,
@@ -173,21 +172,17 @@ export class PaneModel {
 
     this.setHiddenResizerWhileMovement(newSize, direction)
 
-    if (this.visibility) {
-      if (newSize >= this.minSize && newSize <= this.maxSize) {
-        this.size = newSize
-        this.clearHiddenResizer()
-        return ZERO
-      } else if (newSize > this.maxSize) {
-        this.size = this.maxSize
-      } else {
-        this.size = this.minSize
-      }
+    if (newSize >= this.minSize && newSize <= this.maxSize) {
+      this.size = newSize
       this.clearHiddenResizer()
-      return Math.abs(this.size - newSize)
+      return ZERO
+    } else if (newSize > this.maxSize) {
+      this.size = this.maxSize
     } else {
-      return sizeChange
+      this.size = this.minSize
     }
+    this.clearHiddenResizer()
+    return Math.abs(this.size - newSize)
   }
 
   // setPartialForPane (direction: number) {
@@ -350,15 +345,15 @@ export class PaneModel {
     }
   }
 
-  setPartialVisibleSize (isPartiallyHidden: boolean) {
-    if (this.isPartiallyHidden) {
-      return
-    }
-    this.isPartiallyHidden = isPartiallyHidden
-    this.size = isPartiallyHidden
-      ? 0
-      : this.resizerSize ? this.resizerSize : this.api.getVisibleSize()
-  }
+  // setPartialVisibleSize (isPartiallyHidden: boolean) {
+  //   if (this.isPartiallyHidden) {
+  //     return
+  //   }
+  //   this.isPartiallyHidden = isPartiallyHidden
+  //   this.size = isPartiallyHidden
+  //     ? 0
+  //     : this.resizerSize ? this.resizerSize : this.api.getVisibleSize()
+  // }
 
   setVisibilityHelper (isPartiallyHidden: boolean = false) {
     if (this.isHandle) {
