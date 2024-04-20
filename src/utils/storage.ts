@@ -15,6 +15,7 @@ export class ResizeStorage {
   uniqueId: string
   storageApi: any
   empty = false
+
   constructor (uniqueId: string, storageApi: any, panesComponents: ReactElement[]) {
     this.uniqueId = uniqueId
     this.storageApi = storageApi

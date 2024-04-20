@@ -43,6 +43,20 @@ export const moveRightEvent = (clientX: number) => {
   }
 }
 
+export const moveButtomEvent = (clientY: number) => {
+  return {
+    clientY,
+    movementY: LEFT_MOVEMENT_VALUE
+  }
+}
+
+export const moveTopEvent = (clientY: number) => {
+  return {
+    clientY,
+    movementY: RIGHT_MOVEMENT_VALUE
+  }
+}
+
 export const moveLeftEvent = (clientX: number) => {
   return {
     clientX,
@@ -91,6 +105,28 @@ export const moveElementRight = (cyId: string, start: number, end: number, isTou
   }
 }
 
+export const moveElementButtom = (cyId: string, start: number, end: number, isTouch = false) => {
+  const firstEvent = moveButtomEvent(start + 1)
+  const secondEvent = moveButtomEvent(end)
+
+  if (isTouch) {
+    moveElementWithTouch(cyId, firstEvent, secondEvent)
+  } else {
+    moveElement(cyId, firstEvent, secondEvent)
+  }
+}
+
+export const moveElementTop = (cyId: string, start: number, end: number, isTouch = false) => {
+  const firstEvent = moveTopEvent(start + 1)
+  const secondEvent = moveTopEvent(end)
+
+  if (isTouch) {
+    moveElementWithTouch(cyId, firstEvent, secondEvent)
+  } else {
+    moveElement(cyId, firstEvent, secondEvent)
+  }
+}
+
 export const moveElementLeft = (cyId: string, start: number, end: number, isTouch = false) => {
   const firstEvent = moveLeftEvent(start - 1)
   const secondEvent = moveLeftEvent(end)
@@ -131,22 +167,36 @@ export const move = (sourceCyId: string, targetCyId: string,
   position: 'right' | 'left' | 'top' | 'bottom' = 'right',
   addOn: number = 0) => {
   getRects(sourceCyId, targetCyId)
+    // eslint-disable-next-line complexity
     .then(([
       sourceRect,
       targetRect
     ]: any) => {
       console.log(sourceRect, targetRect)
+      const vertical = ['right', 'left'].includes(position)
 
-      const {x: resizerX, width} = sourceRect
-      const widthHalf = width / 2
-      const mouseDownX = resizerX + widthHalf
+      const sourceSize = sourceRect[vertical ? 'width' : 'height']
+
+      const sourceCoordinate = sourceRect[vertical ? 'x' : 'y']
+
+      const sourceHalfSize = sourceSize / 2
+
+      const mouseDownX = sourceCoordinate + sourceHalfSize
 
       const finalCoordinate = targetRect[position] + addOn
 
-      if (resizerX < finalCoordinate) {
-        moveElementRight(sourceCyId, mouseDownX + widthHalf - 1, finalCoordinate)
+      if (sourceCoordinate < finalCoordinate) {
+        if (vertical) {
+          moveElementRight(sourceCyId, mouseDownX + sourceHalfSize - 1, finalCoordinate)
+        } else {
+          moveElementTop(sourceCyId, mouseDownX + sourceHalfSize - 1, finalCoordinate)
+        }
       } else {
-        moveElementLeft(sourceCyId, mouseDownX - widthHalf + 1, finalCoordinate)
+        if (vertical) {
+          moveElementLeft(sourceCyId, mouseDownX - sourceHalfSize + 1, finalCoordinate)
+        } else {
+          moveElementButtom(sourceCyId, mouseDownX + sourceHalfSize - 1, finalCoordinate)
+        }
       }
     })
 }
