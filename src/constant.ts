@@ -19,3 +19,7 @@ export const VISIBILITY = 'visibility'
 export const SIZE = 'size'
 export const PLUS = '+'
 export const MINUS = '-'
+
+export const LEFT = 'left'
+export const RIGHT = 'right'
+export const NONE = 'none'

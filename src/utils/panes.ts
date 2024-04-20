@@ -3,55 +3,43 @@ import {IContextDetails, IHiddenResizer, IResizableItem, IResizablePaneProviderP
 import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
 import {ResizerModel} from '../models/resizer-model'
-import {DIRECTIONS, PLUS} from '../constant'
+import {DIRECTIONS, NONE, PLUS} from '../constant'
 import {getList, localConsole} from './development-util'
 import {isItDown, isItUp} from './util'
 
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
   panesList.forEach(pane => pane.syncAxisSize())
 
-const fixHiddenResizersOrder = (items: IResizableItem[], direction: number) => {
-  const upOrderList = [...items].reverse()
+// It fixes if two resizers face earch other
+const fixFacingHiddenResizersOrder = (items: IResizableItem[], direction: number) => {
+  let prevItemHiddenResizerOrder: IHiddenResizer = NONE
 
-  let prevItemHiddenResizerOrder: IHiddenResizer = 'none'
+  const fixFacingHiddenResizersOrderLogic = (item: IResizableItem) => {
+    if (!item.isHandle) {
+      if (prevItemHiddenResizerOrder !== NONE && item.hiddenResizer !== NONE) {
+        item.hiddenResizer = prevItemHiddenResizerOrder
+      }
+      prevItemHiddenResizerOrder = item.hiddenResizer
+    }
+  }
 
   if (isItUp(direction)) {
-    upOrderList.forEach((item) => {
-      if (!item.isHandle) {
-        // console.log('prevItemHiddenResizerOrder', item.id, prevItemHiddenResizerOrder, item.hiddenResizer)
-        if (prevItemHiddenResizerOrder !== 'none' && item.hiddenResizer !== 'none') {
-          item.hiddenResizer = prevItemHiddenResizerOrder
-        }
-        prevItemHiddenResizerOrder = item.hiddenResizer
-      }
-    })
+    const upOrderList = [...items].reverse()
+    upOrderList.forEach(fixFacingHiddenResizersOrderLogic)
   }
 
   if (isItDown(direction)) {
-    items.forEach((item) => {
-      if (!item.isHandle) {
-        // console.log('prevItemHiddenResizerOrder', item.id, prevItemHiddenResizerOrder, item.hiddenResizer)
-        if (prevItemHiddenResizerOrder !== 'none' && item.hiddenResizer !== 'none') {
-          item.hiddenResizer = prevItemHiddenResizerOrder
-        }
-        prevItemHiddenResizerOrder = item.hiddenResizer
-      }
-    })
+    items.forEach(fixFacingHiddenResizersOrderLogic)
   }
 }
 
 export const setUISizesFn = (items: IResizableItem[], direction: number) => {
   const panes = items.filter((i) => !i.isHandle)
-  const resizers = items.filter((i) => i.isHandle)
   panes.forEach((pane: IResizableItem) => pane.setUISize(direction))
-
-  // panes.forEach((pane: IResizableItem) => pane.setUISize(direction))
+  // above two may not require
 
   items.forEach((pane: IResizableItem) => pane.setUISize(direction))
-
-  fixHiddenResizersOrder(items, direction)
-  // setHiddenResizer(items)
-  // console.log('>>>>>>>>>>>>>>>>>>size ', modelList.map((r) => r.getSize()))
+  fixFacingHiddenResizersOrder(items, direction)
 }
 
 export function getSum <T> (list: T[], getNumber: (item:T) => number, start = 0, end = list.length - 1) {
