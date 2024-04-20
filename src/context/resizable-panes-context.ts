@@ -1,5 +1,5 @@
 import {createContext} from 'react'
-import {createMap, findById} from '../utils/util'
+import {attachResizer, createMap, findById} from '../utils/util'
 import {DIRECTIONS, RATIO, SIZE, VISIBILITY} from '../constant'
 import {
   createPaneModelListAndResizerModelList,
@@ -17,6 +17,7 @@ import {ResizeStorage} from '../utils/storage'
 import {IKeyToBoolMap, IResizableContext, IResizablePaneProviderProps} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {setVisibilityFn} from '../utils/api'
+import {consoleGetSize, directionToText, getList} from '../utils/development-util'
 
 export const getResizableContext = (props: IResizablePaneProviderProps): IResizableContext => {
   const {
@@ -35,6 +36,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   // reference will never change for these items: storage, panesList, resizersList
 
   const {panesList, resizersList} = getPanesAndResizers(items)
+
+  attachResizer(items)
 
   const contextDetails: any = {
     vertical,
@@ -111,6 +114,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   const directionChangeActions = (e: any) => {
+    console.log('directionChangeActions directionChangeActions ++++++++++++++++++++++++++++++++++++++++++')
     contextDetails.axisCoordinate = e.mouseCoordinate
 
     setVirtualOrderList(contextDetails)
@@ -165,6 +169,29 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     if (!newVisibilityModel) {
       contextDetails.newVisibilityModel = true
       panesList.forEach((pane: PaneModel) => pane.setOldVisibilityModel())
+
+      console.log('===================================================')
+
+      const isPreviousRight = false
+      let c
+      /// /////////////////////////////////// transfer left to right
+      items.forEach((item, i) => {
+        if (!item.isHandle) {
+          if (item.visibility) {
+            // c = item.hiddenResizer
+            // item.hiddenResizer = isPreviousRight ? 'left' : item.hiddenResizer
+            // isPreviousRight = c === 'right'
+            // item.hiddenResizer = item.hiddenResizer === 'right' ? 'none' : item.hiddenResizer
+          }
+        }
+      }
+      )
+      // console.log('attachResizer Partial ++++++++++++++++++++++++++++++++++++++++++')
+      // items.forEach((i) => {
+      //   if (!i.isHandle) {
+      //     console.log('attachResizer Partial ', [i.id, i.hiddenResizer])
+      //   }
+      // })
     }
 
     setVisibilityFn(contextDetails, newMap)
@@ -190,6 +217,14 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
     fixPartialHiddenResizer(contextDetails)
     storage.setStorage(contextDetails)
+    consoleGetSize(items)
+
+    // console.log('attachResizer Partial ++++++++++++++++++++++++++++++++++++++++++')
+    // items.forEach((i) => {
+    //   if (!i.isHandle) {
+    //     console.log('attachResizer Partial ', [i.id, i.hiddenResizer])
+    //   }
+    // })
   }
 
   return {

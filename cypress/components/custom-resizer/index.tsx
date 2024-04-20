@@ -22,14 +22,14 @@ export const CustomResizerFirst = ({
     'd-flex custom-resizer-1st-parent h-100p w-100p border-box': true,
     'flex-column': vertical,
     'flex-row ': horizontal,
-    'p-2px': !isMouseDown,
-    'p-3px': isMouseDown,
+    // 'p-2px': !isMouseDown,
+    // 'p-3px': isMouseDown,
     'h-10': !size && horizontal,
     'w-10': !size && !horizontal
   })
 
   const childClassName = joinClassName({
-    'br-5 f-weight-800 white bg-slate-500': true,
+    'br-5 f-weight-800': true,
     'h-70p w-100p vertical-cursur resizer-text-vertical': vertical,
     'w-70p h-100p horizontal-cursur': horizontal,
     'f-size-8': isMouseDown,
@@ -53,6 +53,7 @@ export const CustomResizerFirst = ({
     >
       <div
         className={childClassName}
+        style={{fontSize: 'medium'}}
         onMouseDown={onMouseDown}
         onTouchStartCapture={onTouchStartCapture}
       >

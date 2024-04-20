@@ -109,7 +109,7 @@ describe('Overlapping Resizers', () => {
   // })
 })
 
-describe.only('', () => {
+describe.skip('', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(

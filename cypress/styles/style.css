@@ -101,6 +101,10 @@
     cursor: col-resize;
 }
   
+.text-align-center{
+  text-align: center;
+}
+
 .resizer-text-vertical {
     writing-mode: vertical-lr;
     text-orientation: upright;

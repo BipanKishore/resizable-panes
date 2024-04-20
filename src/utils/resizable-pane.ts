@@ -38,13 +38,13 @@ export const movingLogic = (e: IResizableEvent, {
   let reverseSizeChange = sizeChange
 
   decreasingItemsLocal.forEach(item => {
-    sizeChange = item.changeSize(sizeChange, MINUS)
+    sizeChange = item.changeSize(sizeChange, MINUS, direction)
   })
 
   reverseSizeChange -= sizeChange
 
   increasingItemsLocal.forEach(item => {
-    reverseSizeChange = item.changeSize(reverseSizeChange, PLUS)
+    reverseSizeChange = item.changeSize(reverseSizeChange, PLUS, direction)
   })
 }
 
@@ -71,8 +71,16 @@ export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) =>
     increasingItems = [visibleItems[visibleActiveIndex]]
 
     for (let i = visibleActiveIndex + 1; i < visibleItems.length; i += 2) {
-      increasingItems[i] = visibleItems[i + 1]
-      increasingItems[i + 1] = visibleItems[i] // it is pane
+      const pane = visibleItems[i]
+      // i - Pane
+      // i + 1 - Resizer
+      if (pane.size) {
+        increasingItems[i] = pane
+        increasingItems[i + 1] = visibleItems[i + 1] // it is pane
+      } else {
+        increasingItems[i] = visibleItems[i + 1]
+        increasingItems[i + 1] = pane // it is pane
+      }
     }
 
     virtualOrderList = [...decreasingItems, ...increasingItems]
@@ -81,8 +89,13 @@ export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) =>
 
     for (let i = visibleActiveIndex - 1; i > 0; i -= 2) {
       const pane = visibleItems[i]
-      increasingItems[i] = visibleItems[i - 1]
-      increasingItems[i - 1] = pane
+      if (pane.size) {
+        increasingItems[i] = pane
+        increasingItems[i - 1] = visibleItems[i - 1]
+      } else {
+        increasingItems[i] = visibleItems[i - 1]
+        increasingItems[i - 1] = pane
+      }
     }
 
     increasingItems.push(visibleItems[visibleActiveIndex])
@@ -90,6 +103,15 @@ export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) =>
     for (let i = visibleActiveIndex + 1; i < visibleItems.length; i += 2) {
       decreasingItems.push(visibleItems[i], visibleItems[i + 1])
     }
+
+    // for (let i = visibleActiveIndex + 1; i < visibleItems.length; i += 2) {
+    //   const pane = visibleItems[i]
+    //   if (pane.size) {
+    //     decreasingItems.push(visibleItems[i + 1], visibleItems[i])
+    //   } else {
+    //     decreasingItems.push(visibleItems[i], visibleItems[i + 1])
+    //   }
+    // }
 
     virtualOrderList = [...increasingItems, ...decreasingItems]
   }
@@ -127,7 +149,7 @@ export const setCurrentMinMax = (serviceRefCurrent: IContextDetails) => {
   const bMaxChangeDown = virtualOrderList[virtualActiveIndex].getMaxDiff()
   minMaxLogicDown(virtualOrderList, bMaxChangeDown - aMaxChangeDown, virtualActiveIndex, nextIdx, 0, containerSize)
 
-  console.log('items ', getList(virtualOrderList, 'id'))
+  // console.log('items ', getList(virtualOrderList, 'id'))
   console.log('minSize ', getList(virtualOrderList, 'minSize'))
   console.log('maxSize ', getList(virtualOrderList, 'maxSize'))
 }

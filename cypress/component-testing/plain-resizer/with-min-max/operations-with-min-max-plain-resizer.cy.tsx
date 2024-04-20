@@ -3,6 +3,7 @@ import {Pane} from '../../../../src'
 import {RCy} from '../../../utils'
 import {RPTestWrapper} from '../../../components/rp-test-wrapper'
 import {testResizablePanesId} from '../../../components/rp-test-wrapper/constant'
+import {withMinMaxEqualSize5PanesSet} from '../../pane-model-config-sets'
 
 const containerId = testResizablePanesId
 
@@ -20,25 +21,13 @@ describe('operations-with-min-max-plain-resizer', () => {
     rCy.setViewPort()
     cy.mount(
       <RPTestWrapper
+        panesList={withMinMaxEqualSize5PanesSet}
         storageApi={localStorage}
         uniqueId={containerId}
         unit='ratio'
+
         vertical
       >
-        <Pane className='bg-red-500' id='P0' maxSize={3} minSize={0.1} size={1}>
-        </Pane>
-
-        <Pane className='bg-orange-500' id='P1' minSize={1} size={3}>
-        </Pane>
-
-        <Pane className='bg-lime-500' id='P2' maxSize={3} minSize={1} size={2}>
-        </Pane>
-
-        <Pane className='bg-orange-500' id='P3' minSize={1} size={3}>
-        </Pane>
-
-        <Pane className='bg-red-500' id='P4' maxSize={3} minSize={0.1} size={1}>
-        </Pane>
 
       </RPTestWrapper>
 

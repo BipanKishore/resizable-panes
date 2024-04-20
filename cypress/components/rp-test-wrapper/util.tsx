@@ -20,8 +20,20 @@ const bgClasses = [
   'bg-amber-500', 'bg-green-500', 'bg-emerald-500', 'bg-teal-500']
 
 export const generatePaneModel = (list: PaneModelConfig[]) => {
-  const paneComponentLists = list.map(({size}, index) =>
-    (<Pane className={bgClasses[index]} id={`P${index}`} key={index} size={size} > {<h2>{index}</h2>}</Pane>))
+  const paneComponentLists = list.map(({size, minSize, maxSize}, index) =>
+    (
+      <Pane
+        className={`${bgClasses[index]} text-align-center`}
+        id={`P${index}`}
+        key={index}
+        maxSize={maxSize}
+        minSize={minSize}
+        size={size}
+      >
+        {<h2>{index}</h2>}
+      </Pane>
+    )
+  )
 
   const initalVisibility: any = {}
 

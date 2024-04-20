@@ -1,4 +1,5 @@
-import {DIRECTIONS, RIGHT_BUTTON_VALUE} from '../constant'
+import {IResizableItem} from '../../@types'
+import {DIRECTIONS, RIGHT_BUTTON_VALUE} from '../../constant'
 
 // eslint-disable-next-line complexity
 export const directionBehaviourConsole = (direction: number, prevDirection: number) => {
@@ -35,4 +36,22 @@ export const throwForNonZero = (value: any, id: string) => {
   if (typeof value !== 'number') {
     throw new Error(`${id} -- ${value} `)
   }
+}
+
+export const getPartialHiddenResizer = (items : IResizableItem[]) => {
+  const hiddenResizersI: number[] = []
+
+  items.forEach((item, i) => {
+    if (!item.isHandle) {
+      if (item.hiddenResizer === 'left') {
+        hiddenResizersI.push(i - 1)
+      }
+
+      if (item.hiddenResizer === 'right') {
+        hiddenResizersI.push(i + 1)
+      }
+    }
+  })
+
+  console.log('hiddenResizersI', hiddenResizersI)
 }

@@ -1,6 +1,7 @@
-import {IAnyMap, IPaneModelKey} from '../@types'
+import {IAnyMap, IPaneModelKey, IResizableItem} from '../@types'
 import {DIRECTIONS, RESIZER} from '../constant'
 import {PaneModel} from '../models/pane-model'
+import {ResizerModel} from '../models/resizer-model'
 
 export type INoop = (_: any) => any
 
@@ -57,6 +58,25 @@ export const filterKeys = <T> (obj: T, ...keys: (keyof T)[]) => {
 }
 
 export const isItUp = (direction: number) => direction === DIRECTIONS.UP
-// export const isItDown = (direction: number) => direction === DIRECTIONS.DOWN
+export const isItDown = (direction: number) => direction === DIRECTIONS.DOWN
 
 export const getResizerId = (paneId: string) => `${RESIZER}-${paneId}`
+
+export const attachResizer = (items: IResizableItem[]) => {
+  const visibleItems = items.filter((i) => i.visibility)
+
+  for (let i = 0; i < visibleItems.length; i++) {
+    if (!visibleItems[i].isHandle) {
+      visibleItems[i].leftResizer = visibleItems[i - 1] as ResizerModel
+      visibleItems[i].rightResizer = visibleItems[i + 1] as ResizerModel
+    }
+  }
+
+  // console.log('attachResizer--------------------------------------------------')
+  // console.log('attachResizer--------------------------------------------------')
+  // visibleItems.forEach((i) => {
+  //   if (!i.isHandle) {
+  //     console.log('attachResizer', [i.leftResizer?.id, i.id, i.rightResizer?.id])
+  //   }
+  // })
+}
