@@ -104,15 +104,6 @@ export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) =>
       decreasingItems.push(visibleItems[i], visibleItems[i + 1])
     }
 
-    // for (let i = visibleActiveIndex + 1; i < visibleItems.length; i += 2) {
-    //   const pane = visibleItems[i]
-    //   if (pane.size) {
-    //     decreasingItems.push(visibleItems[i + 1], visibleItems[i])
-    //   } else {
-    //     decreasingItems.push(visibleItems[i], visibleItems[i + 1])
-    //   }
-    // }
-
     virtualOrderList = [...increasingItems, ...decreasingItems]
   }
 

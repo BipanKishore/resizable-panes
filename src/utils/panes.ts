@@ -10,18 +10,6 @@ import {isItDown, isItUp} from './util'
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
   panesList.forEach(pane => pane.syncAxisSize())
 
-export const setHiddenResizer = (items: IResizableItem[]) => {
-  const visibleItems = items.filter((i) => i.visibility)
-
-  for (let i = 0; i < visibleItems.length; i++) {
-    const item = visibleItems[i]
-    const next = visibleItems[i + 1]
-    if (item.isHandle && item.visibility && item.size === 0) {
-      next.hiddenResizer = 'left'
-    }
-  }
-}
-
 const fixHiddenResizersOrder = (items: IResizableItem[], direction: number) => {
   const upOrderList = [...items].reverse()
 
