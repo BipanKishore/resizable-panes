@@ -61,3 +61,7 @@ export const isItUp = (direction: number) => direction === DIRECTIONS.UP
 export const isItDown = (direction: number) => direction === DIRECTIONS.DOWN
 
 export const getResizerId = (paneId: string) => `${RESIZER}-${paneId}`
+
+export const throwError = (message: string) => {
+  if (message) { throw new Error(message) }
+}

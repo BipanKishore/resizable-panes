@@ -24,7 +24,6 @@ describe('operations-with-min-max-plain-resizer', () => {
         panesList={withMinMaxEqualSize5PanesSet}
         storageApi={localStorage}
         uniqueId={containerId}
-        unit='ratio'
 
         vertical
       >

@@ -30,7 +30,6 @@ describe('Resizing with min max limits with no resizerSize', () => {
             }
           storageApi={localStorage}
           uniqueId={containerId}
-          unit='ratio'
           vertical
         >
           <Pane className='bg-red-500' id='P0' maxSize={3} minSize={0.1} size={1}>

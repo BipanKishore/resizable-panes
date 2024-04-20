@@ -117,7 +117,6 @@ describe.skip('', () => {
         <RPTestWrapper
           resizer={ <CustomResizerFirst size={10} />}
           uniqueId='Min-Max-2'
-          unit="ratio"
           vertical
 
         >

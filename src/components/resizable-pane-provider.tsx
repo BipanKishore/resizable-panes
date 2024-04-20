@@ -6,6 +6,7 @@ import {useResizableApi} from '../hook/use-resizable-api'
 import {onResizeClearSizesMapFromStore} from '../utils/storage'
 import {IResizablePaneProviderProps} from '../@types'
 import {singletonService} from '../services/singleton-service'
+import {RATIO} from '../constant'
 
 const ResizablePaneProviderDefaultProps: any = {
   onResize: noop,
@@ -14,7 +15,7 @@ const ResizablePaneProviderDefaultProps: any = {
   onChangeVisibility: noop,
   vertical: false,
   storageApi: undefined,
-  unit: undefined,
+  unit: RATIO,
   resizer: undefined,
   resizerSize: 0,
   // resizerSize: 2,
