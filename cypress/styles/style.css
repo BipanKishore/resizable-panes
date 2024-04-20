@@ -39,6 +39,26 @@
     background-color: rgb(132 204 22);
 }
 
+.bg-teal-500	{
+  background-color: rgb(20 184 166);
+}
+
+.bg-emerald-500{
+  background-color: rgb(16 185 129);
+}
+
+.bg-green-500	{
+  background-color: rgb(34 197 94);
+}
+
+.bg-amber-500	{
+  background-color: rgb(245 158 11);
+}
+
+.bg-cyan-500 {
+  background-color: rgb(6 182 212);
+}
+
 .justify-context{
   justify-content: center;
 }
@@ -81,6 +101,10 @@
     cursor: col-resize;
 }
   
+.text-align-center{
+  text-align: center;
+}
+
 .resizer-text-vertical {
     writing-mode: vertical-lr;
     text-orientation: upright;

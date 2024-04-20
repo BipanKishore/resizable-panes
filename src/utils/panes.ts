@@ -1,18 +1,57 @@
 import {ReactElement} from 'react'
-import {IContextDetails, IResizableItem, IResizablePaneProviderProps, addAndRemoveType} from '../@types'
+import {IContextDetails, IHiddenResizer, IResizableItem, IResizablePaneProviderProps, addAndRemoveType} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
 import {ResizerModel} from '../models/resizer-model'
-import {PLUS} from '../constant'
+import {DIRECTIONS, PLUS} from '../constant'
 import {getList, localConsole} from './development-util'
-import {isItUp} from './util'
+import {isItDown, isItUp} from './util'
 
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
   panesList.forEach(pane => pane.syncAxisSize())
 
-export const setUISizesFn = (modelList: IResizableItem[], direction: number) => {
-  modelList.forEach((pane: IResizableItem) => pane.setUISize(direction))
-  console.log('>>>>>>>>>>>>>>>>>>size ', modelList.map((r) => r.getSize()))
+const fixHiddenResizersOrder = (items: IResizableItem[], direction: number) => {
+  const upOrderList = [...items].reverse()
+
+  let prevItemHiddenResizerOrder: IHiddenResizer = 'none'
+
+  if (isItUp(direction)) {
+    upOrderList.forEach((item) => {
+      if (!item.isHandle) {
+        // console.log('prevItemHiddenResizerOrder', item.id, prevItemHiddenResizerOrder, item.hiddenResizer)
+        if (prevItemHiddenResizerOrder !== 'none' && item.hiddenResizer !== 'none') {
+          item.hiddenResizer = prevItemHiddenResizerOrder
+        }
+        prevItemHiddenResizerOrder = item.hiddenResizer
+      }
+    })
+  }
+
+  if (isItDown(direction)) {
+    items.forEach((item) => {
+      if (!item.isHandle) {
+        // console.log('prevItemHiddenResizerOrder', item.id, prevItemHiddenResizerOrder, item.hiddenResizer)
+        if (prevItemHiddenResizerOrder !== 'none' && item.hiddenResizer !== 'none') {
+          item.hiddenResizer = prevItemHiddenResizerOrder
+        }
+        prevItemHiddenResizerOrder = item.hiddenResizer
+      }
+    })
+  }
+}
+
+export const setUISizesFn = (items: IResizableItem[], direction: number) => {
+  const panes = items.filter((i) => !i.isHandle)
+  const resizers = items.filter((i) => i.isHandle)
+  panes.forEach((pane: IResizableItem) => pane.setUISize(direction))
+
+  // panes.forEach((pane: IResizableItem) => pane.setUISize(direction))
+
+  items.forEach((pane: IResizableItem) => pane.setUISize(direction))
+
+  fixHiddenResizersOrder(items, direction)
+  // setHiddenResizer(items)
+  // console.log('>>>>>>>>>>>>>>>>>>size ', modelList.map((r) => r.getSize()))
 }
 
 export function getSum <T> (list: T[], getNumber: (item:T) => number, start = 0, end = list.length - 1) {
@@ -64,14 +103,14 @@ export const setDownMaxLimits = (panesList: PaneModel[], index: number) => {
   }
 
   for (let i = index + 1; i < panesList.length; i++) {
-    panesList[i].synSizeToMinSize()
+    panesList[i].synSizeToMinSize(DIRECTIONS.DOWN)
   }
 }
 
 // It is used when we rapidly changes mouse movements
 export const setUpMaxLimits = (panesList: PaneModel[], index: number) => {
   for (let i = 0; i <= index; i++) {
-    panesList[i].synSizeToMinSize()
+    panesList[i].synSizeToMinSize(DIRECTIONS.UP)
   }
 
   for (let i = index + 1; i < panesList.length; i++) {
@@ -210,7 +249,8 @@ export const fixPartialHiddenResizer = (contextDetails: IContextDetails) => {
 
         visibleItems.forEach((item) => {
           item.restoreLimits()
-          sizeChange = item.changeSize(sizeChange, PLUS)
+          // forNow keeping it none
+          sizeChange = item.changeSize(sizeChange, PLUS, DIRECTIONS.NONE)
         })
 
         setUISizesFn(items, item.partialHiddenDirection)

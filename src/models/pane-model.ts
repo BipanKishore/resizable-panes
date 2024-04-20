@@ -1,11 +1,11 @@
-/* eslint-disable complexity */
 import {
+  IHiddenResizer,
   IPaneNumericKeys, IResizablePaneProviderProps,
   IStoreResizableItemsModel, addAndRemoveType
 } from '../@types'
 import {DIRECTIONS, PLUS, ZERO} from '../constant'
 import {ResizeStorage} from '../utils/storage'
-import {filterKeys, noop, ratioAndRoundOff} from '../utils/util'
+import {filterKeys, isItDown, isItUp, ratioAndRoundOff} from '../utils/util'
 import {ResizerModel} from './resizer-model'
 import {checkPaneModelErrors} from './utils'
 
@@ -14,9 +14,8 @@ export class PaneModel {
   isHandle = false
   isPartiallyHidden: boolean = false
   partialHiddenDirection = DIRECTIONS.NONE
+  hiddenResizer: IHiddenResizer = 'none'
   resizerSize: number
-
-  attachedResizer: ResizerModel | undefined
 
   id: string
   // index
@@ -118,43 +117,55 @@ export class PaneModel {
     return newSize - this.size
   }
 
-  setPartialHidden (direction: number) { // Will have to remove direction
-    if (this.isHandle) {
-      this.isPartiallyHidden = this.size < this.defaultSize
-      if (this.isPartiallyHidden) {
-        if (this.size !== this.preSize) {
-          this.partialHiddenDirection = direction
+  setHiddenResizer (newSize: number, direction: number) {
+    if (!this.isHandle) {
+      if (newSize < 0) {
+        if (isItUp(direction)) {
+          this.hiddenResizer = 'left'
         }
-      } else {
-        this.partialHiddenDirection = DIRECTIONS.NONE
+        if (isItDown(direction)) {
+          this.hiddenResizer = 'right'
+        }
       }
     }
-
-    this.preSize = this.size
   }
 
-  changeSize (sizeChange: number, operation: addAndRemoveType) {
-    const newSize = this.axisSize + (operation === PLUS ? sizeChange : -sizeChange)
-    if (this.visibility) {
-      if (newSize >= this.minSize && newSize <= this.maxSize) {
-        this.size = newSize
-        return ZERO
-      } else if (newSize > this.maxSize) {
-        this.size = this.maxSize
-      } else {
-        this.size = this.minSize
-      }
-      return Math.abs(this.size - newSize)
-    } else {
-      return sizeChange
+  setHiddenResizerWhileMovement (newSize: number, direction: number) {
+    if (this.axisSize !== 0) {
+      this.setHiddenResizer(newSize, direction)
     }
+    // console.log('change-size-' + this.id, this.size, newSize, this.hiddenResizer)
+  }
+
+  clearHiddenResizer () {
+    if (this.size > 0) {
+      this.hiddenResizer = 'none'
+    }
+  }
+
+  changeSize (sizeChange: number, operation: addAndRemoveType, direction: number) {
+    const newSize = this.axisSize + (operation === PLUS ? sizeChange : -sizeChange)
+
+    this.setHiddenResizerWhileMovement(newSize, direction)
+
+    if (newSize >= this.minSize && newSize <= this.maxSize) {
+      this.size = newSize
+      this.clearHiddenResizer()
+      return ZERO
+    } else if (newSize > this.maxSize) {
+      this.size = this.maxSize
+    } else {
+      this.size = this.minSize
+    }
+    this.clearHiddenResizer()
+    return Math.abs(this.size - newSize)
   }
 
   setUISize (direction: number) {
     if (this.api) {
       this.api.setSize(this.visibility ? this.size : 0)
-      this.setPartialHidden(direction)
     }
+    this.preSize = this.size
   }
 
   register (pane: any) {
@@ -237,9 +248,12 @@ export class PaneModel {
     return ZERO
   }
 
-  synSizeToMinSize () {
+  synSizeToMinSize (direction: number) {
     if (this.visibility) {
       this.size = this.minSize
+      if (this.defaultMinSize === 0) {
+        this.setHiddenResizer(-1, direction)
+      }
     }
   }
 
@@ -265,20 +279,20 @@ export class PaneModel {
     }
   }
 
-  setVisibilityHelper () {
+  setVisibilityHelper (isPartiallyHidden: boolean = false) {
     if (this.isHandle) {
-      this.size = this.isPartiallyHidden
+      this.size = isPartiallyHidden
         ? 0
         : this.resizerSize ? this.resizerSize : this.api.getVisibleSize()
     }
   }
 
-  setVisibility (visibility: boolean) {
+  setVisibility (visibility: boolean, isPartiallyHidden = false) {
     this.visibility = visibility
     if (visibility) {
       this.maxSize = this.defaultMaxSize
       this.minSize = this.defaultMinSize
-      this.setVisibilityHelper()
+      this.setVisibilityHelper(isPartiallyHidden)
     } else {
       this.maxSize = 0
       this.minSize = 0

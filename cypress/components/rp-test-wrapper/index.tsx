@@ -1,9 +1,10 @@
 import React, {useRef, useState} from 'react'
 
 import '../../styles/style.css'
-import {ResizablePanes} from '../../../src'
+import {Pane, ResizablePanes} from '../../../src'
 import {addDefaultProps} from '../../../src/utils/util'
 import {initialVisibility, testResizablePanesId} from './constant'
+import {generatePaneModel} from './util'
 
 interface IIDMap {
   [id: string]: boolean
@@ -14,7 +15,12 @@ export const RPTestWrapper = (props: any) => {
     uniqueId: testResizablePanesId
   })
 
-  const [visibilityMap, setVisibilityMap] = useState<IIDMap>(initialVisibility)
+  const {panesList} = currentProps
+
+  const {paneComponentLists, initalVisibility} = generatePaneModel(panesList)
+
+  const [visibilityMap, setVisibilityMap] = useState<IIDMap>(initalVisibility)
+
   const [resizablePanesVisibility, setResizablePanesVisibility] = useState(true)
 
   const apiRef = useRef <any>({})
@@ -35,7 +41,8 @@ export const RPTestWrapper = (props: any) => {
         <button
           data-cy="hide-resizable-panes"
           onClick={() => setResizablePanesVisibility(!resizablePanesVisibility)}
-        >Hide All
+        >
+          Hide All
         </button>
 
         <button
@@ -62,7 +69,9 @@ export const RPTestWrapper = (props: any) => {
               apiRef.current = api
             }}
             {...currentProps}
-          />
+          >
+            {paneComponentLists}
+          </ResizablePanes>
         }
 
       </div>

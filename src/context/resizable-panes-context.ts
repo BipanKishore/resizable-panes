@@ -17,6 +17,7 @@ import {ResizeStorage} from '../utils/storage'
 import {IKeyToBoolMap, IResizableContext, IResizablePaneProviderProps} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {setVisibilityFn} from '../utils/api'
+import {consoleGetSize, directionToText, getList} from '../utils/development-util'
 
 export const getResizableContext = (props: IResizablePaneProviderProps): IResizableContext => {
   const {
@@ -111,6 +112,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   const directionChangeActions = (e: any) => {
+    console.log('directionChangeActions directionChangeActions ++++++++++++++++++++++++++++++++++++++++++')
     contextDetails.axisCoordinate = e.mouseCoordinate
 
     setVirtualOrderList(contextDetails)
@@ -190,6 +192,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
     fixPartialHiddenResizer(contextDetails)
     storage.setStorage(contextDetails)
+    consoleGetSize(items)
   }
 
   return {

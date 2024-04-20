@@ -1,6 +1,7 @@
-import {IAnyMap, IPaneModelKey} from '../@types'
+import {IAnyMap, IPaneModelKey, IResizableItem} from '../@types'
 import {DIRECTIONS, RESIZER} from '../constant'
 import {PaneModel} from '../models/pane-model'
+import {ResizerModel} from '../models/resizer-model'
 
 export type INoop = (_: any) => any
 
@@ -57,6 +58,6 @@ export const filterKeys = <T> (obj: T, ...keys: (keyof T)[]) => {
 }
 
 export const isItUp = (direction: number) => direction === DIRECTIONS.UP
-// export const isItDown = (direction: number) => direction === DIRECTIONS.DOWN
+export const isItDown = (direction: number) => direction === DIRECTIONS.DOWN
 
 export const getResizerId = (paneId: string) => `${RESIZER}-${paneId}`

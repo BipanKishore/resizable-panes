@@ -71,6 +71,7 @@ export class RCy {
 
     this.containerXStart = VIEW_PORT_PADDING + 1
     this.containerXEnd = VIEW_PORT_PADDING + this.containerXLen
+    this.getResizableIds()
   }
 
   checkContainerWidth () {

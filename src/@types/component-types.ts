@@ -5,6 +5,7 @@ import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from '../utils/storage'
 import {ResizerModel} from '../models/resizer-model'
 
+export type IHiddenResizer = 'left' | 'right' | 'none'
 export type IResizableItem = PaneModel | ResizerModel
 
 export type onResizeType = (param: IMapIdToSize) => void

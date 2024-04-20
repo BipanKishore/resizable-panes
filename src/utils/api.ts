@@ -1,12 +1,17 @@
+/* eslint-disable complexity */
 import {IContextDetails, IKeyToBoolMap} from '../@types'
 import {DIRECTIONS, MINUS, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
-import {ResizerModel} from '../models/resizer-model'
+import {consoleGetSize} from './development-util'
 import {
   change1PixelToPanes, getPanesSizeSum,
   getSizeByIndexes, setUISizesFn
 } from './panes'
 import {getMaxContainerSizes} from './resizable-pane'
+import {
+  findNextVisibleResizer, findPrevVisibleResizer, getFirstVisiblePaneIndexAndHideAllBeforeIt,
+  getItemsVisibleAndNoPartialHidden, setVisibilityOfLeftResizers
+} from './visibilit'
 
 // Need to check for hidden element
 export const restoreDefaultFn = ({items}: any) => {
@@ -73,126 +78,53 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
     pane.setVisibility(visibility)
   })
 
-  hideResizers(contextDetails)
+  setVisibilityOfResizers(contextDetails, visiblePanesIndexes)
 
   const {maxPaneSize} = getMaxContainerSizes(contextDetails)
 
   visibilityOperationFn(panesList, visiblePanesIndexes, maxPaneSize)
 
   setUISizesFn(items, DIRECTIONS.NONE)
+  consoleGetSize(items)
 }
 
-// aIndex - PreviousIndex
-// bIndex - NextIndex
-// eslint-disable-next-line complexity
-const hideSingleResizer = (
-  contextDetails: IContextDetails, aIndex: number, bIndex: number, completeVisibilityList: any[]) => {
-  const preResizer = completeVisibilityList[aIndex] as ResizerModel
-  const nextResizer = completeVisibilityList[bIndex] as ResizerModel
+export const setVisibilityOfResizers = (contextDetails: IContextDetails) => {
+  const {items} = contextDetails
 
-  const runForNext = (visibilityNextResizer: boolean) => {
-    if (visibilityNextResizer) {
-      completeVisibilityList[bIndex].visibility = false
-    } else {
-      hideSingleResizer(contextDetails, aIndex, bIndex + 2, completeVisibilityList)
-    }
-  }
+  const firstVisiblePaneIndex = getFirstVisiblePaneIndexAndHideAllBeforeIt(items)
 
-  const runForPre = (visibilityPreResizer: boolean) => {
-    if (visibilityPreResizer) {
-      completeVisibilityList[aIndex].visibility = false
-    } else {
-      hideSingleResizer(contextDetails, aIndex - 2, bIndex, completeVisibilityList)
-    }
-  }
+  // When we are hiding the pane with attached left ,it is working fine
 
-  switch (true) {
-    case Boolean(preResizer) && Boolean(nextResizer):
+  setVisibilityOfLeftResizers(items, firstVisiblePaneIndex)
 
+  let r
+  let nextR
+  let oppoR
+  items.forEach((item, i) => {
+    if (!item.isHandle) {
       switch (true) {
-        case preResizer.isPartiallyHidden && nextResizer.isPartiallyHidden:
-          if (preResizer.visibility) {
-            completeVisibilityList[aIndex].visibility = false
-          } else if (nextResizer.visibility) {
-            completeVisibilityList[bIndex].visibility = false
-          } else {
-            hideSingleResizer(contextDetails, aIndex - 2, bIndex + 2, completeVisibilityList)
+        case item.visibility && item.hiddenResizer === 'left':
+          r = findPrevVisibleResizer(items, i - 1)
+          oppoR = findNextVisibleResizer(items, i)
+          console.log('power ', item.id, item.hiddenResizer, i - 1, r?.id, oppoR?.id)
+          if (oppoR) {
+            r?.setVisibility(true, true)
           }
           break
 
-        case preResizer.isPartiallyHidden:
-          runForPre(preResizer.visibility)
-          break
+        case item.visibility && item.hiddenResizer === 'right':
+          r = findNextVisibleResizer(items, i + 1)
+          oppoR = findPrevVisibleResizer(items, i)
+          console.log('power ', item.id, item.hiddenResizer, i + 1, r?.id, oppoR?.id)
 
-        case nextResizer.isPartiallyHidden:
-          runForNext(nextResizer.visibility)
-          break
-
-        default:
-          if (preResizer.visibility) {
-            completeVisibilityList[aIndex].visibility = false
-          } else if (nextResizer.visibility) {
-            completeVisibilityList[bIndex].visibility = false
-          } else {
-            hideSingleResizer(contextDetails, aIndex - 2, bIndex + 2, completeVisibilityList)
+          if (oppoR) {
+            r?.setVisibility(true, true)
           }
-      }
 
-      break
-    case Boolean(preResizer): // For Last two panes
-      completeVisibilityList[aIndex].visibility = false
-      break
-    case Boolean(nextResizer): // For first two panes
-      completeVisibilityList[bIndex].visibility = false
-      break
-  }
-}
-
-const hideResizers = (contextDetails: IContextDetails) => {
-  const {items} = contextDetails
-
-  const completeVisibilityList: any[] = items
-    .map(({isPartiallyHidden}) => ({visibility: true, isPartiallyHidden}))
-
-  for (let i = 0; i < items.length; i += 2) {
-    const {visibility, id} = items[i]
-    completeVisibilityList[i] = {visibility, id}
-
-    if (!visibility) {
-      hideSingleResizer(contextDetails, i - 1, i + 1, completeVisibilityList)
-    }
-  }
-
-  for (let i = 0; i < items.length; i += 1) {
-    const resizer = items[i]
-    if (resizer.isHandle) {
-      resizer.setVisibility(completeVisibilityList[i].visibility)
-    }
-  }
-
-  console.log(
-    'completeVisibilityList', completeVisibilityList
-  )
-
-  searchAndMakeVisiblePartialHiddenResizer(contextDetails)
-}
-
-// eslint-disable-next-line complexity
-export const searchAndMakeVisiblePartialHiddenResizer = (contextDetails: IContextDetails) => {
-  const {items} = contextDetails
-
-  for (let i = 0; i < items.length; i++) {
-    const resizer = items[i]
-    if (resizer.isHandle) {
-      if (resizer.isPartiallyHidden) {
-        const aPane = items[i - 1]
-        const bPane = items[i + 1]
-        if (aPane.size && bPane.size) {
-          console.log('searchPartialHiddenResizer', resizer.id)
-          resizer.isPartiallyHidden = false
-          resizer.size = resizer.defaultSize
-        }
+          break
       }
     }
-  }
+  })
+
+  const itemsVisibleAndNoPartialHidden = getItemsVisibleAndNoPartialHidden(items)
 }
