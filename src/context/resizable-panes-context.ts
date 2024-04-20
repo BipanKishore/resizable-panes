@@ -1,5 +1,5 @@
 import {createContext} from 'react'
-import {attachResizer, createMap, findById} from '../utils/util'
+import {createMap, findById} from '../utils/util'
 import {DIRECTIONS, RATIO, SIZE, VISIBILITY} from '../constant'
 import {
   createPaneModelListAndResizerModelList,
@@ -36,8 +36,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   // reference will never change for these items: storage, panesList, resizersList
 
   const {panesList, resizersList} = getPanesAndResizers(items)
-
-  attachResizer(items)
 
   const contextDetails: any = {
     vertical,
@@ -169,29 +167,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     if (!newVisibilityModel) {
       contextDetails.newVisibilityModel = true
       panesList.forEach((pane: PaneModel) => pane.setOldVisibilityModel())
-
-      console.log('===================================================')
-
-      const isPreviousRight = false
-      let c
-      /// /////////////////////////////////// transfer left to right
-      items.forEach((item, i) => {
-        if (!item.isHandle) {
-          if (item.visibility) {
-            // c = item.hiddenResizer
-            // item.hiddenResizer = isPreviousRight ? 'left' : item.hiddenResizer
-            // isPreviousRight = c === 'right'
-            // item.hiddenResizer = item.hiddenResizer === 'right' ? 'none' : item.hiddenResizer
-          }
-        }
-      }
-      )
-      // console.log('attachResizer Partial ++++++++++++++++++++++++++++++++++++++++++')
-      // items.forEach((i) => {
-      //   if (!i.isHandle) {
-      //     console.log('attachResizer Partial ', [i.id, i.hiddenResizer])
-      //   }
-      // })
     }
 
     setVisibilityFn(contextDetails, newMap)
@@ -218,13 +193,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     fixPartialHiddenResizer(contextDetails)
     storage.setStorage(contextDetails)
     consoleGetSize(items)
-
-    // console.log('attachResizer Partial ++++++++++++++++++++++++++++++++++++++++++')
-    // items.forEach((i) => {
-    //   if (!i.isHandle) {
-    //     console.log('attachResizer Partial ', [i.id, i.hiddenResizer])
-    //   }
-    // })
   }
 
   return {

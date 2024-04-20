@@ -18,9 +18,6 @@ export class PaneModel {
   prevHiddenResizer: IHiddenResizer = 'none'
   resizerSize: number
 
-  leftResizer: ResizerModel | undefined
-  rightResizer: ResizerModel | undefined
-
   id: string
   // index
   api: any
@@ -184,46 +181,6 @@ export class PaneModel {
     this.clearHiddenResizer()
     return Math.abs(this.size - newSize)
   }
-
-  // setPartialForPane (direction: number) {
-  //   if (this.defaultMinSize === 0) {
-  //     if (this.size === 0) {
-  //       if (this.id === 'P5') {
-  //         console.log(this.id, this.leftResizer.size, this.leftResizer.preSize)
-  //       }
-
-  //       if (direction === DIRECTIONS.UP &&
-  //         this.leftResizer &&
-  //         this.leftResizer.size !== this.leftResizer.preSize &&
-  //          this.leftResizer.size !== this.leftResizer.defaultSize &&
-  //          this.hiddenResizer === 'none') {
-  //         this.hiddenResizer = 'left'
-  //       } else if (direction === DIRECTIONS.DOWN &&
-  //         this.rightResizer &&
-  //         this.rightResizer.size !== this.rightResizer.preSize &&
-  //         this.rightResizer.size !== this.rightResizer.defaultSize &&
-  //       this.hiddenResizer === 'none') {
-  //         this.hiddenResizer = 'right'
-  //       } else {
-  //         switch (true) {
-  //           case direction === DIRECTIONS.DOWN && this.leftResizer:
-  //             if (
-  //               this.rightResizer.size === this.rightResizer.defaultSize) {
-  //               this.hiddenResizer = 'none'
-  //             }
-  //             break
-  //           case direction === DIRECTIONS.UP && this.rightResizer:
-  //             if (
-  //               this.rightResizer.size === this.rightResizer.defaultSize) {
-  //               this.hiddenResizer = 'none'
-  //             }
-  //         }
-  //       }
-  //     } else {
-  //       this.hiddenResizer = 'none'
-  //     }
-  //   }
-  // }
 
   setUISize (direction: number) {
     if (this.api) {

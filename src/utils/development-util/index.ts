@@ -33,3 +33,10 @@ export const consoleGetSize = (list: any[]) => {
   const sizes = list.map((i) => i.getSize())
   console.log('consoleGetSize', sizes)
 }
+
+// console.log('attachResizer Partial ++++++++++++++++++++++++++++++++++++++++++')
+// items.forEach((i) => {
+//   if (!i.isHandle) {
+//     console.log('attachResizer Partial ', [i.id, i.hiddenResizer])
+//   }
+// })

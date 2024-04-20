@@ -8,7 +8,6 @@ import {
   getSizeByIndexes, setUISizesFn
 } from './panes'
 import {getMaxContainerSizes} from './resizable-pane'
-import {attachResizer} from './util'
 import {
   findNextVisibleResizer, findPrevVisibleResizer, getFirstVisiblePaneIndexAndHideAllBeforeIt,
   getItemsVisibleAndNoPartialHidden, setVisibilityOfLeftResizers
@@ -87,7 +86,6 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
 
   setUISizesFn(items, DIRECTIONS.NONE)
   consoleGetSize(items)
-  attachResizer(items)
 }
 
 export const setVisibilityOfResizers = (contextDetails: IContextDetails) => {

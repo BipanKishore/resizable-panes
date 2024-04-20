@@ -62,7 +62,6 @@ export const setUISizesFn = (items: IResizableItem[], direction: number) => {
   items.forEach((pane: IResizableItem) => pane.setUISize(direction))
 
   fixHiddenResizersOrder(items, direction)
-  items.forEach((pane: IResizableItem) => pane.setPrevHiddenResizer())
   // setHiddenResizer(items)
   // console.log('>>>>>>>>>>>>>>>>>>size ', modelList.map((r) => r.getSize()))
 }
