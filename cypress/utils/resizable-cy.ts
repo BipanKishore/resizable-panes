@@ -183,4 +183,10 @@ export class RCy {
   toMostLeft (cyId:string) {
     swiftMove(cyId, moveRightEvent(this.viewPortstart))
   }
+
+  reMount (mountUnMountButtonId: string) {
+    this.cyGet(mountUnMountButtonId).click()
+      .wait(50)
+    this.cyGet(mountUnMountButtonId).click()
+  }
 }

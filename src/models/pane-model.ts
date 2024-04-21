@@ -163,6 +163,7 @@ export class PaneModel {
 
   setUISize (direction: number) {
     if (this.api) {
+      console.log('setUISize', this.id, this.size)
       this.api.setSize(this.visibility ? this.size : 0)
     }
     this.preSize = this.size

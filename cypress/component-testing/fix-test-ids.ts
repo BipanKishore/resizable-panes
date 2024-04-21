@@ -11,8 +11,10 @@ const {
 } = rCy.getResizableIds()
 
 const rScontainerId = 'rScontainerId'
+const mountUnMountButtonId = 'hide-resizable-panes'
 
 export {
+  mountUnMountButtonId,
   rScontainerId,
   R0, R1, R2, R3, R4, R5,
   CK0, CK1, CK2, CK3, CK4, CK5, CK6,
