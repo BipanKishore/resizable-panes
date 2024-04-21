@@ -19,7 +19,7 @@ export const restoreDefaultFn = ({items}: any) => {
   setUISizesFn(items, DIRECTIONS.DOWN)
 }
 
-export const visibilityOperationFn = (
+const setSizesAfterVisibilityChange = (
   panesList: PaneModel[],
   actionList: number[],
   maxPaneSize: number
@@ -58,7 +58,7 @@ export const changeSizeInRatio = (panesList: PaneModel[], actionList: number[], 
     }
   })
 
-  visibilityOperationFn(panesList, nextActionList, maxPaneSize)
+  setSizesAfterVisibilityChange(panesList, nextActionList, maxPaneSize)
 }
 
 export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBoolMap) => {
@@ -78,11 +78,11 @@ export const setVisibilityFn = (contextDetails: IContextDetails, idMap: IKeyToBo
     pane.setVisibility(visibility)
   })
 
-  setVisibilityOfResizers(contextDetails, visiblePanesIndexes)
+  setVisibilityOfResizers(contextDetails)
 
   const {maxPaneSize} = getMaxContainerSizes(contextDetails)
 
-  visibilityOperationFn(panesList, visiblePanesIndexes, maxPaneSize)
+  setSizesAfterVisibilityChange(panesList, visiblePanesIndexes, maxPaneSize)
 
   setUISizesFn(items, DIRECTIONS.NONE)
   consoleGetSize(items)
