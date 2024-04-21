@@ -98,7 +98,6 @@ export const setVisibilityOfResizers = (contextDetails: IContextDetails) => {
   setVisibilityOfLeftResizers(items, firstVisiblePaneIndex)
 
   let r
-  let nextR
   let oppoR
   items.forEach((item, i) => {
     if (!item.isHandle) {
@@ -125,6 +124,6 @@ export const setVisibilityOfResizers = (contextDetails: IContextDetails) => {
       }
     }
   })
-
-  const itemsVisibleAndNoPartialHidden = getItemsVisibleAndNoPartialHidden(items)
+  // need to change name
+  getItemsVisibleAndNoPartialHidden(items)
 }
