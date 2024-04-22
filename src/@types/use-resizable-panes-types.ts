@@ -1,5 +1,5 @@
 import {PaneModel} from '../models/pane-model'
-import {IBoolMap, IGetMaP, IGetState, INumberMap, IResizablePanesProps} from './component-types'
+import {IBoolMap, IGetState, INumberMap, IResizablePanesProps} from './component-types'
 import {IKeyToBoolMap} from './general-type'
 
 export type keyOfPaneModel = keyof PaneModel

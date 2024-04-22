@@ -242,7 +242,7 @@ export const minMaxLogicUp = (
       }
       break
       // ---------------------------------------------------------------------------------
-      // @ts-ignore
+
     case aIndex === 0 && bIndex === lastIndex:
       // return for every case
       switch (true) {
@@ -356,7 +356,7 @@ export const minMaxLogicDown = (
       }
       break
       // ---------------------------------------------------------------------------------
-      // @ts-ignore
+
     case aIndex === 0 && bIndex === lastIndex:
       // return for every case
       switch (true) {
@@ -387,7 +387,7 @@ export const minMaxLogicDown = (
   minMaxLogicDown(panesList, <number>nextValue, nextAIndex, nextBIndex, sum, maxPaneSize)
 }
 
-export const getMaxContainerSizes = ({getContainerRect, vertical, panesList, resizersList} :IContextDetails) => {
+export const getMaxContainerSizes = ({getContainerRect, vertical, resizersList} :IContextDetails) => {
   const {top, height, left, width} = getContainerRect()
   const maxTopAxis = vertical ? left : top
   const containerSize = Math.round(vertical ? width : height)

@@ -164,7 +164,7 @@ export class PaneModel {
     return Math.abs(this.size - newSize)
   }
 
-  setUISize (direction: number) {
+  setUISize () {
     if (this.api) {
       this.api.setSize(this.visibility ? this.size : 0)
     }
