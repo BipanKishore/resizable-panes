@@ -3,7 +3,6 @@ import {defineConfig} from 'cypress'
 // import We
 
 export default defineConfig({
-  projectId: 'resizable-panes',
 
   retries: {
     runMode: 0
