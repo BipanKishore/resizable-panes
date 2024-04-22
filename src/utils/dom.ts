@@ -64,14 +64,16 @@ export const getDirection = (e: IResizableEvent) => e.movement < 0 ? DIRECTIONS.
 
 export const toArray = (items: any) => Array.isArray(items) ? items : [items]
 
-const clearPlainResizerStyle = (node: HTMLElement) => {
+const clearPlainResizerStyle = (node: any) => {
   [MARGIN, MIN_WIDTH, MIN_HEIGHT, BORDER_LEFT,
-    BORDER_RIGHT, BORDER_BOTTOM, BORDER_RIGHT].forEach((key) => node.style[key] = null)
+    BORDER_RIGHT, BORDER_BOTTOM, BORDER_RIGHT].forEach((key:string) => {
+    node.style[key] = null
+  })
 }
 
-const setPlainResizerStyle = (node: HTMLElement, style: any) => {
+const setPlainResizerStyle = (node: any, style: any) => {
   const keys = Object.keys(style)
-  keys.forEach((key) => node.style[key] = style[key])
+  keys.forEach((key) => { node.style[key] = style[key] })
 }
 
 export const generateResizerStyle = (resizerSize: number,

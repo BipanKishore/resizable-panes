@@ -27,6 +27,7 @@
         "react-hooks",
         "@typescript-eslint"],
     "rules": {
+      "@typescript-eslint/ban-ts-comment":"warn",
       "@typescript-eslint/no-explicit-any": 0,
       "space-infix-ops": "error",
         "camelcase": ["error", {"allow": ["^UNSAFE_"]}],
