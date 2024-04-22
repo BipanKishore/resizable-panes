@@ -97,17 +97,19 @@ export const generateResizerStyle = (resizerSize: number,
   }
 }
 
-export const getSetSize = (node: any, vertical: boolean,
-
-  addOverFlowLogic = false, style: any) => (size: number) => {
+export const getSetSize = (node: any, vertical: boolean) => (size: number) => {
   node.style[getSizeKey(vertical)] = toPx(size)
+}
 
-  if (addOverFlowLogic) {
-    node.style.overflow = size ? 'visible' : 'hidden'
-  }
+export const getSetResizerSize = (node: any, vertical: boolean,
+  isValidCustomResizer: boolean, resizerSize: number, detectionSize: number) => (size: number) => {
+  node.style[getSizeKey(vertical)] = toPx(size)
+  node.style.overflow = size ? 'visible' : 'hidden'
+  const sizeReduction = Math.abs(size - resizerSize)
 
-  if (style) {
+  if (!isValidCustomResizer) {
     if (size) {
+      const style = generateResizerStyle(resizerSize - sizeReduction, detectionSize, vertical)
       setPlainResizerStyle(node, style)
     } else {
       clearPlainResizerStyle(node)

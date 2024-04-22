@@ -1,13 +1,12 @@
 import React, {
   useState,
   useContext, useCallback,
-  isValidElement, cloneElement, useRef,
-  useMemo
+  isValidElement, cloneElement, useRef
 } from 'react'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
 import {
-  generateResizerStyle, getResizableEvent,
-  getSetSize, joinClassName
+  getResizableEvent,
+  getSetResizerSize, joinClassName
 } from '../utils/dom'
 import {findIndexInChildrenbyId} from '../utils/panes'
 import {getResizerId, noop} from '../utils/util'
@@ -70,16 +69,8 @@ export const Resizer = (props: IResizer) => {
   const isValidCustomResizer = isValidElement(children)
   const onMouseDownElement = isValidCustomResizer ? noop : onMouseDown
 
-  const style = useMemo(
-    () => isValidCustomResizer
-      ? null
-      : generateResizerStyle(resizerSize, detectionSize,
-        vertical),
-    [])
-
   const onNewRef = (node: any) => {
-    // need to work for default resizer
-    const setSize = getSetSize(node, vertical, true, style)
+    const setSize = getSetResizerSize(node, vertical, isValidCustomResizer, resizerSize, detectionSize)
     context.registerResizer({
       setSize,
       visibility: isNotLastIndex
