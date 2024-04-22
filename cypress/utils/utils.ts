@@ -85,6 +85,12 @@ export const moveElement = (cyId: string, firstEvent: IMoveEvent, secondEvent: I
     .trigger('mouseup')
 }
 
+export const moveElementNoMouseUp = (cyId: string, firstEvent: IMoveEvent, secondEvent: IMoveEvent) => {
+  cy.get(`[data-cy=${cyId}]`)
+    .trigger('mousemove', firstEvent)
+    .trigger('mousemove', secondEvent)
+}
+
 export const moveElementWithTouch = (cyId: string, firstEvent: IMoveEvent, secondEvent: IMoveEvent) => {
   cy.get(`[data-cy=${cyId}]`)
   // onTouchStartCapture
@@ -92,6 +98,20 @@ export const moveElementWithTouch = (cyId: string, firstEvent: IMoveEvent, secon
     .trigger('touchmove', firstEvent)
     .trigger('touchmove', secondEvent)
     .trigger('touchend')
+}
+
+export const moveElementRightNoMouseUp = (cyId: string, start: number, end: number, isTouch = false) => {
+  const firstEvent = moveRightEvent(start + 1)
+  const secondEvent = moveRightEvent(end)
+
+  moveElementNoMouseUp(cyId, firstEvent, secondEvent)
+}
+
+export const moveElementLeftNoMouseUp = (cyId: string, start: number, end: number, isTouch = false) => {
+  const firstEvent = moveLeftEvent(start - 1)
+  const secondEvent = moveLeftEvent(end)
+
+  moveElementNoMouseUp(cyId, firstEvent, secondEvent)
 }
 
 export const moveElementRight = (cyId: string, start: number, end: number, isTouch = false) => {
@@ -220,6 +240,55 @@ export const moveNPixel = (cyId:string,
         moveElementRight(cyId, mouseDownX - 1, mouseDownX + nPixel)
       } else {
         moveElementLeft(cyId, mouseDownX + 1, mouseDownX - nPixel)
+      }
+    })
+}
+
+export const moveNPixelNoMouseUp = (
+  cyId:string,
+  currentXY: number,
+  nPixel : number,
+  position: 'right' | 'left' | 'top' | 'bottom' = 'right'
+) => {
+  const nextXY = position === 'right' ? currentXY + nPixel : currentXY - nPixel
+  if (position === 'right') {
+    moveElementRightNoMouseUp(cyId, currentXY - 1, currentXY + nPixel)
+  } else {
+    moveElementLeftNoMouseUp(cyId, currentXY + 1, currentXY - nPixel)
+  }
+  cy.wait(50)
+    .then(() => {
+      return {
+        right: (nPixel: number) => moveNPixelNoMouseUp(cyId, nextXY, nPixel, 'right'),
+        left: (nPixel: number) => moveNPixelNoMouseUp(cyId, nextXY, nPixel, 'left'),
+        up: () => {
+          cy.get(`[data-cy=${cyId}]`)
+            .trigger('mouseup')
+        }
+      }
+    })
+}
+
+export const continousMovements = (cyId:string
+) => {
+  cy.get(`[data-cy=${cyId}]`)
+    .trigger('mousedown')
+
+  return getRects(cyId)
+    .then(([
+      sourceRect
+    ]: any) => {
+      const {x: resizerX, width} = sourceRect
+      const widthHalf = width / 2
+      const currentXY = resizerX + widthHalf
+
+      return {
+        right: (nPixel: number) => moveNPixelNoMouseUp(cyId, currentXY, nPixel, 'right'),
+        left: (nPixel: number) => moveNPixelNoMouseUp(cyId, currentXY, nPixel, 'left'),
+        up: () => {
+          cy.get(`[data-cy=${cyId}]`)
+            .trigger('mouseup')
+        }
       }
     })
 }

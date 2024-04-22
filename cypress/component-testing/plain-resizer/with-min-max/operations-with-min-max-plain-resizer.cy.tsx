@@ -92,6 +92,46 @@ describe('operations-with-min-max-plain-resizer', () => {
     })
   })
 
+  // Edge Case
+  it('Left Axis: Outside the axis movements should not reproduce any change', () => {
+    rCy.continousMovements(R2)
+      .then(({left}) => {
+        return left(700)
+      })
+      .then(({right}) => {
+        rCy.checkWidthsAndSum(
+          [10, 2, 100, 2, 100, 2, 690, 2, 100]
+        )
+        return right(10)
+      })
+      .then(({right}) => {
+        rCy.checkWidthsAndSum(
+          [10, 2, 100, 2, 100, 2, 690, 2, 100]
+        )
+        return right(100)
+      })
+  })
+
+  // Edge Case
+  it('Right Axis: Outside the axis movements should not reproduce any change', () => {
+    rCy.continousMovements(R1)
+      .then(({right}) => {
+        return right(800)
+      })
+      .then(({left}) => {
+        rCy.checkWidthsAndSum(
+          [100, 2, 690, 2, 100, 2, 100, 2, 10]
+        )
+        return left(10)
+      })
+      .then(({up}) => {
+        rCy.checkWidthsAndSum(
+          [100, 2, 690, 2, 100, 2, 100, 2, 10]
+        )
+        return up()
+      })
+  })
+
   describe('Resizing with visibility operations', () => {
     it('Continuous resizing with visibility operations', () => {
       rCy.move(R1, R2, 'left')

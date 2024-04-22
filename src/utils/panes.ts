@@ -187,7 +187,7 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
           item.defaultMaxSize = item.defaultSize
         }
         if (index > virtualActiveIndex) {
-          item.defaultMinSize = 0
+          item.defaultMinSize = item.size
           item.defaultMaxSize = item.defaultSize
         }
       }
@@ -196,7 +196,7 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
     virtualOrderList.forEach((item, index) => {
       if (item.isHandle) {
         if (index < virtualActiveIndex) {
-          item.defaultMinSize = 0
+          item.defaultMinSize = item.size
           item.defaultMaxSize = item.defaultSize
         }
         if (index > virtualActiveIndex) {

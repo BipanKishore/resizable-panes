@@ -2,8 +2,9 @@ import {checkWidths} from './check-widths'
 import {VIEW_PORT_PADDING} from './constants'
 import {ISizeMap} from './types'
 import {
+  continousMovements,
   getPaneIds, getRects, move, moveElementLeft,
-  moveItem, moveNPixel, moveRightEvent, swiftMove
+  moveItem, moveNPixel, moveNPixelNoMouseUp, moveRightEvent, swiftMove
 } from './utils'
 
 interface IRCy {
@@ -168,6 +169,8 @@ export class RCy {
   moveItem = moveItem
   move = move
   moveNPixel = moveNPixel
+  moveNPixelNoMouseUp = moveNPixelNoMouseUp
+  continousMovements = continousMovements
 
   moveResizerToStart (cyResizerId: string) {
     getRects(cyResizerId)
