@@ -28,7 +28,7 @@ const INITIAL_SIZES: any = {
 }
 
 const storeInMemoryAndCheckSizeAfterRemounting = () => {
-  rCy.toMostLeft(R2)
+  rCy.moveNPixel(R2, 1000, 'left')
   rCy.checkWidthsAndSum({
     [R0]: 0,
     [R1]: 0,

@@ -41,7 +41,7 @@ describe('Overlapping Resizers', () => {
   })
 
   it('R2 to most Left', () => {
-    rCy.toMostLeft(R2)
+    rCy.moveNPixel(R2, 1000, 'left')
 
     rCy.checkWidths({
       [uniqueIdResizablePanes]: containerXLen
@@ -61,7 +61,7 @@ describe('Overlapping Resizers', () => {
   })
 
   it('R1 to most Right', () => {
-    rCy.toMostRight(R1)
+    rCy.moveNPixel(R1, 1000)
 
     rCy.checkWidths({
       [uniqueIdResizablePanes]: containerXLen
