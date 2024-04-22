@@ -1,4 +1,4 @@
-name: NodeJS with Webpack
+name: Unit Tests / Component Testing
 
 on:
   push:
