@@ -8,7 +8,10 @@ import {Pane} from '../../src'
 import {ResizableComponentCustomPanesTestWrapper}
   from '../components/rp-test-wrapper/resizable-component-custom-panes-test-wrapper'
 
-const rCy = new RCy()
+const rCy = new RCy({
+  resizerSize: 10,
+  detectionSize: 0
+})
 const {resizerSize} = rCy
 
 const INITIAL_SIZES: any = {
@@ -64,6 +67,7 @@ describe('Storage api', () => {
         resizer={
           <CustomResizerFirst horizontal={false} size={10} />
         }
+        resizerSize={10}
         storageApi={localStorage}
         uniqueId={rScontainerId}
         vertical
@@ -84,14 +88,15 @@ describe('Storage api', () => {
     storeInMemoryAndCheckSizeAfterRemounting)
 })
 
-describe.only('Check auto clear memory', () => {
-  it.only('should clear memeory when a pane id changes', () => {
+describe('Check auto clear memory', () => {
+  it('should clear memeory when a pane id changes', () => {
     rCy.setViewPort()
     cy.mount(
       <ResizableComponentCustomPanesTestWrapper
         resizer={
           <CustomResizerFirst horizontal={false} size={10} />
       }
+        resizerSize={10}
         storageApi={localStorage}
         uniqueId={rScontainerId}
         vertical
@@ -132,6 +137,7 @@ describe.only('Check auto clear memory', () => {
         resizer={
           <CustomResizerFirst horizontal={false} size={10} />
       }
+        resizerSize={10}
         storageApi={localStorage}
         uniqueId={rScontainerId}
         vertical
@@ -161,6 +167,7 @@ describe.only('Check auto clear memory', () => {
         resizer={
           <CustomResizerFirst horizontal={false} size={10} />
       }
+        resizerSize={10}
         storageApi={localStorage}
         uniqueId={rScontainerId}
         vertical
@@ -168,7 +175,7 @@ describe.only('Check auto clear memory', () => {
       </RPTestWrapper>
     )
     storeInMemoryAndCheckSizeAfterRemounting()
-    cy.wait(5000)
+    cy.wait(50)
 
     const noMinMax5PanesSetClone = [...noMinMax5PanesSet]
 
@@ -181,6 +188,7 @@ describe.only('Check auto clear memory', () => {
         resizer={
           <CustomResizerFirst horizontal={false} size={10} />
       }
+        resizerSize={10}
         storageApi={localStorage}
         uniqueId={rScontainerId}
         vertical

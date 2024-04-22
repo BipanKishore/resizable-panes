@@ -1,9 +1,9 @@
-import {checkWidths, checkWidthsAndSum} from './check-widths'
+import {checkWidths} from './check-widths'
 import {VIEW_PORT_PADDING} from './constants'
 import {ISizeMap} from './types'
 import {
   getPaneIds, getRects, move, moveElementLeft,
-  moveItem, moveLeftEvent, moveNPixel, moveRightEvent, swiftMove
+  moveItem, moveNPixel, moveRightEvent, swiftMove
 } from './utils'
 
 interface IRCy {
@@ -13,11 +13,14 @@ interface IRCy {
     maxInitialPaneSize?: number,
     len?: number,
     height?: number,
-    plainResizer?:boolean
+    plainResizer?:boolean,
+    detectionSize?: number
 }
 
 export class RCy {
   resizerSize: number
+  detectionSize: number
+
   maxInitialPaneSize: number
   height: number
   len: number
@@ -47,7 +50,8 @@ export class RCy {
   constructor (model: IRCy = {}) {
     const {
       containerId,
-      resizerSize = 10,
+      detectionSize = 5,
+      resizerSize = 2,
       maxInitialPaneSize = 1000,
       height = 500,
       len = 5,
@@ -60,6 +64,7 @@ export class RCy {
     this.plainResizer = plainResizer
 
     this.resizerSize = resizerSize
+    this.detectionSize = detectionSize
     this.maxInitialPaneSize = maxInitialPaneSize
     this.len = len
 
@@ -100,10 +105,8 @@ export class RCy {
         let size = sizes[i]
         _sizeSum += size
         if (this.plainResizer && i % 2) {
-          if (size === 2) {
-            size = 12
-          } if (size === 0) {
-            size = 10
+          if (size === this.resizerSize) {
+            size = this.resizerSize + 2 * this.detectionSize
           }
         }
         sizeMap[id] = size

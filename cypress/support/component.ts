@@ -20,6 +20,7 @@ import './commands'
 // require('./commands')
 
 import {mount} from 'cypress/react18'
+import '../styles/style.css'
 
 import '@cypress/code-coverage/support'
 

@@ -12,6 +12,7 @@ import {
 
 const uniqueIdResizablePanes = ENUMS.resizablePanesId
 const rCy = new RCy({
+  resizerSize: 10,
   containerId: uniqueIdResizablePanes,
   len: 7
 })

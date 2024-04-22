@@ -2,7 +2,9 @@ import {ENUMS, TestComponentWrapper} from '../../../components/test-component-wr
 import React from 'react'
 import {RCy} from '../../../utils'
 
-const rCy = new RCy()
+const rCy = new RCy({
+  resizerSize: 10
+})
 const {resizerSize} = rCy
 
 const {

@@ -146,18 +146,19 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     return getSizeStyle(vertical, size as number)
   }
 
-  const setVisibility = (param: IKeyToBoolMap = {}) => {
+  // It is getting default empty Object param
+  const setVisibility = (param: IKeyToBoolMap) => {
     const oldVisibilityMap = createMap(panesList, VISIBILITY)
 
     const keys = Object.keys(oldVisibilityMap)
-    const isNoChange = keys.every((key) => oldVisibilityMap[key] === param[key])
-    if (isNoChange) {
-      return
-    }
-
     const newMap = {
       ...oldVisibilityMap,
       ...param
+    }
+
+    const isNoChange = keys.every((key) => oldVisibilityMap[key] === newMap[key])
+    if (isNoChange) {
+      return
     }
 
     const {

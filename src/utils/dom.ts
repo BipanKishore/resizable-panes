@@ -2,7 +2,10 @@ import {
   IResizableEvent, IJoinClassNameParam,
   UnitTypes, IBooleanOrUndefined, ISizeStyle
 } from '../@types'
-import {DIRECTIONS, RATIO} from '../constant'
+import {
+  BORDER_BOTTOM, BORDER_LEFT, BORDER_RIGHT,
+  DIRECTIONS, MARGIN, MIN_HEIGHT, MIN_WIDTH, RATIO
+} from '../constant'
 
 export const toPx = (size: number) => `${size}px`
 export const getSizeKey = (vertical: boolean) => vertical ? 'width' : 'height'
@@ -20,7 +23,7 @@ export const joinClassName = (param: IJoinClassNameParam, notRequired: boolean |
 
 export const getContainerClass = (vertical: boolean, className: string, unit: UnitTypes) =>
   joinClassName({
-    'd-flex': true,
+    flex: true,
     'f-row w-fit-content h-100p': vertical,
     'f-column': !vertical,
     'w-100p h-100p': unit === RATIO,
@@ -61,20 +64,53 @@ export const getDirection = (e: IResizableEvent) => e.movement < 0 ? DIRECTIONS.
 
 export const toArray = (items: any) => Array.isArray(items) ? items : [items]
 
-export const getSetSize = (node: any, vertical: boolean,
-  // eslint-disable-next-line complexity
-  addOverFlowLogic = false, addMinSize: number = 0) => (size: number) => {
-  node.style[getSizeKey(vertical)] = toPx(size)
-  if (addOverFlowLogic) {
-    if (size === 0) {
-      node.style.overflow = 'hidden'
-    } else {
-      node.style.overflow = 'visible'
+const clearPlainResizerStyle = (node: HTMLElement) => {
+  [MARGIN, MIN_WIDTH, MIN_HEIGHT, BORDER_LEFT,
+    BORDER_RIGHT, BORDER_BOTTOM, BORDER_RIGHT].forEach((key) => node.style[key] = null)
+}
+
+const setPlainResizerStyle = (node: HTMLElement, style: any) => {
+  const keys = Object.keys(style)
+  keys.forEach((key) => node.style[key] = style[key])
+}
+
+export const generateResizerStyle = (resizerSize: number,
+  detectionSize: number, vertical: boolean) => {
+  const detectionSizePx = toPx(detectionSize)
+  const minSize = toPx(resizerSize + 2 * detectionSize)
+  const border = `${detectionSizePx} solid transparent`
+
+  if (vertical) {
+    return {
+      margin: `0 -${detectionSizePx}`,
+      minWidth: minSize,
+      borderLeft: border,
+      borderRight: border
     }
   }
 
-  if (addMinSize) {
-    const key: string = `min${vertical ? 'Width' : 'Height'}` as 'minWidth' | 'minHeight'
-    node.style[key] = toPx(size === 0 ? size : addMinSize)
+  return {
+    margin: `${detectionSizePx} 0`,
+    minHeight: minSize,
+    borderTop: border,
+    borderBottom: border
+  }
+}
+
+export const getSetSize = (node: any, vertical: boolean,
+
+  addOverFlowLogic = false, style: any) => (size: number) => {
+  node.style[getSizeKey(vertical)] = toPx(size)
+
+  if (addOverFlowLogic) {
+    node.style.overflow = size ? 'visible' : 'hidden'
+  }
+
+  if (style) {
+    if (size) {
+      setPlainResizerStyle(node, style)
+    } else {
+      clearPlainResizerStyle(node)
+    }
   }
 }
