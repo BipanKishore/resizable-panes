@@ -2,17 +2,14 @@ import {checkWidths} from '../../../utils/check-widths'
 import {ENUMS, TestComponentWrapper} from '../../../components/test-component-wrapper'
 import {RCy} from '../../../utils'
 import React from 'react'
+import {R2, R0, R1, R3} from '../../fix-test-ids'
 
 const uniqueIdResizablePanes = ENUMS.resizablePanesId
 
-const rCy = new RCy()
+const rCy = new RCy({
+  resizerSize: 10
+})
 const {resizerSize, containerXLen} = rCy
-
-const {
-  resizerIds: [R0, R1, R2, R3],
-  checkboxIds: [CK0, CK1, CK2, CK3, CK4],
-  paneIds: [P0, P1, P2, P3, P4]
-} = rCy.getResizableIds()
 
 const INITIAL_SIZES: any = {
   [uniqueIdResizablePanes]: containerXLen,

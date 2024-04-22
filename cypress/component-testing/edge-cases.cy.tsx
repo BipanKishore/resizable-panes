@@ -1,20 +1,15 @@
 import React from 'react'
 import {ENUMS, TestComponentWrapper} from '../components/test-component-wrapper'
 import {RCy} from '../utils'
-import {Panes, ResizablePanes} from '../../src'
+import {Panes} from '../../src'
 import {CustomResizerFirst} from '../components/custom-resizer'
 import {RPTestWrapper} from '../components/rp-test-wrapper'
+import {R2, CK4, R3, R1, CK0, R0} from './fix-test-ids'
 
 const containerId = ENUMS.resizablePanesId
 
-const rCy = new RCy({containerId})
+const rCy = new RCy({containerId, resizerSize: 10})
 const {resizerSize} = rCy
-
-const {
-  resizerIds: [R0, R1, R2, R3],
-  checkboxIds: [CK0, CK1, CK2, CK3, CK4],
-  paneIds: [P0, P1, P2, P3, P4]
-} = rCy.getResizableIds()
 
 const INITIAL_SIZES: any = {
   // [uniqueIdResizablePanes]: containerSize,

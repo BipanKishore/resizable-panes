@@ -113,7 +113,7 @@ export const Resizer = (props: IResizer) => {
 
   const onMouseDownElement = isValidResizer ? noop : onMouseDown
 
-  const style = generateResizerStyle(resizerSize, _detectionSize, vertical)
+  const style = isValidResizer ? {} : generateResizerStyle(resizerSize, _detectionSize, vertical)
 
   console.log('style', style)
 

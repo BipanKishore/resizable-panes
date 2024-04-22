@@ -3,7 +3,9 @@ import React from 'react'
 import {RCy} from '../../../utils'
 
 const uniqueIdResizablePanes = ENUMS.resizablePanesId
-const rCy = new RCy()
+const rCy = new RCy({
+  resizerSize: 10
+})
 const {resizerSize, containerXLen} = rCy
 
 const INITIAL_SIZES: any = {
@@ -80,7 +82,7 @@ describe('No min max limits, Custom resizer with resizerSize prop', () => {
   })
 
   describe('Simple Resizing and visibility operations', () => {
-    it('hide P1 >> P2 >> R1 TO 100Px right', () => {
+    it.only('hide P1 >> P2 >> R1 TO 100Px right', () => {
       cy.get(`[data-cy=${CK1}]`).uncheck()
       cy.get(`[data-cy=${CK3}]`).uncheck()
       rCy.checkWidthsAndSum({

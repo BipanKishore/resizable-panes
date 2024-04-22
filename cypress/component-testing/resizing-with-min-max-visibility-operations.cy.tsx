@@ -1,25 +1,36 @@
-import {ENUMS, TestComponentWrapper} from '../components/test-component-wrapper'
 import React from 'react'
 import {RCy} from '../utils'
-import {TestComponentWrapperWithMinMax} from '../components/test-component-wrapper-with-min-max'
+import {CK0, P0, P1, P2, P3, P4, R0, R1, R2, R3, CK1, CK2, CK3, CK4, rScontainerId} from './fix-test-ids'
+import {withMinMaxEqualSize5PanesSet} from './pane-model-config-sets'
+import {RPTestWrapper} from '../components/rp-test-wrapper'
+import {CustomResizerFirst} from '../components/custom-resizer'
 
-const containerId = ENUMS.resizablePanesId
+const containerId = rScontainerId
 const rCy = new RCy({
-  containerId
+  resizerSize: 10,
+  containerId,
+  plainResizer: false
 })
 const {resizerSize} = rCy
-
-const {
-  resizerIds: [R0, R1, R2, R3],
-  checkboxIds: [CK0, CK1, CK2, CK3, CK4],
-  paneIds: [P0, P1, P2, P3, P4]
-} = rCy.getResizableIds()
 
 describe('Resizing with min and max with visibility operations', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
-      <TestComponentWrapperWithMinMax />
+      <RPTestWrapper
+        panesList={withMinMaxEqualSize5PanesSet}
+        resizer={
+          <CustomResizerFirst size={10} />
+        }
+        resizerClass='bg-slate-500'
+        resizerSize={10}
+        storageApi={localStorage}
+        uniqueId={rScontainerId}
+        vertical
+      >
+
+      </RPTestWrapper>
+
     )
   })
 
@@ -351,7 +362,7 @@ describe('Resizing with min and max with visibility operations', () => {
 
   describe('Rezing to container Edges', () => {
     it('R0 to max right', () => {
-      rCy.move(R0, ENUMS.resizablePanesId, 'right')
+      rCy.move(R0, containerId, 'right')
       rCy.checkWidths({
         [P0]: 300,
         [P1]: 100,
@@ -361,7 +372,7 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('R0 to max left', () => {
-      rCy.move(R0, ENUMS.resizablePanesId, 'left')
+      rCy.move(R0, containerId, 'left')
       rCy.checkWidths({
         [P0]: 10,
         [P1]: 390,
@@ -371,7 +382,7 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('R1 to max left', () => {
-      rCy.move(R1, ENUMS.resizablePanesId, 'left')
+      rCy.move(R1, containerId, 'left')
       rCy.checkWidths({
         [P0]: 10,
         [P1]: 100,
@@ -383,7 +394,7 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('R1 to max right', () => {
-      rCy.move(R1, ENUMS.resizablePanesId, 'right')
+      rCy.move(R1, containerId, 'right')
       rCy.checkWidthsAndSum({
         [P0]: 100,
         [P1]: 690,
@@ -398,7 +409,7 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('R2 to max left', () => {
-      rCy.move(R2, ENUMS.resizablePanesId, 'left')
+      rCy.move(R2, containerId, 'left')
       rCy.checkWidthsAndSum({
         [P0]: 10,
         [P1]: 100,
@@ -413,7 +424,7 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('R2 to max right', () => {
-      rCy.move(R2, ENUMS.resizablePanesId, 'right')
+      rCy.move(R2, containerId, 'right')
       rCy.checkWidthsAndSum({
         [P0]: 100,
         [P1]: 490,
@@ -428,7 +439,7 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('R3 to max left', () => {
-      rCy.move(R3, ENUMS.resizablePanesId, 'left')
+      rCy.move(R3, containerId, 'left')
       rCy.checkWidthsAndSum({
         [P0]: 100,
         [P1]: 300,
@@ -443,7 +454,7 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('R3 to max right', () => {
-      rCy.move(R3, ENUMS.resizablePanesId, 'right')
+      rCy.move(R3, containerId, 'right')
       rCy.checkWidthsAndSum({
         [P0]: 100,
         [P1]: 300,
@@ -458,8 +469,8 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('R3 to max right - R2 to max right', () => {
-      rCy.move(R3, ENUMS.resizablePanesId, 'right')
-      rCy.move(R2, ENUMS.resizablePanesId, 'right')
+      rCy.move(R3, containerId, 'right')
+      rCy.move(R2, containerId, 'right')
       rCy.checkWidthsAndSum({
         [P0]: 100,
         [P1]: 490,
@@ -474,8 +485,8 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('R3 to max right - R0 to max left - R2 to max right - R1 to most left', () => {
-      rCy.move(R3, ENUMS.resizablePanesId, 'right')
-      rCy.move(R0, ENUMS.resizablePanesId, 'left')
+      rCy.move(R3, containerId, 'right')
+      rCy.move(R0, containerId, 'left')
       rCy.checkWidthsAndSum({
         [P0]: 10,
         [P1]: 390,
@@ -488,7 +499,7 @@ describe('Resizing with min and max with visibility operations', () => {
         [R3]: resizerSize
       })
 
-      rCy.move(R2, ENUMS.resizablePanesId, 'right')
+      rCy.move(R2, containerId, 'right')
 
       rCy.checkWidthsAndSum({
         [P0]: 10,
@@ -502,7 +513,7 @@ describe('Resizing with min and max with visibility operations', () => {
         [R3]: resizerSize
       })
 
-      rCy.move(R1, ENUMS.resizablePanesId, 'left')
+      rCy.move(R1, containerId, 'left')
 
       rCy.checkWidthsAndSum({
         [P0]: 10,

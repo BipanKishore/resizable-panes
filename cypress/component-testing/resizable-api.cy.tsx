@@ -7,9 +7,10 @@ import {CustomResizerFirst} from '../components/custom-resizer'
 import {Pane, ResizablePanes} from '../../src'
 import {IGetState, IResizableApi} from '../../src/@types'
 
-const rCy = new RCy()
-
 describe('Storage api', () => {
+  const rCy = new RCy({
+    resizerSize: 10
+  })
   let resizableApi: IResizableApi
 
   beforeEach(() => {
@@ -20,6 +21,7 @@ describe('Storage api', () => {
           resizer={
             <CustomResizerFirst horizontal={false} size={10} />
         }
+          resizerSize={10}
           storageApi={localStorage}
           uniqueId={rScontainerId}
           vertical
@@ -149,11 +151,15 @@ describe('Storage api', () => {
 describe('Storage api', () => {
   let resizableApi: IResizableApi
 
+  const rCy = new RCy({
+    resizerSize: 1,
+    detectionSize: 5
+  })
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
       <RPTestWrapper
-        detectionSize={10}
+        detectionSize={5}
         panesList={withMinMaxEqualSize5PanesSet}
         resizerClass='bg-slate-500'
         resizerSize={1}
