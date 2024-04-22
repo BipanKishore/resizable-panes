@@ -1,20 +1,13 @@
 import React from 'react'
-import {Pane} from '../../../../src'
 import {RCy} from '../../../utils'
 import {RPTestWrapper} from '../../../components/rp-test-wrapper'
 import {testResizablePanesId} from '../../../components/rp-test-wrapper/constant'
 import {withMinMaxEqualSize5PanesSet} from '../../pane-model-config-sets'
+import {R0, R1, R2, R3, CK1, CK0, CK4, CK2} from '../../fix-test-ids'
 
 const containerId = testResizablePanesId
 
 const rCy = new RCy({containerId, plainResizer: true, resizerSize: 2})
-const {resizerSize} = rCy
-
-const {
-  resizerIds: [R0, R1, R2, R3],
-  checkboxIds: [CK0, CK1, CK2, CK3, CK4],
-  paneIds: [P0, P1, P2, P3, P4]
-} = rCy.getResizableIds()
 
 describe('operations-with-min-max-plain-resizer', () => {
   beforeEach(() => {

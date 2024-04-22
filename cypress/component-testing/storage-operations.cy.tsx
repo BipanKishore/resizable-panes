@@ -84,8 +84,8 @@ describe('Storage api', () => {
     storeInMemoryAndCheckSizeAfterRemounting)
 })
 
-describe.only('Check auto clear memory', () => {
-  it.only('should clear memeory when a pane id changes', () => {
+describe('Check auto clear memory', () => {
+  it('should clear memeory when a pane id changes', () => {
     rCy.setViewPort()
     cy.mount(
       <ResizableComponentCustomPanesTestWrapper

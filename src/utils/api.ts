@@ -15,8 +15,11 @@ import {
 
 // Need to check for hidden element
 export const restoreDefaultFn = ({items}: any) => {
+  console.log(
+    'restoreDefaultFn'
+  )
   items.forEach((pane: PaneModel) => pane.restore())
-  setUISizesFn(items, DIRECTIONS.DOWN)
+  setUISizesFn(items, DIRECTIONS.NONE)
 }
 
 const setSizesAfterVisibilityChange = (

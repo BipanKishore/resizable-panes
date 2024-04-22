@@ -1,5 +1,5 @@
 import {PaneModel} from '../models/pane-model'
-import {IResizablePanesProps} from './component-types'
+import {IBoolMap, IGetMaP, IGetState, INumberMap, IResizablePanesProps} from './component-types'
 import {IKeyToBoolMap} from './general-type'
 
 export type keyOfPaneModel = keyof PaneModel
@@ -7,7 +7,10 @@ export type IPaneNumericKeys = 'size' | 'defaultSize' | 'minSize' | 'maxSize' | 
 
 export interface IResizableApi {
     restoreDefault: () => void,
-    setVisibility: (map: IKeyToBoolMap) => void
+    setVisibility: (map: IKeyToBoolMap) => void,
+    getVisibilitys: () => IBoolMap,
+    getSizes: () => INumberMap,
+    getState: () => IGetState
 }
 
 export interface IUseResizablePanesParams {

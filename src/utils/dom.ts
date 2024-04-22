@@ -20,7 +20,7 @@ export const joinClassName = (param: IJoinClassNameParam, notRequired: boolean |
 
 export const getContainerClass = (vertical: boolean, className: string, unit: UnitTypes) =>
   joinClassName({
-    'd-flex': true,
+    flex: true,
     'f-row w-fit-content h-100p': vertical,
     'f-column': !vertical,
     'w-100p h-100p': unit === RATIO,
@@ -76,5 +76,27 @@ export const getSetSize = (node: any, vertical: boolean,
   if (addMinSize) {
     const key: string = `min${vertical ? 'Width' : 'Height'}` as 'minWidth' | 'minHeight'
     node.style[key] = toPx(size === 0 ? size : addMinSize)
+  }
+}
+
+export const generateResizerStyle = (resizerSize: number, detectionSize: number, vertical: boolean) => {
+  const detectionSizePx = toPx(detectionSize)
+  const minSize = toPx(resizerSize + 2 * detectionSize)
+  const border = `${detectionSizePx} solid transparent`
+
+  if (vertical) {
+    return {
+      margin: `0 -${detectionSizePx}`,
+      minWidth: minSize,
+      borderLeft: border,
+      borderRight: border
+    }
+  }
+
+  return {
+    margin: `${detectionSizePx} 0`,
+    minHeight: minSize,
+    borderTop: border,
+    borderBottom: border
   }
 }

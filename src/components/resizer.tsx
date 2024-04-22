@@ -4,7 +4,10 @@ import React, {
   isValidElement, cloneElement, useRef
 } from 'react'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
-import {getResizableEvent, getSetSize, getSizeKey, joinClassName} from '../utils/dom'
+import {
+  generateResizerStyle, getResizableEvent,
+  getSetSize, getSizeKey, joinClassName
+} from '../utils/dom'
 import {findIndexInChildrenbyId} from '../utils/panes'
 import {getResizerId, noop} from '../utils/util'
 import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
@@ -21,7 +24,8 @@ export const Resizer = (props: IResizer) => {
   const context: any = useContext(ResizablePaneContext)
   const {getIdToSizeMap, myChildren, onMoveEndFn} = context
 
-  const {vertical, uniqueId} = context.props
+  const {vertical, uniqueId, resizerSize, detectionSize, resizerClass} = context.props
+  const _detectionSize = detectionSize + 1
   const index = findIndexInChildrenbyId(myChildren, id)
   const isNotLastIndex = index < (myChildren.length - 1)
   const previousTouchEvent:any = useRef()
@@ -72,7 +76,7 @@ export const Resizer = (props: IResizer) => {
 
   const onNewRef = (node: any) => {
     // need to work for default resizer
-    const setSize = getSetSize(node, vertical, true, children ? 0 : 12)
+    const setSize = getSetSize(node, vertical, true, children ? 0 : resizerSize + 2 * _detectionSize)
 
     context.registerResizer({
       getVisibleSize: () => getVisibleSize(node),
@@ -85,6 +89,7 @@ export const Resizer = (props: IResizer) => {
   const [setResizerRef]: any = useHookWithRefCallback(onNewRef)
 
   const className = joinClassName({
+    [resizerClass]: true,
     resizer: true,
     'resizer-horizontal': vertical,
     'resizer-vertical': !vertical
@@ -108,12 +113,17 @@ export const Resizer = (props: IResizer) => {
 
   const onMouseDownElement = isValidResizer ? noop : onMouseDown
 
+  const style = generateResizerStyle(resizerSize, _detectionSize, vertical)
+
+  console.log('style', style)
+
   if (isNotLastIndex) {
     return (
       <div
         className={className}
         data-cy={resizerId}
         ref={setResizerRef}
+        style={style}
         onMouseDown={onMouseDownElement}
         onTouchStartCapture={onMouseDownElement}
       >

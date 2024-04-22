@@ -14,8 +14,25 @@ export type UnitTypes = 'ratio' | 'pixel' | undefined
 
 export type IGetMapApiParam = 'size' | 'visibility'
 
-export interface IGetMaP {
-  [key: string]: number | boolean
+export interface INumberMap {
+  [key: string]: number
+}
+
+export interface IBoolMap {
+  [key: string]: boolean
+}
+
+export type IGetMaP = INumberMap | IBoolMap
+
+interface IGetStateItem {
+  size: number,
+  visibility: boolean,
+  defaultMinSize: number,
+  defaultMaxSize: number
+}
+
+export interface IGetState {
+  [key: string]: IGetStateItem
 }
 
 export interface IResizablePanesPropsBase {
