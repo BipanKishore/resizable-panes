@@ -82,7 +82,7 @@ describe('No min max limits, Custom resizer with resizerSize prop', () => {
   })
 
   describe('Simple Resizing and visibility operations', () => {
-    it.only('hide P1 >> P2 >> R1 TO 100Px right', () => {
+    it('hide P1 >> P2 >> R1 TO 100Px right', () => {
       cy.get(`[data-cy=${CK1}]`).uncheck()
       cy.get(`[data-cy=${CK3}]`).uncheck()
       rCy.checkWidthsAndSum({

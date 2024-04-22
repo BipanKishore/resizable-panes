@@ -7,7 +7,12 @@ import {R0, R1, R2, R3, CK1, CK0, CK4, CK2} from '../../fix-test-ids'
 
 const containerId = testResizablePanesId
 
-const rCy = new RCy({containerId, plainResizer: true, resizerSize: 2})
+const rCy = new RCy({
+  containerId,
+  plainResizer: true,
+  resizerSize: 2,
+  detectionSize: 5
+})
 
 describe('operations-with-min-max-plain-resizer', () => {
   beforeEach(() => {
@@ -17,7 +22,6 @@ describe('operations-with-min-max-plain-resizer', () => {
         panesList={withMinMaxEqualSize5PanesSet}
         storageApi={localStorage}
         uniqueId={containerId}
-
         vertical
       >
 

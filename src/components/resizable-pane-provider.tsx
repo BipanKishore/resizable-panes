@@ -20,8 +20,7 @@ const ResizablePaneProviderDefaultProps: any = {
   resizerClass: '',
   resizerSize: 2,
   detectionSize: 5,
-  // resizerSize: 2,
-  visibility: {} // It can be removed as I have already past default value in method
+  visibility: {}
 }
 
 export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {

@@ -1,12 +1,13 @@
 import React, {
   useState,
   useContext, useCallback,
-  isValidElement, cloneElement, useRef
+  isValidElement, cloneElement, useRef,
+  useMemo
 } from 'react'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
 import {
   generateResizerStyle, getResizableEvent,
-  getSetSize, getSizeKey, joinClassName
+  getSetSize, joinClassName
 } from '../utils/dom'
 import {findIndexInChildrenbyId} from '../utils/panes'
 import {getResizerId, noop} from '../utils/util'
@@ -25,7 +26,7 @@ export const Resizer = (props: IResizer) => {
   const {getIdToSizeMap, myChildren, onMoveEndFn} = context
 
   const {vertical, uniqueId, resizerSize, detectionSize, resizerClass} = context.props
-  const _detectionSize = detectionSize + 1
+
   const index = findIndexInChildrenbyId(myChildren, id)
   const isNotLastIndex = index < (myChildren.length - 1)
   const previousTouchEvent:any = useRef()
@@ -66,20 +67,20 @@ export const Resizer = (props: IResizer) => {
     onMoveEnd
   ])
 
-  const getVisibleSize = (node: any) => {
-    if (children) {
-      const rect = node.getBoundingClientRect()
-      return rect[getSizeKey(vertical)]
-    }
-    return 2
-  }
+  const isValidCustomResizer = isValidElement(children)
+  const onMouseDownElement = isValidCustomResizer ? noop : onMouseDown
+
+  const style = useMemo(
+    () => isValidCustomResizer
+      ? null
+      : generateResizerStyle(resizerSize, detectionSize,
+        vertical),
+    [])
 
   const onNewRef = (node: any) => {
     // need to work for default resizer
-    const setSize = getSetSize(node, vertical, true, children ? 0 : resizerSize + 2 * _detectionSize)
-
+    const setSize = getSetSize(node, vertical, true, style)
     context.registerResizer({
-      getVisibleSize: () => getVisibleSize(node),
       setSize,
       visibility: isNotLastIndex
     }, id)
@@ -95,10 +96,8 @@ export const Resizer = (props: IResizer) => {
     'resizer-vertical': !vertical
   }, children)
 
-  const isValidResizer = isValidElement(children)
-
   let cloneChild
-  if (isValidResizer) {
+  if (isValidCustomResizer) {
     cloneChild = cloneElement(children, {
       ...children.props as object,
       // @ts-ignore
@@ -111,19 +110,12 @@ export const Resizer = (props: IResizer) => {
     })
   }
 
-  const onMouseDownElement = isValidResizer ? noop : onMouseDown
-
-  const style = isValidResizer ? {} : generateResizerStyle(resizerSize, _detectionSize, vertical)
-
-  console.log('style', style)
-
   if (isNotLastIndex) {
     return (
       <div
         className={className}
         data-cy={resizerId}
         ref={setResizerRef}
-        style={style}
         onMouseDown={onMouseDownElement}
         onTouchStartCapture={onMouseDownElement}
       >

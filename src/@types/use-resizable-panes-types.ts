@@ -32,7 +32,6 @@ export type IPaneModelKey = keyof PaneModel
 
 export interface IResizerApi {
     setVisibility: (value: boolean) => unknown,
-    getVisibleSize: () => number,
     visibility: boolean,
     setSize: (size: number) => void
   }

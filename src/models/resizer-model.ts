@@ -9,7 +9,6 @@ import {PaneModel} from './pane-model'
 
 export class ResizerModel extends PaneModel {
   api: IResizerApi
-  resizerSize: number
 
   constructor (
     paneProps: IPane,
@@ -52,7 +51,7 @@ export class ResizerModel extends PaneModel {
   register (api: IResizerApi) {
     this.api = api
     if (this.visibility) {
-      this.size = this.resizerSize ? this.resizerSize : api.getVisibleSize()
+      this.size = this.resizerSize
       this.defaultMaxSize = this.size
     } else {
       this.defaultMaxSize = this.resizerSize

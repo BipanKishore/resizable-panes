@@ -64,7 +64,7 @@ export class RCy {
     this.plainResizer = plainResizer
 
     this.resizerSize = resizerSize
-    this.detectionSize = detectionSize + 1
+    this.detectionSize = detectionSize
     this.maxInitialPaneSize = maxInitialPaneSize
     this.len = len
 
@@ -107,8 +107,6 @@ export class RCy {
         if (this.plainResizer && i % 2) {
           if (size === this.resizerSize) {
             size = this.resizerSize + 2 * this.detectionSize
-          } if (size === 0) {
-            size = 10
           }
         }
         sizeMap[id] = size

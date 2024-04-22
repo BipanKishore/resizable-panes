@@ -289,9 +289,7 @@ export class PaneModel {
 
   setVisibilityHelper (isPartiallyHidden: boolean = false) {
     if (this.isHandle) {
-      this.size = isPartiallyHidden
-        ? 0
-        : this.resizerSize ? this.resizerSize : this.api.getVisibleSize()
+      this.size = isPartiallyHidden ? 0 : this.resizerSize
     }
   }
 

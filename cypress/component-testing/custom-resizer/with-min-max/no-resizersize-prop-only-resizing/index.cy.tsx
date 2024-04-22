@@ -3,17 +3,12 @@ import React from 'react'
 import {RCy} from '../../../../utils'
 import {Pane, ResizablePanes} from '../../../../../src'
 import {CustomResizerFirst} from '../../../../components/custom-resizer'
+import {R0, P0, P1, R1, P2, R2, P3, P4, R3} from '../../../fix-test-ids'
 
 const containerId = ENUMS.resizablePanesId
 
-const rCy = new RCy({containerId})
+const rCy = new RCy({containerId, resizerSize: 10})
 const {resizerSize} = rCy
-
-const {
-  resizerIds: [R0, R1, R2, R3],
-  checkboxIds: [CK0, CK1, CK2, CK3, CK4],
-  paneIds: [P0, P1, P2, P3, P4]
-} = rCy.getResizableIds()
 
 describe('Resizing with min max limits with no resizerSize', () => {
   beforeEach(() => {
@@ -28,6 +23,7 @@ describe('Resizing with min max limits with no resizerSize', () => {
           resizer={
             <CustomResizerFirst size={10} />
             }
+          resizerSize={10}
           storageApi={localStorage}
           uniqueId={containerId}
           vertical
