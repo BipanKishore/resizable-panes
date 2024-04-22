@@ -64,14 +64,16 @@ export const getDirection = (e: IResizableEvent) => e.movement < 0 ? DIRECTIONS.
 
 export const toArray = (items: any) => Array.isArray(items) ? items : [items]
 
-const clearPlainResizerStyle = (node: HTMLElement) => {
+const clearPlainResizerStyle = (node: any) => {
   [MARGIN, MIN_WIDTH, MIN_HEIGHT, BORDER_LEFT,
-    BORDER_RIGHT, BORDER_BOTTOM, BORDER_RIGHT].forEach((key) => node.style[key] = null)
+    BORDER_RIGHT, BORDER_BOTTOM, BORDER_RIGHT].forEach((key:string) => {
+    node.style[key] = null
+  })
 }
 
-const setPlainResizerStyle = (node: HTMLElement, style: any) => {
+const setPlainResizerStyle = (node: any, style: any) => {
   const keys = Object.keys(style)
-  keys.forEach((key) => node.style[key] = style[key])
+  keys.forEach((key) => { node.style[key] = style[key] })
 }
 
 export const generateResizerStyle = (resizerSize: number,
@@ -97,17 +99,19 @@ export const generateResizerStyle = (resizerSize: number,
   }
 }
 
-export const getSetSize = (node: any, vertical: boolean,
-
-  addOverFlowLogic = false, style: any) => (size: number) => {
+export const getSetSize = (node: any, vertical: boolean) => (size: number) => {
   node.style[getSizeKey(vertical)] = toPx(size)
+}
 
-  if (addOverFlowLogic) {
-    node.style.overflow = size ? 'visible' : 'hidden'
-  }
+export const getSetResizerSize = (node: any, vertical: boolean,
+  isValidCustomResizer: boolean, resizerSize: number, detectionSize: number) => (size: number) => {
+  node.style[getSizeKey(vertical)] = toPx(size)
+  node.style.overflow = size ? 'visible' : 'hidden'
+  const sizeReduction = Math.abs(size - resizerSize)
 
-  if (style) {
+  if (!isValidCustomResizer) {
     if (size) {
+      const style = generateResizerStyle(resizerSize - sizeReduction, detectionSize, vertical)
       setPlainResizerStyle(node, style)
     } else {
       clearPlainResizerStyle(node)
