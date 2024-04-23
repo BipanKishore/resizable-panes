@@ -29,8 +29,9 @@ jobs:
     - name: Component Testing
       run: |
         npm run test:cloud
-    - name: Check Coverage
+    - name: Get Code Coverage Badge
       run: |
-        npm run coverage
+        SUMMARY="$(npm run coverage)"
+        echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
 
 
