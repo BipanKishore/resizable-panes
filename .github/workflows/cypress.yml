@@ -1,5 +1,7 @@
-name: Cypress Tests
-on: [push]
+name: Cypress Clouds
+on:
+  push:
+    branches: [ "master" ]
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
