@@ -1,5 +1,5 @@
 import {SinonSpy} from 'cypress/types/sinon'
-import {getResizableEvent} from '../../src/utils/dom'
+import {getResizableEvent} from '../../../src/utils/dom'
 
 describe('Dom utils', () => {
   describe('It should test getResizableEvent for Touch evevts', () => {
