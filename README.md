@@ -24,6 +24,9 @@ various applications where flexible layout management is required.
 
 ![Codecov](https://img.shields.io/codecov/c/github/BipanKishore/resizable-panes-react)
 
+<!-- README.md -->
+* [![cov](https://BipanKishore.github.io/resizable-panes-react/badges/coverage.svg)](https://github.com/<you>/<repo>/actions)
+
 [Cypress Recoreded tests are available here](https://cloud.cypress.io/projects/2xc7po/branches/master/overview)
 
 Author: [Vimal Sharma (Freelancer)](https://vimalsharma.co.in/).

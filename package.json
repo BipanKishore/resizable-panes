@@ -28,7 +28,7 @@
     "test": "cypress run --component --config-file cypress.config.ts browser --browser chrome",
     "lint": "eslint ./src",
     "test:cloud": "cypress run --component --config-file cypress.config.ts browser --browser chrome",
-    "coverage": "nyc report --reporter=text-summary"
+    "coverage": "nyc report --reporter=text-summary --reporter=json-summary"
   },
   "keywords": [
     "resizable",
