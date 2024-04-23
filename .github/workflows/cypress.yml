@@ -1,7 +1,8 @@
 name: Cypress Cloud
 on:
-  push:
-    branches: [ "master" ]
+  schedule:
+  - cron: "0 0 * * THU"
+
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
