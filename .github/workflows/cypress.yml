@@ -1,4 +1,4 @@
-name: Cypress Clouds
+name: Cypress Cloud
 on:
   push:
     branches: [ "master" ]

@@ -21,13 +21,14 @@
     "start": "npm-run-all --serial  build-watch link-local",
     "predeploy": "npm-run-all --serial  build-prod",
     "deploy": "npm publish",
-    "test-clean":  "rd /s /q coverage .nyc_output>nul 2>&1|echo.>nul",
+    "test-clean": "rd /s /q coverage .nyc_output>nul 2>&1|echo.>nul",
     "pretest": "npm run test-clean",
     "pretest:open": "npm run test-clean",
     "test:open": "cypress open --component --config-file cypress.config.ts browser --browser chrome",
     "test": "cypress run --component --config-file cypress.config.ts browser --browser chrome",
     "lint": "eslint ./src",
-    "test:cloud": "cypress run --component --config-file cypress.config.ts browser --browser chrome"
+    "test:cloud": "cypress run --component --config-file cypress.config.ts browser --browser chrome",
+    "coverage": "nyc report --reporter=text-summary"
   },
   "keywords": [
     "resizable",
@@ -88,6 +89,7 @@
     "html-webpack-plugin": "^5.6.0",
     "mini-css-extract-plugin": "^2.8.1",
     "npm-run-all": "^4.1.5",
+    "nyc": "^15.1.0",
     "postcss-loader": "^8.1.1",
     "rollup": "^3.20.2",
     "rollup-plugin-dts": "^5.3.0",
