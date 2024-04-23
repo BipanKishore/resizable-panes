@@ -211,6 +211,7 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
   console.log('defaultMaxSize ', getList(resizersList, 'defaultMaxSize'))
 }
 
+// Test case
 // We increases the size of element in opposite direction than in the direction
 export const fixPartialHiddenResizer = (contextDetails: IContextDetails) => {
   const {items} = contextDetails
