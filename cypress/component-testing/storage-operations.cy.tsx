@@ -10,7 +10,8 @@ import {ResizableComponentCustomPanesTestWrapper}
 
 const rCy = new RCy({
   resizerSize: 10,
-  detectionSize: 0
+  detectionSize: 0,
+  containerId: rScontainerId
 })
 const {resizerSize} = rCy
 

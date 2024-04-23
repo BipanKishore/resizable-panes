@@ -293,13 +293,6 @@ export const continousMovements = (cyId:string
     })
 }
 
-export const swiftMove = (cyHook: string, event: any) => {
-  cy.get(`[data-cy=${cyHook}]`)
-    .trigger('mousedown')
-    .trigger('mousemove', event)
-    .trigger('mouseup')
-}
-
 export const mountingWithRetry = (mounting: any, resizablePanesId: string, retryTimes = 5) => {
   mounting()
   cy.document()

@@ -4,7 +4,8 @@ import {RCy} from '../../../utils'
 
 const uniqueIdResizablePanes = ENUMS.resizablePanesId
 const rCy = new RCy({
-  resizerSize: 10
+  resizerSize: 10,
+  containerId: uniqueIdResizablePanes
 })
 const {resizerSize, containerXLen} = rCy
 

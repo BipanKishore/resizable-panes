@@ -19,7 +19,7 @@ export class ResizerModel extends PaneModel {
     this.isHandle = true
 
     const {id} = paneProps
-    const {resizerSize, visibility = {}} = resizableProps
+    const {resizerSize, visibility} = resizableProps
     const show = visibility[id] !== undefined ? visibility[id] : true
     this.id = getResizerId(id)
 

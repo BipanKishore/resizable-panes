@@ -2,12 +2,13 @@ import {checkWidths} from '../../../utils/check-widths'
 import {ENUMS, TestComponentWrapper} from '../../../components/test-component-wrapper'
 import {RCy} from '../../../utils'
 import React from 'react'
-import {R2, R0, R1, R3} from '../../fix-test-ids'
+import {R2, R0, R1, R3, rScontainerId} from '../../fix-test-ids'
 
 const uniqueIdResizablePanes = ENUMS.resizablePanesId
 
 const rCy = new RCy({
-  resizerSize: 10
+  resizerSize: 10,
+  containerId: uniqueIdResizablePanes
 })
 const {resizerSize, containerXLen} = rCy
 
