@@ -1,10 +1,26 @@
-name: Tests 
+
+
+
+
+    - name: Install
+      run: |
+        npm install
+
+    - name: Component Testing
+      run: |
+        npm run test:cloud
+    - name: Get Code Coverage Badge
+      run: |
+        npm run coverage
+
+
+name: Tests/ Coverage
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ master ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ master ]
 
 jobs:
   build:
@@ -22,14 +38,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Install
-      run: |
-        npm install
+    - run: npm instal
+    - run: npm run test:cloud
 
-    - name: Component Testing
-      run: |
-        npm run test:cloud
-    -  name: Get Coverage for badge
+    # Only run the coverage once
+      name: Get Coverage for badge
         run: |
           # var SUMMARY = [
           #   '',
@@ -43,7 +56,7 @@ jobs:
           # ];
           # SUMMARY = SUMMARY.split('\n')[5]; // 'Lines        : 31.93% ( 38/119 )'
           # SUMMARY = SUMMARY.split(':')[1].split('(')[0].trim(); // '31.93%'
-          SUMMARY="$(npm test -- --coverageReporters='text-summary' | tail -2 | head -1)"
+          SUMMARY="$(npm run coverage | tail -2 | head -1)"
           TOKENS=($SUMMARY)
           # process.env.COVERAGE = '31.93%';
           echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
@@ -71,5 +84,3 @@ jobs:
           message: ${{ env.COVERAGE }}
           color: green
           namedLogo: jest
-
-
