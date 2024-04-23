@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false # https://github.com/cypress-io/github-action/issues/48
       matrix:
-        containers: [1, 2] # Uses 2 parallel instances
+        containers: [1, 2] # Uses 2 parallel instances 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
