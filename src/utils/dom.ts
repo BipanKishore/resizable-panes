@@ -92,7 +92,7 @@ export const generateResizerStyle = (resizerSize: number,
   }
 
   return {
-    margin: `${detectionSizePx} 0`,
+    margin: `-${detectionSizePx} 0`,
     minHeight: minSize,
     borderTop: border,
     borderBottom: border
