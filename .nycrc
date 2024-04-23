@@ -2,6 +2,6 @@
   "extends": "@istanbuljs/nyc-config-typescript",
   "all": true,
   "check-coverage": true,
-  "branches": 90,
-  "lines": 90
+  "branches": [85, 90],
+  "lines": [90, 100]
 }
