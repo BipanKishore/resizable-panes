@@ -20,7 +20,9 @@ various applications where flexible layout management is required.
 
 ### [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
 
-![resizable-panes-react](https://github.com/BipanKishore/resizable-panes-react/actions/workflows/build.yml/badge.svg?branch=master)  ![Cypress Tests](https://github.com/BipanKishore/resizable-panes-react/actions/workflows/cypress.yml/badge.svg?branch=master)
+![resizable-panes-react](https://github.com/BipanKishore/resizable-panes-react/actions/workflows/build.yml/badge.svg?branch=master)  ![Cypress Tests](https://github.com/BipanKishore/resizable-panes-react/actions/workflows/cypress.yml/badge.svg?branch=master) ![NPM Version](https://img.shields.io/npm/v/resizable-panes-react) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/resizable-panes-react)
+
+![Codecov](https://img.shields.io/codecov/c/github/BipanKishore/resizable-panes-react)
 
 [Cypress Recoreded tests are available here](https://cloud.cypress.io/projects/2xc7po/branches/master/overview)
 
