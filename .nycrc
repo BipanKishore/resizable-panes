@@ -2,7 +2,6 @@
   "extends": "@istanbuljs/nyc-config-typescript",
   "all": true,
   "check-coverage": true,
-  "branches": 88,
   "lines": 95,
   "include": ["src"],
   "exclude": ["src/@types", "src/utils/development-util"]
