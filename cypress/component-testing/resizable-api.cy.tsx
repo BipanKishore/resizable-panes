@@ -1,15 +1,16 @@
 import React from 'react'
 import {RCy} from '../utils'
-import {noMinMax5PanesSet, withMinMaxEqualSize5PanesSet} from './pane-model-config-sets'
+import {withMinMaxEqualSize5PanesSet} from './pane-model-config-sets'
 import {RPTestWrapper} from '../components/rp-test-wrapper'
-import {CK0, CK1, CK4, P0, P1, P2, R0, R1, R2, R3, mountUnMountButtonId, rScontainerId} from './fix-test-ids'
+import {CK0, CK1, CK4, P0, P1, R0, R2, rScontainerId} from './fix-test-ids'
 import {CustomResizerFirst} from '../components/custom-resizer'
 import {Pane, ResizablePanes} from '../../src'
 import {IGetState, IResizableApi} from '../../src/@types'
 
 describe('Storage api', () => {
   const rCy = new RCy({
-    resizerSize: 10
+    resizerSize: 10,
+    containerId: rScontainerId
   })
   let resizableApi: IResizableApi
 

@@ -55,7 +55,7 @@ export class PaneModel {
       id, minSize = ZERO, size, maxSize = Infinity
     } = paneProps
 
-    const {visibility = {}, vertical} = resizableProps
+    const {visibility, vertical} = resizableProps
     const show = visibility[id] !== undefined ? visibility[id] : true
     this.defaultVisibility = show
 

@@ -1,5 +1,5 @@
 import {SinonSpy} from 'cypress/types/sinon'
-import {getResizableEvent} from '../../../src/utils/dom'
+import {generateResizerStyle, getResizableEvent} from '../../../src/utils/dom'
 
 describe('Dom utils', () => {
   describe('It should test getResizableEvent for Touch evevts', () => {
@@ -39,6 +39,33 @@ describe('Dom utils', () => {
       const value = getResizableEvent(event, false, {})
       expect(preventDefault.calledOnce).to.equal(true)
 
+      expect(value).to.deep.equals(retValue)
+    })
+  })
+
+  // Edge case
+  describe('should test generateResizerStyle', () => {
+    it('should run generateResizerStyle for vertical direction', () => {
+      const retValue = {
+        margin: '0 -5px',
+        minWidth: '12px',
+        borderLeft: '5px solid transparent',
+        borderRight: '5px solid transparent'
+      }
+
+      const value = generateResizerStyle(2, 5, true)
+      expect(value).to.deep.equals(retValue)
+    })
+
+    it('should run generateResizerStyle for horizontal direction', () => {
+      const retValue = {
+        margin: '-5px 0',
+        minHeight: '12px',
+        borderTop: '5px solid transparent',
+        borderBottom: '5px solid transparent'
+      }
+
+      const value = generateResizerStyle(2, 5, false)
       expect(value).to.deep.equals(retValue)
     })
   })

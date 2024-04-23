@@ -3,7 +3,7 @@ import {IContextDetails, IHiddenResizer, IResizableItem, IResizablePaneProviderP
 import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
 import {ResizerModel} from '../models/resizer-model'
-import {DIRECTIONS, NONE, PLUS} from '../constant'
+import {DIRECTIONS, LEFT, NONE, PLUS, RIGHT} from '../constant'
 import {getList, localConsole} from './development-util'
 import {isItDown, isItUp} from './util'
 
@@ -217,19 +217,22 @@ export const fixPartialHiddenResizer = (contextDetails: IContextDetails) => {
 
   let sizeChange = 0
   items.forEach(
+    // eslint-disable-next-line complexity
     (item, index) => {
       if (item.isHandle && item.defaultSize !== item.size && item.size) {
         sizeChange = item.size
         item.size = 0
-
+        let virtualIndex
         const resizingOrder: IResizableItem[] = []
 
-        if (isItUp(item.partialHiddenDirection)) {
-          const resizingOrderLeftOver = items.slice(0, index).reverse()
-          resizingOrder.push(...items.slice(index + 1), ...resizingOrderLeftOver)
-        } else {
-          const resizingOrderLeftOver = items.slice(index + 1)
-          resizingOrder.push(...items.slice(0, index).reverse(), ...resizingOrderLeftOver)
+        if (items[index + 1].hiddenResizer === LEFT) {
+          virtualIndex = index + 1
+          const resizingOrderLeftOver = items.slice(0, virtualIndex).reverse()
+          resizingOrder.push(...items.slice(virtualIndex + 1), ...resizingOrderLeftOver)
+        } else if (items[index - 1].hiddenResizer === RIGHT) {
+          virtualIndex = index - 1
+          const resizingOrderLeftOver = items.slice(virtualIndex + 1)
+          resizingOrder.push(...items.slice(0, virtualIndex).reverse(), ...resizingOrderLeftOver)
         }
 
         const visibleItems = resizingOrder.filter((item) => item.size)
@@ -237,7 +240,7 @@ export const fixPartialHiddenResizer = (contextDetails: IContextDetails) => {
 
         visibleItems.forEach((item) => {
           item.restoreLimits()
-          // forNow keeping it none
+          // None is right for this
           sizeChange = item.changeSize(sizeChange, PLUS, DIRECTIONS.NONE)
         })
 

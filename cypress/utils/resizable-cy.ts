@@ -1,10 +1,11 @@
 import {checkWidths} from './check-widths'
 import {VIEW_PORT_PADDING} from './constants'
-import {ISizeMap} from './types'
+import {IMoveEvent, ISizeMap} from './types'
 import {
   continousMovements,
   getPaneIds, getRects, move, moveElementLeft,
-  moveItem, moveNPixel, moveNPixelNoMouseUp, moveRightEvent, swiftMove
+  moveItem, moveLeftEvent, moveNPixel,
+  moveRightEvent
 } from './utils'
 
 interface IRCy {
@@ -165,12 +166,55 @@ export class RCy {
     }
   }
 
-  swiftMove = swiftMove
   moveItem = moveItem
   move = move
-  moveNPixel = moveNPixel
-  moveNPixelNoMouseUp = moveNPixelNoMouseUp
   continousMovements = continousMovements
+
+  moveElement = (cyId: string, firstEvent: IMoveEvent, secondEvent: IMoveEvent) => {
+    cy.get(`[data-cy=${cyId}]`)
+      .trigger('mousedown')
+      .trigger('mousemove', firstEvent)
+      .trigger('mousemove', secondEvent)
+    this.cyGet(this.containerId)
+      .trigger('mouseup')
+  }
+
+  moveElementRight = (cyId: string, start: number, end: number, isTouch = false) => {
+    const firstEvent = moveRightEvent(start + 1)
+    const secondEvent = moveRightEvent(end)
+
+    this.moveElement(cyId, firstEvent, secondEvent)
+  }
+
+  moveElementLeft = (cyId: string, start: number, end: number, isTouch = false) => {
+    const firstEvent = moveLeftEvent(start - 1)
+    const secondEvent = moveLeftEvent(end)
+
+    this.moveElement(cyId, firstEvent, secondEvent)
+  }
+
+  moveNPixel = (cyId:string,
+    nPixel : number,
+    position: 'right' | 'left' | 'top' | 'bottom' = 'right'
+  ) => {
+    getRects(cyId)
+      .then(([
+        sourceRect
+      ]: any) => {
+        const {x: resizerX, width} = sourceRect
+        const widthHalf = width / 2
+        const mouseDownX = resizerX + widthHalf
+
+        // console.log('moveResizerToStart', mouseDownX, X_START_CONTAINER)
+        // console.log('resizerRect cyIdRect', resizerRect, cyIdRect)
+
+        if (position === 'right') {
+          this.moveElementRight(cyId, mouseDownX - 1, mouseDownX + nPixel)
+        } else {
+          this.moveElementLeft(cyId, mouseDownX + 1, mouseDownX - nPixel)
+        }
+      })
+  }
 
   moveResizerToStart (cyResizerId: string) {
     getRects(cyResizerId)
@@ -180,14 +224,6 @@ export class RCy {
         console.log('moveResizerToStart', mouseDownX, this.containerXStart)
         moveElementLeft(cyResizerId, mouseDownX, this.containerXStart)
       })
-  }
-
-  toMostRight (cyId:string) {
-    swiftMove(cyId, moveRightEvent(this.viewPortXLen))
-  }
-
-  toMostLeft (cyId:string) {
-    swiftMove(cyId, moveRightEvent(this.viewPortstart))
   }
 
   reMount (mountUnMountButtonId: string) {
