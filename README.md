@@ -20,4 +20,8 @@ various applications where flexible layout management is required.
 
 ### [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
 
+![resizable-panes-react](https://github.com/BipanKishore/resizable-panes-react/actions/workflows/build.yml/badge.svg)
+
+![Cypress Tests](https://github.com/BipanKishore/resizable-panes-react/actions/workflows/cypress.yml/badge.svg)
+
 Author: [Vimal Sharma (Freelancer)](https://vimalsharma.co.in/).
