@@ -6,7 +6,8 @@
 .pnp.js
 
 # testing
-/coverage
+#/coverage
+#/.nyc_output
 
 /cypress/screenshots
 /cypress/downloads
