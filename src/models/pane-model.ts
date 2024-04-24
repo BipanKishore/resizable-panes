@@ -183,16 +183,16 @@ export class PaneModel {
     this.api = pane
   }
 
-  synPreservedSize () {
-    if (!this.storedSize) {
-      this.storedSize = this.size
-    }
-  }
+  // synPreservedSize () {
+  //   if (!this.storedSize) {
+  //     this.storedSize = this.size
+  //   }
+  // }
 
-  synSizeToStored () {
-    this.size = this.storedSize as number
-    // this.storedSize = null
-  }
+  // synSizeToStored () {
+  //   this.size = this.storedSize as number
+  //   // this.storedSize = null
+  // }
 
   syncAxisSize () {
     this.axisSize = this.size
@@ -210,24 +210,16 @@ export class PaneModel {
     this.maxSize = this.defaultMaxSize
   }
 
+  // this method runs only for visible panes
   resetMax (reduce = 0) {
-    if (this.visibility) {
-      this.maxSize = this.defaultMaxSize - reduce
-      return this.maxSize
-    } else {
-      this.maxSize = 0
-    }
-    return ZERO
+    this.maxSize = this.defaultMaxSize - reduce
+    return this.maxSize
   }
 
+  // this method runs only for visible panes
   resetMin () {
-    if (this.visibility) {
-      this.minSize = this.defaultMinSize
-      return this.minSize
-    } else {
-      this.minSize = 0
-    }
-    return ZERO
+    this.minSize = this.defaultMinSize
+    return this.minSize
   }
 
   synMaxToSize () {
@@ -240,20 +232,13 @@ export class PaneModel {
     return this.size
   }
 
+  // this method runs only for visible panes
   getMinDiff () {
-    if (this.visibility) {
-      return this.size - this.defaultMinSize
-    }
-    return ZERO
+    return this.size - this.defaultMinSize
   }
 
   getMaxDiff () {
-    if (this.visibility) {
-      return this.defaultMaxSize - this.size
-    } else {
-      this.maxSize = 0
-    }
-    return ZERO
+    return this.defaultMaxSize - this.size
   }
 
   synSizeToMinSize (direction: number) {
@@ -269,10 +254,6 @@ export class PaneModel {
     if (this.visibility) {
       this.size = this.maxSize
     }
-  }
-
-  toRatioDefaultSize (containerSize: number, maxRatioValue: number) {
-    this.defaultSize = ratioAndRoundOff(containerSize, maxRatioValue, this.size)
   }
 
   // We never come here for the case of store
@@ -293,7 +274,7 @@ export class PaneModel {
     }
   }
 
-  setVisibilityHelper (isPartiallyHidden: boolean = false) {
+  setVisibilityHelper (isPartiallyHidden: boolean) {
     if (this.isHandle) {
       this.size = isPartiallyHidden ? 0 : this.resizerSize
     }
