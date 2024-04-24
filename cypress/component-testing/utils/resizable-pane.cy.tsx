@@ -200,4 +200,85 @@ describe('Test setCurrentMinMax use cases', () => {
       )
     })
   })
+
+  describe('should test minMaxLogicDown', () => {
+    it(`Move R0 to max right with bellow pane set config
+    when case aIndex === 0 && bIndex < lastIndex: case value < 0:
+    Result: P0 should set to max, change in P1 = change in P0, other should remain same
+    `, () => {
+      const panesSet = [
+        new PaneModelConfig(1, 0, 2),
+        new PaneModelConfig(4, 1, 6),
+        new PaneModelConfig(1, 1),
+        new PaneModelConfig(4, 1)
+      ]
+
+      const rCy = new RCy({
+        containerId: rScontainerId,
+        plainResizer: true,
+        resizerSize: 2,
+        vertical: true,
+        len: 4
+      })
+
+      rCy.setViewPort()
+
+      cy.mount(
+        <RPTestWrapper
+          panesList={panesSet}
+          storageApi={localStorage}
+          uniqueId={rScontainerId}
+
+          vertical
+        >
+
+        </RPTestWrapper>
+      )
+
+      rCy.move(R0, rScontainerId, 'right')
+      rCy.checkWidthsAndSum(
+        [200, 2, 300, 2, 100, 2, 400]
+      )
+    })
+
+    it(`Move R0 to max right with bellow pane set config
+    case aIndex === 0 && bIndex === lastIndex: case value === 0:
+    Result: P0 should set to max and P3 should set to min
+    `, () => {
+      const panesSet = [
+
+        new PaneModelConfig(4, 2, 6),
+        new PaneModelConfig(1, 1, 1),
+        new PaneModelConfig(1, 1, 1),
+        new PaneModelConfig(4, 2)
+      ]
+
+      const rCy = new RCy({
+        containerId: rScontainerId,
+        plainResizer: true,
+        resizerSize: 2,
+        vertical: true,
+        len: 4
+      })
+
+      rCy.setViewPort()
+
+      cy.mount(
+        <RPTestWrapper
+          panesList={panesSet}
+          storageApi={localStorage}
+          uniqueId={rScontainerId}
+
+          vertical
+        >
+
+        </RPTestWrapper>
+      )
+
+      rCy.move(R0, rScontainerId, 'right')
+      rCy.checkWidthsAndSum(
+        [600, 2, 100, 2, 100, 2, 200]
+      )
+    })
+  })
 })

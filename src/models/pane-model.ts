@@ -176,10 +176,6 @@ export class PaneModel {
   }
 
   register (pane: any) {
-    if (this.api) {
-      this.api = pane
-      this.setUISize(DIRECTIONS.DOWN)
-    }
     this.api = pane
   }
 

@@ -1,7 +1,7 @@
 import {IContextDetails, IResizableEvent, IResizableItem} from '../@types'
 import {DIRECTIONS, MINUS, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
-import {getList, setPaneList} from './development-util'
+import {getList} from './development-util'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
   getPanesSizeSum, getResizerSum, setUISizesFn, synPanesMaxToSize, synPanesMinToSize
@@ -124,7 +124,6 @@ export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) =>
 }
 
 export const setCurrentMinMax = (serviceRefCurrent: IContextDetails) => {
-  // const {panesList, resizersList, activeIndex, items, direction} = serviceRefCurrent
   const {containerSize} = getMaxContainerSizes(serviceRefCurrent)
 
   const {virtualOrderList, virtualActiveIndex} = serviceRefCurrent
@@ -132,19 +131,14 @@ export const setCurrentMinMax = (serviceRefCurrent: IContextDetails) => {
   const nextIdx = virtualActiveIndex + 1
   const aMaxChangeUp = virtualOrderList[virtualActiveIndex].getMinDiff()
   const bMaxChangeUp = virtualOrderList[nextIdx].getMaxDiff()
-  setPaneList(virtualOrderList, ['minSize', 'maxSize'], null)
 
   minMaxLogicUp(virtualOrderList, aMaxChangeUp - bMaxChangeUp, virtualActiveIndex, nextIdx, 0, containerSize)
 
   const aMaxChangeDown = virtualOrderList[nextIdx].getMinDiff()
   const bMaxChangeDown = virtualOrderList[virtualActiveIndex].getMaxDiff()
   minMaxLogicDown(virtualOrderList, bMaxChangeDown - aMaxChangeDown, virtualActiveIndex, nextIdx, 0, containerSize)
-
-  // console.log('items ', getList(virtualOrderList, 'id'))
-  console.log('minSize ', getList(virtualOrderList, 'minSize'))
-  console.log('maxSize ', getList(virtualOrderList, 'maxSize'))
 }
-// virtualActiveIndex
+
 export const calculateAxes = (contextDetails: any) => {
   const {items, virtualActiveIndex} = contextDetails
   const {maxTopAxis} = getMaxContainerSizes(contextDetails)
@@ -163,7 +157,6 @@ export const minMaxLogicUp = (
   // Failing for going up Reached Max
   const lastIndex = panesList.length - 1
 
-  // keyConsole({aIndex, bIndex, value, sum}, 'newMinMaxLogicUpnewMinMaxLogicUp')
   let nextValue: number | undefined
   let nextAIndex = aIndex
   let nextBIndex = bIndex
@@ -172,7 +165,6 @@ export const minMaxLogicUp = (
   const paneB = panesList[bIndex]
 
   switch (true) {
-    // total 6 combination
     case aIndex > 0 && bIndex < lastIndex:
       switch (true) {
         case value < 0:
@@ -242,7 +234,6 @@ export const minMaxLogicUp = (
       }
       break
       // ---------------------------------------------------------------------------------
-
     case aIndex === 0 && bIndex === lastIndex:
       // return for every case
       switch (true) {
@@ -263,11 +254,6 @@ export const minMaxLogicUp = (
           paneA.minSize = maxPaneSize - sum
           return
       }
-
-      // ---------------------------------------------------------------------------------
-    default:
-      console.error('v---------------------------------------------------------------')
-      break
   }
 
   minMaxLogicUp(panesList, <number>nextValue, nextAIndex, nextBIndex, sum, maxPaneSize)
@@ -286,7 +272,6 @@ export const minMaxLogicDown = (
   const paneA = panesList[aIndex]
   const paneB = panesList[bIndex]
   switch (true) {
-    // total 6 combination
     case aIndex > 0 && bIndex < lastIndex:
       switch (true) {
         case value < 0:
@@ -356,7 +341,6 @@ export const minMaxLogicDown = (
       }
       break
       // ---------------------------------------------------------------------------------
-
     case aIndex === 0 && bIndex === lastIndex:
       // return for every case
       switch (true) {
@@ -377,11 +361,6 @@ export const minMaxLogicDown = (
           paneA.maxSize = maxPaneSize - sum
           return
       }
-
-      // ---------------------------------------------------------------------------------
-    default:
-      console.error('v---------------------------------------------------------------')
-      break
   }
 
   minMaxLogicDown(panesList, <number>nextValue, nextAIndex, nextBIndex, sum, maxPaneSize)
@@ -406,15 +385,9 @@ export const registerContainer = (context: any) => (node: any) => {
   context.registerContainer({getContainerRect: () => node.getBoundingClientRect()})
 }
 
-// getMaxContainerSizes need to use this
-// export const toRatioModeFn = (panesList: PaneModel[], resizersList: ResizerModel[], containerSize: number) => {
 export const toRatioModeFn = (contextDetails: IContextDetails) => {
   const {panesList, items} = contextDetails
   const {maxPaneSize} = getMaxContainerSizes(contextDetails)
-
-  // add for last no visible pane also
-  // const resizerSum = getSum(resizersList, (resizer) => resizer.resizerSize)
-  // console.log('v-- toRatioModeFn', resizerSum, containerSize, maxPaneSize)
 
   const maxRatioValue = getPanesSizeSum(panesList)
   panesList
