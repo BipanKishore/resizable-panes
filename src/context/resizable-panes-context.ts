@@ -14,7 +14,10 @@ import {
 } from '../utils/resizable-pane'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
-import {IKeyToBoolMap, IResizableContext, IResizablePaneProviderProps} from '../@types'
+import {
+  IKeyToBoolMap, IResizableContext
+  , IResizablePaneProviderProps
+} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {setVisibilityFn} from '../utils/api'
 import {consoleAttachResizer, consoleGetSize} from '../utils/development-util'
@@ -65,10 +68,15 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const registerContainer = ({getContainerRect}: any) => {
     contextDetails.getContainerRect = getContainerRect
+    let visibilityMap = props.visibility
     if (storage.empty && unit === RATIO && !contextDetails.isSetRatioMode) {
       toRatioModeFn(contextDetails)
       contextDetails.isSetRatioMode = true
+    } else {
+      const {panes} = storage.getStorage()
+      visibilityMap = createMap(panes, VISIBILITY)
     }
+    setVisibility(visibilityMap)
   }
 
   const getIdToSizeMap = () => createMap(panesList, SIZE)
@@ -148,17 +156,12 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   // It is getting default empty Object param
   const setVisibility = (param: IKeyToBoolMap) => {
+    // it can be removed with change in default props
     const oldVisibilityMap = createMap(panesList, VISIBILITY)
 
-    const keys = Object.keys(oldVisibilityMap)
     const newMap = {
       ...oldVisibilityMap,
       ...param
-    }
-
-    const isNoChange = keys.every((key) => oldVisibilityMap[key] === newMap[key])
-    if (isNoChange) {
-      return
     }
 
     const {

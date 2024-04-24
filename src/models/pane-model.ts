@@ -12,7 +12,6 @@ import {attachDefaultPaneProps, checkPaneModelErrors} from './utils'
 export class PaneModel {
   isRegistered = true
   isHandle = false
-  isPartiallyHidden: boolean = false
   partialHiddenDirection = DIRECTIONS.NONE
   hiddenResizer: IHiddenResizer = 'none'
   resizerSize: number
@@ -53,28 +52,29 @@ export class PaneModel {
   // Development Variables
 
   constructor (paneProps: any, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
+    this.props = attachDefaultPaneProps(paneProps)
     const {
       id, minSize, size, maxSize
-    } = attachDefaultPaneProps(paneProps)
-    this.props = attachDefaultPaneProps(paneProps)
+    } = this.props
+
+    checkPaneModelErrors(size, minSize, maxSize, id)
 
     const {visibility, vertical} = resizableProps
+    // // it can be removed with change in default props
     const show = visibility[id] !== undefined ? visibility[id] : true
     this.defaultVisibility = show
 
     const storedPane = store.getStoredPane(id)
     if (storedPane) {
-      const {size, defaultMaxSize, defaultMinSize, defaultSize, visibility, storedSize} = storedPane
+      const {size, defaultMaxSize, defaultMinSize, defaultSize, visibility, storedSize, hiddenResizer} = storedPane
+      this.hiddenResizer = hiddenResizer
       this.initializeSizes(size, defaultMinSize, defaultMaxSize as number, defaultSize, storedSize, visibility)
     } else {
-      const freshSize = show ? size : 0
-      this.initializeSizes(freshSize, minSize, maxSize, freshSize, size, show)
+      this.initializeSizes(size, minSize, maxSize, size, size, show)
     }
 
     this.id = id
     this.vertical = vertical as boolean
-
-    checkPaneModelErrors(size, minSize, maxSize, id)
   }
 
   initializeSize (size: number) {
@@ -96,7 +96,8 @@ export class PaneModel {
   }
 
   getStoreModel (): IStoreResizableItemsModel {
-    const t = filterKeys(this, 'id', 'size', 'defaultSize', 'defaultMinSize', 'visibility', 'storedSize')
+    const t = filterKeys(this, 'id', 'hiddenResizer', 'size',
+      'defaultSize', 'defaultMinSize', 'visibility', 'storedSize')
     return {
       ...t,
       defaultMaxSize: this.defaultMaxSize.toString()
@@ -282,10 +283,8 @@ export class PaneModel {
     const storeSizeCalculated = ratioAndRoundOff(containerSize, maxRatioValue, size)
     const minSizeCalculated = ratioAndRoundOff(containerSize, maxRatioValue, minSize)
     const maxSizeCalculated = ratioAndRoundOff(containerSize, maxRatioValue, maxSize)
-    // Need to check if it is right
-    const sizeCalculated = this.visibility ? storeSizeCalculated : 0
-    this.initializeSizes(sizeCalculated, minSizeCalculated,
-      maxSizeCalculated, sizeCalculated, storeSizeCalculated, this.visibility)
+    this.initializeSizes(storeSizeCalculated, minSizeCalculated,
+      maxSizeCalculated, storeSizeCalculated, storeSizeCalculated, this.visibility)
   }
 
   fixChange (key: IPaneNumericKeys, change: number) {
