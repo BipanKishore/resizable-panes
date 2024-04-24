@@ -34,7 +34,7 @@ export class ResizeStorage {
 
     const objectToSave = {
       panes: panesList.map(item => item.getStoreModel()),
-      resizers: resizersList.map(item => item.getStoreModel()),
+      resizers: resizersList.map(item => item.getStoreModel()), // Now not required
       containerSize
     }
     this.store = objectToSave
@@ -89,10 +89,10 @@ export class ResizeStorage {
     return findById(panes, id) ?? null
   }
 
-  getStoredResizer (id: string) {
-    const {resizers} = this.getStorage()
-    return findById(resizers, id) ?? null
-  }
+  // getStoredResizer (id: string) {
+  //   const {resizers} = this.getStorage()
+  //   return findById(resizers, id) ?? null
+  // }
 
   // Need to check this
   // readPaneChange (children: ReactElement[], context: any) {
