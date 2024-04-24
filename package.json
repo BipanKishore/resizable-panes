@@ -1,13 +1,13 @@
 {
   "name": "resizable-panes-react",
-  "version": "2.0.9",
+  "version": "2.1.9",
   "description": "A simple library for resizing elements in the browser",
   "main": "./lib/index.cjs.js",
-  "module": "./lib/index.cjs.js",
+  "module": "./lib/index.esm.js",
   "types": "./lib/index.d.ts",
   "exports": {
     "require": "./lib/index.cjs.js",
-    "import": "./lib/index.cjs.js"
+    "import": "./lib/index.esm.js"
   },
   "scripts": {
     "build-w": "webpack --config configs/webpack.dev.js",
@@ -17,8 +17,8 @@
     "build-prod": "rimraf lib && rollup -c configs/rollup.config.prod.mjs",
     "build-watch": "rollup -c configs/rollup.config.dev.mjs -w",
     "link-local": "npm link",
-    "start-w": "npm-run-all --serial  build-watch-w link-local",
-    "start": "npm-run-all --serial  build-watch link-local",
+    "start-w": "npm-run-all --serial  link-local build-watch-w",
+    "start": "npm-run-all --serial  link-local build-watch",
     "predeploy": "npm-run-all --serial  build-prod",
     "deploy": "npm publish",
     "test-clean": "rd /s /q coverage .nyc_output>nul 2>&1|echo.>nul",

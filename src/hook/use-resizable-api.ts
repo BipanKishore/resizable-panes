@@ -15,7 +15,7 @@ export const useResizableApi = (context: IResizableContext, props: any) => {
   const restoreDefault = () => restoreDefaultFn(contextDetails)
 
   const getState = () =>
-    createMap(panesList, 'size', 'visibility', 'defaultMinSize', 'defaultMaxSize')
+    createMap(panesList, 'size', 'visibility', 'minSize', 'maxSize')
 
   const getSizes = () => createMap(panesList, 'size')
   const getVisibilitys = () => createMap(panesList, 'visibility')

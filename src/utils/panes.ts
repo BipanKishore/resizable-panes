@@ -34,11 +34,11 @@ const fixFacingHiddenResizersOrder = (items: IResizableItem[], direction: number
 }
 
 export const setUISizesFn = (items: IResizableItem[], direction: number) => {
-  const panes = items.filter((i) => !i.isHandle)
-  panes.forEach((pane: IResizableItem) => pane.setUISize(direction))
+  // const panes = items.filter((i) => !i.isHandle)
+  // panes.forEach((pane: IResizableItem) => pane.setUISize())
   // above two may not require
 
-  items.forEach((pane: IResizableItem) => pane.setUISize(direction))
+  items.forEach((pane: IResizableItem) => pane.setUISize())
   fixFacingHiddenResizersOrder(items, direction)
 }
 
