@@ -1,12 +1,13 @@
 import {
   IHiddenResizer,
+  IPane,
   IPaneNumericKeys, IResizablePaneProviderProps,
   IStoreResizableItemsModel, addAndRemoveType
 } from '../@types'
 import {DIRECTIONS, LEFT, PLUS, RIGHT, ZERO} from '../constant'
 import {ResizeStorage} from '../utils/storage'
 import {filterKeys, isItDown, isItUp, ratioAndRoundOff} from '../utils/util'
-import {checkPaneModelErrors} from './utils'
+import {attachDefaultPaneProps, checkPaneModelErrors} from './utils'
 
 export class PaneModel {
   isRegistered = true
@@ -48,12 +49,14 @@ export class PaneModel {
 
   oldVisibleSize: number = 0
   oldVisibility: boolean = true
+  props:IPane
   // Development Variables
 
   constructor (paneProps: any, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
     const {
-      id, minSize = ZERO, size, maxSize = Infinity
-    } = paneProps
+      id, minSize, size, maxSize
+    } = attachDefaultPaneProps(paneProps)
+    this.props = attachDefaultPaneProps(paneProps)
 
     const {visibility, vertical} = resizableProps
     const show = visibility[id] !== undefined ? visibility[id] : true
@@ -273,12 +276,16 @@ export class PaneModel {
 
   // We never come here for the case of store
   toRatioMode (containerSize: number, maxRatioValue: number) {
-    const storeSize = ratioAndRoundOff(containerSize, maxRatioValue, this.size)
-    const minSize = ratioAndRoundOff(containerSize, maxRatioValue, this.minSize)
-    const maxSize = ratioAndRoundOff(containerSize, maxRatioValue, this.maxSize)
+    const {
+      minSize, size, maxSize
+    } = this.props
+    const storeSizeCalculated = ratioAndRoundOff(containerSize, maxRatioValue, size)
+    const minSizeCalculated = ratioAndRoundOff(containerSize, maxRatioValue, minSize)
+    const maxSizeCalculated = ratioAndRoundOff(containerSize, maxRatioValue, maxSize)
     // Need to check if it is right
-    const size = this.visibility ? storeSize : 0
-    this.initializeSizes(size, minSize, maxSize, size, storeSize, this.visibility)
+    const sizeCalculated = this.visibility ? storeSizeCalculated : 0
+    this.initializeSizes(sizeCalculated, minSizeCalculated,
+      maxSizeCalculated, sizeCalculated, storeSizeCalculated, this.visibility)
   }
 
   fixChange (key: IPaneNumericKeys, change: number) {
