@@ -72,8 +72,7 @@ export const Resizer = (props: IResizer) => {
   const onNewRef = (node: any) => {
     const setSize = getSetResizerSize(node, vertical, isValidCustomResizer, resizerSize, detectionSize)
     context.registerResizer({
-      setSize,
-      visibility: isNotLastIndex
+      setSize
     }, id)
   }
 

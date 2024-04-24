@@ -31,7 +31,5 @@ export interface IInitPaneService {
 export type IPaneModelKey = keyof PaneModel
 
 export interface IResizerApi {
-    setVisibility: (value: boolean) => unknown,
-    visibility: boolean,
     setSize: (size: number) => void
   }

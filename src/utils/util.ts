@@ -1,4 +1,4 @@
-import {IAnyMap, IPaneModelKey} from '../@types'
+import {IAnyMap, IPaneModelKey, IStoreResizableItemsModel} from '../@types'
 import {DIRECTIONS, RESIZER} from '../constant'
 import {PaneModel} from '../models/pane-model'
 
@@ -9,7 +9,7 @@ export const noop: INoop = (_: any): any => _
 export const findById = (list: PaneModel[] | any[], _id: string) =>
   list.find(({id}) => id === _id)
 
-export const createMap = (paneList: PaneModel[], ...keys: IPaneModelKey[]) => {
+export const createMap = (paneList: PaneModel[] | IStoreResizableItemsModel[], ...keys: IPaneModelKey[]) => {
   const map: IAnyMap = {}
   paneList.forEach((pane) => {
     const {id} = pane
@@ -37,6 +37,7 @@ export const ratioAndRoundOff = (totalSize: number, maxRatioValue: number, size:
   ratioToNumber(totalSize, maxRatioValue, size)
 )
 
+// Not required
 export const addDefaultProps = (props: any, defaultProps: any) => {
   const keys = Object.keys({...props, ...defaultProps})
   const newProps: any = {}
@@ -60,3 +61,13 @@ export const isItUp = (direction: number) => direction === DIRECTIONS.UP
 export const isItDown = (direction: number) => direction === DIRECTIONS.DOWN
 
 export const getResizerId = (paneId: string) => `${RESIZER}-${paneId}`
+
+// need to make pure
+export const deleteUndefined = (anyObject: any) => {
+  Object.keys(anyObject).forEach(key => {
+    if (anyObject[key] === undefined) {
+      delete anyObject[key]
+    }
+  })
+  return anyObject
+}
