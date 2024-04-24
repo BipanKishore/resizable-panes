@@ -159,7 +159,7 @@ export const calculateAxes = (contextDetails: any) => {
 export const minMaxLogicUp = (
   panesList: PaneModel[], value: number,
   aIndex: number, bIndex: number,
-  sum = 0, maxPaneSize: number) => {
+  sum: number, maxPaneSize: number) => {
   // Failing for going up Reached Max
   const lastIndex = panesList.length - 1
 
@@ -276,7 +276,7 @@ export const minMaxLogicUp = (
 // eslint-disable-next-line complexity
 export const minMaxLogicDown = (
   panesList: PaneModel[], value: number,
-  aIndex: number, bIndex: number, sum = 0,
+  aIndex: number, bIndex: number, sum: number,
   maxPaneSize: number) => {
   const lastIndex = panesList.length - 1
   // keyConsole({aIndex, bIndex, value, sum})

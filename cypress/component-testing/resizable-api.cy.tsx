@@ -91,7 +91,6 @@ describe('Storage api', () => {
   })
 
   it('Hide P0 using API.setVisibility method -- Then restore using API.restoreDefault', () => {
-    resizableApi.setVisibility({}) // For isNoChange code branch
     resizableApi.setVisibility({P0: false})
     const visibilityMap = resizableApi.getVisibilitys()
 

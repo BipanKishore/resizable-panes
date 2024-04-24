@@ -176,10 +176,6 @@ export class PaneModel {
   }
 
   register (pane: any) {
-    if (this.api) {
-      this.api = pane
-      this.setUISize(DIRECTIONS.DOWN)
-    }
     this.api = pane
   }
 
@@ -271,10 +267,6 @@ export class PaneModel {
     }
   }
 
-  toRatioDefaultSize (containerSize: number, maxRatioValue: number) {
-    this.defaultSize = ratioAndRoundOff(containerSize, maxRatioValue, this.size)
-  }
-
   // We never come here for the case of store
   toRatioMode (containerSize: number, maxRatioValue: number) {
     const {
@@ -293,7 +285,7 @@ export class PaneModel {
     }
   }
 
-  setVisibilityHelper (isPartiallyHidden: boolean = false) {
+  setVisibilityHelper (isPartiallyHidden: boolean) {
     if (this.isHandle) {
       this.size = isPartiallyHidden ? 0 : this.resizerSize
     }
