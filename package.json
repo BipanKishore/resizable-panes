@@ -5,6 +5,7 @@
   "main": "./lib/index.cjs.js",
   "module": "./lib/index.esm.js",
   "types": "./lib/index.d.ts",
+  "files": ["lib"],
   "scripts": {
     "build-w": "webpack --config configs/webpack.dev.js",
     "build-prod-w": "webpack --config configs/webpack.prod.js",
