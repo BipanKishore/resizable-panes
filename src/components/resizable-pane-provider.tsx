@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react'
 import {ResizablePaneContext, getResizableContext} from '../context/resizable-panes-context'
 import {ResizablePanes} from './resizable-panes'
 import {addDefaultProps, noop} from '../utils/util'
-import {useResizableApi} from '../hook/use-resizable-api'
+// import {useResizableApi} from '../hook/use-resizable-api'
 import {onResizeClearSizesMapFromStore} from '../utils/storage'
 import {IResizablePaneProviderProps} from '../@types'
 import {singletonService} from '../services/singleton-service'
@@ -25,9 +25,10 @@ const ResizablePaneProviderDefaultProps: any = {
 
 export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   const currentProps = addDefaultProps(props, ResizablePaneProviderDefaultProps) as IResizablePaneProviderProps
-  const {uniqueId, visibility, storageApi} = currentProps
+  const {uniqueId, visibility, storageApi, onReady} = currentProps
 
   const context = singletonService.getService(uniqueId, () => getResizableContext(currentProps))
+  const {api} = context
 
   useEffect(() => {
     return () => {
@@ -37,7 +38,10 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
 
   const ref = useRef(true)
   // context.storage.readPaneChange(toArray(children), context)
-  useResizableApi(context, currentProps)
+  useEffect(() => {
+    onReady(api)
+  }, [api])
+
   useEffect(() => {
     onResizeClearSizesMapFromStore(uniqueId, storageApi)
   }, [uniqueId, storageApi])

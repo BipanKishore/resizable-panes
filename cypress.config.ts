@@ -1,7 +1,5 @@
 import {defineConfig} from 'cypress'
 
-// import We
-
 export default defineConfig({
   projectId: '2xc7po',
   retries: {
