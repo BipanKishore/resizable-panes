@@ -78,14 +78,14 @@ describe('Storage api', () => {
       P1: {
         size: 515,
         visibility: true,
-        defaultMinSize: 0,
-        defaultMaxSize: Infinity
+        minSize: 0,
+        maxSize: Infinity
       },
       P0: {
         size: 515,
         visibility: true,
-        defaultMinSize: 0,
-        defaultMaxSize: Infinity
+        minSize: 0,
+        maxSize: Infinity
       }
     })
   })
@@ -108,14 +108,14 @@ describe('Storage api', () => {
       P1: {
         size: 515,
         visibility: true,
-        defaultMinSize: 0,
-        defaultMaxSize: Infinity
+        minSize: 0,
+        maxSize: Infinity
       },
       P0: {
         size: 515,
         visibility: true,
-        defaultMinSize: 0,
-        defaultMaxSize: Infinity
+        minSize: 0,
+        maxSize: Infinity
       }
     })
   })
@@ -137,14 +137,14 @@ describe('Storage api', () => {
       P1: {
         size: 515,
         visibility: true,
-        defaultMinSize: 0,
-        defaultMaxSize: Infinity
+        minSize: 0,
+        maxSize: Infinity
       },
       P0: {
         size: 515,
         visibility: true,
-        defaultMinSize: 0,
-        defaultMaxSize: Infinity
+        minSize: 0,
+        maxSize: Infinity
       }
     })
   })

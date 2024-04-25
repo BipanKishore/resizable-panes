@@ -1,34 +1,25 @@
-import {useEffect} from 'react'
-import {
-  restoreDefaultFn
-} from '../utils/api'
-import {IResizableContext} from '../@types'
-import {createMap} from '../utils/util'
+// import {useEffect} from 'react'
+// import {
+//   restoreDefaultFn
+// } from '../utils/api'
+// import {IResizableContext} from '../@types'
+// import {createMap} from '../utils/util'
 
-export const useResizableApi = (context: IResizableContext, props: any) => {
-  const {contextDetails, setVisibility} = context
-  const {panesList} = contextDetails
-  const {
-    onReady
-  } = props
+// export const useResizableApi = (context: IResizableContext, props: any) => {
+//   const {} = context
+//   const {
+//     onReady
+//   } = props
 
-  const restoreDefault = () => restoreDefaultFn(contextDetails)
+//   useEffect(() => {
+//     const api = {
+//       restoreDefault,
+//       setVisibility,
+//       getSizes,
+//       getVisibilitys,
+//       getState
+//     }
 
-  const getState = () =>
-    createMap(panesList, 'size', 'visibility', 'minSize', 'maxSize')
-
-  const getSizes = () => createMap(panesList, 'size')
-  const getVisibilitys = () => createMap(panesList, 'visibility')
-
-  useEffect(() => {
-    const api = {
-      restoreDefault,
-      setVisibility,
-      getSizes,
-      getVisibilitys,
-      getState
-    }
-
-    onReady(api)
-  }, [context])
-}
+//     onReady(api)
+//   }, [context])
+// }

@@ -19,7 +19,7 @@ import {
   , IResizablePaneProviderProps
 } from '../@types'
 import {PaneModel} from '../models/pane-model'
-import {setVisibilityFn} from '../utils/api'
+import {restoreDefaultFn, setVisibilityFn} from '../utils/api'
 import {consoleAttachResizer, consoleGetSize} from '../utils/development-util'
 
 export const getResizableContext = (props: IResizablePaneProviderProps): IResizableContext => {
@@ -201,7 +201,23 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     consoleAttachResizer(items)
   }
 
+  const restoreDefault = () => restoreDefaultFn(contextDetails)
+  const getState = () =>
+    createMap(panesList, 'size', 'visibility', 'minSize', 'maxSize')
+
+  const getSizes = () => createMap(panesList, 'size')
+  const getVisibilitys = () => createMap(panesList, 'visibility')
+
+  const api = {
+    restoreDefault,
+    setVisibility,
+    getSizes,
+    getVisibilitys,
+    getState
+  }
+
   return {
+    api,
     onMoveEndFn,
     registerPane,
     registerResizer,

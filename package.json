@@ -5,17 +5,13 @@
   "main": "./lib/index.cjs.js",
   "module": "./lib/index.esm.js",
   "types": "./lib/index.d.ts",
-  "exports": {
-    "require": "./lib/index.cjs.js",
-    "import": "./lib/index.esm.js"
-  },
   "scripts": {
     "build-w": "webpack --config configs/webpack.dev.js",
     "build-prod-w": "webpack --config configs/webpack.prod.js",
-    "build-watch-w": "webpack --watch --config configs/webpack.dev.js",
+    "build-watch-w": "rimraf lib && webpack --watch --config configs/webpack.dev.js",
     "build": "rimraf lib && rollup -c configs/rollup.config.dev.mjs",
     "build-prod": "rimraf lib && rollup -c configs/rollup.config.prod.mjs",
-    "build-watch": "rollup -c configs/rollup.config.dev.mjs -w",
+    "build-watch": "rimraf lib && rollup -c configs/rollup.config.dev.mjs -w",
     "link-local": "npm link",
     "start-w": "npm-run-all --serial  link-local build-watch-w",
     "start": "npm-run-all --serial  link-local build-watch",
@@ -102,6 +98,7 @@
     "style-loader": "^3.3.3",
     "terser-webpack-plugin": "^5.3.9",
     "ts-loader": "^9.4.4",
+    "tslib": "^2.6.2",
     "typescript": "^5.2.2",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",

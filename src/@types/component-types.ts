@@ -116,6 +116,7 @@ export interface IContextDetails {
 }
 
 export interface IResizableContext {
+  api: any,
   onMoveEndFn: any,
   registerPane: any,
   registerResizer: any,
