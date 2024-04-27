@@ -382,17 +382,22 @@ export const getMaxContainerSizes = ({getContainerRect, vertical, resizersList} 
 }
 
 export const registerContainer = (context: any) => (node: any) => {
+
+  new ResizeObserver((a) => {
+    console.log('----------------------', a)
+  }).observe(node)
+
   context.registerContainer({getContainerRect: () => node.getBoundingClientRect()})
 }
 
-export const toRatioModeFn = (contextDetails: IContextDetails) => {
+export const toRatioModeFn = (contextDetails: IContextDetails, isOnResize = false) => {
   const {panesList, items} = contextDetails
   const {maxPaneSize} = getMaxContainerSizes(contextDetails)
 
   const maxRatioValue = getPanesSizeSum(panesList)
   panesList
     .forEach((pane: PaneModel) =>
-      pane.toRatioMode(maxPaneSize, maxRatioValue)
+      pane.toRatioMode(maxPaneSize, maxRatioValue, isOnResize)
     )
 
   const sizeSum = getPanesSizeSum(panesList)
@@ -401,4 +406,10 @@ export const toRatioModeFn = (contextDetails: IContextDetails) => {
   change1PixelToPanes(panesList, Math.abs(leftOverTotalSize), changeOperation)
 
   setUISizesFn(items, DIRECTIONS.DOWN)
+}
+
+export const toRatioModeOnResize =  (contextDetails: IContextDetails) => {
+  const {panesList, items} = contextDetails
+  const {maxPaneSize} = getMaxContainerSizes(contextDetails)
+  const maxRatioValue = getPanesSizeSum(panesList)
 }

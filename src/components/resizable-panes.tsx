@@ -14,6 +14,9 @@ export const ResizablePanes = (props: IResizablePanesProps) => {
 
   return (
     <div
+    onResize={() => {
+      console.log('-------------------onResize')
+    }}
       className={classname}
       data-cy={uniqueId}
       ref={containerRef}

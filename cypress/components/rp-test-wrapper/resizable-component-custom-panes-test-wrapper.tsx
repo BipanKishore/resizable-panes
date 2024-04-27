@@ -1,9 +1,9 @@
-import React, {useRef, useState} from 'react'
+import React, { useRef, useState } from 'react'
 
 import '../../styles/style.css'
-import {ResizablePanes} from '../../../src'
-import {addDefaultProps} from '../../../src/utils/util'
-import {testResizablePanesId} from './constant'
+import { ResizablePanes } from '../../../src'
+import { addDefaultProps } from '../../../src/utils/util'
+import { testResizablePanesId } from './constant'
 
 interface IIDMap {
   [id: string]: boolean
@@ -14,16 +14,16 @@ export const ResizableComponentCustomPanesTestWrapper = (props: any) => {
     uniqueId: testResizablePanesId
   })
 
-  const {children, visibility, ...otherProps} = currentProps
+  const { children, visibility, height = 300, noExtra = false, ...otherProps } = currentProps
 
   const [visibilityMap, setVisibilityMap] = useState<IIDMap>(visibility ?? {})
 
   const [resizablePanesVisibility, setResizablePanesVisibility] = useState(true)
 
-  const apiRef = useRef <any>({})
+  const apiRef = useRef<any>({})
 
   const updateVisibilityMap = (e: any) => {
-    const {name, checked} = e.currentTarget
+    const { name, checked } = e.currentTarget
     const newVisibilityMap = {
       ...visibilityMap,
       [name]: checked
@@ -31,33 +31,40 @@ export const ResizableComponentCustomPanesTestWrapper = (props: any) => {
     setVisibilityMap(newVisibilityMap)
   }
 
+  const containerStyle = {
+    height: `${height}px`
+  }
+
   return (
     <div className='h-100p w-100p' >
+      {
+        !noExtra &&
+        <div className='d-flex justify-content-center m-10'>
+          <button
+            data-cy="hide-resizable-panes"
+            onClick={() => setResizablePanesVisibility(!resizablePanesVisibility)}
+          >
+            Hide All
+          </button>
 
-      <div className='d-flex justify-content-center m-10'>
-        <button
-          data-cy="hide-resizable-panes"
-          onClick={() => setResizablePanesVisibility(!resizablePanesVisibility)}
-        >
-          Hide All
-        </button>
+          <button
+            data-cy="restore-default"
+            onClick={() => apiRef.current.restoreDefault()}
+          >
+            Restore Default
+          </button>
 
-        <button
-          data-cy="restore-default"
-          onClick={() => apiRef.current.restoreDefault()}
-        >
-          Restore Default
-        </button>
+          <button
+            data-cy="get-map"
+            onClick={() => apiRef.current.getState()}
+          >
+            Get State
+          </button>
+        </div>
+      }
 
-        <button
-          data-cy="get-map"
-          onClick={() => apiRef.current.getState()}
-        >
-          Get State
-        </button>
-      </div>
 
-      <div className='h-300 w-100p'>
+      <div style={containerStyle} className='w-100p'>
         {
           resizablePanesVisibility &&
           <ResizablePanes

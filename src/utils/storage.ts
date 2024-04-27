@@ -3,8 +3,10 @@ import {IContextDetails, IStoreModel, IStoreResizableItemsModel} from '../@types
 import {getResizerSum} from './panes'
 import {findById} from './util'
 
+// need to remove also
 export const onResizeClearSizesMapFromStore = (uniqueId: string, storageApi: any) => {
   window.addEventListener('resize', function () {
+    console.log('Resize')
     if (storageApi) { storageApi.removeItem(uniqueId) }
   })
 }

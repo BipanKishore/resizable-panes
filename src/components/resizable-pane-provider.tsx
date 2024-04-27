@@ -37,7 +37,7 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   }, [uniqueId])
 
   const ref = useRef(true)
-  // context.storage.readPaneChange(toArray(children), context)
+
   useEffect(() => {
     onReady(api)
   }, [api])

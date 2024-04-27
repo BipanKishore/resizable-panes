@@ -79,6 +79,12 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     setVisibility(visibilityMap)
   }
 
+  window.addEventListener('resize', function () {
+
+    console.log('Resize')
+    toRatioModeFn(contextDetails, true)
+  })
+
   const getIdToSizeMap = () => createMap(panesList, SIZE)
 
   const setMouseDownDetails = ({mouseCoordinate}: any, resizerId: string) => {
