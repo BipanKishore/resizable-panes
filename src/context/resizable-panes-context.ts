@@ -79,11 +79,13 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     setVisibility(visibilityMap)
   }
 
-  window.addEventListener('resize', function () {
+  const onContainerResize = () => {
+    if (unit === RATIO) {
+      toRatioModeFn(contextDetails, true)
+    }
 
-    console.log('Resize')
-    toRatioModeFn(contextDetails, true)
-  })
+    console.log('onContainerResize', items)
+  }
 
   const getIdToSizeMap = () => createMap(panesList, SIZE)
 
@@ -111,6 +113,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       }
       contextDetails.newVisibilityModel = false
       setUISizesFn(items, contextDetails.direction)
+      panesList.forEach((item) => item.syncRatioSizeToSize())
       // console.log('visPartiallyHidden ', getList(resizersList, 'isPartiallyHidden'))
     }
   }
@@ -214,6 +217,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   const getSizes = () => createMap(panesList, 'size')
   const getVisibilitys = () => createMap(panesList, 'visibility')
 
+  const resizeObserverContainer = new ResizeObserver(onContainerResize)
+
   const api = {
     restoreDefault,
     setVisibility,
@@ -224,6 +229,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   return {
     api,
+    resizeObserverContainer,
+    onContainerResize,
     onMoveEndFn,
     registerPane,
     registerResizer,

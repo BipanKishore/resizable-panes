@@ -4,10 +4,10 @@ import {
   IPaneNumericKeys, IResizablePaneProviderProps,
   IStoreResizableItemsModel, addAndRemoveType
 } from '../@types'
-import { DIRECTIONS, LEFT, PLUS, RIGHT, ZERO } from '../constant'
-import { ResizeStorage } from '../utils/storage'
-import { filterKeys, isItDown, isItUp, ratioAndRoundOff } from '../utils/util'
-import { attachDefaultPaneProps, checkPaneModelErrors } from './utils'
+import {DIRECTIONS, LEFT, PLUS, RIGHT, ZERO} from '../constant'
+import {ResizeStorage} from '../utils/storage'
+import {filterKeys, isItDown, isItUp, ratioAndRoundOff} from '../utils/util'
+import {attachDefaultPaneProps, checkPaneModelErrors} from './utils'
 
 export class PaneModel {
   isRegistered = true
@@ -19,13 +19,15 @@ export class PaneModel {
   id: string
   api: any
   size: number
+  ratioSize: number
+
   preSize: number
   // get _size () {
   //   return this.size
   // }
 
   // set _size (val:number) {
-  //   if (val === 63) {
+  //   if (val === 0) {
   //     debugger
   //   }
   //   this.size = val
@@ -51,7 +53,7 @@ export class PaneModel {
   props: IPane
   // Development Variables
 
-  constructor(paneProps: any, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
+  constructor (paneProps: any, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
     this.props = attachDefaultPaneProps(paneProps)
     const {
       id, minSize, size, maxSize
@@ -59,14 +61,14 @@ export class PaneModel {
 
     checkPaneModelErrors(size, minSize, maxSize, id)
 
-    const { visibility, vertical } = resizableProps
+    const {visibility, vertical} = resizableProps
     // // it can be removed with change in default props
     const show = visibility[id] !== undefined ? visibility[id] : true
     this.defaultVisibility = show
 
     const storedPane = store.getStoredPane(id)
     if (storedPane) {
-      const { size, defaultMaxSize, defaultMinSize, defaultSize, visibility, storedSize, hiddenResizer } = storedPane
+      const {size, defaultMaxSize, defaultMinSize, defaultSize, visibility, storedSize, hiddenResizer} = storedPane
       this.hiddenResizer = hiddenResizer
       this.initializeSizes(size, defaultMinSize, defaultMaxSize as number, defaultSize, storedSize, visibility)
     } else {
@@ -75,27 +77,29 @@ export class PaneModel {
 
     this.id = id
     this.vertical = vertical as boolean
+    this.syncRatioSizeToSize()
   }
 
-  initializeSize(size: number) {
+  initializeSize (size: number) {
     this.size = size
     this.storedSize = size
   }
 
-  initializeSizes(size: number, minSize: number, maxSize: number,
+  initializeSizes (size: number, minSize: number, maxSize: number,
     defaultSize: number, storedSize: number, visibility: boolean) {
-    // console.log(this.id, size, minSize, maxSize, visibility, this.storedSize)
+    console.log(this.id, size, minSize, maxSize, visibility, this.storedSize)
     this.initializeSize(size)
     this.defaultSize = defaultSize
     this.minSize = minSize
     this.maxSize = maxSize
     this.defaultMinSize = minSize
     this.defaultMaxSize = maxSize
+    console.warn('initializeSizes', maxSize)
     this.storedSize = storedSize
     this.visibility = visibility
   }
 
-  getStoreModel(): IStoreResizableItemsModel {
+  getStoreModel (): IStoreResizableItemsModel {
     const t = filterKeys(this, 'id', 'hiddenResizer', 'size',
       'defaultSize', 'defaultMinSize', 'visibility', 'storedSize')
     return {
@@ -104,12 +108,16 @@ export class PaneModel {
     }
   }
 
-  getSize() {
+  getSize () {
     return this.isRegistered && this.visibility ? this.size : 0
   }
 
+  getRatioSize () {
+    return this.isRegistered && this.visibility ? this.ratioSize : 0
+  }
+
   // No visibility check required here, we are only using this method for visible panes
-  setVisibilitySize(sizeChange: number, operation: addAndRemoveType) {
+  setVisibilitySize (sizeChange: number, operation: addAndRemoveType) {
     // we are never reducing here
     const newSize = this.size + (operation === PLUS ? sizeChange : -sizeChange)
     this.restoreLimits()
@@ -124,7 +132,7 @@ export class PaneModel {
     return newSize - this.size
   }
 
-  setHiddenResizer(newSize: number, direction: number) {
+  setHiddenResizer (newSize: number, direction: number) {
     if (!this.isHandle) {
       if (newSize < 0) {
         if (isItUp(direction)) {
@@ -137,20 +145,20 @@ export class PaneModel {
     }
   }
 
-  setHiddenResizerWhileMovement(newSize: number, direction: number) {
+  setHiddenResizerWhileMovement (newSize: number, direction: number) {
     if (this.axisSize !== 0) {
       this.setHiddenResizer(newSize, direction)
     }
     // console.log('change-size-' + this.id, this.size, newSize, this.hiddenResizer)
   }
 
-  clearHiddenResizer() {
+  clearHiddenResizer () {
     if (this.size > 0) {
       this.hiddenResizer = 'none'
     }
   }
 
-  changeSize(sizeChange: number, operation: addAndRemoveType, direction: number) {
+  changeSize (sizeChange: number, operation: addAndRemoveType, direction: number) {
     const newSize = this.axisSize + (operation === PLUS ? sizeChange : -sizeChange)
 
     this.setHiddenResizerWhileMovement(newSize, direction)
@@ -168,14 +176,14 @@ export class PaneModel {
     return Math.abs(this.size - newSize)
   }
 
-  setUISize() {
+  setUISize () {
     if (this.api) {
       this.api.setSize(this.visibility ? this.size : 0)
     }
     this.preSize = this.size
   }
 
-  register(pane: any) {
+  register (pane: any) {
     this.api = pane
   }
 
@@ -190,54 +198,54 @@ export class PaneModel {
   //   // this.storedSize = null
   // }
 
-  syncAxisSize() {
+  syncAxisSize () {
     this.axisSize = this.size
   }
 
-  restore() {
+  restore () {
     this.size = this.defaultSize
     this.restoreLimits()
     this.visibility = this.defaultVisibility
     console.log(this.id, this.size, this.visibility)
   }
 
-  restoreLimits() {
+  restoreLimits () {
     this.minSize = this.defaultMinSize
     this.maxSize = this.defaultMaxSize
   }
 
   // this method runs only for visible panes
-  resetMax(reduce = 0) {
+  resetMax (reduce = 0) {
     this.maxSize = this.defaultMaxSize - reduce
     return this.maxSize
   }
 
   // this method runs only for visible panes
-  resetMin() {
+  resetMin () {
     this.minSize = this.defaultMinSize
     return this.minSize
   }
 
-  synMaxToSize() {
+  synMaxToSize () {
     this.maxSize = this.size
     return this.size
   }
 
-  synMinToSize() {
+  synMinToSize () {
     this.minSize = this.size
     return this.size
   }
 
   // this method runs only for visible panes
-  getMinDiff() {
+  getMinDiff () {
     return this.size - this.defaultMinSize
   }
 
-  getMaxDiff() {
+  getMaxDiff () {
     return this.defaultMaxSize - this.size
   }
 
-  synSizeToMinSize(direction: number) {
+  synSizeToMinSize (direction: number) {
     if (this.visibility) {
       this.size = this.minSize
       if (this.defaultMinSize === 0) {
@@ -246,14 +254,14 @@ export class PaneModel {
     }
   }
 
-  synSizeToMaxSize() {
+  synSizeToMaxSize () {
     if (this.visibility) {
       this.size = this.maxSize
     }
   }
 
   // We never come here for the case of store
-  toRatioMode(containerSize: number, maxRatioValue: number, isOnResize: boolean) {
+  toRatioMode (containerSize: number, maxRatioValue: number, isOnResize: boolean) {
     const {
       minSize, size, maxSize
     } = this.props
@@ -262,9 +270,10 @@ export class PaneModel {
       defaultMinSize, size: sizeForOnResize, defaultMaxSize
     } = this
 
-    const [minSizeToUse, sizeToUse, maxSizeToUse] = isOnResize 
-    ? [defaultMinSize, sizeForOnResize, defaultMaxSize]
-    : [minSize, size, maxSize]
+    // need optimization
+    const [minSizeToUse, sizeToUse, maxSizeToUse] = isOnResize
+      ? [defaultMinSize, sizeForOnResize, defaultMaxSize]
+      : [minSize, size, maxSize]
 
     const storeSizeCalculated = ratioAndRoundOff(containerSize, maxRatioValue, sizeToUse)
     const minSizeCalculated = ratioAndRoundOff(containerSize, maxRatioValue, minSizeToUse)
@@ -273,19 +282,19 @@ export class PaneModel {
       maxSizeCalculated, storeSizeCalculated, storeSizeCalculated, this.visibility)
   }
 
-  fixChange(key: IPaneNumericKeys, change: number) {
+  fixChange (key: IPaneNumericKeys, change: number) {
     if (this.visibility) {
       this[key] = this[key] + change
     }
   }
 
-  setVisibilityHelper(isPartiallyHidden: boolean) {
+  setVisibilityHelper (isPartiallyHidden: boolean) {
     if (this.isHandle) {
       this.size = isPartiallyHidden ? 0 : this.resizerSize
     }
   }
 
-  setVisibility(visibility: boolean, isPartiallyHidden = false) {
+  setVisibility (visibility: boolean, isPartiallyHidden = false) {
     this.visibility = visibility
     if (visibility) {
       this.maxSize = this.defaultMaxSize
@@ -297,13 +306,21 @@ export class PaneModel {
     }
   }
 
-  setOldVisibilityModel() {
+  setOldVisibilityModel () {
     this.oldVisibleSize = this.size
     this.oldVisibility = this.visibility
   }
 
-  syncToOldVisibilityModel() {
+  syncToOldVisibilityModel () {
     this.size = this.oldVisibleSize
     this.visibility = this.oldVisibility
+  }
+
+  syncSizeToRatioSize () {
+    this.size = this.ratioSize
+  }
+
+  syncRatioSizeToSize () {
+    this.ratioSize = this.size
   }
 }

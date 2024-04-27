@@ -4,7 +4,8 @@ import {PaneModel} from '../models/pane-model'
 import {getList} from './development-util'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
-  getPanesSizeSum, getResizerSum, setUISizesFn, synPanesMaxToSize, synPanesMinToSize
+  getPanesSizeSum, getRatioSizeSum, getResizerSum,
+  setUISizesFn, synPanesMaxToSize, synPanesMinToSize
 } from './panes'
 import {findIndex, isItUp} from './util'
 
@@ -154,6 +155,11 @@ export const minMaxLogicUp = (
   panesList: PaneModel[], value: number,
   aIndex: number, bIndex: number,
   sum: number, maxPaneSize: number) => {
+  console.log('minMaxLogicUp', aIndex, bIndex)
+
+  if (Number.isNaN(value)) {
+    throw new Error(value)
+  }
   // Failing for going up Reached Max
   const lastIndex = panesList.length - 1
 
@@ -265,7 +271,10 @@ export const minMaxLogicDown = (
   aIndex: number, bIndex: number, sum: number,
   maxPaneSize: number) => {
   const lastIndex = panesList.length - 1
-  // keyConsole({aIndex, bIndex, value, sum})
+  console.log('minMaxLogicDown', aIndex, bIndex)
+  if (Number.isNaN(value)) {
+    throw new Error(value)
+  }
   let nextValue: number | undefined
   let nextAIndex = aIndex
   let nextBIndex = bIndex
@@ -381,23 +390,20 @@ export const getMaxContainerSizes = ({getContainerRect, vertical, resizersList} 
   }
 }
 
-export const registerContainer = (context: any) => (node: any) => {
-
-  new ResizeObserver((a) => {
-    console.log('----------------------', a)
-  }).observe(node)
-
-  context.registerContainer({getContainerRect: () => node.getBoundingClientRect()})
-}
-
 export const toRatioModeFn = (contextDetails: IContextDetails, isOnResize = false) => {
   const {panesList, items} = contextDetails
   const {maxPaneSize} = getMaxContainerSizes(contextDetails)
+  if (maxPaneSize < 0) {
+    return
+  }
+  const maxRatioValue = getRatioSizeSum(panesList)
 
-  const maxRatioValue = getPanesSizeSum(panesList)
+  console.log('toRatioModeFn', maxPaneSize, maxRatioValue)
   panesList
-    .forEach((pane: PaneModel) =>
+    .forEach((pane: PaneModel) => {
+      pane.syncSizeToRatioSize()
       pane.toRatioMode(maxPaneSize, maxRatioValue, isOnResize)
+    }
     )
 
   const sizeSum = getPanesSizeSum(panesList)
@@ -406,10 +412,4 @@ export const toRatioModeFn = (contextDetails: IContextDetails, isOnResize = fals
   change1PixelToPanes(panesList, Math.abs(leftOverTotalSize), changeOperation)
 
   setUISizesFn(items, DIRECTIONS.DOWN)
-}
-
-export const toRatioModeOnResize =  (contextDetails: IContextDetails) => {
-  const {panesList, items} = contextDetails
-  const {maxPaneSize} = getMaxContainerSizes(contextDetails)
-  const maxRatioValue = getPanesSizeSum(panesList)
 }

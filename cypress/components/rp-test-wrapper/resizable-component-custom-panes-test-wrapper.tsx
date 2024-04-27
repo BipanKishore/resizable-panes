@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react'
+import React, {useRef, useState} from 'react'
 
 import '../../styles/style.css'
-import { ResizablePanes } from '../../../src'
-import { addDefaultProps } from '../../../src/utils/util'
-import { testResizablePanesId } from './constant'
+import {ResizablePanes} from '../../../src'
+import {addDefaultProps} from '../../../src/utils/util'
+import {testResizablePanesId} from './constant'
 
 interface IIDMap {
   [id: string]: boolean
@@ -14,7 +14,7 @@ export const ResizableComponentCustomPanesTestWrapper = (props: any) => {
     uniqueId: testResizablePanesId
   })
 
-  const { children, visibility, height = 300, noExtra = false, ...otherProps } = currentProps
+  const {children, visibility, height = 300, noExtra = false, ...otherProps} = currentProps
 
   const [visibilityMap, setVisibilityMap] = useState<IIDMap>(visibility ?? {})
 
@@ -23,7 +23,7 @@ export const ResizableComponentCustomPanesTestWrapper = (props: any) => {
   const apiRef = useRef<any>({})
 
   const updateVisibilityMap = (e: any) => {
-    const { name, checked } = e.currentTarget
+    const {name, checked} = e.currentTarget
     const newVisibilityMap = {
       ...visibilityMap,
       [name]: checked
@@ -63,8 +63,7 @@ export const ResizableComponentCustomPanesTestWrapper = (props: any) => {
         </div>
       }
 
-
-      <div style={containerStyle} className='w-100p'>
+      <div className='w-100p' style={containerStyle}>
         {
           resizablePanesVisibility &&
           <ResizablePanes
@@ -77,7 +76,6 @@ export const ResizableComponentCustomPanesTestWrapper = (props: any) => {
             {children}
           </ResizablePanes>
         }
-
       </div>
 
       <div className='d-flex justify-context'>

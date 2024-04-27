@@ -13,10 +13,18 @@ const {
 const rScontainerId = 'rScontainerId'
 const mountUnMountButtonId = 'hide-resizable-panes'
 
+const {
+  resizerIds: [R0_C, R1_C, R2_C],
+  // checkboxIds: [CK0, CK1, CK2, CK3, CK4, CK5, CK6],
+  paneIds: [P0_C, P1_C, P2_C, P3_C]
+} = rCy.getResizableIds('child-')
+
 export {
   mountUnMountButtonId,
   rScontainerId,
   R0, R1, R2, R3, R4, R5,
   CK0, CK1, CK2, CK3, CK4, CK5, CK6,
-  P0, P1, P2, P3, P4, P5, P6
+  P0, P1, P2, P3, P4, P5, P6,
+  R0_C, R1_C, R2_C,
+  P0_C, P1_C, P2_C, P3_C
 }

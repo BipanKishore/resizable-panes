@@ -140,8 +140,8 @@ export class RCy {
     checkWidths(sizeMap, this.vertical)
   }
 
-  getResizableIds () {
-    const paneIds = getPaneIds(this.len)
+  getResizableIds (addOn = '') {
+    const paneIds = getPaneIds(this.len, addOn)
     const resizerIds = paneIds.map((id) => `resizer-${id}`)
     resizerIds.pop()
     const checkboxIds = paneIds.map((id) => `checkbox-${id}`)

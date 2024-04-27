@@ -1,12 +1,16 @@
 {
   "name": "resizable-panes-react",
-  "version": "2.1.9",
-  "description": "A simple library for resizing elements in the browser",
+  "version": "2.2.9",
+  "description": "A simple library for resizing Layouts in the ReactJs",
   "main": "./lib/index.cjs.js",
-  "module": "./lib/index.esm.js",
   "types": "./lib/index.d.ts",
   "files": ["lib"],
   "scripts": {
+    "clean:modules": "rimraf node_modules package-lock.json",
+    "clean:build": "rimraf lib",
+    "clean:test": "rimraf coverage .nyc_output",
+    "clean:all": "npm-run-all --serial clean:modules clean:build clean:test",
+    "ci": "npm run clean:all &&  npm install",
     "build-w": "webpack --config configs/webpack.dev.js",
     "build-prod-w": "webpack --config configs/webpack.prod.js",
     "build-watch-w": "rimraf lib && webpack --watch --config configs/webpack.dev.js",
@@ -18,9 +22,8 @@
     "start": "npm-run-all --serial  link-local build-watch",
     "predeploy": "npm-run-all --serial  build-prod",
     "deploy": "npm publish",
-    "test-clean": "rd /s /q coverage .nyc_output>nul 2>&1|echo.>nul",
-    "pretest": "npm run test-clean",
-    "pretest:open": "npm run test-clean",
+    "pretest": "npm run clean:test",
+    "pretest:open": "npm run clean:test",
     "test:open": "cypress open --component --config-file cypress.config.ts browser --browser chrome",
     "test": "cypress run --component --config-file cypress.config.ts browser --browser chrome",
     "posttest": "npm run coverage",
@@ -105,7 +108,9 @@
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1",
     "webpack-node-externals": "^3.0.0",
-    "webpack-notifier": "^1.15.0"
+    "webpack-notifier": "^1.15.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "peerDependencies": {
     "react": "*",

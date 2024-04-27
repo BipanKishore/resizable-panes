@@ -234,7 +234,7 @@ export const getPartialHiddenItems = (items : IResizableItem[]) => {
     }
   })
 
-  console.log('getPartialHiddenItems', partialHiddenItems)
+  // console.log('getPartialHiddenItems', partialHiddenItems)
   return partialHiddenItems
 }
 
@@ -266,7 +266,7 @@ export const getItemsVisibleAndNoPartialHidden = (items : IResizableItem[]) => {
       itemsVisibleAndNoPartialHidden.push(i)
     }
   }
-  console.log('itemsVisibleAndNoPartialHidden', partialHiddenItems)
+  // console.log('itemsVisibleAndNoPartialHidden', partialHiddenItems)
 
   findConsecutiveAdjacentResizer(items, itemsVisibleAndNoPartialHidden)
 
@@ -308,7 +308,7 @@ export const findConsecutiveAdjacentResizer = (items : IResizableItem[], indexes
       }
     }
   }
-  console.log('consecutiveResizers', consecutiveResizers)
+  // console.log('consecutiveResizers', consecutiveResizers)
 
   consecutiveResizers.forEach((set) => {
     set.forEach((i, index) => {

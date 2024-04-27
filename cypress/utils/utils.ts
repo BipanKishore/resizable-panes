@@ -1,10 +1,10 @@
 import {LEFT_MOVEMENT_VALUE, RIGHT_MOVEMENT_VALUE} from './events'
 import {IMoveEvent} from './types'
 
-export const getPaneIds = (length: number) => {
+export const getPaneIds = (length: number, addOn: string) => {
   const paneIds = []
   for (let i = 0; i < length; i++) {
-    paneIds.push('P' + i)
+    paneIds.push(`${addOn}P${i}`)
   }
 
   return paneIds
