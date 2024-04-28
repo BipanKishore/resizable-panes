@@ -102,11 +102,9 @@ export const findConsecutiveAdjacentResizer = (items : IResizableItem[], indexes
     nextI = findNextResizer(itemsByIndexes, i)
     if (i + 1 === nextI && itemsByIndexes[i].isHandle) {
       consecutiveResizers[set].push(i, nextI)
-    } else {
-      if (consecutiveResizers[set].length) {
-        ++set
-        consecutiveResizers[set] = []
-      }
+    } else if (consecutiveResizers[set].length) {
+      ++set
+      consecutiveResizers[set] = []
     }
   }
 
