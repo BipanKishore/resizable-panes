@@ -9,24 +9,22 @@
     "lib"
   ],
   "scripts": {
-    "clean": "rimraf node_modules package-lock.json",
+    "clean": "rimraf node_modules package-lock.json coverage .nyc_output",
     "clean:build": "rimraf lib",
-    "build": "rimraf lib && rollup -c configs/rollup.config.dev.mjs",
+    "test:clean": "rimraf coverage .nyc_output",
     "prod": "rimraf lib && cross-env NODE_ENV=prod rollup -c --bundleConfigAsCjs",
     "dev": "rimraf lib && cross-env NODE_ENV=dev rollup -c -w --bundleConfigAsCjs",
     "link-local": "npm link",
     "start": "npm-run-all --serial  link-local dev",
-    "predeploy": "npm-run-all --serial  build-prod",
+    "predeploy": "npm-run-all --serial clean prod",
     "deploy": "npm publish",
-    "test-clean": "rd /s /q coverage .nyc_output>nul 2>&1|echo.>nul",
-    "pretest": "npm run test-clean",
-    "pretest:open": "npm run test-clean",
+    "pretest": "npm run test:clean",
+    "pretest:open": "npm run test:clean",
     "test:open": "cypress open --component --config-file cypress.config.ts browser --browser chrome",
     "test": "cypress run --component --config-file cypress.config.ts browser --browser chrome",
+    "coverage": "nyc report --reporter=text --reporter=text-summary",
     "posttest": "npm run coverage",
-    "lint": "eslint ./src",
-    "test:cloud": "cypress run --component --config-file cypress.config.ts browser --browser chrome",
-    "coverage": "nyc report --reporter=text --reporter=text-summary"
+    "lint": "eslint ./src"
   },
   "keywords": [
     "resizable",
