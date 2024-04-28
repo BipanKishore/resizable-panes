@@ -32,7 +32,7 @@ jobs:
 
     - name: Build
       run: |
-        npm run build-prod
+        npm run prod
 
     - name: Component Testing
       run: |
