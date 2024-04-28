@@ -1,18 +1,21 @@
 {
     "compilerOptions": {
       "baseUrl": "/",
-      "outDir": "../../build/",
-      "noImplicitAny": true,
-      "module": "ES2020",
-      "target": "es6",
+      "outDir": "./lib/",
+      "declaration": true,
+      "module": "esnext",
+      "target": "es5",
+      "lib": ["dom", "esnext"],
+      "sourceMap": true,
       "jsx": "react",
-      "allowJs": true,
       "moduleResolution": "node",
-    //   "sourceMap": true,
       "allowSyntheticDefaultImports": true,
-      "types": ["cypress"]
+      "esModuleInterop": true,
+      "resolveJsonModule": true,
+      "types": ["cypress", "node"]
     },
+    "include": ["src"],
       "exclude": [
-      "node_modules"
+      "node_modules", "cypress"
     ]
   }

@@ -141,7 +141,6 @@ export class PaneModel {
     if (this.axisSize !== 0) {
       this.setHiddenResizer(newSize, direction)
     }
-    // console.log('change-size-' + this.id, this.size, newSize, this.hiddenResizer)
   }
 
   clearHiddenResizer () {

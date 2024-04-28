@@ -2,7 +2,7 @@
     "compilerOptions": {
       "outDir": "../lib/",
       "noImplicitAny": true,
-      "module": "ES2015",
+      "module": "esnext",
       "target": "es5",
       "lib": ["es2017", "es7", "es6", "dom"],
       "jsx": "react-jsx",

@@ -1,30 +1,36 @@
 import React, {useEffect, useRef} from 'react'
 import {ResizablePaneContext, getResizableContext} from '../context/resizable-panes-context'
 import {ResizablePanes} from './resizable-panes'
-import {addDefaultProps, noop} from '../utils/util'
+import {deleteUndefined, noop} from '../utils/util'
 // import {useResizableApi} from '../hook/use-resizable-api'
 import {onResizeClearSizesMapFromStore} from '../utils/storage'
 import {IResizablePaneProviderProps} from '../@types'
 import {singletonService} from '../services/singleton-service'
 import {RATIO} from '../constant'
 
-const ResizablePaneProviderDefaultProps: any = {
-  onResize: noop,
-  onResizeStop: noop,
-  onReady: noop,
-  onChangeVisibility: noop,
-  vertical: false,
-  storageApi: undefined,
-  unit: RATIO,
-  resizer: undefined,
-  resizerClass: '',
-  resizerSize: 2,
-  detectionSize: 5,
-  visibility: {}
+const v = {}
+
+export const attachDefaultPaneProps = (attachedProps: IResizablePaneProviderProps) => {
+  const propsWithNoUndefined = deleteUndefined({...attachedProps})
+  return {
+    onResize: noop,
+    onResizeStop: noop,
+    onReady: noop,
+    onChangeVisibility: noop,
+    vertical: false,
+    storageApi: undefined,
+    unit: RATIO,
+    resizer: undefined,
+    resizerClass: '',
+    resizerSize: 2,
+    detectionSize: 5,
+    visibility: v,
+    ...propsWithNoUndefined
+  }
 }
 
 export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
-  const currentProps = addDefaultProps(props, ResizablePaneProviderDefaultProps) as IResizablePaneProviderProps
+  const currentProps = attachDefaultPaneProps(props) as IResizablePaneProviderProps
   const {uniqueId, visibility, storageApi, onReady} = currentProps
 
   const context = singletonService.getService(uniqueId, () => getResizableContext(currentProps))

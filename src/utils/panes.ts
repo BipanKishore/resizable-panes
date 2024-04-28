@@ -4,7 +4,7 @@ import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
 import {ResizerModel} from '../models/resizer-model'
 import {DIRECTIONS, LEFT, NONE, PLUS, RIGHT} from '../constant'
-import {getList, localConsole} from './development-util'
+import {localConsole} from './development-util'
 import {isItDown, isItUp} from './util'
 
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
@@ -178,7 +178,7 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
   const resizerHandle = virtualOrderList[virtualActiveIndex] as ResizerModel
   resizerHandle.defaultMinSize = resizerHandle.defaultSize
   resizerHandle.defaultMaxSize = resizerHandle.defaultSize
-  console.log('setResizersLimits')
+
   if (isItUp(direction)) {
     virtualOrderList.forEach((item, index) => {
       if (item.isHandle) {
@@ -206,9 +206,6 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
       }
     })
   }
-
-  console.log('defaultMinSize ', getList(resizersList, 'defaultMinSize'))
-  console.log('defaultMaxSize ', getList(resizersList, 'defaultMaxSize'))
 }
 
 // We increases the size of element in opposite direction than in the direction

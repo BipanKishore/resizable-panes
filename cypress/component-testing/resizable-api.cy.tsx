@@ -54,7 +54,7 @@ describe('Storage api', () => {
   })
 
   it('Check initial visibility with fixed values and API.getSizes method', () => {
-    const visibilityMap = resizableApi.getVisibilitys()
+    const visibilityMap = resizableApi.getVisibilities()
     expect(visibilityMap).to.deep.equal({
       P1: true,
       P0: true
@@ -63,7 +63,7 @@ describe('Storage api', () => {
 
   it('Hide P0 using API.setVisibility method', () => {
     resizableApi.setVisibility({P0: false})
-    const visibilityMap = resizableApi.getVisibilitys()
+    const visibilityMap = resizableApi.getVisibilities()
 
     expect(visibilityMap).to.deep.equal({
       P1: true,
@@ -93,7 +93,7 @@ describe('Storage api', () => {
   it('Hide P0 using API.setVisibility method -- Then restore using API.restoreDefault', () => {
     resizableApi.setVisibility({}) // For isNoChange code branch
     resizableApi.setVisibility({P0: false})
-    const visibilityMap = resizableApi.getVisibilitys()
+    const visibilityMap = resizableApi.getVisibilities()
 
     expect(visibilityMap).to.deep.equal({
       P1: true,

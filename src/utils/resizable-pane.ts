@@ -1,7 +1,6 @@
 import {IContextDetails, IResizableEvent, IResizableItem} from '../@types'
 import {DIRECTIONS, MINUS, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
-import {getList} from './development-util'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
   getPanesSizeSum, getResizerSum, setUISizesFn, synPanesMaxToSize, synPanesMinToSize
@@ -56,7 +55,6 @@ export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) =>
 
   const visibleItems = removeHidden(items)
   const visibleActiveIndex = findIndex(visibleItems, handleId)
-  // console.log('visibleItems', getList(visibleItems, 'id'))
 
   const decreasingItems: (IResizableItem | undefined)[] = []
   let increasingItems: (IResizableItem | undefined)[] = []
@@ -112,15 +110,6 @@ export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) =>
   serviceRefCurrent.decreasingItems = removeHidden(filterEmpty(decreasingItems))
 
   serviceRefCurrent.virtualActiveIndex = findIndex(serviceRefCurrent.virtualOrderList, handleId)
-
-  console.log(
-    'visibleActiveIndex', visibleActiveIndex,
-    serviceRefCurrent.virtualActiveIndex
-  )
-
-  console.log('increasingItems', getList((serviceRefCurrent.increasingItems), 'id'))
-  console.log('decreasingItems', getList(serviceRefCurrent.decreasingItems, 'id'))
-  console.log('virtualOrderList', getList(serviceRefCurrent.virtualOrderList, 'id'))
 }
 
 export const setCurrentMinMax = (serviceRefCurrent: IContextDetails) => {
