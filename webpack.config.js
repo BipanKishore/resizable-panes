@@ -79,9 +79,6 @@ module.exports = {
         })
     ],
     resolve: {
-        alias: {
-            react: 'React'
-        },
         extensions: ['.tsx', '.ts', '.js'],
     }
 }
