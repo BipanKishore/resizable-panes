@@ -85,8 +85,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     const resizer = findById(items, resizerId)
     const index = items.indexOf(resizer)
 
-    console.log('setActiveIndex ', resizerId, 'index:', index)
-
     setActiveIndex(index)
     contextDetails.handleId = resizerId
     contextDetails.direction = DIRECTIONS.NONE
@@ -135,13 +133,11 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
     if (e.mouseCoordinate <= topAxis) {
       setUpMaxLimits(virtualOrderList, virtualActiveIndex)
-      console.log('setUpMaxLimits setUpMaxLimits')
       syncAxisSizes()
       contextDetails.axisCoordinate = topAxis
       return false
     } else if (e.mouseCoordinate >= bottomAxis) {
       setDownMaxLimits(virtualOrderList, virtualActiveIndex)
-      console.log('setDownMaxLimits setDownMaxLimits')
       syncAxisSizes()
       contextDetails.axisCoordinate = bottomAxis
       return false
@@ -206,13 +202,13 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     createMap(panesList, 'size', 'visibility', 'minSize', 'maxSize')
 
   const getSizes = () => createMap(panesList, 'size')
-  const getVisibilitys = () => createMap(panesList, 'visibility')
+  const getVisibilities = () => createMap(panesList, 'visibility')
 
   const api = {
     restoreDefault,
     setVisibility,
     getSizes,
-    getVisibilitys,
+    getVisibilities,
     getState
   }
 

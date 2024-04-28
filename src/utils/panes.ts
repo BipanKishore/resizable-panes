@@ -178,7 +178,7 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
   const resizerHandle = virtualOrderList[virtualActiveIndex] as ResizerModel
   resizerHandle.defaultMinSize = resizerHandle.defaultSize
   resizerHandle.defaultMaxSize = resizerHandle.defaultSize
-  console.log('setResizersLimits')
+
   if (isItUp(direction)) {
     virtualOrderList.forEach((item, index) => {
       if (item.isHandle) {
@@ -206,9 +206,6 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
       }
     })
   }
-
-  console.log('defaultMinSize ', getList(resizersList, 'defaultMinSize'))
-  console.log('defaultMaxSize ', getList(resizersList, 'defaultMaxSize'))
 }
 
 // We increases the size of element in opposite direction than in the direction

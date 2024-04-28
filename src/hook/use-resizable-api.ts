@@ -16,7 +16,7 @@
 //       restoreDefault,
 //       setVisibility,
 //       getSizes,
-//       getVisibilitys,
+//       getVisibilities,
 //       getState
 //     }
 

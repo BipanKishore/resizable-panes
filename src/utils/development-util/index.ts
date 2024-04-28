@@ -29,6 +29,20 @@ export const consoleIds = (list: any[]) => {
   console.log('consoleIds', ids)
 }
 
+export const consoleMinAndMaxSize = (list: any[]) => {
+  const minSize = getList(list, 'minSize')
+  const maxSize = getList(list, 'maxSize')
+  console.log('consoleMinSize', minSize)
+  console.log('consoleMaxSize', maxSize)
+}
+
+export const consoleDefaultMinAndDefaultMaxSize = (list: any[]) => {
+  const defaultMinSize = getList(list, 'defaultMinSize')
+  const defaultMaxSize = getList(list, 'defaultMaxSize')
+  console.log('defaultMinSize', defaultMinSize)
+  console.log('defaultMaxSize', defaultMaxSize)
+}
+
 export const consoleGetSize = (list: any[]) => {
   const sizes = list.map((i) => i.getSize())
   console.log('consoleGetSize', sizes)
@@ -41,4 +55,21 @@ export const consoleAttachResizer = (list: any[]) => {
       console.log('attachResizer Partial ', [i.id, i.hiddenResizer])
     }
   })
+}
+
+export const consoleResizerLimitCrossedUp = () => {
+  console.log('setUpMaxLimits setUpMaxLimits')
+}
+
+export const consoleResizerLimitCrossedDown = () => {
+  console.error('setDownMaxLimits setDownMaxLimits')
+}
+
+export const consoleVirtualOrder = (serviceRefCurrent: any) => {
+  console.log(
+    'visibleActiveIndex', serviceRefCurrent.virtualActiveIndex
+  )
+  console.log('increasingItems', getList((serviceRefCurrent.increasingItems), 'id'))
+  console.log('decreasingItems', getList(serviceRefCurrent.decreasingItems, 'id'))
+  console.log('virtualOrderList', getList(serviceRefCurrent.virtualOrderList, 'id'))
 }

@@ -11,13 +11,11 @@ import {getMaxContainerSizes} from './resizable-pane'
 import {
   findNextVisibleResizer, findPrevVisibleResizer, getFirstVisiblePaneIndexAndHideAllBeforeIt,
   getItemsVisibleAndNoPartialHidden, setVisibilityOfLeftResizers
-} from './visibilit'
+} from './visibility-helper'
 
 // Need to check for hidden element
 export const restoreDefaultFn = ({items}: any) => {
-  console.log(
-    'restoreDefaultFn'
-  )
+  console.log('restoreDefaultFn')
   items.forEach((pane: PaneModel) => pane.restore())
   setUISizesFn(items, DIRECTIONS.NONE)
 }

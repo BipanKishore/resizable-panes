@@ -8,7 +8,7 @@ export type IPaneNumericKeys = 'size' | 'defaultSize' | 'minSize' | 'maxSize' | 
 export interface IResizableApi {
     restoreDefault: () => void,
     setVisibility: (map: IKeyToBoolMap) => void,
-    getVisibilitys: () => IBoolMap,
+    getVisibilities: () => IBoolMap,
     getSizes: () => INumberMap,
     getState: () => IGetState
 }
