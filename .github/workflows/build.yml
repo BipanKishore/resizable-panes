@@ -36,7 +36,7 @@ jobs:
 
     - name: Component Testing
       run: |
-        npm run test:cloud
+        npm test
         
     - name: Check Coverage
       run: |
