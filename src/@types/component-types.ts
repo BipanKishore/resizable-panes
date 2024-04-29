@@ -105,7 +105,6 @@ export interface IContextDetails {
   resizersList: ResizerModel[],
   isSetRatioMode: boolean,
   virtualActiveIndex: number,
-  activeIndex: number,
   axisCoordinate: number,
   direction: number,
   getContainerRect: any,
