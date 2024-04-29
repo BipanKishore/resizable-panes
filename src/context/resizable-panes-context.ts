@@ -51,11 +51,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const syncAxisSizes = () => syncAxisSizesFn(items)
 
-  const setActiveIndex = (index: number) => {
-    // Pane Index before resizer
-    contextDetails.activeIndex = index
-  }
-
   const registerPane = (pane: any, id:string) => {
     const index = findIndexInChildrenbyId(myChildren, id)
     panesList[index].register(pane)
@@ -82,10 +77,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   const getIdToSizeMap = () => createMap(panesList, SIZE)
 
   const setMouseDownDetails = ({mouseCoordinate}: any, resizerId: string) => {
-    const resizer = findById(items, resizerId)
-    const index = items.indexOf(resizer)
-
-    setActiveIndex(index)
     contextDetails.handleId = resizerId
     contextDetails.direction = DIRECTIONS.NONE
     contextDetails.axisCoordinate = mouseCoordinate
