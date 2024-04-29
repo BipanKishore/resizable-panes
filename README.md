@@ -128,3 +128,7 @@ Sponsors will be prominently displayed on the project's README and other relevan
 | getSizes        |        | It returns the size map object  of Ids of Panes                       |
 | getVisibilities |        | It returns the visibility map object of Ids of Panes                  |
 | getState        |        | It return the current state of all Panes.                             |
+
+
+### [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
+
