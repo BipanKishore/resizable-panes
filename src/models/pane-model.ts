@@ -1,10 +1,10 @@
 import {
   IHiddenResizer,
   IPane,
-  IPaneNumericKeys, IResizablePaneProviderProps,
-  IStoreResizableItemsModel, addAndRemoveType
+  IResizablePaneProviderProps,
+  IStoreResizableItemsModel, UnitTypes, addAndRemoveType
 } from '../@types'
-import {DIRECTIONS, LEFT, PLUS, RIGHT, ZERO} from '../constant'
+import {DIRECTIONS, LEFT, NONE, PLUS, RATIO, RIGHT, ZERO} from '../constant'
 import {ResizeStorage} from '../utils/storage'
 import {filterKeys, isItDown, isItUp, ratioAndRoundOff} from '../utils/util'
 import {attachDefaultPaneProps, checkPaneModelErrors} from './utils'
@@ -13,12 +13,18 @@ export class PaneModel {
   isRegistered = true
   isHandle = false
   partialHiddenDirection = DIRECTIONS.NONE
-  hiddenResizer: IHiddenResizer = 'none'
+  hiddenResizer: IHiddenResizer = NONE
   resizerSize: number
 
   id: string
   api: any
   size: number
+  sizeRatio: number
+  minSizeRatio: number
+  maxSizeRatio: number
+
+  minMaxUnit: UnitTypes
+
   preSize: number
   // get _size () {
   //   return this.size
@@ -57,9 +63,13 @@ export class PaneModel {
       id, minSize, size, maxSize
     } = this.props
 
-    checkPaneModelErrors(size, minSize, maxSize, id)
+    const {visibility, vertical, minMaxUnit, unit} = resizableProps
+    this.minMaxUnit = minMaxUnit
 
-    const {visibility, vertical} = resizableProps
+    if (unit !== RATIO) {
+      checkPaneModelErrors(size, minSize, maxSize, id)
+    }
+
     // // it can be removed with change in default props
     const show = visibility[id] !== undefined ? visibility[id] : true
     this.defaultVisibility = show
@@ -75,6 +85,11 @@ export class PaneModel {
 
     this.id = id
     this.vertical = vertical as boolean
+    this.syncRatioSizeToSize()
+  }
+
+  getRatioSize () {
+    return this.isRegistered && this.visibility ? this.sizeRatio : 0
   }
 
   initializeSize (size: number) {
@@ -252,21 +267,37 @@ export class PaneModel {
   }
 
   // We never come here for the case of store
-  toRatioMode (containerSize: number, maxRatioValue: number) {
+  toRatioMode (containerSize: number, maxRatioValue: number, isOnResize: boolean) {
     const {
       minSize, size, maxSize
     } = this.props
-    const storeSizeCalculated = ratioAndRoundOff(containerSize, maxRatioValue, size)
-    const minSizeCalculated = ratioAndRoundOff(containerSize, maxRatioValue, minSize)
-    const maxSizeCalculated = ratioAndRoundOff(containerSize, maxRatioValue, maxSize)
+
+    // need optimization
+    const [minSizeToUse, sizeToUse, maxSizeToUse] = isOnResize
+      ? [this.minSizeRatio, this.size, this.maxSizeRatio]
+      : [minSize, size, maxSize]
+
+    const storeSizeCalculated = ratioAndRoundOff(containerSize, maxRatioValue, sizeToUse)
+
+    let minSizeCalculated, maxSizeCalculated
+    if (this.minMaxUnit !== RATIO) {
+      minSizeCalculated = this.defaultMinSize
+      maxSizeCalculated = this.defaultMaxSize
+    } else {
+      minSizeCalculated = ratioAndRoundOff(containerSize, maxRatioValue, minSizeToUse)
+      maxSizeCalculated = ratioAndRoundOff(containerSize, maxRatioValue, maxSizeToUse)
+    }
+
+    if (!isOnResize) {
+      if (this.minMaxUnit !== RATIO) {
+        checkPaneModelErrors(storeSizeCalculated, minSizeCalculated, maxSizeCalculated, this.id)
+      } else {
+        checkPaneModelErrors(size, minSize, maxSize, this.id)
+      }
+    }
+
     this.initializeSizes(storeSizeCalculated, minSizeCalculated,
       maxSizeCalculated, storeSizeCalculated, storeSizeCalculated, this.visibility)
-  }
-
-  fixChange (key: IPaneNumericKeys, change: number) {
-    if (this.visibility) {
-      this[key] = this[key] + change
-    }
   }
 
   setVisibilityHelper (isPartiallyHidden: boolean) {
@@ -295,5 +326,17 @@ export class PaneModel {
   syncToOldVisibilityModel () {
     this.size = this.oldVisibleSize
     this.visibility = this.oldVisibility
+  }
+
+  syncSizeToRatioSize () {
+    this.size = this.sizeRatio
+    this.defaultMinSize = this.minSizeRatio
+    this.defaultMaxSize = this.maxSizeRatio
+  }
+
+  syncRatioSizeToSize () {
+    this.sizeRatio = this.size
+    this.minSizeRatio = this.defaultMinSize
+    this.maxSizeRatio = this.defaultMaxSize
   }
 }

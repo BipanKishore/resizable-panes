@@ -33,6 +33,13 @@ export const noMinMax5PanesSet = [
   new PaneModelConfig(3),
   new PaneModelConfig(1)
 ]
+
+export const withMinMaxWithMinMaxUnitPixel5PanesSet = [
+  new PaneModelConfig(1, 100, 1000),
+  new PaneModelConfig(2, 200, 1000),
+  new PaneModelConfig(1, 100, 1000)
+]
+
 export const withMinMaxEqualSize1PanesSet = [
   new PaneModelConfig(1, 0.1, 3)
 ]

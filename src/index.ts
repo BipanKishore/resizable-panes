@@ -1,5 +1,7 @@
 export {
-  Pane as Panes,
-  Pane,
-  ResizablePanes
-} from './components'
+  Pane
+} from './components/pane'
+
+export {
+  ResizablePaneProvider as ResizablePanes
+} from './components/resizable-pane-provider'

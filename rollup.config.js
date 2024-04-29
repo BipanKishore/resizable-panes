@@ -38,7 +38,7 @@ export default {
     commonjs(),
     typescript(),
     postcss(),
-    isOptimise ? null : terser()
+    isOptimise ? terser() : null
   ],
   external: ['react']
 }

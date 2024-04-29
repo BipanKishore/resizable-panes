@@ -103,6 +103,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       }
       contextDetails.newVisibilityModel = false
       setUISizesFn(items, contextDetails.direction)
+      panesList.forEach((item) => item.syncRatioSizeToSize())
       // console.log('visPartiallyHidden ', getList(resizersList, 'isPartiallyHidden'))
     }
   }

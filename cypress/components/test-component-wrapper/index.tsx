@@ -1,11 +1,10 @@
 import React, {useRef, useState} from 'react'
 
 import '../../styles/style.css'
-import {Panes, ResizablePanes} from '../../../src'
+import {Pane, ResizablePanes} from '../../../src'
 import {CustomResizerFirst} from '../custom-resizer'
 
 const VERTICAL_CONTAINER_WIDTH = 1000 + 4 * 10
-const VIEW_PORT_WIDTH = VERTICAL_CONTAINER_WIDTH + 16
 
 const resizablePanesId = 'simple-visibility-operation'
 export const ENUMS = {
@@ -96,25 +95,25 @@ export const TestComponentWrapper = (props: any) => {
               apiRef.current = api
             }}
           >
-            <Panes className='bg-red-500' id='P0' size={1}>
+            <Pane className='bg-red-500' id='P0' size={1}>
               P0
-            </Panes>
+            </Pane>
 
-            <Panes className='bg-orange-500' id='P1' size={3}>
+            <Pane className='bg-orange-500' id='P1' size={3}>
               P1
-            </Panes>
+            </Pane>
 
-            <Panes className='bg-lime-500' id='P2' size={2}>
+            <Pane className='bg-lime-500' id='P2' size={2}>
               P2
-            </Panes>
+            </Pane>
 
-            <Panes className='bg-orange-500' id='P3' size={3}>
+            <Pane className='bg-orange-500' id='P3' size={3}>
               P3
-            </Panes>
+            </Pane>
 
-            <Panes className='bg-red-500' id='P4' size={1}>
+            <Pane className='bg-red-500' id='P4' size={1}>
               P4
-            </Panes>
+            </Pane>
 
           </ResizablePanes>
         }

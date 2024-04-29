@@ -13,7 +13,6 @@ const rCy = new RCy({
   resizerSize: 2,
   vertical: true
 })
-const {resizerSize} = rCy
 
 describe('Pixel mode', () => {
   beforeEach(() => {
@@ -23,7 +22,7 @@ describe('Pixel mode', () => {
         panesList={withMinMaxPixelMode5PanesSet}
         storageApi={localStorage}
         uniqueId={containerId}
-
+        unit='pixel'
         vertical
       >
 

@@ -1,10 +1,10 @@
 {
-  "name": "resizable-panes-react-testing",
+  "name": "resizable-panes-react",
   "version": "2.3.9",
   "description": "A simple library for resizing elements in the browser",
   "module": "./lib/esm/index.esm.js",
   "main": "./lib/cjs/index.cjs.js",
-  "types": "./lib/index.d.ts",
+  "types": "./lib/esm/index.d.ts",
   "files": [
     "lib"
   ],
@@ -15,7 +15,7 @@
     "prod": "rimraf lib && cross-env NODE_ENV=prod rollup -c --bundleConfigAsCjs",
     "dev": "rimraf lib && cross-env NODE_ENV=dev rollup -c -w --bundleConfigAsCjs",
     "link-local": "npm link",
-    "start": "npm-run-all --serial  link-local dev",
+    "start": "npm-run-all --serial link-local dev",
     "predeploy": "npm-run-all --serial clean prod",
     "deploy": "npm publish",
     "pretest": "npm run test:clean",
