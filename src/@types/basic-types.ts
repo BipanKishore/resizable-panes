@@ -1,0 +1,14 @@
+import {PaneModel} from '../models/pane-model'
+
+export type IHiddenResizer = 'left' | 'right' | 'none'
+
+export type UnitTypes = 'ratio' | 'pixel' | undefined
+
+export type addAndRemoveType = '+'| '-'
+
+export type IPaneModelKey = keyof PaneModel
+
+export type IPaneNumericKeys = 'size' | 'defaultSize' | 'minSize' | 'maxSize' | 'defaultMinSize' | 'defaultMaxSize'
+
+export type IBooleanOrUndefined = boolean | undefined
+export type IStringOrUndefined = string | undefined

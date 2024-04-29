@@ -1,18 +1,17 @@
 import {MouseEventHandler, ReactNode} from 'react'
 import {IKeyToBoolMap, IMapIdToSize} from './general-type'
-import {IResizableApi} from './use-resizable-panes-types'
 import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from '../utils/storage'
 import {ResizerModel} from '../models/resizer-model'
+import {UnitTypes, IHiddenResizer} from './basic-types'
 
-export type IHiddenResizer = 'left' | 'right' | 'none'
 export type IResizableItem = PaneModel | ResizerModel
 
-export type onResizeType = (param: IMapIdToSize) => void
-export type onReadyType = (api: IResizableApi) => void
-export type UnitTypes = 'ratio' | 'pixel' | undefined
+export interface IResizerApi {
+  setSize: (size: number) => void
+}
 
-export type IGetMapApiParam = 'size' | 'visibility'
+export type onResizeType = (param: IMapIdToSize) => void
 
 export interface INumberMap {
   [key: string]: number
@@ -35,7 +34,16 @@ export interface IGetState {
   [key: string]: IGetStateItem
 }
 
-export interface IResizablePanesPropsBase {
+export interface IResizableApi {
+  restoreDefault: () => void,
+  setVisibility: (map: IKeyToBoolMap) => void,
+  getVisibilities: () => IBoolMap,
+  getSizes: () => INumberMap,
+  getState: () => IGetState
+}
+export type onReadyType = (api: IResizableApi) => void
+
+export interface IResizablePaneProviderProps {
   uniqueId: string,
   className?: string,
   resizerClass?: string,
@@ -48,17 +56,10 @@ export interface IResizablePanesPropsBase {
   onReady?: onReadyType,
   onChangeVisibility?: (map: IKeyToBoolMap) => unknown,
   children: ReactNode | ReactNode[],
-}
-
-export interface IResizablePaneProviderProps extends IResizablePanesPropsBase {
   storageApi?: any,
   resizer?: ReactNode,
   resizerSize?: number,
-  visibility?: IKeyToBoolMap,
-  vertical?: boolean
-}
-
-export interface IResizablePanesProps extends IResizablePanesPropsBase {
+  visibility?: IKeyToBoolMap
 }
 
 export interface IPane {
