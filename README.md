@@ -23,6 +23,15 @@ various applications where flexible layout management is required.
 
 * **Auto-Save Sizes:** Pane size and visibility are automatically saved in the browser's memory for consistent layouts across sessions.
 
+## Installation
+
+```bash
+npm i resizable-panes-react --save
+# or
+yarn add resizable-panes-react
+```
+
+
 ## Usage
 
 ```css
