@@ -21,6 +21,7 @@ export const attachDefaultPaneProps = (attachedProps: IResizablePaneProviderProp
     unit: RATIO,
     resizer: undefined,
     resizerClass: '',
+    activeResizerClass: '',
     resizerSize: 2,
     detectionSize: 5,
     visibility: v,

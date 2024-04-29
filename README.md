@@ -83,6 +83,8 @@ Sponsors will be prominently displayed on the project's README and other relevan
 | minMaxUnit         | 'ratio' or 'pixel' | ratio   | false               | It sets the unit of minSize and maxSize of panes.                                                                                  |
 | visibility         | Object             |         |                     | It accepts a boolean map of Pane Ids visibility.                                                                                   |
 | storageApi         | Object             |         | false               | It used to store data across session. It can be localStorage, sessionStorage or any other following the interface of localStorage. |
+| resizerClass       | string             |         | false               | It gets applied to the main resizer element in normal state.                                                                       |
+| activeResizerClass | string             |         | false               | It gets applied to the main resizer element in active state.                                                                       |
 | resizer            | ReactElement       |         | false               | It will replace the in build resizer.                                                                                              |
 | resizerSize        | number             | 2       | optionally required | It is the size of resizer. If the size of resizer is other than 2px you will have to provide the value.                            |
 | onResize           | function           |         | false               | It emits size map of while resizing layout.                                                                                        |
