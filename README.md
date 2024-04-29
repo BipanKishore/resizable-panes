@@ -2,6 +2,11 @@
 This library is highly customizable and can be used in
 various applications where flexible layout management is required.
 
+![resizable-panes-react](https://github.com/BipanKishore/resizable-panes-react/actions/workflows/build.yml/badge.svg?branch=master)  ![Cypress Tests](https://github.com/BipanKishore/resizable-panes-react/actions/workflows/cypress.yml/badge.svg?branch=master) ![nycrc config on GitHub](https://img.shields.io/nycrc/BipanKishore/resizable-panes-react)
+ ![NPM Version](https://img.shields.io/npm/v/resizable-panes-react) [![npm bundle size](https://img.shields.io/bundlephobia/minzip/resizable-panes-react)](https://www.npmjs.com/package/resizable-panes-react) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=BipanKishore_resizable-panes-react&branch=master&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=BipanKishore_resizable-panes-react)
+
+ [Cypress Recoreded tests are available here](https://cloud.cypress.io/projects/2xc7po/branches/master/overview)
+
 ## Key Features
 
 * **Smooth Resizing:** Enjoy smooth and fast pane resizing without performance issues.
@@ -20,9 +25,36 @@ various applications where flexible layout management is required.
 
 ### [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
 
-![resizable-panes-react](https://github.com/BipanKishore/resizable-panes-react/actions/workflows/build.yml/badge.svg?branch=master)  ![Cypress Tests](https://github.com/BipanKishore/resizable-panes-react/actions/workflows/cypress.yml/badge.svg?branch=master) ![nycrc config on GitHub](https://img.shields.io/nycrc/BipanKishore/resizable-panes-react)
- ![NPM Version](https://img.shields.io/npm/v/resizable-panes-react) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/resizable-panes-react) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=BipanKishore_resizable-panes-react&branch=master&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=BipanKishore_resizable-panes-react)
+## Usage
 
-[Cypress Recoreded tests are available here](https://cloud.cypress.io/projects/2xc7po/branches/master/overview)
+```css
+.bg-slate-500{
+    background-color: rgb(100 116 139);
+}
+```
 
-Author: [Vimal Sharma (Freelancer)](https://vimalsharma.co.in/).
+```jsx
+import { Pane, ResizablePanes } from 'resizable-panes-react';
+
+function App() {
+  return (
+    <div
+      style={{
+        height: '300px',
+      }}
+    >
+      <ResizablePanes uniqueId="uniqueId" vertical resizerClass="bg-slate-500">
+        <Pane id="P0" size={1}>
+          Your component 1
+        </Pane>
+        <Pane id="P1" size={2}>
+          Your component 2
+        </Pane>
+        <Pane id="P2" size={3}>
+          Your component 3
+        </Pane>
+      </ResizablePanes>
+    </div>
+  );
+}
+```
