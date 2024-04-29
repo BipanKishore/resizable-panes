@@ -4,7 +4,7 @@
   "description": "A simple library for resizing elements in the browser",
   "module": "./lib/esm/index.esm.js",
   "main": "./lib/cjs/index.cjs.js",
-  "types": "./lib/esm/index.d.ts",
+  "types": "./lib/index.d.ts",
   "files": [
     "lib"
   ],
