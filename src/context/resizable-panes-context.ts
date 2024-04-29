@@ -43,7 +43,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   const {panesList, resizersList} = getPanesAndResizers(items)
 
   const contextDetails = new ResizablePanesModel()
-  console.log(contextDetails)
   contextDetails.register({
     vertical,
     items,
