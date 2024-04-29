@@ -19,7 +19,7 @@ import {
   IKeyToBoolMap, IResizableContext
   , IResizablePaneProviderProps
 } from '../@types'
-import {PaneModel, ResizablePanesModel} from '../models'
+import {PaneModel, ResizableModel} from '../models'
 import {consoleGetSize} from '../utils/development-util'
 import {setVisibilityFn} from '../utils/visibility-helper'
 import {fixPartialHiddenResizer, setResizersLimits} from '../utils/resizer'
@@ -42,7 +42,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const {panesList, resizersList} = getPanesAndResizers(items)
 
-  const contextDetails = new ResizablePanesModel()
+  const contextDetails = new ResizableModel()
   contextDetails.register({
     vertical,
     items,

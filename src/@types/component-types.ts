@@ -1,6 +1,6 @@
 import {MouseEventHandler, ReactNode} from 'react'
 import {IKeyToBoolMap, IMapIdToSize} from './general-type'
-import {PaneModel, ResizerModel, ResizablePanesModel} from '../models'
+import {PaneModel, ResizerModel, ResizableModel} from '../models'
 import {ResizeStorage} from '../utils/storage'
 import {UnitTypes, IHiddenResizer} from './basic-types'
 
@@ -112,7 +112,7 @@ export interface IResizableContext {
   vertical: boolean | undefined,
   calculateAndSetHeight: any,
   props: IResizablePaneProviderProps,
-  contextDetails: ResizablePanesModel,
+  contextDetails: ResizableModel,
   myChildren: ReactNode[],
   storage: ResizeStorage,
   getPaneSizeStyle: (id: string) => void,
