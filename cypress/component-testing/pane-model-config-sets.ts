@@ -43,3 +43,9 @@ export const withMinMaxWithMinMaxUnitPixel5PanesSet = [
 export const withMinMaxEqualSize1PanesSet = [
   new PaneModelConfig(1, 0.1, 3)
 ]
+
+export const mix3PanesSet = [
+  new PaneModelConfig(3, 1, 6),
+  new PaneModelConfig(2),
+  new PaneModelConfig(3, 1, 6)
+]

@@ -71,3 +71,5 @@ export const deleteUndefined = (anyObject: any) => {
   })
   return anyObject
 }
+
+export const reverse = <T>(list: T[]): T[] => [...list].reverse()

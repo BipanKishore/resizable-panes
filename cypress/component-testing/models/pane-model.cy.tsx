@@ -13,7 +13,6 @@ const rCy = new RCy({
   resizerSize: 2,
   vertical: true
 })
-const {resizerSize} = rCy
 
 describe('Test Pane Model', () => {
   describe('Test UI Action: toRatioMode method', () => {
