@@ -1,43 +1,15 @@
 import {ReactElement} from 'react'
-import {IContextDetails, IHiddenResizer, IResizableItem, IResizablePaneProviderProps, addAndRemoveType} from '../@types'
+import {IResizableItem, IResizablePaneProviderProps, addAndRemoveType} from '../@types'
 import {PaneModel} from '../models/pane-model'
 import {ResizeStorage} from './storage'
 import {ResizerModel} from '../models/resizer-model'
-import {DIRECTIONS, LEFT, NONE, PLUS, RIGHT} from '../constant'
-import {localConsole} from './development-util'
-import {isItDown, isItUp} from './util'
+import {DIRECTIONS, PLUS} from '../constant'
+import {fixFacingHiddenResizersOrder} from './resizer'
 
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
   panesList.forEach(pane => pane.syncAxisSize())
 
-// It fixes if two resizers face earch other
-const fixFacingHiddenResizersOrder = (items: IResizableItem[], direction: number) => {
-  let prevItemHiddenResizerOrder: IHiddenResizer = NONE
-
-  const fixFacingHiddenResizersOrderLogic = (item: IResizableItem) => {
-    if (!item.isHandle) {
-      if (prevItemHiddenResizerOrder !== NONE && item.hiddenResizer !== NONE) {
-        item.hiddenResizer = prevItemHiddenResizerOrder
-      }
-      prevItemHiddenResizerOrder = item.hiddenResizer
-    }
-  }
-
-  if (isItUp(direction)) {
-    const upOrderList = [...items].reverse()
-    upOrderList.forEach(fixFacingHiddenResizersOrderLogic)
-  }
-
-  if (isItDown(direction)) {
-    items.forEach(fixFacingHiddenResizersOrderLogic)
-  }
-}
-
 export const setUISizesFn = (items: IResizableItem[], direction: number) => {
-  // const panes = items.filter((i) => !i.isHandle)
-  // panes.forEach((pane: IResizableItem) => pane.setUISize())
-  // above two may not require
-
   items.forEach((pane: IResizableItem) => pane.setUISize())
   fixFacingHiddenResizersOrder(items, direction)
 }
@@ -76,16 +48,16 @@ export const getResizerSum = (resizersList: ResizerModel[], start?: number, end?
   getSum(resizersList, resizer => resizer.getSize(), start, end)
 
 export const getMaxSizeSum = (panesList: PaneModel[], start: number, end: number) =>
-  getSum(panesList, (pane) => {
-    localConsole({
-      maxSize: pane.maxSize,
-      minL: pane.minSize
-    }, pane.id)
-    return pane.maxSize
-  }, start, end)
+  getSum(panesList, (pane) => pane.maxSize, start, end)
 
 export const getMinSizeSum = (panesList: PaneModel[], start: number, end: number) =>
   getSum(panesList, (pane) => pane.minSize, start, end)
+
+// Need to check for hidden element
+export const restoreDefaultFn = ({items}: any) => {
+  items.forEach(pane => pane.restore())
+  setUISizesFn(items, DIRECTIONS.NONE)
+}
 
 // It is used when we rapidly changes mouse movements
 export const setDownMaxLimits = (panesList: PaneModel[], index: number) => {
@@ -107,6 +79,11 @@ export const setUpMaxLimits = (panesList: PaneModel[], index: number) => {
   for (let i = index + 1; i < panesList.length; i++) {
     panesList[i].synSizeToMaxSize()
   }
+}
+
+export const getItemsByIndexes = (items : IResizableItem[], indexes: number[]) => {
+  const itemsByIndexes = items.filter((_, i) => indexes.includes(i))
+  return itemsByIndexes
 }
 
 export const findIndexInChildrenbyId = (children: any, _id: string) =>
@@ -167,85 +144,4 @@ export const createPaneModelListAndResizerModelList = (
   )
   items.pop()
   return items
-}
-
-export const setResizersLimits = (contextDetails: IContextDetails) => {
-  const {virtualActiveIndex, direction, virtualOrderList, resizersList} = contextDetails
-
-  resizersList.forEach((item) => {
-    item.defaultMinSize = 0
-    item.defaultMaxSize = item.defaultSize
-  })
-
-  // The bellow logic wont be required if we will put the virtualActiveIndex in increasing side
-  const resizerHandle = virtualOrderList[virtualActiveIndex] as ResizerModel
-  resizerHandle.defaultMinSize = resizerHandle.defaultSize
-  resizerHandle.defaultMaxSize = resizerHandle.defaultSize
-
-  if (isItUp(direction)) {
-    virtualOrderList.forEach((item, index) => {
-      if (item.isHandle) {
-        if (index < virtualActiveIndex) {
-          item.defaultMinSize = virtualOrderList[index - 1].defaultMinSize === 0 ? 0 : item.defaultSize
-          item.defaultMaxSize = item.defaultSize
-        }
-        if (index > virtualActiveIndex) {
-          item.defaultMinSize = item.size
-          item.defaultMaxSize = item.defaultSize
-        }
-      }
-    })
-  } else {
-    virtualOrderList.forEach((item, index) => {
-      if (item.isHandle) {
-        if (index < virtualActiveIndex) {
-          item.defaultMinSize = item.size
-          item.defaultMaxSize = item.defaultSize
-        }
-        if (index > virtualActiveIndex) {
-          item.defaultMinSize = virtualOrderList[index - 1].defaultMinSize === 0 ? 0 : item.defaultSize
-          item.defaultMaxSize = item.defaultSize
-        }
-      }
-    })
-  }
-}
-
-// We increases the size of element in opposite direction than in the direction
-export const fixPartialHiddenResizer = (contextDetails: IContextDetails) => {
-  const {items} = contextDetails
-
-  let sizeChange = 0
-  items.forEach(
-    // eslint-disable-next-line complexity
-    (item, index) => {
-      if (item.isHandle && item.defaultSize !== item.size && item.size) {
-        sizeChange = item.size
-        item.size = 0
-        let virtualIndex
-        const resizingOrder: IResizableItem[] = []
-
-        if (items[index + 1].hiddenResizer === LEFT) {
-          virtualIndex = index + 1
-          const resizingOrderLeftOver = items.slice(0, virtualIndex).reverse()
-          resizingOrder.push(...items.slice(virtualIndex + 1), ...resizingOrderLeftOver)
-        } else if (items[index - 1].hiddenResizer === RIGHT) {
-          virtualIndex = index - 1
-          const resizingOrderLeftOver = items.slice(virtualIndex + 1)
-          resizingOrder.push(...items.slice(0, virtualIndex).reverse(), ...resizingOrderLeftOver)
-        }
-
-        const visibleItems = resizingOrder.filter((item) => item.size)
-        visibleItems.forEach((item) => item.syncAxisSize())
-
-        visibleItems.forEach((item) => {
-          item.restoreLimits()
-          // None is right for this
-          sizeChange = item.changeSize(sizeChange, PLUS, DIRECTIONS.NONE)
-        })
-
-        setUISizesFn(items, item.partialHiddenDirection)
-      }
-    }
-  )
 }

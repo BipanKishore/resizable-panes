@@ -6,10 +6,9 @@ import {
 } from '../constant'
 import {
   createPaneModelListAndResizerModelList,
-  findIndexInChildrenbyId, getPanesAndResizers, setDownMaxLimits,
-  setResizersLimits,
-  setUISizesFn, setUpMaxLimits, syncAxisSizesFn,
-  fixPartialHiddenResizer
+  findIndexInChildrenbyId, getPanesAndResizers, restoreDefaultFn, setDownMaxLimits,
+
+  setUISizesFn, setUpMaxLimits, syncAxisSizesFn
 } from '../utils/panes'
 import {
   calculateAxes, setVirtualOrderList, movingLogic, setCurrentMinMax,
@@ -22,8 +21,9 @@ import {
   , IResizablePaneProviderProps
 } from '../@types'
 import {PaneModel} from '../models/pane-model'
-import {restoreDefaultFn, setVisibilityFn} from '../utils/api'
 import {consoleAttachResizer, consoleGetSize} from '../utils/development-util'
+import {setResizersLimits, fixPartialHiddenResizer} from '../utils/resizer'
+import {setVisibilityFn} from '../utils/visibility-helper'
 
 export const getResizableContext = (props: IResizablePaneProviderProps): IResizableContext => {
   const {
