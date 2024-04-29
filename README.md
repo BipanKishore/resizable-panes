@@ -58,3 +58,41 @@ function App() {
   );
 }
 ```
+
+### ResizablePanes Props
+
+| Prop              | Type               | Default | Required            | Description                                                                                                                        |
+|--------------------|--------------------|---------|---------------------|------------------------------------------------------------------------------------------------------------------------------------|
+| uniqueId           | string             |         | true                | Helps identify ResizablePanes component.                                                                                           |
+| className          | string             |         | false               | It will get attached to ResizablePanes  container element.                                                                         |
+| vertical           | boolean            | false   | false               | It sets the orientation of Panes.                                                                                                  |
+| unit               | 'ratio' or 'pixel' | 'ratio' | false               | It sets the unit of size of panes.                                                                                                 |
+| minMaxUnit         | 'ratio' or 'pixel' | ratio   | false               | It sets the unit of minSize and maxSize of panes.                                                                                  |
+| visibility         | Object             |         |                     | It accepts a boolean map of Pane Ids visibility.                                                                                   |
+| storageApi         | Object             |         | false               | It used to store data across session. It can be localStorage, sessionStorage or any other following the interface of localStorage. |
+| resizer            | ReactElement       |         | false               | It will replace the in build resizer.                                                                                              |
+| resizerSize        | number             | 2       | optionally required | It is the size of resizer. If the size of resizer is other than 2px you will have to provide the value.                            |
+| onResize           | function           |         | false               | It emits size map of while resizing layout.                                                                                        |
+| onResizeStop       | function           |         | false               | It emits size map after the layout resizing is complete.                                                                           |
+| onReady            | function           |         | false               | It emits ResizablePanes component's api once it is constructed.                                                                    |
+| onChangeVisibility | function           |         | false               | It emits visibility map when there is change in visibility.                                                                        |
+
+### Pane Props
+
+| Prop       | Type         | Default  | Required            | Description                                                                                              |
+|-------------|--------------|----------|---------------------|----------------------------------------------------------------------------------------------------------|
+| id          | string       |          | true                | Helps identify Pane component.                                                                           |
+| size        | number       |          | true                | Sets the size of Pane.                                                                                   |
+| className   | string       |          | false               | It will get attached to Pane element.                                                                    |
+| maxSize     | number       | Infinity | false               | The maximum size limit of the Pane.                                                                      |
+| minSize     | number       | 0        | false               | The minimum size limit of the Pane.                                                                      |
+| resizer     | ReactElement |          | false               | It will replace the in build resizer of Pane.                                                            |
+| resizerSize | number       |          | Optionally required | It is the size of attached Resizer Element. It is required when we have passed resizer prop to the Pane. |
+
+### Custom Resizer Component (resizer prop of ResizablePanes/Pane)
+
+| Prop                | Type     | Default | Required | Description                                                                                                                |
+|---------------------|----------|---------|----------|----------------------------------------------------------------------------------------------------------------------------|
+| onMouseDown         | function |         |          | Attached it to the element that, upon being clicked and dragged, initiates the resizing of the Pane's size.                |
+| onTouchStartCapture |          |         |          | Attached it to the element that, upon being clicked and dragged, initiates the resizing of the Pane's size.(Touch devices) |
+| isMouseDown         | boolean  |         |          | Use it style you Custom resizer element behavior.
