@@ -4,6 +4,8 @@ import commonjs from '@rollup/plugin-commonjs'
 import typescript from '@rollup/plugin-typescript'
 import postcss from 'rollup-plugin-postcss'
 import terser from '@rollup/plugin-terser'
+import {dts} from 'rollup-plugin-dts'
+
 import packageJson from './package.json'
 import {config} from 'dotenv'
 
@@ -18,7 +20,7 @@ if (process.env.NODE_ENV === 'dev') {
 
 const isOptimise = process.env.REACT_LIB_OPTIMIZE === 'TRUE'
 
-export default {
+export default [{
   input: 'src/index.ts',
   output: [
     {
@@ -41,4 +43,10 @@ export default {
     isOptimise ? terser() : null
   ],
   external: ['react']
+},
+{
+  input: 'src/index.ts',
+  output: [{file: 'lib/index.d.ts', format: 'es'}],
+  plugins: [dts()]
 }
+]
