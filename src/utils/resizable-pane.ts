@@ -1,6 +1,6 @@
-import {IContextDetails, IResizableEvent, IResizableItem} from '../@types'
+import {IResizableEvent, IResizableItem} from '../@types'
 import {DIRECTIONS, MINUS, PLUS} from '../constant'
-import {PaneModel} from '../models/pane-model'
+import {PaneModel, ResizablePanesModel} from '../models'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
   getPanesSizeSum, getRatioSizeSum, getResizerSum, getVisibleItems, setUISizesFn,
@@ -15,7 +15,7 @@ export const movingLogic = (e: IResizableEvent, {
   decreasingItems,
   increasingItems,
   direction
-}: IContextDetails) => {
+}: ResizablePanesModel) => {
   let sizeChange: number
   let decreasingItemsLocal = decreasingItems
   let increasingItemsLocal = increasingItems
@@ -48,7 +48,7 @@ export const movingLogic = (e: IResizableEvent, {
 }
 
 // eslint-disable-next-line complexity
-export const setVirtualOrderList = (serviceRefCurrent: IContextDetails) => {
+export const setVirtualOrderList = (serviceRefCurrent: ResizablePanesModel) => {
   const {items, direction, handleId} = serviceRefCurrent
 
   const visibleItems = getVisibleItems(items)
@@ -110,7 +110,7 @@ export const setVirtualOrderList = (serviceRefCurrent: IContextDetails) => {
   serviceRefCurrent.virtualActiveIndex = findIndex(serviceRefCurrent.virtualOrderList, handleId)
 }
 
-export const setCurrentMinMax = (serviceRefCurrent: IContextDetails) => {
+export const setCurrentMinMax = (serviceRefCurrent: ResizablePanesModel) => {
   const {containerSize} = getMaxContainerSizes(serviceRefCurrent)
 
   const {virtualOrderList, virtualActiveIndex} = serviceRefCurrent
@@ -126,7 +126,7 @@ export const setCurrentMinMax = (serviceRefCurrent: IContextDetails) => {
   minMaxLogicDown(virtualOrderList, bMaxChangeDown - aMaxChangeDown, virtualActiveIndex, nextIdx, 0, containerSize)
 }
 
-export const calculateAxes = (contextDetails: IContextDetails) => {
+export const calculateAxes = (contextDetails: ResizablePanesModel) => {
   const {items, virtualActiveIndex} = contextDetails
   const {maxTopAxis} = getMaxContainerSizes(contextDetails)
   const visibleItemsList = getVisibleItems(items)
@@ -252,7 +252,6 @@ export const minMaxLogicDown = (
   aIndex: number, bIndex: number, sum: number,
   maxPaneSize: number) => {
   const lastIndex = panesList.length - 1
-  // keyConsole({aIndex, bIndex, value, sum})
   let nextValue: number | undefined
   let nextAIndex = aIndex
   let nextBIndex = bIndex
@@ -353,7 +352,7 @@ export const minMaxLogicDown = (
   minMaxLogicDown(panesList, <number>nextValue, nextAIndex, nextBIndex, sum, maxPaneSize)
 }
 
-export const getMaxContainerSizes = ({getContainerRect, vertical, resizersList} :IContextDetails) => {
+export const getMaxContainerSizes = ({getContainerRect, vertical, resizersList} :ResizablePanesModel) => {
   const {top, height, left, width} = getContainerRect()
   const maxTopAxis = vertical ? left : top
   const containerSize = Math.round(vertical ? width : height)
@@ -368,7 +367,7 @@ export const getMaxContainerSizes = ({getContainerRect, vertical, resizersList} 
   }
 }
 
-export const toRatioModeFn = (contextDetails: IContextDetails, isOnResize = false) => {
+export const toRatioModeFn = (contextDetails: ResizablePanesModel, isOnResize = false) => {
   const {panesList, items} = contextDetails
   const {maxPaneSize} = getMaxContainerSizes(contextDetails)
 

@@ -52,6 +52,4 @@ export const getPartialHiddenResizer = (items : IResizableItem[]) => {
       }
     }
   })
-
-  console.log('hiddenResizersI', hiddenResizersI)
 }

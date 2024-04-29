@@ -1,8 +1,7 @@
 import {MouseEventHandler, ReactNode} from 'react'
 import {IKeyToBoolMap, IMapIdToSize} from './general-type'
-import {PaneModel} from '../models/pane-model'
+import {PaneModel, ResizerModel, ResizablePanesModel} from '../models'
 import {ResizeStorage} from '../utils/storage'
-import {ResizerModel} from '../models/resizer-model'
 import {UnitTypes, IHiddenResizer} from './basic-types'
 
 export type IResizableItem = PaneModel | ResizerModel
@@ -102,25 +101,6 @@ export interface IStoreModel {
   containerSize?: number
 }
 
-export interface IContextDetails {
-  items: IResizableItem[],
-  panesList: PaneModel[],
-  resizersList: ResizerModel[],
-  isSetRatioMode: boolean,
-  virtualActiveIndex: number,
-  axisCoordinate: number,
-  direction: number,
-  getContainerRect: any,
-  newVisibilityModel: boolean,
-  vertical: boolean,
-  virtualOrderList: IResizableItem[],
-  decreasingItems: IResizableItem[],
-  increasingItems: IResizableItem[],
-  bottomAxis: number,
-  topAxis: number,
-  handleId: string
-}
-
 export interface IResizableContext {
   api: any,
   onMoveEndFn: any,
@@ -132,7 +112,7 @@ export interface IResizableContext {
   vertical: boolean | undefined,
   calculateAndSetHeight: any,
   props: IResizablePaneProviderProps,
-  contextDetails: IContextDetails,
+  contextDetails: ResizablePanesModel,
   myChildren: ReactNode[],
   storage: ResizeStorage,
   getPaneSizeStyle: (id: string) => void,

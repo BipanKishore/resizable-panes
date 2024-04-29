@@ -19,8 +19,8 @@ import {
   IKeyToBoolMap, IResizableContext
   , IResizablePaneProviderProps
 } from '../@types'
-import {PaneModel} from '../models/pane-model'
-import {consoleAttachResizer, consoleGetSize} from '../utils/development-util'
+import {PaneModel, ResizablePanesModel} from '../models'
+import {consoleGetSize} from '../utils/development-util'
 import {setVisibilityFn} from '../utils/visibility-helper'
 import {fixPartialHiddenResizer, setResizersLimits} from '../utils/resizer'
 
@@ -42,14 +42,14 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const {panesList, resizersList} = getPanesAndResizers(items)
 
-  const contextDetails: any = {
+  const contextDetails = new ResizablePanesModel()
+  console.log(contextDetails)
+  contextDetails.register({
     vertical,
     items,
     panesList,
-    resizersList,
-    isSetRatioMode: false,
-    newVisibilityModel: false
-  }
+    resizersList
+  })
 
   const syncAxisSizes = () => syncAxisSizesFn(items)
 
@@ -78,10 +78,12 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const getIdToSizeMap = () => createMap(panesList, SIZE)
 
-  const setMouseDownDetails = ({mouseCoordinate}: any, resizerId: string) => {
-    contextDetails.handleId = resizerId
-    contextDetails.direction = DIRECTIONS.NONE
-    contextDetails.axisCoordinate = mouseCoordinate
+  const setMouseDownDetails = ({mouseCoordinate}: any, handleId: string) => {
+    contextDetails.register({
+      handleId,
+      direction: DIRECTIONS.NONE,
+      axisCoordinate: mouseCoordinate
+    })
     syncAxisSizes()
   }
 
@@ -97,7 +99,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       contextDetails.newVisibilityModel = false
       setUISizesFn(items, contextDetails.direction)
       panesList.forEach((item) => item.syncRatioSizeToSize())
-      // console.log('visPartiallyHidden ', getList(resizersList, 'isPartiallyHidden'))
     }
   }
 
@@ -112,7 +113,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   const directionChangeActions = (e: any) => {
-    console.log('directionChangeActions directionChangeActions ++++++++++++++++++++++++++++++++++++++++++')
     contextDetails.axisCoordinate = e.mouseCoordinate
 
     setVirtualOrderList(contextDetails)
@@ -187,8 +187,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     fixPartialHiddenResizer(contextDetails)
     storage.setStorage(contextDetails)
     consoleGetSize(items)
-
-    consoleAttachResizer(items)
   }
 
   const restoreDefault = () => restoreDefaultFn(contextDetails)

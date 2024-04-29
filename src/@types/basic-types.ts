@@ -1,4 +1,4 @@
-import {PaneModel} from '../models/pane-model'
+import {PaneModel} from '../models'
 
 export type IHiddenResizer = 'left' | 'right' | 'none'
 
