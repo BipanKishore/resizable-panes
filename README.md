@@ -57,14 +57,14 @@ function App() {
 }
 ```
 
-🌟 I'm looking Sponsors <img alt="GitHub Sponsors" src="https://img.shields.io/github/sponsors/BipanKishore">
+🌟 <img alt="GitHub Sponsors" src="https://img.shields.io/github/sponsors/BipanKishore">
 
-## 👋 Hi there! If you find this project useful or valuable, please consider sponsoring its development
+## 👋 Hi there! If you find this project useful or valuable, please consider [Sponsoring Its Development]() or [Buy Me a Coffee]().
 
 🚀 By sponsoring, you'll:
 
 **Receive Recognition**:
-Sponsors will be prominently displayed on the project's README and other relevant documentation([Doc website](https://bipankishore.github.io/resizable-panes-demo/)), showcasing your support to the community.
+Sponsors will be prominently displayed on the project's README and other relevant documentation([Doc website](https://bipankishore.github.io/resizable-panes-demo/)).
 
 **Influence Roadmap**: Your feedback and suggestions will carry significant weight in shaping the project's future direction and features.
 
