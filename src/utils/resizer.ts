@@ -1,49 +1,27 @@
 import {IContextDetails, IHiddenResizer, IResizableItem} from '../@types'
 import {LEFT, RIGHT, PLUS, DIRECTIONS, NONE} from '../constant'
-import {ResizerModel} from '../models/resizer-model'
 import {setUISizesFn} from './panes'
-import {isItDown, isItUp} from './util'
+import {findIndex, isItDown, isItUp, reverse} from './util'
 
 export const setResizersLimits = (contextDetails: IContextDetails) => {
-  const {virtualActiveIndex, direction, virtualOrderList, resizersList} = contextDetails
+  const {direction, virtualOrderList, handleId} = contextDetails
 
-  resizersList.forEach((item) => {
-    item.defaultMinSize = 0
-    item.defaultMaxSize = item.defaultSize
+  const virtualActionList = isItUp(direction) ? reverse(virtualOrderList) : virtualOrderList
+
+  const handleIdIndex = findIndex(virtualActionList, handleId)
+
+  virtualActionList.forEach((item, index) => {
+    if (item.isHandle) {
+      if (index <= handleIdIndex) {
+        item.defaultMinSize = item.size
+        item.defaultMaxSize = item.defaultSize
+      }
+      if (index > handleIdIndex) {
+        item.defaultMinSize = virtualActionList[index - 1].defaultMinSize === 0 ? 0 : item.defaultSize
+        item.defaultMaxSize = item.defaultSize
+      }
+    }
   })
-
-  // The bellow logic wont be required if we will put the virtualActiveIndex in increasing side
-  const resizerHandle = virtualOrderList[virtualActiveIndex] as ResizerModel
-  resizerHandle.defaultMinSize = resizerHandle.defaultSize
-  resizerHandle.defaultMaxSize = resizerHandle.defaultSize
-
-  if (isItUp(direction)) {
-    virtualOrderList.forEach((item, index) => {
-      if (item.isHandle) {
-        if (index < virtualActiveIndex) {
-          item.defaultMinSize = virtualOrderList[index - 1].defaultMinSize === 0 ? 0 : item.defaultSize
-          item.defaultMaxSize = item.defaultSize
-        }
-        if (index > virtualActiveIndex) {
-          item.defaultMinSize = item.size
-          item.defaultMaxSize = item.defaultSize
-        }
-      }
-    })
-  } else {
-    virtualOrderList.forEach((item, index) => {
-      if (item.isHandle) {
-        if (index < virtualActiveIndex) {
-          item.defaultMinSize = item.size
-          item.defaultMaxSize = item.defaultSize
-        }
-        if (index > virtualActiveIndex) {
-          item.defaultMinSize = virtualOrderList[index - 1].defaultMinSize === 0 ? 0 : item.defaultSize
-          item.defaultMaxSize = item.defaultSize
-        }
-      }
-    })
-  }
 }
 
 // We increases the size of element in opposite direction than in the direction

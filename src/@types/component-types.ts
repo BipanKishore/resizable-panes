@@ -114,7 +114,10 @@ export interface IContextDetails {
   vertical: boolean,
   virtualOrderList: IResizableItem[],
   decreasingItems: IResizableItem[],
-  increasingItems: IResizableItem[]
+  increasingItems: IResizableItem[],
+  bottomAxis: number,
+  topAxis: number,
+  handleId: string
 }
 
 export interface IResizableContext {

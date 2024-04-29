@@ -3,12 +3,11 @@ import {DIRECTIONS, MINUS, PLUS} from '../constant'
 import {PaneModel} from '../models/pane-model'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
-  getPanesSizeSum, getRatioSizeSum, getResizerSum, setUISizesFn,
+  getPanesSizeSum, getRatioSizeSum, getResizerSum, getVisibleItems, setUISizesFn,
   synPanesMaxToSize, synPanesMinToSize
 } from './panes'
-import {findIndex, isItUp} from './util'
+import {findIndex, isItUp, reverse} from './util'
 
-const reverse = <T>(list: T[]): T[] => [...list].reverse()
 const filterEmpty = (list: any[]) => list.filter(_ => _)
 
 export const movingLogic = (e: IResizableEvent, {
@@ -48,13 +47,11 @@ export const movingLogic = (e: IResizableEvent, {
   })
 }
 
-const removeHidden = (list: IResizableItem[]) => list.filter(item => item.visibility)
-
 // eslint-disable-next-line complexity
-export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) => {
+export const setVirtualOrderList = (serviceRefCurrent: IContextDetails) => {
   const {items, direction, handleId} = serviceRefCurrent
 
-  const visibleItems = removeHidden(items)
+  const visibleItems = getVisibleItems(items)
   const visibleActiveIndex = findIndex(visibleItems, handleId)
 
   const decreasingItems: (IResizableItem | undefined)[] = []
@@ -106,9 +103,9 @@ export const setVirtualOrderList = (serviceRefCurrent: IContextDetails | any) =>
     virtualOrderList = [...increasingItems, ...decreasingItems]
   }
 
-  serviceRefCurrent.virtualOrderList = removeHidden(filterEmpty(virtualOrderList))
-  serviceRefCurrent.increasingItems = removeHidden(filterEmpty(increasingItems))
-  serviceRefCurrent.decreasingItems = removeHidden(filterEmpty(decreasingItems))
+  serviceRefCurrent.virtualOrderList = getVisibleItems(filterEmpty(virtualOrderList))
+  serviceRefCurrent.increasingItems = getVisibleItems(filterEmpty(increasingItems))
+  serviceRefCurrent.decreasingItems = getVisibleItems(filterEmpty(decreasingItems))
 
   serviceRefCurrent.virtualActiveIndex = findIndex(serviceRefCurrent.virtualOrderList, handleId)
 }
@@ -129,10 +126,10 @@ export const setCurrentMinMax = (serviceRefCurrent: IContextDetails) => {
   minMaxLogicDown(virtualOrderList, bMaxChangeDown - aMaxChangeDown, virtualActiveIndex, nextIdx, 0, containerSize)
 }
 
-export const calculateAxes = (contextDetails: any) => {
+export const calculateAxes = (contextDetails: IContextDetails) => {
   const {items, virtualActiveIndex} = contextDetails
   const {maxTopAxis} = getMaxContainerSizes(contextDetails)
-  const visibleItemsList = items.filter((item : IResizableItem) => item.visibility)
+  const visibleItemsList = getVisibleItems(items)
 
   contextDetails.bottomAxis = maxTopAxis + getMaxSizeSum(visibleItemsList, 0, virtualActiveIndex - 1)
   contextDetails.topAxis = maxTopAxis + getMinSizeSum(visibleItemsList, 0, virtualActiveIndex - 1)

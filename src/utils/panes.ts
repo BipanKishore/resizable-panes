@@ -14,6 +14,8 @@ export const setUISizesFn = (items: IResizableItem[], direction: number) => {
   fixFacingHiddenResizersOrder(items, direction)
 }
 
+export const getVisibleItems = (list: IResizableItem[]) => list.filter(item => item.visibility)
+
 export function getSum <T> (list: T[], getNumber: (item:T) => number, start = 0, end = list.length - 1) {
   let sum = 0
   for (let i = start; i <= end; i++) {
