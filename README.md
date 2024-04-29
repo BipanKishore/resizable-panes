@@ -68,7 +68,7 @@ Sponsors will be prominently displayed on the project's README and other relevan
 
 **Influence Roadmap**: Your feedback and suggestions will carry significant weight in shaping the project's future direction and features.
 
-🙏 Your sponsorship, no matter the size, is greatly appreciated and goes a long way in sustaining this project's growth. Thank you for considering it!
+🙏 Your sponsorship, no matter the size, is greatly appreciated and goes a long way in sustaining this project's growth.
 
 ### [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
 
