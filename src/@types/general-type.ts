@@ -13,10 +13,6 @@ export interface IResizableEvent {
     mouseCoordinate: number,
     movement: number
 }
-export type addAndRemoveType = '+'| '-'
-
-export type IBooleanOrUndefined = boolean | undefined
-export type IStringOrUndefined = string | undefined
 
 export interface ISizeStyle {
   height?: string,
