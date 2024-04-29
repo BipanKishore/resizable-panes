@@ -4,7 +4,10 @@ import {
   IResizablePaneProviderProps,
   IStoreResizableItemsModel, UnitTypes, addAndRemoveType
 } from '../@types'
-import {DIRECTIONS, LEFT, NONE, PLUS, RATIO, RIGHT, ZERO} from '../constant'
+import {
+  DIRECTIONS, LEFT, NONE, PLUS,
+  RATIO, RIGHT, SIZE, VISIBILITY, ZERO
+} from '../constant'
 import {ResizeStorage} from '../utils/storage'
 import {filterKeys, isItDown, isItUp, ratioAndRoundOff} from '../utils/util'
 import {attachDefaultPaneProps, checkPaneModelErrors} from './utils'
@@ -111,8 +114,8 @@ export class PaneModel {
   }
 
   getStoreModel (): IStoreResizableItemsModel {
-    const t = filterKeys(this, 'id', 'hiddenResizer', 'size',
-      'defaultSize', 'defaultMinSize', 'visibility', 'storedSize')
+    const t = filterKeys(this, 'id', 'hiddenResizer', SIZE,
+      'defaultSize', 'defaultMinSize', VISIBILITY, 'storedSize')
     return {
       ...t,
       defaultMaxSize: this.defaultMaxSize.toString()
@@ -192,17 +195,6 @@ export class PaneModel {
   register (pane: any) {
     this.api = pane
   }
-
-  // synPreservedSize () {
-  //   if (!this.storedSize) {
-  //     this.storedSize = this.size
-  //   }
-  // }
-
-  // synSizeToStored () {
-  //   this.size = this.storedSize as number
-  //   // this.storedSize = null
-  // }
 
   syncAxisSize () {
     this.axisSize = this.size

@@ -1,6 +1,9 @@
 import {createContext} from 'react'
 import {createMap, findById} from '../utils/util'
-import {DIRECTIONS, RATIO, SIZE, VISIBILITY} from '../constant'
+import {
+  DIRECTIONS, MAX_SIZE, MIN_SIZE,
+  RATIO, SIZE, VISIBILITY
+} from '../constant'
 import {
   createPaneModelListAndResizerModelList,
   findIndexInChildrenbyId, getPanesAndResizers, setDownMaxLimits,
@@ -199,11 +202,10 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   const restoreDefault = () => restoreDefaultFn(contextDetails)
-  const getState = () =>
-    createMap(panesList, 'size', 'visibility', 'minSize', 'maxSize')
+  const getState = () => createMap(panesList, SIZE, VISIBILITY, MIN_SIZE, MAX_SIZE)
+  const getSizes = () => createMap(panesList, SIZE)
 
-  const getSizes = () => createMap(panesList, 'size')
-  const getVisibilities = () => createMap(panesList, 'visibility')
+  const getVisibilities = () => createMap(panesList, VISIBILITY)
 
   const api = {
     restoreDefault,
