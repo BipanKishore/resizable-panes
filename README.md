@@ -23,8 +23,6 @@ various applications where flexible layout management is required.
 
 * **Auto-Save Sizes:** Pane size and visibility are automatically saved in the browser's memory for consistent layouts across sessions.
 
-### [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
-
 ## Usage
 
 ```css
@@ -59,7 +57,22 @@ function App() {
 }
 ```
 
-### ResizablePanes Props
+🌟 I'm looking Sponsors <img alt="GitHub Sponsors" src="https://img.shields.io/github/sponsors/BipanKishore">
+
+## 👋 Hi there! If you find this project useful or valuable, please consider sponsoring its development
+
+🚀 By sponsoring, you'll:
+
+**Receive Recognition**:
+Sponsors will be prominently displayed on the project's README and other relevant documentation([Doc website](https://bipankishore.github.io/resizable-panes-demo/)), showcasing your support to the community.
+
+**Influence Roadmap**: Your feedback and suggestions will carry significant weight in shaping the project's future direction and features.
+
+🙏 Your sponsorship, no matter the size, is greatly appreciated and goes a long way in sustaining this project's growth. Thank you for considering it!
+
+### [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
+
+## ResizablePanes Props
 
 | Prop              | Type               | Default | Required            | Description                                                                                                                        |
 |--------------------|--------------------|---------|---------------------|------------------------------------------------------------------------------------------------------------------------------------|
@@ -77,7 +90,7 @@ function App() {
 | onReady            | function           |         | false               | It emits ResizablePanes component's api once it is constructed.                                                                    |
 | onChangeVisibility | function           |         | false               | It emits visibility map when there is change in visibility.                                                                        |
 
-### Pane Props
+## Pane Props
 
 | Prop       | Type         | Default  | Required            | Description                                                                                              |
 |-------------|--------------|----------|---------------------|----------------------------------------------------------------------------------------------------------|
@@ -89,10 +102,20 @@ function App() {
 | resizer     | ReactElement |          | false               | It will replace the in build resizer of Pane.                                                            |
 | resizerSize | number       |          | Optionally required | It is the size of attached Resizer Element. It is required when we have passed resizer prop to the Pane. |
 
-### Custom Resizer Component (resizer prop of ResizablePanes/Pane)
+## Custom Resizer Component (resizer prop of ResizablePanes/Pane)
 
 | Prop                | Type     | Default | Required | Description                                                                                                                |
 |---------------------|----------|---------|----------|----------------------------------------------------------------------------------------------------------------------------|
 | onMouseDown         | function |         |          | Attached it to the element that, upon being clicked and dragged, initiates the resizing of the Pane's size.                |
 | onTouchStartCapture |          |         |          | Attached it to the element that, upon being clicked and dragged, initiates the resizing of the Pane's size.(Touch devices) |
 | isMouseDown         | boolean  |         |          | Use it style you Custom resizer element behavior.
+
+## ResizablePanes component api
+
+| Method          | Params | Description                                                           |
+|-----------------|--------|-----------------------------------------------------------------------|
+| restoreDefault  |        | It restores the default view of layout.                               |
+| setVisibility   | Object | It sets the visibility of Panes using the Boolean map of id of Panes. |
+| getSizes        |        | It returns the size map object  of Ids of Panes                       |
+| getVisibilities |        | It returns the visibility map object of Ids of Panes                  |
+| getState        |        | It return the current state of all Panes.                             |
