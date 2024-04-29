@@ -24,7 +24,7 @@ export const Resizer = (props: IResizer) => {
   const context: any = useContext(ResizablePaneContext)
   const {getIdToSizeMap, myChildren, onMoveEndFn} = context
 
-  const {vertical, uniqueId, resizerSize, detectionSize, resizerClass} = context.props
+  const {vertical, uniqueId, resizerSize, detectionSize, resizerClass, activeResizerClass} = context.props
 
   const index = findIndexInChildrenbyId(myChildren, id)
   const isNotLastIndex = index < (myChildren.length - 1)
@@ -80,7 +80,8 @@ export const Resizer = (props: IResizer) => {
   const [setResizerRef]: any = useHookWithRefCallback(onNewRef)
 
   const className = joinClassName({
-    [resizerClass]: true,
+    [activeResizerClass]: isMouseDown,
+    [resizerClass]: !isMouseDown,
     resizer: true,
     'resizer-horizontal': vertical,
     'resizer-vertical': !vertical

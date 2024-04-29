@@ -38,6 +38,8 @@ export interface IGetState {
 export interface IResizablePanesPropsBase {
   uniqueId: string,
   className?: string,
+  resizerClass?: string,
+  activeResizerClass?: string,
   vertical?: boolean,
   unit?: UnitTypes,
   minMaxUnit?: UnitTypes,
