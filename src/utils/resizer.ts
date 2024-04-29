@@ -1,9 +1,10 @@
-import {IContextDetails, IHiddenResizer, IResizableItem} from '../@types'
+import {IHiddenResizer, IResizableItem} from '../@types'
 import {LEFT, RIGHT, PLUS, DIRECTIONS, NONE} from '../constant'
+import {ResizablePanesModel} from '../models'
 import {setUISizesFn} from './panes'
 import {findIndex, isItDown, isItUp, reverse} from './util'
 
-export const setResizersLimits = (contextDetails: IContextDetails) => {
+export const setResizersLimits = (contextDetails: ResizablePanesModel) => {
   const {direction, virtualOrderList, handleId} = contextDetails
 
   const virtualActionList = isItUp(direction) ? reverse(virtualOrderList) : virtualOrderList
@@ -25,7 +26,7 @@ export const setResizersLimits = (contextDetails: IContextDetails) => {
 }
 
 // We increases the size of element in opposite direction than in the direction
-export const fixPartialHiddenResizer = (contextDetails: IContextDetails) => {
+export const fixPartialHiddenResizer = (contextDetails: ResizablePanesModel) => {
   const {items} = contextDetails
 
   let sizeChange = 0

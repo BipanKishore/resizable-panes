@@ -1,7 +1,8 @@
 import {ReactElement} from 'react'
-import {IContextDetails, IStoreModel, IStoreResizableItemsModel} from '../@types'
+import {IStoreModel, IStoreResizableItemsModel} from '../@types'
 import {getResizerSum} from './panes'
 import {findById} from './util'
+import {ResizablePanesModel} from '../models'
 
 export class ResizeStorage {
   panesComponents: ReactElement[]
@@ -17,7 +18,7 @@ export class ResizeStorage {
     this.getStorage()
   }
 
-  setStorage (contextDetails: IContextDetails, _containerSize?: number) {
+  setStorage (contextDetails: ResizablePanesModel, _containerSize?: number) {
     const {getContainerRect, panesList, vertical, resizersList} = contextDetails
     const {uniqueId, storageApi} = this
     const {width, height} = getContainerRect()

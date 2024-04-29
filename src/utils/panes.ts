@@ -1,8 +1,7 @@
 import {ReactElement} from 'react'
 import {IResizableItem, IResizablePaneProviderProps, addAndRemoveType} from '../@types'
-import {PaneModel} from '../models/pane-model'
+import {PaneModel, ResizerModel} from '../models'
 import {ResizeStorage} from './storage'
-import {ResizerModel} from '../models/resizer-model'
 import {DIRECTIONS, PLUS} from '../constant'
 import {fixFacingHiddenResizersOrder} from './resizer'
 

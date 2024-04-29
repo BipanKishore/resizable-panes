@@ -1,5 +1,5 @@
 import {DIRECTIONS} from '../../constant'
-import {PaneModel} from '../../models/pane-model'
+import {ResizablePanesModel, PaneModel} from '../../models'
 
 export const localConsole = (obj: any, key : string) => {
   // console.log(key, obj)
@@ -65,7 +65,7 @@ export const consoleResizerLimitCrossedDown = () => {
   console.error('setDownMaxLimits setDownMaxLimits')
 }
 
-export const consoleVirtualOrder = (serviceRefCurrent: any) => {
+export const consoleVirtualOrder = (serviceRefCurrent: ResizablePanesModel) => {
   console.log(
     'visibleActiveIndex', serviceRefCurrent.virtualActiveIndex
   )

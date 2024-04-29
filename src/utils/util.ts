@@ -1,6 +1,6 @@
 import {IAnyMap, IPaneModelKey, IStoreResizableItemsModel} from '../@types'
 import {DIRECTIONS, RESIZER} from '../constant'
-import {PaneModel} from '../models/pane-model'
+import {PaneModel} from '../models'
 
 export type INoop = (_: any) => any
 
