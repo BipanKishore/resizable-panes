@@ -7,7 +7,7 @@ import {getResizerId} from '../utils/util'
 import {PaneModel} from './pane-model'
 
 export class ResizerModel extends PaneModel {
-  api: IResizerApi
+  api: IResizerApi = null
 
   constructor (
     paneProps: IPane,
