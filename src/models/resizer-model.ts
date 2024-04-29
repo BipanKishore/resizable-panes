@@ -27,6 +27,7 @@ export class ResizerModel extends PaneModel {
   register (api: IResizerApi) {
     this.api = api
     const size = this.resizerSize
+    api.setSize(this.resizerSize)
     this.initializeSizes(size, 0, size as number, size, size, this.visibility)
     this.isRegistered = true
   }

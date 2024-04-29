@@ -1,4 +1,4 @@
-import {ENUMS, TestComponentWrapper} from '../../../components/test-component-wrapper'
+import {TestComponentWrapper} from '../../../components/test-component-wrapper'
 import React from 'react'
 import {RCy} from '../../../utils'
 

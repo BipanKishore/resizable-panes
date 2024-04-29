@@ -1,7 +1,7 @@
 import React from 'react'
 import {ENUMS, TestComponentWrapper} from '../components/test-component-wrapper'
 import {RCy} from '../utils'
-import {Panes} from '../../src'
+import {Pane} from '../../src'
 import {CustomResizerFirst} from '../components/custom-resizer'
 import {RPTestWrapper} from '../components/rp-test-wrapper'
 import {R2, CK4, R3, R1, CK0, R0} from './fix-test-ids'
@@ -10,19 +10,6 @@ const containerId = ENUMS.resizablePanesId
 
 const rCy = new RCy({containerId, resizerSize: 10})
 const {resizerSize} = rCy
-
-const INITIAL_SIZES: any = {
-  // [uniqueIdResizablePanes]: containerSize,
-  'resizer-P0': resizerSize,
-  'resizer-P1': resizerSize,
-  'resizer-P2': resizerSize,
-  'resizer-P3': resizerSize,
-  P0: 100,
-  P1: 300,
-  P2: 200,
-  P3: 300,
-  P4: 100
-}
 
 describe('Overlapping Resizers', () => {
   beforeEach(() => {
@@ -116,30 +103,30 @@ describe.skip('', () => {
 
         >
 
-          <Panes
+          <Pane
             className='bg-red-500' id='P0' maxSize={450}
             minSize={100}
             size={280}
           >
             P0
-          </Panes>
+          </Pane>
 
-          <Panes
+          <Pane
             className='bg-orange-500' id='P1' maxSize={400}
             minSize={100}
             size={335}
           >
             P1
-          </Panes>
+          </Pane>
 
-          <Panes
+          <Pane
             className='bg-lime-500' id='P2'
             maxSize={500}
             minSize={150}
             size={280}
           >
             P2
-          </Panes>
+          </Pane>
 
         </RPTestWrapper>
       </div>

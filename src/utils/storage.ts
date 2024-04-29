@@ -3,12 +3,6 @@ import {IContextDetails, IStoreModel, IStoreResizableItemsModel} from '../@types
 import {getResizerSum} from './panes'
 import {findById} from './util'
 
-export const onResizeClearSizesMapFromStore = (uniqueId: string, storageApi: any) => {
-  window.addEventListener('resize', function () {
-    if (storageApi) { storageApi.removeItem(uniqueId) }
-  })
-}
-
 export class ResizeStorage {
   panesComponents: ReactElement[]
   store: any = null

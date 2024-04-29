@@ -2,11 +2,10 @@ import React, {useEffect, useRef} from 'react'
 import {ResizablePaneContext, getResizableContext} from '../context/resizable-panes-context'
 import {ResizablePanes} from './resizable-panes'
 import {deleteUndefined, noop} from '../utils/util'
-// import {useResizableApi} from '../hook/use-resizable-api'
-import {onResizeClearSizesMapFromStore} from '../utils/storage'
 import {IResizablePaneProviderProps} from '../@types'
 import {singletonService} from '../services/singleton-service'
-import {RATIO} from '../constant'
+import {RATIO, RESIZE_HTML_EVENT} from '../constant'
+import {toRatioModeFn} from '../utils/resizable-pane'
 
 const v = {}
 
@@ -25,16 +24,17 @@ export const attachDefaultPaneProps = (attachedProps: IResizablePaneProviderProp
     resizerSize: 2,
     detectionSize: 5,
     visibility: v,
+    minMaxUnit: RATIO,
     ...propsWithNoUndefined
   }
 }
 
 export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   const currentProps = attachDefaultPaneProps(props) as IResizablePaneProviderProps
-  const {uniqueId, visibility, storageApi, onReady} = currentProps
+  const {uniqueId, visibility, onReady, unit} = currentProps
 
   const context = singletonService.getService(uniqueId, () => getResizableContext(currentProps))
-  const {api} = context
+  const {api, contextDetails} = context
 
   useEffect(() => {
     return () => {
@@ -42,15 +42,22 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
     }
   }, [uniqueId])
 
+  useEffect(() => {
+    const onResize = () => {
+      if (unit === RATIO) {
+        toRatioModeFn(contextDetails, true)
+      }
+    }
+    window.addEventListener(RESIZE_HTML_EVENT, onResize)
+
+    return () => window.removeEventListener(RESIZE_HTML_EVENT, onResize)
+  }, [unit, contextDetails])
+
   const ref = useRef(true)
-  // context.storage.readPaneChange(toArray(children), context)
   useEffect(() => {
     onReady(api)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [api])
-
-  useEffect(() => {
-    onResizeClearSizesMapFromStore(uniqueId, storageApi)
-  }, [uniqueId, storageApi])
 
   useEffect(() => {
     if (ref.current === false) {
@@ -58,6 +65,7 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
     } else {
       ref.current = false
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visibility, ref])
 
   return (

@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === 'dev') {
   config()
 }
 
-const isOptimise = process.env.REACT_LIB_OPTIMIZE === 'TRUE'
+const isOptimise = !(process.env.REACT_LIB_OPTIMIZE === 'FALSE')
 
 export default {
   input: 'src/index.ts',
@@ -38,7 +38,7 @@ export default {
     commonjs(),
     typescript(),
     postcss(),
-    isOptimise ? null : terser()
+    isOptimise ? terser() : null
   ],
   external: ['react']
 }

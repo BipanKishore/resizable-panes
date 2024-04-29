@@ -1,3 +1,4 @@
+// Need to make Plain
 export const DIRECTIONS = {
   DOWN: -1,
   NONE: 0,
@@ -31,3 +32,5 @@ export const BORDER_LEFT = 'borderLeft'
 export const BORDER_RIGHT = 'borderRight'
 export const BORDER_TOP = 'borderTop'
 export const BORDER_BOTTOM = 'borderBottom'
+
+export const RESIZE_HTML_EVENT = 'resize'

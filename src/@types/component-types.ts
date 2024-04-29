@@ -40,6 +40,7 @@ export interface IResizablePanesPropsBase {
   className?: string,
   vertical?: boolean,
   unit?: UnitTypes,
+  minMaxUnit?: UnitTypes,
   onResize?: onResizeType,
   onResizeStop?: onResizeType,
   onReady?: onReadyType,
