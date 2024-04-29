@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === 'dev') {
   config()
 }
 
-const isOptimise = !(process.env.REACT_LIB_OPTIMIZE === 'FALSE')
+const isOptimise = process.env.REACT_LIB_OPTIMIZE === 'TRUE'
 
 export default {
   input: 'src/index.ts',
