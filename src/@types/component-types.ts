@@ -1,4 +1,4 @@
-import {MouseEventHandler, ReactNode} from 'react'
+import {MouseEventHandler, ReactElement, ReactNode} from 'react'
 import {IKeyToBoolMap, IMapIdToSize} from './general-type'
 import {PaneModel, ResizerModel, ResizableModel} from '../models'
 import {ResizeStorage} from '../utils/storage'
@@ -81,7 +81,7 @@ export interface IResizer {
   onMouseDown?: MouseEventHandler<HTMLDivElement>,
   node?: any,
   visibility?: boolean,
-  children?: ReactNode
+  children?: ReactElement
 }
 
 export interface IStoreResizableItemsModel {
@@ -104,8 +104,7 @@ export interface IStoreModel {
 export interface IResizableContext {
   api: any,
   onMoveEndFn: any,
-  registerPane: any,
-  registerResizer: any,
+  registerItem: (api: any, id: string) => void,
   registerContainer: any,
   getIdToSizeMap: any,
   setMouseDownDetails: any,
@@ -113,7 +112,6 @@ export interface IResizableContext {
   calculateAndSetHeight: any,
   props: IResizablePaneProviderProps,
   contextDetails: ResizableModel,
-  myChildren: ReactNode[],
   storage: ResizeStorage,
   getPaneSizeStyle: (id: string) => void,
   setVisibility: (param: IKeyToBoolMap) => void

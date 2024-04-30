@@ -7,7 +7,7 @@ import {singletonService} from '../services/singleton-service'
 import {RATIO, RESIZE_HTML_EVENT} from '../constant'
 import {toRatioModeFn} from '../utils/resizable-pane'
 
-const v = {}
+const emptyObhect = {}
 
 export const attachDefaultPaneProps = (attachedProps: IResizablePaneProviderProps) => {
   const propsWithNoUndefined = deleteUndefined({...attachedProps})
@@ -24,7 +24,7 @@ export const attachDefaultPaneProps = (attachedProps: IResizablePaneProviderProp
     activeResizerClass: '',
     resizerSize: 2,
     detectionSize: 5,
-    visibility: v,
+    visibility: emptyObhect,
     minMaxUnit: RATIO,
     ...propsWithNoUndefined
   }

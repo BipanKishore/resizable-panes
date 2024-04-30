@@ -87,9 +87,6 @@ export const getItemsByIndexes = (items : IResizableItem[], indexes: number[]) =
   return itemsByIndexes
 }
 
-export const findIndexInChildrenbyId = (children: any, _id: string) =>
-  children.findIndex(({props: {id}}: any) => id === _id)
-
 const fixChangeCallBack = (pane: PaneModel, change: number, operation: addAndRemoveType) => {
   const newSize = pane.size + (operation === PLUS ? change : -change)
   pane.initializeSize(newSize)

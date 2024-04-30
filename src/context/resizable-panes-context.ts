@@ -6,7 +6,7 @@ import {
 } from '../constant'
 import {
   createPaneModelListAndResizerModelList,
-  findIndexInChildrenbyId, getPanesAndResizers, restoreDefaultFn, setDownMaxLimits,
+  getPanesAndResizers, restoreDefaultFn, setDownMaxLimits,
   setUISizesFn, setUpMaxLimits, syncAxisSizesFn
 } from '../utils/panes'
 import {
@@ -52,14 +52,9 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const syncAxisSizes = () => syncAxisSizesFn(items)
 
-  const registerPane = (pane: any, id:string) => {
-    const index = findIndexInChildrenbyId(myChildren, id)
-    panesList[index].register(pane)
-  }
-
-  const registerResizer = (resizer: any, id: string) => {
-    const index = findIndexInChildrenbyId(myChildren, id)
-    resizersList[index].register(resizer)
+  const registerItem = (api: any, id: string) => {
+    findById(items, id)
+      .register(api)
   }
 
   const registerContainer = ({getContainerRect}: any) => {
@@ -190,14 +185,13 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   const restoreDefault = () => restoreDefaultFn(contextDetails)
   const getState = () => createMap(panesList, SIZE, VISIBILITY, MIN_SIZE, MAX_SIZE)
-  const getSizes = () => createMap(panesList, SIZE)
 
   const getVisibilities = () => createMap(panesList, VISIBILITY)
 
   const api = {
     restoreDefault,
     setVisibility,
-    getSizes,
+    getSizes: getIdToSizeMap,
     getVisibilities,
     getState
   }
@@ -205,8 +199,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   return {
     api,
     onMoveEndFn,
-    registerPane,
-    registerResizer,
+    registerItem,
     registerContainer,
     getIdToSizeMap,
     setMouseDownDetails,
@@ -215,7 +208,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     props,
     contextDetails,
     storage,
-    myChildren,
     getPaneSizeStyle,
     setVisibility
   }
