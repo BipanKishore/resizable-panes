@@ -1,15 +1,15 @@
 import React, {
   useState,
   useContext, useCallback,
-  isValidElement, cloneElement, useRef
+  isValidElement, cloneElement, useRef,
+  ReactElement
 } from 'react'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
 import {
   getResizableEvent,
   getSetResizerSize, joinClassName
 } from '../utils/dom'
-import {findIndexInChildrenbyId} from '../utils/panes'
-import {getResizerId, noop} from '../utils/util'
+import {findIndex, getResizerId, noop} from '../utils/util'
 import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
 import {IResizer} from '../@types'
 
@@ -22,12 +22,13 @@ export const Resizer = (props: IResizer) => {
   const resizerId = getResizerId(id)
 
   const context: any = useContext(ResizablePaneContext)
-  const {getIdToSizeMap, myChildren, onMoveEndFn} = context
+  const {getIdToSizeMap, onMoveEndFn, contextDetails} = context
+  const {panesList} = contextDetails
 
   const {vertical, uniqueId, resizerSize, detectionSize, resizerClass, activeResizerClass} = context.props
 
-  const index = findIndexInChildrenbyId(myChildren, id)
-  const isNotLastIndex = index < (myChildren.length - 1)
+  const index = findIndex(panesList, id)
+  const isNotLastIndex = index < (panesList.length - 1)
   const previousTouchEvent:any = useRef()
 
   const [isMouseDown, setIsMouseDown] = useState(false)
@@ -53,7 +54,7 @@ export const Resizer = (props: IResizer) => {
   const onMouseDown = useCallback((e: any) => {
     setIsMouseDown(true)
     const resizableEvent = getResizableEvent(e, vertical, previousTouchEvent)
-    context.setMouseDownDetails(resizableEvent, getResizerId(id))
+    context.setMouseDownDetails(resizableEvent, resizerId)
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('touchmove', onMouseMove, {passive: false})
     document.addEventListener('mouseup', onMoveEnd)
@@ -62,7 +63,7 @@ export const Resizer = (props: IResizer) => {
     context,
     onMouseMove,
     vertical,
-    id,
+    resizerId,
     onMoveEnd
   ])
 
@@ -71,9 +72,9 @@ export const Resizer = (props: IResizer) => {
 
   const onNewRef = (node: any) => {
     const setSize = getSetResizerSize(node, vertical, isValidCustomResizer, resizerSize, detectionSize)
-    context.registerResizer({
+    context.registerItem({
       setSize
-    }, id)
+    }, resizerId)
   }
 
   // Does not run for the last element
@@ -87,11 +88,10 @@ export const Resizer = (props: IResizer) => {
     'resizer-vertical': !vertical
   }, children)
 
-  let cloneChild
+  let cloneChild: ReactElement
   if (isValidCustomResizer) {
-    cloneChild = cloneElement(children, {
+    cloneChild = cloneElement(children as ReactElement, {
       ...children.props as object,
-      // @ts-ignore
       onMouseDown,
       onTouchStartCapture: onMouseDown,
       isMouseDown,

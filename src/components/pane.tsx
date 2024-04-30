@@ -10,7 +10,7 @@ export const Pane = (props: IPane) => {
 
   const {
     vertical,
-    registerPane,
+    registerItem,
     getPaneSizeStyle,
     props: {
       resizer: parentResizer
@@ -27,14 +27,14 @@ export const Pane = (props: IPane) => {
   const [setPaneRef]: any = useHookWithRefCallback((node: HTMLElement) => {
     const setSize = getSetSize(node, vertical)
 
-    registerPane({
+    registerItem({
       setSize
     }, id)
   })
 
   const classname = joinClassName({
     'overflow-hidden flex-shrink-0': true,
-    [className as string]: className
+    [className]: className
   })
 
   const style = getPaneSizeStyle(id)
