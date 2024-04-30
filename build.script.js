@@ -5,7 +5,7 @@ import typescript from '@rollup/plugin-typescript'
 import postcss from 'rollup-plugin-postcss'
 import terser from '@rollup/plugin-terser'
 import {dts} from 'rollup-plugin-dts'
-import copy from 'rollup-plugin-copy'
+// import copy from 'rollup-plugin-copy'
 import path from 'path'
 import {fileURLToPath} from 'url'
 
@@ -59,21 +59,6 @@ export const developmentPlugins = [
   resolve(),
   commonjs(),
   typescript(),
-<<<<<<< Updated upstream
-  postcss(),
-  copy({
-    targets: [{
-      src: 'scripts/include-scripts.cjs.js',
-      dest: `${CJS_BUILD_PATH}`,
-      rename: 'index.cjs.js'
-    },
-    {
-      src: 'scripts/include-scripts.esm.js',
-      dest: `${ESM_BUILD_PATH}`,
-      rename: 'index.esm.js'
-    }]
-  })
-=======
   postcss()
   // copy({
   //   targets: [{
@@ -87,7 +72,6 @@ export const developmentPlugins = [
   //     rename: 'index.esm.js'
   //   }]
   // })
->>>>>>> Stashed changes
 ]
 
 export const productionPlugins = [
