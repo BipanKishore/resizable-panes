@@ -2,7 +2,7 @@ import {IResizableItem} from '../@types'
 import {PaneModel} from './pane-model'
 import {ResizerModel} from './resizer-model'
 
-export class ResizablePanesModel {
+export class ResizableModel {
   isSetRatioMode = false
   newVisibilityModel = false
 

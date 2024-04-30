@@ -1,6 +1,6 @@
 import {IKeyToBoolMap, IResizableItem} from '../@types'
 import {DIRECTIONS, LEFT, MINUS, PLUS, RIGHT} from '../constant'
-import {ResizablePanesModel, PaneModel} from '../models'
+import {ResizableModel, PaneModel} from '../models'
 import {consoleGetSize} from './development-util'
 import {change1PixelToPanes, getItemsByIndexes, getPanesSizeSum, getSizeByIndexes, setUISizesFn} from './panes'
 import {getMaxContainerSizes} from './resizable-pane'
@@ -115,7 +115,7 @@ export const findConsecutiveAdjacentResizer = (items : IResizableItem[], indexes
   return consecutiveResizers
 }
 
-export const setVisibilityOfResizers = (contextDetails: ResizablePanesModel) => {
+export const setVisibilityOfResizers = (contextDetails: ResizableModel) => {
   const {items} = contextDetails
 
   const firstVisiblePaneIndex = getFirstVisiblePaneIndexAndHideAllBeforeIt(items)
@@ -196,7 +196,7 @@ export const changeSizeInRatio = (panesList: PaneModel[], actionList: number[],
   setSizesAfterVisibilityChange(panesList, nextActionList, maxPaneSize)
 }
 
-export const setVisibilityFn = (contextDetails: ResizablePanesModel, idMap: IKeyToBoolMap) => {
+export const setVisibilityFn = (contextDetails: ResizableModel, idMap: IKeyToBoolMap) => {
   const {
     panesList, items
   } = contextDetails
