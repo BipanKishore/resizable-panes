@@ -127,8 +127,8 @@ Sponsors will be prominently displayed on the project's README and other relevan
 |-----------------|--------|-----------------------------------------------------------------------|
 | restoreDefault  |        | It restores the default view of layout.                               |
 | setVisibility   | Object | It sets the visibility of Panes using the Boolean map of id of Panes. |
-| getSizes        |        | It returns the size map object  of Ids of Panes                       |
-| getVisibilities |        | It returns the visibility map object of Ids of Panes                  |
+| getSizesMap        |        | It returns the size map object  of Ids of Panes                       |
+| getVisibilitiesMap |        | It returns the visibility map object of Ids of Panes                  |
 | getState        |        | It return the current state of all Panes.                             |
 
 

@@ -44,8 +44,8 @@ describe('Storage api', () => {
     cy.wait(50)
   })
 
-  it('Check initial sizes with fixed values and API.getSizes method', () => {
-    const sizeMap = resizableApi.getSizes()
+  it('Check initial sizes with fixed values and API.getSizesMap method', () => {
+    const sizeMap = resizableApi.getSizesMap()
     rCy.checkWidths(sizeMap)
     rCy.checkWidths({
       P0: 515,
@@ -53,8 +53,8 @@ describe('Storage api', () => {
     })
   })
 
-  it('Check initial visibility with fixed values and API.getSizes method', () => {
-    const visibilityMap = resizableApi.getVisibilities()
+  it('Check initial visibility with fixed values and API.getSizesMap method', () => {
+    const visibilityMap = resizableApi.getVisibilitiesMap()
     expect(visibilityMap).to.deep.equal({
       P1: true,
       P0: true
@@ -63,7 +63,7 @@ describe('Storage api', () => {
 
   it('Hide P0 using API.setVisibility method', () => {
     resizableApi.setVisibility({P0: false})
-    const visibilityMap = resizableApi.getVisibilities()
+    const visibilityMap = resizableApi.getVisibilitiesMap()
 
     expect(visibilityMap).to.deep.equal({
       P1: true,
@@ -93,7 +93,7 @@ describe('Storage api', () => {
   it('Hide P0 using API.setVisibility method -- Then restore using API.restoreDefault', () => {
     resizableApi.setVisibility({}) // For isNoChange code branch
     resizableApi.setVisibility({P0: false})
-    const visibilityMap = resizableApi.getVisibilities()
+    const visibilityMap = resizableApi.getVisibilitiesMap()
 
     expect(visibilityMap).to.deep.equal({
       P1: true,
