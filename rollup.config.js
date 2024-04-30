@@ -1,13 +1,7 @@
-import peerDepsExternal from 'rollup-plugin-peer-deps-external'
-import resolve from '@rollup/plugin-node-resolve'
-import commonjs from '@rollup/plugin-commonjs'
-import typescript from '@rollup/plugin-typescript'
-import postcss from 'rollup-plugin-postcss'
-import terser from '@rollup/plugin-terser'
-import {dts} from 'rollup-plugin-dts'
-
-import packageJson from './package.json'
 import {config} from 'dotenv'
+import {developmentConfig, productionConfig, typesRollupConfig} from './build.script'
+
+let isProduction = false
 
 if (process.env.NODE_ENV === 'dev') {
   config({
@@ -16,37 +10,12 @@ if (process.env.NODE_ENV === 'dev') {
   })
 } else {
   config()
+  isProduction = true
 }
 
-const isOptimise = process.env.REACT_LIB_OPTIMIZE === 'TRUE'
-
-export default [{
-  input: 'src/index.ts',
-  output: [
-    {
-      file: packageJson.main,
-      format: 'cjs',
-      sourcemap: true
-    },
-    {
-      file: packageJson.module,
-      format: 'esm',
-      sourcemap: true
-    }
-  ],
-  plugins: [
-    peerDepsExternal(),
-    resolve(),
-    commonjs(),
-    typescript(),
-    postcss(),
-    isOptimise ? terser() : null
-  ],
-  external: ['react']
-},
-{
-  input: 'src/index.ts',
-  output: [{file: 'lib/index.d.ts', format: 'es'}],
-  plugins: [dts()]
-}
-]
+export default isProduction
+  ? productionConfig
+  : [
+      developmentConfig,
+      typesRollupConfig
+    ]
