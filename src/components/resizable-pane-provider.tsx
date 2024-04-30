@@ -3,7 +3,6 @@ import {ResizablePaneContext, getResizableContext} from '../context/resizable-pa
 import {ResizablePanes} from './resizable-panes'
 import {deleteUndefined, noop} from '../utils/util'
 import {IResizablePaneProviderProps} from '../@types'
-import {singletonService} from '../services/singleton-service'
 import {RATIO, RESIZE_HTML_EVENT} from '../constant'
 import {toRatioModeFn} from '../utils/resizable-pane'
 
@@ -32,16 +31,11 @@ export const attachDefaultPaneProps = (attachedProps: IResizablePaneProviderProp
 
 export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   const currentProps = attachDefaultPaneProps(props) as IResizablePaneProviderProps
-  const {uniqueId, visibility, onReady, unit} = currentProps
+  const {visibility, onReady, unit} = currentProps
 
-  const context = singletonService.getService(uniqueId, () => getResizableContext(currentProps))
-  const {api, contextDetails} = context
+  const resizableRef : any = useRef(getResizableContext(currentProps))
 
-  useEffect(() => {
-    return () => {
-      singletonService.clearService(uniqueId)
-    }
-  }, [uniqueId])
+  const {api, contextDetails} = resizableRef.current
 
   useEffect(() => {
     const onResize = () => {
@@ -62,15 +56,14 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
 
   useEffect(() => {
     if (ref.current === false) {
-      context.setVisibility(visibility)
+      resizableRef.current.setVisibility(visibility)
     } else {
       ref.current = false
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visibility, ref])
 
   return (
-    <ResizablePaneContext.Provider value={context} >
+    <ResizablePaneContext.Provider value={resizableRef.current} >
       <ResizablePanes {...currentProps}/>
     </ResizablePaneContext.Provider>
   )

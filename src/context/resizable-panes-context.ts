@@ -57,7 +57,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       .register(api)
   }
 
-  const registerContainer = ({getContainerRect}: any) => {
+  const registerContainer = (getContainerRect: any) => {
     contextDetails.getContainerRect = getContainerRect
     let visibilityMap = props.visibility
     if (storage.empty && unit === RATIO && !contextDetails.isSetRatioMode) {
