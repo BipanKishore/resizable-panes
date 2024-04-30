@@ -31,25 +31,27 @@ export const LIB_FILE_NAME_PRODUCTION_ESM = `${LIB_NAME}.${PRODUCTION}.min.${ESM
 export const BUILD_INPUT_FILE_PATH = path.resolve(__dirname, '../src/index.ts')
 
 export const cjsOutOptionsDevelopment = {
-  file: `${CJS_BUILD_PATH}${LIB_FILE_NAME_DEVELOPMENT_CJS}`,
+  file: `${CJS_BUILD_PATH}${'index.cjs.js'}`,
   format: 'cjs',
   sourcemap: true
 }
 
 export const cjsOutOptionsProduction = {
-  file: `${CJS_BUILD_PATH}${LIB_FILE_NAME_PRODUCTION_CJS}`,
-  format: 'cjs'
+  file: `${CJS_BUILD_PATH}${'index.cjs.js'}`,
+  format: 'cjs',
+  sourcemap: true
 }
 
 export const esmOutOptionsDevelopment = {
-  file: `${ESM_BUILD_PATH}${LIB_FILE_NAME_DEVELOPMENT_ESM}`,
+  file: `${ESM_BUILD_PATH}${'index.esm.js'}`,
   format: 'esm',
   sourcemap: true
 }
 
 export const esmOutOptionsProduction = {
-  file: `${ESM_BUILD_PATH}${LIB_FILE_NAME_PRODUCTION_ESM}`,
-  format: 'esm'
+  file: `${ESM_BUILD_PATH}${'index.esm.js'}`,
+  format: 'esm',
+  sourcemap: true
 }
 
 export const developmentPlugins = [
@@ -57,6 +59,7 @@ export const developmentPlugins = [
   resolve(),
   commonjs(),
   typescript(),
+<<<<<<< Updated upstream
   postcss(),
   copy({
     targets: [{
@@ -65,6 +68,21 @@ export const developmentPlugins = [
       rename: 'index.cjs.js'
     }]
   })
+=======
+  postcss()
+  // copy({
+  //   targets: [{
+  //     src: 'scripts/include-scripts.cjs.js',
+  //     dest: `${CJS_BUILD_PATH}`,
+  //     rename: 'index.cjs.js'
+  //   },
+  //   {
+  //     src: 'scripts/include-scripts.esm.js',
+  //     dest: `${ESM_BUILD_PATH}`,
+  //     rename: 'index.esm.js'
+  //   }]
+  // })
+>>>>>>> Stashed changes
 ]
 
 export const productionPlugins = [
@@ -113,7 +131,7 @@ const productionConfigMinSet = {
 }
 
 export const productionConfig = [
-  developmentConfig,
+  // developmentConfig,
   productionConfigMinSet,
   typesRollupConfig
 ]
