@@ -63,6 +63,11 @@ export const developmentPlugins = [
       src: 'scripts/include-scripts.cjs.js',
       dest: `${CJS_BUILD_PATH}`,
       rename: 'index.cjs.js'
+    },
+    {
+      src: 'scripts/include-scripts.esm.js',
+      dest: `${ESM_BUILD_PATH}`,
+      rename: 'index.esm.js'
     }]
   })
 ]
