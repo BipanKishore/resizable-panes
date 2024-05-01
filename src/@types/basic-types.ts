@@ -12,3 +12,5 @@ export type IPaneNumericKeys = 'size' | 'defaultSize' | 'minSize' | 'maxSize' | 
 
 export type IBooleanOrUndefined = boolean | undefined
 export type IStringOrUndefined = string | undefined
+
+export type IVisibilityState = 'zipped' | 'visible' | 'hidden'

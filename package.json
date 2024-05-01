@@ -18,7 +18,7 @@
     "link-local": "npm link",
     "start": "run-s -n link-local dev",
     "patch": "npm version patch",
-    "predeploy": "run-s -n clean Install test prod patch",
+    "predeploy": "run-s -n patch clean Install test prod",
     "deploy": "npm publish",
     "pretest": "npm run test:clean",
     "pretest:open": "npm run test:clean",
