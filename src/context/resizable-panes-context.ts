@@ -195,8 +195,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   const getState = () => createMap(panesList, SIZE, VISIBILITY, MIN_SIZE, MAX_SIZE)
-
-  const getVisibilitiesMap = () => createMap(panesList, VISIBILITY)
+  const getVisibilitiesMap = () => getVisibilityState(panesList)
 
   const api = {
     restoreDefault,

@@ -6,6 +6,7 @@ import {CK0, CK1, CK4, P0, P1, R0, R2, rScontainerId} from './fix-test-ids'
 import {CustomResizerFirst} from '../components/custom-resizer'
 import {Pane, ResizablePanes} from '../../src'
 import {IGetState, IResizableApi} from '../../src/@types'
+import {HIDDEN, VISIBLE} from '../../src/constant'
 
 describe('Storage api', () => {
   const rCy = new RCy({
@@ -56,8 +57,8 @@ describe('Storage api', () => {
   it('Check initial visibility with fixed values and API.getSizesMap method', () => {
     const visibilityMap = resizableApi.getVisibilitiesMap()
     expect(visibilityMap).to.deep.equal({
-      P1: true,
-      P0: true
+      P1: VISIBLE,
+      P0: VISIBLE
     })
   })
 
@@ -66,8 +67,8 @@ describe('Storage api', () => {
     const visibilityMap = resizableApi.getVisibilitiesMap()
 
     expect(visibilityMap).to.deep.equal({
-      P1: true,
-      P0: false
+      P1: VISIBLE,
+      P0: HIDDEN
     })
   })
 
@@ -96,8 +97,8 @@ describe('Storage api', () => {
     const visibilityMap = resizableApi.getVisibilitiesMap()
 
     expect(visibilityMap).to.deep.equal({
-      P1: true,
-      P0: false
+      P1: VISIBLE,
+      P0: HIDDEN
     })
 
     resizableApi.restoreDefault()
