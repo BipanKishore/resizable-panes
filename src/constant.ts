@@ -28,6 +28,10 @@ export const LEFT = 'left'
 export const RIGHT = 'right'
 export const NONE = 'none'
 
+export const ZIPPED = 'zipped'
+export const VISIBLE = 'visible'
+export const HIDDEN = 'hidden'
+
 export const MARGIN = 'margin'
 export const MIN_WIDTH = 'minWidth'
 export const MIN_HEIGHT = 'minHeight'

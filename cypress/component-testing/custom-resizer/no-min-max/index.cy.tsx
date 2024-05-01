@@ -84,8 +84,8 @@ describe('No min max limits, Custom resizer with resizerSize prop', () => {
 
   describe('Simple Resizing and visibility operations', () => {
     it('hide P1 >> P2 >> R1 TO 100Px right', () => {
-      cy.get(`[data-cy=${CK1}]`).uncheck()
-      cy.get(`[data-cy=${CK3}]`).uncheck()
+      cy.get(`[data-cy=${CK1}]`).click()
+      cy.get(`[data-cy=${CK3}]`).click()
       rCy.checkWidthsAndSum({
         [P0]: 255,
         [P1]: 0,
@@ -100,8 +100,8 @@ describe('No min max limits, Custom resizer with resizerSize prop', () => {
 
       rCy.moveNPixel(R1, 400, 'right')
 
-      cy.get(`[data-cy=${CK1}]`).check()
-      cy.get(`[data-cy=${CK3}]`).check()
+      cy.get(`[data-cy=${CK1}]`).click()
+      cy.get(`[data-cy=${CK3}]`).click()
 
       rCy.checkWidths({
         [R0]: resizerSize,

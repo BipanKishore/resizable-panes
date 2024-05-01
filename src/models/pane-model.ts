@@ -16,7 +16,10 @@ export class PaneModel {
   isRegistered = true
   isHandle = false
   partialHiddenDirection = DIRECTIONS.NONE
+
   hiddenResizer: IHiddenResizer = NONE
+  prevHiddenResizer: IHiddenResizer = NONE
+
   resizerSize: number
 
   id: string

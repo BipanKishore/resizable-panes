@@ -27,8 +27,15 @@
     background-color: rgb(239 68 68);
 }
 
+
+.bg-orange-100 {
+  background-color: rgb(255 237 213);
+}
+.bg-orange-300 {
+  background-color: rgb(253 186 116);
+}
 .bg-orange-500 {
-    background-color: rgb(249 115 22);
+  background-color: rgb(249 115 22);
 }
 
 .bg-amber-500{
@@ -39,10 +46,23 @@
     background-color: rgb(132 204 22);
 }
 
+.bg-teal-100	{
+  background-color: rgb(204 251 241);
+}
+
+.bg-teal-300{
+  background-color: rgb(94 234 212);
+}
+
 .bg-teal-500	{
   background-color: rgb(20 184 166);
 }
-
+.bg-teal-600	{
+  background-color: rgb(13 148 136);
+}
+.bg-teal-700	{
+  background-color: rgb(15 118 110);
+}
 .bg-emerald-500{
   background-color: rgb(16 185 129);
 }
@@ -59,6 +79,7 @@
   background-color: rgb(6 182 212);
 }
 
+
 .justify-context{
   justify-content: center;
 }
@@ -71,6 +92,11 @@
   margin: 10px;
 }
 
+.mh-10{
+  margin: 0 10px;
+}
+
+
 
 .d-flex {
   display: flex;
@@ -82,7 +108,11 @@
 }
 
 .f-weight-800{
-    font-weight: 800;
+  font-weight: 800;
+}
+
+.f-weight-700{
+  font-weight: 700;
 }
 
 .white {
@@ -164,4 +194,16 @@
 
   .w-10 {
     width: 10px;
+  }
+
+  .h-32{
+    height: 32px;
+  }
+
+  .w-32{
+    width: 32px;
+  }
+
+  .w-44{
+    width: 44px;
   }

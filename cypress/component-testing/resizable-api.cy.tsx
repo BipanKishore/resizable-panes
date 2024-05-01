@@ -175,9 +175,9 @@ describe('Storage api', () => {
   })
 
   it('Move R0 -- Then restore using API.restoreDefault', () => {
-    rCy.cyGet(CK0).uncheck()
-    rCy.cyGet(CK1).uncheck()
-    rCy.cyGet(CK4).uncheck()
+    rCy.cyGet(CK0).click()
+    rCy.cyGet(CK1).click()
+    rCy.cyGet(CK4).click()
 
     rCy.move(R2, rScontainerId, 'left')
   })

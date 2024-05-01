@@ -4,6 +4,7 @@ import '../../styles/style.css'
 import {ResizablePanes} from '../../../src'
 import {addDefaultProps} from '../../../src/utils/util'
 import {testResizablePanesId} from './constant'
+import {MultiStateButtonGroup} from './multi-state-button-group'
 
 interface IIDMap {
   [id: string]: boolean
@@ -14,9 +15,10 @@ export const ResizableComponentCustomPanesTestWrapper = (props: any) => {
     uniqueId: testResizablePanesId
   })
 
-  const {children, visibility, ...otherProps} = currentProps
+  const {children, visibility = {}, ...otherProps} = currentProps
+  const [paneVisibilityState, setPaneVisibilityState] = useState(visibility)
 
-  const [visibilityMap, setVisibilityMap] = useState<IIDMap>(visibility ?? {})
+  const [visibilityMap, setVisibilityMap] = useState<IIDMap>(visibility)
 
   const [resizablePanesVisibility, setResizablePanesVisibility] = useState(true)
 
@@ -28,7 +30,7 @@ export const ResizableComponentCustomPanesTestWrapper = (props: any) => {
   }
 
   const updateVisibilityMap = (e: any) => {
-    const {name, checked} = e.currentTarget
+    const {name, checked} = e
     const newVisibilityMap = {
       ...visibilityMap,
       [name]: checked
@@ -44,7 +46,7 @@ export const ResizableComponentCustomPanesTestWrapper = (props: any) => {
           data-cy="hide-resizable-panes"
           onClick={() => setResizablePanesVisibility(!resizablePanesVisibility)}
         >
-         {resizablePanesVisibility ? 'Hide All' : 'Show'}
+          {resizablePanesVisibility ? 'Hide All' : 'Show'}
         </button>
 
         <button
@@ -71,6 +73,7 @@ export const ResizableComponentCustomPanesTestWrapper = (props: any) => {
               apiRef.current = api
             }}
             {...otherProps}
+            onChangeVisibility={setPaneVisibilityState}
           >
             {children}
           </ResizablePanes>
@@ -78,28 +81,7 @@ export const ResizableComponentCustomPanesTestWrapper = (props: any) => {
 
       </div>
 
-      <div className='d-flex justify-context'>
-        {Object
-          .keys(visibilityMap)
-          .map((id) => (
-
-            <label className='m-r-10' htmlFor={id} key={id}>
-              <input
-                checked={visibilityMap[id]}
-                data-cy={`checkbox-${id}`}
-                id={id}
-                name={id}
-                type="checkbox"
-                onChange={updateVisibilityMap}
-              />
-              <span className='m-l-5' >
-                {id}
-              </span>
-
-            </label>
-
-          ))}
-      </div>
+      <MultiStateButtonGroup stateMap={paneVisibilityState} onClick={updateVisibilityMap} />
 
     </div>
   )

@@ -6,7 +6,7 @@ import {
 } from '../constant'
 import {
   createPaneModelListAndResizerModelList,
-  getPanesAndResizers, restoreDefaultFn, setDownMaxLimits,
+  getPanesAndResizers, getVisibilityState, emitIfChangeInPartialHiddenState, restoreDefaultFn, setDownMaxLimits,
   setUISizesFn, setUpMaxLimits, syncAxisSizesFn
 } from '../utils/panes'
 import {
@@ -63,8 +63,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   const emitChangeVisibility = () => {
-    const visibilityMap = createMap(panesList, VISIBILITY)
-    onChangeVisibility(visibilityMap)
+    const map = getVisibilityState(panesList)
+    onChangeVisibility(map)
   }
 
   const registerItem = (api: any, id: string) => {
@@ -108,6 +108,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       contextDetails.newVisibilityModel = false
       setUISizesFn(items, contextDetails.direction)
       panesList.forEach((item) => item.syncRatioSizeToSize())
+      emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
     }
   }
 

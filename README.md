@@ -31,7 +31,6 @@ npm i resizable-panes-react --save
 yarn add resizable-panes-react
 ```
 
-
 ## Usage
 
 ```css
@@ -68,7 +67,7 @@ function App() {
 
 <img height="24px" alt="GitHub Sponsors" src="https://img.shields.io/github/sponsors/BipanKishore">
 
-## 👋 Hi there! If you find this project useful or valuable, please consider [Sponsoring Its Development]() or [Buy Me a Coffee]().
+## 👋 Hi there! If you find this project useful or valuable, please consider [Sponsoring Its Development]() or [Buy Me a Coffee]()
 
 🚀 By sponsoring, you'll:
 
@@ -99,7 +98,7 @@ Sponsors will be prominently displayed on the project's README and other relevan
 | onResize           | function           |         | false               | It emits size map of while resizing layout.                                                                                        |
 | onResizeStop       | function           |         | false               | It emits size map after the layout resizing is complete.                                                                           |
 | onReady            | function           |         | false               | It emits ResizablePanes component's api once it is constructed.                                                                    |
-| onChangeVisibility | function           |         | false               | It emits visibility map when there is change in visibility.                                                                        |
+| onChangeVisibility | function           |         | false               | It emits visibility map when there is change in visibility. A Pane can have 'visible', 'hidden' or 'zipped' state.                                                                        |
 
 ## Pane Props
 
@@ -131,6 +130,4 @@ Sponsors will be prominently displayed on the project's README and other relevan
 | getVisibilitiesMap |        | It returns the visibility map object of Ids of Panes                  |
 | getState        |        | It return the current state of all Panes.                             |
 
-
 ### [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
-
