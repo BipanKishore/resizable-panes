@@ -1,13 +1,16 @@
 import {createContext} from 'react'
-import {createMap, findById} from '../utils/util'
+import {createMap, findById, findIndex} from '../utils/util'
 import {
-  DIRECTIONS, MAX_SIZE, MIN_SIZE,
-  RATIO, SIZE, VISIBILITY
+  DIRECTIONS, LEFT, MAX_SIZE, MIN_SIZE,
+  NONE,
+  RATIO, RIGHT, SIZE, VISIBILITY
 } from '../constant'
 import {
   createPaneModelListAndResizerModelList,
   getPanesAndResizers, getVisibilityState, emitIfChangeInPartialHiddenState, restoreDefaultFn, setDownMaxLimits,
-  setUISizesFn, setUpMaxLimits, syncAxisSizesFn
+  setUISizesFn, setUpMaxLimits, syncAxisSizesFn,
+  getVisibleItems,
+  getPanesSizeSum
 } from '../utils/panes'
 import {
   calculateAxes, setVirtualOrderList, movingLogic, setCurrentMinMax,
@@ -17,11 +20,11 @@ import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
 import {
   IKeyToBoolMap, IResizableContext
-  , IResizablePaneProviderProps
+  , IResizableItem, IResizablePaneProviderProps
 } from '../@types'
 import {PaneModel, ResizableModel} from '../models'
 import {consoleGetSize} from '../utils/development-util'
-import {setVisibilityFn} from '../utils/visibility-helper'
+import {setSizesAfterVisibilityChange, setVisibilityFn} from '../utils/visibility-helper'
 import {fixPartialHiddenResizer, setResizersLimits} from '../utils/resizer'
 
 export const getResizableContext = (props: IResizablePaneProviderProps): IResizableContext => {
@@ -105,8 +108,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       if (isChangeRequired) {
         movingLogic(e, contextDetails)
       }
-      contextDetails.newVisibilityModel = false
       setUISizesFn(items, contextDetails.direction)
+      contextDetails.newVisibilityModel = false
       panesList.forEach((item) => item.syncRatioSizeToSize())
       emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
     }
@@ -197,12 +200,77 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   const getState = () => createMap(panesList, SIZE, VISIBILITY, MIN_SIZE, MAX_SIZE)
   const getVisibilitiesMap = () => getVisibilityState(panesList)
 
+  // eslint-disable-next-line complexity
+  const setSize = (id: string, newSize: number, isSecondAttemp = false) => {
+    const visiblePanes = getVisibleItems(panesList)
+    const visibleItems = getVisibleItems(items)
+
+    const requestIndex = findIndex(visiblePanes, id)
+
+    if (requestIndex === -1 || newSize < 1) {
+      return
+    }
+
+    const initialSizeSum = getPanesSizeSum(visiblePanes)
+
+    const pane = visiblePanes[requestIndex]
+    const requestIndexInItems = findIndex(visibleItems, id)
+
+    let addOnSizeChange = 0
+    let resizer: IResizableItem
+    // setting hiddenResizer state to NONE in final State
+    if (pane.hiddenResizer === LEFT) {
+      resizer = visibleItems[requestIndexInItems - 1]
+      resizer.setVisibility(true, false)
+      addOnSizeChange = resizer.resizerSize
+    } else if (pane.hiddenResizer === RIGHT) {
+      resizer = visibleItems[requestIndexInItems + 1]
+      resizer.setVisibility(true, false)
+      addOnSizeChange = resizer.resizerSize
+    }
+
+    pane.restoreLimits()
+    pane.setSizeAndReturnRemaining(newSize)
+
+    const remainingVisiblePanes = [...visiblePanes]
+    remainingVisiblePanes.splice(requestIndex, 1)
+
+    const newMaxPaneSizeAllowd = initialSizeSum - pane.size - addOnSizeChange
+
+    const actionList = remainingVisiblePanes.map((_, i) => i)
+
+    setSizesAfterVisibilityChange(remainingVisiblePanes, actionList, newMaxPaneSizeAllowd)
+
+    const nowSizeSum = getPanesSizeSum(visiblePanes)
+
+    if (initialSizeSum === nowSizeSum + addOnSizeChange) {
+      pane.hiddenResizer = NONE
+      setUISizesFn(items, DIRECTIONS.NONE)
+      contextDetails.newVisibilityModel = false
+      panesList.forEach((item) => item.syncRatioSizeToSize())
+      emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
+      consoleGetSize(items)
+    } else {
+      visibleItems.forEach((item) => item.setPreSize())
+      resizer?.setVisibility(true, true)
+      if (!isSecondAttemp) {
+        const allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
+        console.log('allowedChange', allowedChange)
+        console.log('nowSizeSum', nowSizeSum)
+        console.log('initialSizeSum', initialSizeSum)
+        console.error('Reeeeetttttrrrrry', newSize, addOnSizeChange)
+        setSize(id, allowedChange, true)
+      }
+    }
+  }
+
   const api = {
     restoreDefault,
     setVisibility,
     getSizesMap: getIdToSizeMap,
     getVisibilitiesMap,
-    getState
+    getState,
+    setSize
   }
 
   return {

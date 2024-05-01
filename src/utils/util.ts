@@ -6,7 +6,7 @@ export type INoop = (_: any) => any
 
 export const noop: INoop = (_: any): any => _
 
-export const findById = (list: PaneModel[] | any[], _id: string) =>
+export const findById = <T>(list: T[] | any[], _id: string) =>
   list.find(({id}) => id === _id)
 
 export const createMap = (paneList: PaneModel[] | IStoreResizableItemsModel[], ...keys: IPaneModelKey[]) => {

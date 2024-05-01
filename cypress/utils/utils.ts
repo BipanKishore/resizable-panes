@@ -119,9 +119,9 @@ export const moveElementRight = (cyId: string, start: number, end: number, isTou
   const secondEvent = moveRightEvent(end)
 
   if (isTouch) {
-    moveElementWithTouch(cyId, firstEvent, secondEvent)
+    return moveElementWithTouch(cyId, firstEvent, secondEvent)
   } else {
-    moveElement(cyId, firstEvent, secondEvent)
+    return moveElement(cyId, firstEvent, secondEvent)
   }
 }
 
@@ -175,10 +175,10 @@ export const moveItem = (sourceCyId: string, targetCyId: string, isTouch = false
 
       if (resizerX < cyIdX) {
         const {right} = targetRect
-        moveElementRight(sourceCyId, mouseDownX + widthHalf - 1, right, isTouch)
+        return moveElementRight(sourceCyId, mouseDownX + widthHalf - 1, right, isTouch)
       } else {
         const {left} = targetRect
-        moveElementLeft(sourceCyId, mouseDownX - widthHalf + 1, left, isTouch)
+        return moveElementLeft(sourceCyId, mouseDownX - widthHalf + 1, left, isTouch)
       }
     })
 }

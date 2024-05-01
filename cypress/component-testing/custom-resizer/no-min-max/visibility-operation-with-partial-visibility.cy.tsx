@@ -6,8 +6,8 @@ import {CustomResizerFirst} from '../../../components/custom-resizer'
 import {noMinMaxEqualSize7PanesSet} from '../../pane-model-config-sets'
 import {
   R0, R1, R2, R3, R4, R5,
-  CK0, CK1, CK2, CK3, CK4, CK5, CK6,
-  P0, P1, P2, P3, P4, P5, P6
+  CK0, CK1, CK2, CK3, CK6,
+  P1, P6
 } from '../../fix-test-ids'
 
 const uniqueIdResizablePanes = ENUMS.resizablePanesId
