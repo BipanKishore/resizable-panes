@@ -39,7 +39,7 @@ export const ResizableComponentCustomPanesTestWrapper = (props: any) => {
           data-cy="hide-resizable-panes"
           onClick={() => setResizablePanesVisibility(!resizablePanesVisibility)}
         >
-          Hide All
+         {resizablePanesVisibility ? 'Hide All' : 'Show'}
         </button>
 
         <button

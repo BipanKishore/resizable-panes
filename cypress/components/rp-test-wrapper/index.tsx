@@ -42,7 +42,7 @@ export const RPTestWrapper = (props: any) => {
           data-cy="hide-resizable-panes"
           onClick={() => setResizablePanesVisibility(!resizablePanesVisibility)}
         >
-          Hide All
+         {resizablePanesVisibility ? 'Hide All' : 'Show'}
         </button>
 
         <button

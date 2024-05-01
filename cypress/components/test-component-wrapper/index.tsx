@@ -57,7 +57,8 @@ export const TestComponentWrapper = (props: any) => {
         <button
           data-cy="hide-resizable-panes"
           onClick={() => setResizablePanesVisibility(!resizablePanesVisibility)}
-        >Hide All
+        >
+          {resizablePanesVisibility ? 'Hide All' : 'Show'}
         </button>
 
         <button
