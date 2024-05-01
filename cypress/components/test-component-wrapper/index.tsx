@@ -50,6 +50,11 @@ export const TestComponentWrapper = (props: any) => {
     setVisibilityMap(newVisibilityMap)
   }
 
+  const onRestore = () => {
+    setVisibilityMap(ENUMS.initialVisibility)
+    apiRef.current.restoreDefault()
+  }
+
   return (
     <div className='h-100p w-100p' >
 
@@ -62,7 +67,7 @@ export const TestComponentWrapper = (props: any) => {
 
         <button
           data-cy="restore-default"
-          onClick={() => apiRef.current.restoreDefault()}
+          onClick={onRestore}
         >
           Restore Default
         </button>

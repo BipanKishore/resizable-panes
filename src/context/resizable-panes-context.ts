@@ -28,7 +28,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   const {
     vertical, children, unit,
     uniqueId, storageApi,
-    onResizeStop, onChangeVisibility
+    onResizeStop, onChangeVisibility,
+    onResize
   } = props
 
   const myChildren = toArray(children)
@@ -51,6 +52,20 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   })
 
   const syncAxisSizes = () => syncAxisSizesFn(items)
+
+  const emitResize = () => {
+    const resizeParams = getIdToSizeMap()
+    onResize(resizeParams)
+  }
+  const emitResizeStop = () => {
+    const resizeParams = getIdToSizeMap()
+    onResizeStop(resizeParams)
+  }
+
+  const emitChangeVisibility = () => {
+    const visibilityMap = createMap(panesList, VISIBILITY)
+    onChangeVisibility(visibilityMap)
+  }
 
   const registerItem = (api: any, id: string) => {
     findById(items, id)
@@ -158,32 +173,26 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     }
 
     setVisibilityFn(contextDetails, newMap)
-    const visibilityMap = createMap(panesList, VISIBILITY)
-
-    // storage.setStorage(contextDetails)
-    const sisesMap = getIdToSizeMap()
-    if (onResizeStop) {
-      onResizeStop(sisesMap)
-    }
-    if (onChangeVisibility) {
-      onChangeVisibility(visibilityMap)
-    }
+    emitResizeStop()
+    emitChangeVisibility()
 
     storage.setStorage(contextDetails)
   }
 
   const onMoveEndFn = () => {
-    const resizeParams = getIdToSizeMap()
-    if (onResizeStop) {
-      onResizeStop(resizeParams)
-    }
-
     fixPartialHiddenResizer(contextDetails)
     storage.setStorage(contextDetails)
+    emitResizeStop()
     consoleGetSize(items)
   }
 
-  const restoreDefault = () => restoreDefaultFn(contextDetails)
+  const restoreDefault = () => {
+    restoreDefaultFn(contextDetails)
+    contextDetails.newVisibilityModel = false
+    emitResizeStop()
+    emitChangeVisibility()
+  }
+
   const getState = () => createMap(panesList, SIZE, VISIBILITY, MIN_SIZE, MAX_SIZE)
 
   const getVisibilitiesMap = () => createMap(panesList, VISIBILITY)
@@ -197,6 +206,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   return {
+    emitResize,
     api,
     onMoveEndFn,
     registerItem,

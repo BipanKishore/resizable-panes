@@ -22,6 +22,11 @@ export const ResizableComponentCustomPanesTestWrapper = (props: any) => {
 
   const apiRef = useRef <any>({})
 
+  const onRestore = () => {
+    setVisibilityMap(visibility)
+    apiRef.current.restoreDefault()
+  }
+
   const updateVisibilityMap = (e: any) => {
     const {name, checked} = e.currentTarget
     const newVisibilityMap = {
@@ -44,7 +49,7 @@ export const ResizableComponentCustomPanesTestWrapper = (props: any) => {
 
         <button
           data-cy="restore-default"
-          onClick={() => apiRef.current.restoreDefault()}
+          onClick={onRestore}
         >
           Restore Default
         </button>

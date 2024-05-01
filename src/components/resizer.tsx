@@ -22,7 +22,11 @@ export const Resizer = (props: IResizer) => {
   const resizerId = getResizerId(id)
 
   const context: any = useContext(ResizablePaneContext)
-  const {getIdToSizeMap, onMoveEndFn, contextDetails} = context
+
+  const {
+    getIdToSizeMap, onMoveEndFn, contextDetails,
+    emitResize
+  } = context
   const {panesList} = contextDetails
 
   const {vertical, uniqueId, resizerSize, detectionSize, resizerClass, activeResizerClass} = context.props
@@ -36,9 +40,8 @@ export const Resizer = (props: IResizer) => {
   const onMouseMove = useCallback((e: any) => {
     const resizableEvent = getResizableEvent(e, vertical, previousTouchEvent)
     context.calculateAndSetHeight(resizableEvent)
-    const resizeParams = getIdToSizeMap()
-    context.props.onResize(resizeParams)
-  }, [vertical, getIdToSizeMap, context])
+    emitResize()
+  }, [vertical, context, emitResize])
 
   const onMoveEnd = useCallback(() => {
     document.removeEventListener('mousemove', onMouseMove)

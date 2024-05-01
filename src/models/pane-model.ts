@@ -204,7 +204,7 @@ export class PaneModel {
     this.size = this.defaultSize
     this.restoreLimits()
     this.visibility = this.defaultVisibility
-    console.log(this.id, this.size, this.visibility)
+    this.hiddenResizer = NONE
   }
 
   restoreLimits () {
