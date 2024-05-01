@@ -5,26 +5,12 @@ import {RCy} from '../../../utils'
 const containerId = ENUMS.resizablePanesId
 
 const rCy = new RCy({containerId, vertical: false})
-const {resizerSize} = rCy
 
 const {
-  resizerIds: [R0, R1, R2, R3],
-  checkboxIds: [CK0, CK1, CK2, CK3, CK4],
-  paneIds: [P0, P1, P2, P3, P4]
+  resizerIds: [,,],
+  checkboxIds: [,,,],
+  paneIds: [,,,]
 } = rCy.getResizableIds()
-
-const INITIAL_SIZES: any = {
-  // [uniqueIdResizablePanes]: containerSize,
-  'resizer-P0': resizerSize,
-  'resizer-P1': resizerSize,
-  'resizer-P2': resizerSize,
-  'resizer-P3': resizerSize,
-  P0: 100,
-  P1: 300,
-  P2: 200,
-  P3: 300,
-  P4: 100
-}
 
 describe('Overlapping Resizers', () => {
   beforeEach(() => {

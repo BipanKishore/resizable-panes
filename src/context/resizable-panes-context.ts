@@ -10,7 +10,6 @@ import {
   getPanesAndResizers, getVisibilityState, emitIfChangeInPartialHiddenState, restoreDefaultFn, setDownMaxLimits,
   setUISizesFn, setUpMaxLimits, syncAxisSizesFn,
   getVisibleItems,
-  getSum,
   getPanesSizeSum
 } from '../utils/panes'
 import {
@@ -24,8 +23,8 @@ import {
   , IResizableItem, IResizablePaneProviderProps
 } from '../@types'
 import {PaneModel, ResizableModel} from '../models'
-import {consoleGetSize, consoleIds} from '../utils/development-util'
-import {changeSizeInRatio, setSizesAfterVisibilityChange, setVisibilityFn} from '../utils/visibility-helper'
+import {consoleGetSize} from '../utils/development-util'
+import {setSizesAfterVisibilityChange, setVisibilityFn} from '../utils/visibility-helper'
 import {fixPartialHiddenResizer, setResizersLimits} from '../utils/resizer'
 
 export const getResizableContext = (props: IResizablePaneProviderProps): IResizableContext => {
@@ -230,17 +229,11 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       addOnSizeChange = resizer.resizerSize
     }
 
-    const prevSize = pane.size
     pane.restoreLimits()
-    const remainingSize = pane.setSizeAndReturnRemaining(newSize)
-    const changeInSize = (newSize - remainingSize) - prevSize - addOnSizeChange
-
-    console.log('remainingSize', newSize, remainingSize, changeInSize, addOnSizeChange)
+    pane.setSizeAndReturnRemaining(newSize)
 
     const remainingVisiblePanes = [...visiblePanes]
     remainingVisiblePanes.splice(requestIndex, 1)
-
-    consoleIds(remainingVisiblePanes)
 
     const newMaxPaneSizeAllowd = initialSizeSum - pane.size - addOnSizeChange
 
@@ -256,12 +249,11 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       contextDetails.newVisibilityModel = false
       panesList.forEach((item) => item.syncRatioSizeToSize())
       emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
+      consoleGetSize(items)
     } else {
       visibleItems.forEach((item) => item.setPreSize())
       resizer?.setVisibility(true, true)
-      if (isSecondAttemp) {
-        console.error('RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRejcted', initialSizeSum, nowSizeSum, newSize)
-      } else {
+      if (!isSecondAttemp) {
         const allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
         console.log('allowedChange', allowedChange)
         console.log('nowSizeSum', nowSizeSum)

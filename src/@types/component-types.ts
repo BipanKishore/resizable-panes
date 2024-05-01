@@ -42,7 +42,8 @@ export interface IResizableApi {
   setVisibility: (map: IKeyToBoolMap) => void,
   getVisibilitiesMap: () => IVisibilityMap,
   getSizesMap: () => INumberMap,
-  getState: () => IGetState
+  getState: () => IGetState,
+  setSize: (id: string, size: number) => void
 }
 export type onReadyType = (api: IResizableApi) => void
 
