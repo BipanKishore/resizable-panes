@@ -21,6 +21,7 @@ describe('operations-no-min-max-plain-resizer', () => {
     cy.mount(
       <RPTestWrapper
         panesList={noMinMax5PanesSet}
+        resigerClass="bg-slate-500"
         resizerSize={10}
         storageApi={localStorage}
         uniqueId={containerId}

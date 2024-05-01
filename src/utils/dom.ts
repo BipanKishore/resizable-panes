@@ -4,7 +4,8 @@ import {
 } from '../@types'
 import {
   BORDER_BOTTOM, BORDER_LEFT, BORDER_RIGHT,
-  DIRECTIONS, MARGIN, MIN_HEIGHT, MIN_WIDTH, RATIO
+  DIRECTIONS, HIDDEN, MARGIN, MIN_HEIGHT, MIN_WIDTH, RATIO,
+  VISIBLE
 } from '../constant'
 
 export const toPx = (size: number) => `${size}px`
@@ -106,7 +107,7 @@ export const getSetSize = (node: any, vertical: boolean) => (size: number) => {
 export const getSetResizerSize = (node: any, vertical: boolean,
   isValidCustomResizer: boolean, resizerSize: number, detectionSize: number) => (size: number) => {
   node.style[getSizeKey(vertical)] = toPx(size)
-  node.style.overflow = size ? 'visible' : 'hidden'
+  node.style.overflow = size ? VISIBLE : HIDDEN
   const sizeReduction = Math.abs(size - resizerSize)
 
   if (!isValidCustomResizer) {

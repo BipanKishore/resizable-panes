@@ -153,8 +153,8 @@ export const setVisibilityOfResizers = (contextDetails: ResizableModel) => {
   // need to change name
   getItemsVisibleAndNoPartialHidden(items)
 }
-
-const setSizesAfterVisibilityChange = (
+// actionList it can be removed
+export const setSizesAfterVisibilityChange = (
   panesList: PaneModel[],
   actionList: number[],
   maxPaneSize: number

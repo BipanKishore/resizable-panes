@@ -129,9 +129,22 @@ export class PaneModel {
     return this.isRegistered && this.visibility ? this.size : 0
   }
 
+  setSizeAndReturnRemaining (newSize: number) {
+    let size
+    if (newSize >= this.minSize && newSize <= this.maxSize) {
+      size = newSize
+    } else if (newSize > this.maxSize) {
+      size = this.maxSize
+    } else {
+      size = this.minSize
+    }
+    this.size = size
+    // console.log(newSize, size)
+    return Math.abs(newSize - size)
+  }
+
   // No visibility check required here, we are only using this method for visible panes
   setVisibilitySize (sizeChange: number, operation: addAndRemoveType) {
-    // we are never reducing here
     const newSize = this.size + (operation === PLUS ? sizeChange : -sizeChange)
     this.restoreLimits()
     if (newSize >= this.minSize && newSize <= this.maxSize) {
@@ -188,11 +201,16 @@ export class PaneModel {
     return Math.abs(this.size - newSize)
   }
 
+  // Task will run this for only visible Items
   setUISize () {
     if (this.api) {
       this.api.setSize(this.visibility ? this.size : 0)
     }
     this.preSize = this.size
+  }
+
+  setPreSize () {
+    this.size = this.preSize
   }
 
   register (pane: any) {
