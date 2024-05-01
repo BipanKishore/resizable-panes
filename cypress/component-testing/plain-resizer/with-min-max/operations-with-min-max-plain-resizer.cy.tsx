@@ -137,18 +137,18 @@ describe('operations-with-min-max-plain-resizer', () => {
       rCy.move(R1, R2, 'left')
       rCy.checkWidthsAndSum([100, 2, 490, 2, 100, 2, 210, 2, 100])
 
-      rCy.cyGet(CK1).uncheck()
+      rCy.cyGet(CK1).click()
 
       rCy.checkWidthsAndSum([197, 0, 0, 2, 196, 2, 413, 2, 196])
 
-      rCy.cyGet(CK1).check()
+      rCy.cyGet(CK1).click()
       rCy.checkWidthsAndSum([100, 2, 490, 2, 100, 2, 210, 2, 100])
 
       rCy.moveNPixel(R1, 100, 'left')
       rCy.checkWidthsAndSum([100, 2, 390, 2, 200, 2, 210, 2, 100])
 
-      rCy.cyGet(CK0).uncheck()
-      rCy.cyGet(CK4).uncheck()
+      rCy.cyGet(CK0).click()
+      rCy.cyGet(CK4).click()
       rCy.checkWidthsAndSum([0, 0, 489, 2, 251, 2, 264, 0, 0])
 
       rCy.moveNPixel(R1, 45, 'left')
@@ -162,7 +162,7 @@ describe('operations-with-min-max-plain-resizer', () => {
 
       rCy.checkWidthsAndSum([0, 0, 444, 2, 300, 2, 260, 0, 0])
 
-      rCy.cyGet(CK2).uncheck()
+      rCy.cyGet(CK2).click()
       rCy.checkWidthsAndSum([0, 0, 634, 0, 0, 2, 372, 0, 0])
 
       rCy.moveNPixel(R2, 200, 'right')
@@ -182,9 +182,9 @@ describe('operations-with-min-max-plain-resizer', () => {
 
     // F
     it('Hide P0, P1, P4 - R2 move most left', () => {
-      cy.get(`[data-cy=${CK0}]`).uncheck()
-      cy.get(`[data-cy=${CK1}]`).uncheck()
-      cy.get(`[data-cy=${CK4}]`).uncheck()
+      cy.get(`[data-cy=${CK0}]`).click()
+      cy.get(`[data-cy=${CK1}]`).click()
+      cy.get(`[data-cy=${CK4}]`).click()
       rCy.move(R2, containerId, 'left')
 
       rCy.checkWidthsAndSum([0, 0, 0, 0, 100, 2, 906, 0, 0])

@@ -50,7 +50,7 @@ describe('Initial visibility use case', () => {
 
   // Edge
   it('After initial size/mount if we trun ON P0 visibility, it should come back to its normal size', () => {
-    rCy.cyGet(CK0).check()
+    rCy.cyGet(CK0).click()
 
     rCy.checkWidths(
       [100, 10, 300, 10, 200, 10, 300, 10, 100]
@@ -61,7 +61,7 @@ describe('Initial visibility use case', () => {
   it('Default hidden Pane whenever made visible should come to its default size',
     () => {
       rCy.moveNPixel(R1, 10, 'right')
-      rCy.cyGet(CK0).check()
+      rCy.cyGet(CK0).click()
       rCy.checkWidths(
         [100, 10, 309, 10, 191, 10, 300, 10, 100]
       )
@@ -72,7 +72,7 @@ describe('Initial visibility use case', () => {
   it('Default hidden Pane whenever made visible should come to its default size and its resizer should stay after novement',
     () => {
       rCy.moveNPixel(R1, 10, 'right')
-      rCy.cyGet(CK0).check()
+      rCy.cyGet(CK0).click()
       rCy.moveNPixel(R1, 10, 'right')
       rCy.checkWidths(
         [100, 10, 319, 10, 181, 10, 300, 10, 100]

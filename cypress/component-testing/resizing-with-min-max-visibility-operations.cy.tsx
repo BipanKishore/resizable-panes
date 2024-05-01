@@ -36,7 +36,7 @@ describe('Resizing with min and max with visibility operations', () => {
 
   describe('Only Visibility operations', () => {
     it('Hide P0', () => {
-      cy.get(`[data-cy=${CK0}]`).uncheck()
+      cy.get(`[data-cy=${CK0}]`).click()
       rCy.checkWidthsAndSum({
         [P0]: 0,
         [P1]: 337,
@@ -51,7 +51,7 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P1', () => {
-      cy.get(`[data-cy=${CK1}]`).uncheck()
+      cy.get(`[data-cy=${CK1}]`).click()
       rCy.checkWidthsAndSum({
         [P0]: 144,
         [P1]: 0,
@@ -66,7 +66,7 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P2', () => {
-      cy.get(`[data-cy=${CK2}]`).uncheck()
+      cy.get(`[data-cy=${CK2}]`).click()
       rCy.checkWidthsAndSum({
         [P0]: 126,
         [P1]: 379,
@@ -81,7 +81,7 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P3', () => {
-      cy.get(`[data-cy=${CK3}]`).uncheck()
+      cy.get(`[data-cy=${CK3}]`).click()
       rCy.checkWidthsAndSum({
         [P0]: 144,
         [P1]: 433,
@@ -96,7 +96,7 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P4', () => {
-      cy.get(`[data-cy=${CK4}]`).uncheck()
+      cy.get(`[data-cy=${CK4}]`).click()
       rCy.checkWidthsAndSum({
         [P0]: 112,
         [P1]: 337,
@@ -111,8 +111,8 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P0, P1', () => {
-      cy.get(`[data-cy=${CK1}]`).uncheck()
-      cy.get(`[data-cy=${CK0}]`).uncheck()
+      cy.get(`[data-cy=${CK1}]`).click()
+      cy.get(`[data-cy=${CK0}]`).click()
       rCy.checkWidthsAndSum({
         [P0]: 0,
         [P1]: 0,
@@ -127,8 +127,8 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P0, P2', () => {
-      cy.get(`[data-cy=${CK2}]`).uncheck()
-      cy.get(`[data-cy=${CK0}]`).uncheck()
+      cy.get(`[data-cy=${CK2}]`).click()
+      cy.get(`[data-cy=${CK0}]`).click()
       rCy.checkWidthsAndSum({
         [P0]: 0,
         [P1]: 437,
@@ -143,8 +143,8 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P0, P3', () => {
-      cy.get(`[data-cy=${CK3}]`).uncheck()
-      cy.get(`[data-cy=${CK0}]`).uncheck()
+      cy.get(`[data-cy=${CK3}]`).click()
+      cy.get(`[data-cy=${CK0}]`).click()
       rCy.checkWidthsAndSum({
         [P0]: 0,
         [P1]: 540,
@@ -159,8 +159,8 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P0, P4', () => {
-      cy.get(`[data-cy=${CK4}]`).uncheck()
-      cy.get(`[data-cy=${CK0}]`).uncheck()
+      cy.get(`[data-cy=${CK4}]`).click()
+      cy.get(`[data-cy=${CK0}]`).click()
       rCy.checkWidthsAndSum({
         [P0]: 0,
         [P1]: 382,
@@ -175,9 +175,9 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P0, P1, P2', () => {
-      cy.get(`[data-cy=${CK0}]`).uncheck()
-      cy.get(`[data-cy=${CK1}]`).uncheck()
-      cy.get(`[data-cy=${CK2}]`).uncheck()
+      cy.get(`[data-cy=${CK0}]`).click()
+      cy.get(`[data-cy=${CK1}]`).click()
+      cy.get(`[data-cy=${CK2}]`).click()
       rCy.checkWidthsAndSum({
         [P0]: 0,
         [P1]: 0,
@@ -193,9 +193,9 @@ describe('Resizing with min and max with visibility operations', () => {
 
     // Resizing after this fails
     it('Hide P0, P1, P3', () => {
-      cy.get(`[data-cy=${CK0}]`).uncheck()
-      cy.get(`[data-cy=${CK1}]`).uncheck()
-      cy.get(`[data-cy=${CK3}]`).uncheck()
+      cy.get(`[data-cy=${CK0}]`).click()
+      cy.get(`[data-cy=${CK1}]`).click()
+      cy.get(`[data-cy=${CK3}]`).click()
       rCy.checkWidths({
         [P0]: 0,
         [P1]: 0,
@@ -211,9 +211,9 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P0, P1, P4', () => {
-      cy.get(`[data-cy=${CK0}]`).uncheck()
-      cy.get(`[data-cy=${CK1}]`).uncheck()
-      cy.get(`[data-cy=${CK4}]`).uncheck()
+      cy.get(`[data-cy=${CK0}]`).click()
+      cy.get(`[data-cy=${CK1}]`).click()
+      cy.get(`[data-cy=${CK4}]`).click()
       rCy.checkWidths({
         [P0]: 0,
         [P1]: 0,
@@ -229,9 +229,9 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P0, P2, P3', () => {
-      rCy.cyGet(CK0).uncheck()
-      rCy.cyGet(CK2).uncheck()
-      rCy.cyGet(CK3).uncheck()
+      rCy.cyGet(CK0).click()
+      rCy.cyGet(CK2).click()
+      rCy.cyGet(CK3).click()
       rCy.checkWidthsAndSum({
         [P0]: 0,
         [P1]: 772,
@@ -247,9 +247,9 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P0, P2, P4', () => {
-      rCy.cyGet(CK0).uncheck()
-      rCy.cyGet(CK2).uncheck()
-      rCy.cyGet(CK4).uncheck()
+      rCy.cyGet(CK0).click()
+      rCy.cyGet(CK2).click()
+      rCy.cyGet(CK4).click()
       rCy.checkWidthsAndSum({
         [P0]: 0,
         [P1]: 515,
@@ -265,10 +265,10 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P0, P1, P2, P3', () => {
-      rCy.cyGet(CK0).uncheck()
-      rCy.cyGet(CK1).uncheck()
-      rCy.cyGet(CK2).uncheck()
-      rCy.cyGet(CK3).uncheck()
+      rCy.cyGet(CK0).click()
+      rCy.cyGet(CK1).click()
+      rCy.cyGet(CK2).click()
+      rCy.cyGet(CK3).click()
       rCy.checkWidths({
         [P0]: 0,
         [P1]: 0,
@@ -284,10 +284,10 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P0, P1, P2, P4', () => {
-      rCy.cyGet(CK0).uncheck()
-      rCy.cyGet(CK1).uncheck()
-      rCy.cyGet(CK2).uncheck()
-      rCy.cyGet(CK4).uncheck()
+      rCy.cyGet(CK0).click()
+      rCy.cyGet(CK1).click()
+      rCy.cyGet(CK2).click()
+      rCy.cyGet(CK4).click()
       rCy.checkWidths({
         [P0]: 0,
         [P1]: 0,
@@ -303,10 +303,10 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P0, P1, P3, P4', () => {
-      rCy.cyGet(CK0).uncheck()
-      rCy.cyGet(CK1).uncheck()
-      rCy.cyGet(CK3).uncheck()
-      rCy.cyGet(CK4).uncheck()
+      rCy.cyGet(CK0).click()
+      rCy.cyGet(CK1).click()
+      rCy.cyGet(CK3).click()
+      rCy.cyGet(CK4).click()
       rCy.checkWidths({
         [P0]: 0,
         [P1]: 0,
@@ -322,10 +322,10 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P0, P2, P3, P4', () => {
-      rCy.cyGet(CK0).uncheck()
-      rCy.cyGet(CK2).uncheck()
-      rCy.cyGet(CK3).uncheck()
-      rCy.cyGet(CK4).uncheck()
+      rCy.cyGet(CK0).click()
+      rCy.cyGet(CK2).click()
+      rCy.cyGet(CK3).click()
+      rCy.cyGet(CK4).click()
       rCy.checkWidths({
         [P0]: 0,
         [P1]: 1040,
@@ -341,10 +341,10 @@ describe('Resizing with min and max with visibility operations', () => {
     })
 
     it('Hide P1, P2, P3, P4', () => {
-      rCy.cyGet(CK1).uncheck()
-      rCy.cyGet(CK2).uncheck()
-      rCy.cyGet(CK3).uncheck()
-      rCy.cyGet(CK4).uncheck()
+      rCy.cyGet(CK1).click()
+      rCy.cyGet(CK2).click()
+      rCy.cyGet(CK3).click()
+      rCy.cyGet(CK4).click()
       rCy.checkWidths({
         [P0]: 300,
         [P1]: 0,
@@ -544,7 +544,7 @@ describe('Resizing with min and max with visibility operations', () => {
         100
       ])
 
-      rCy.cyGet(CK1).uncheck()
+      rCy.cyGet(CK1).click()
 
       rCy.checkWidths([
         202,
@@ -558,7 +558,7 @@ describe('Resizing with min and max with visibility operations', () => {
         202
       ])
 
-      rCy.cyGet(CK1).check()
+      rCy.cyGet(CK1).click()
 
       rCy.checkWidths([
         100,
@@ -588,8 +588,8 @@ describe('Resizing with min and max with visibility operations', () => {
         ]
       )
 
-      rCy.cyGet(CK0).uncheck()
-      rCy.cyGet(CK4).uncheck()
+      rCy.cyGet(CK0).click()
+      rCy.cyGet(CK4).click()
 
       rCy.checkWidths(
         [
@@ -653,7 +653,7 @@ describe('Resizing with min and max with visibility operations', () => {
         ]
       )
 
-      rCy.cyGet(CK2).uncheck()
+      rCy.cyGet(CK2).click()
 
       rCy.checkWidths(
         [
@@ -738,9 +738,9 @@ describe('Resizing with min and max with visibility operations', () => {
 
     // F
     it('Hide P0, P1, P4 - R2 move most left', () => {
-      cy.get(`[data-cy=${CK0}]`).uncheck()
-      cy.get(`[data-cy=${CK1}]`).uncheck()
-      cy.get(`[data-cy=${CK4}]`).uncheck()
+      cy.get(`[data-cy=${CK0}]`).click()
+      cy.get(`[data-cy=${CK1}]`).click()
+      cy.get(`[data-cy=${CK4}]`).click()
       rCy.move(R2, containerId, 'left')
       rCy.checkWidths({
         [P0]: 0,
