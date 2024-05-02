@@ -1,6 +1,7 @@
 import React from 'react'
 
 import {Pane, ResizablePanes} from '../../../src'
+import {Loading} from '../Loading'
 
 export class PaneModelConfig {
   size:number
@@ -31,6 +32,7 @@ export const generatePaneModel = (list: PaneModelConfig[]) => {
         size={size}
       >
         {<h2>{index}</h2>}
+        <Loading />
       </Pane>
     )
   )

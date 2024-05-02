@@ -1,4 +1,4 @@
-import React, {useContext, Fragment} from 'react'
+import React, {useContext, Fragment, useState} from 'react'
 import {IPane} from '../@types'
 import {getSetSize, joinClassName} from '../utils/dom'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
@@ -8,12 +8,15 @@ import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
 export const Pane = (props: IPane) => {
   const context: any = useContext(ResizablePaneContext)
 
+  const [mountIt, setMountIt] = useState(true)
+
   const {
     vertical,
     registerItem,
     getPaneSizeStyle,
     props: {
-      resizer: parentResizer
+      resizer: parentResizer,
+      destroyOnHide: destroyOnHideGlobal
     }
   } = context
 
@@ -21,13 +24,25 @@ export const Pane = (props: IPane) => {
     className,
     children,
     resizer,
-    id
+    id,
+    destroyOnHide
   } = props
+
+  const shouldDestroy = destroyOnHide !== undefined ? destroyOnHide : destroyOnHideGlobal
+
+  console.log('destroyOnHide', destroyOnHide)
+  console.log('destroyOnHideGlobal', destroyOnHideGlobal)
 
   const [setPaneRef]: any = useHookWithRefCallback((node: HTMLElement) => {
     const setSize = getSetSize(node, vertical)
+    const destroy = (visibility: boolean) => {
+      if (shouldDestroy) {
+        setMountIt(visibility)
+      }
+    }
 
     registerItem({
+      destroy,
       setSize
     }, id)
   })
@@ -48,7 +63,7 @@ export const Pane = (props: IPane) => {
         ref={setPaneRef}
         style={style}
       >
-        {children}
+        {mountIt && children}
       </div>
       <Resizer id={id}>
         {resizer || parentResizer}
