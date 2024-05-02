@@ -98,7 +98,7 @@ export const Resizer = (props: IResizer) => {
       onMouseDown,
       onTouchStartCapture: onMouseDown,
       isMouseDown,
-      id: `custom-${resizerId}`
+      id: `${resizerId}`
 
     })
   }

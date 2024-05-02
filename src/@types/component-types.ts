@@ -64,7 +64,8 @@ export interface IResizablePaneProviderProps {
   resizer?: ReactNode,
   resizerSize?: number,
   visibility?: IKeyToBoolMap,
-  destroyOnHide?: boolean
+  destroyOnHide?: boolean,
+  zipping?: boolean
 }
 
 export interface IPane {

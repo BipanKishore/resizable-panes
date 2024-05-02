@@ -1,6 +1,5 @@
 import React from 'react'
-
-import {Pane, ResizablePanes} from '../../../src'
+import {Pane} from '../../../src'
 import {Loading} from '../Loading'
 
 export class PaneModelConfig {
@@ -31,7 +30,7 @@ export const generatePaneModel = (list: PaneModelConfig[]) => {
         minSize={minSize}
         size={size}
       >
-        {<h2>{index}</h2>}
+        {<h2>{`P${index}`}</h2>}
         <Loading />
       </Pane>
     )

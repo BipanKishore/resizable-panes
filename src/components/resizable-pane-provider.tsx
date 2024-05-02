@@ -26,6 +26,7 @@ export const attachDefaultPaneProps = (attachedProps: IResizablePaneProviderProp
     visibility: emptyObhect,
     minMaxUnit: RATIO,
     destroyOnHide: true,
+    zipping: true,
     ...propsWithNoUndefined
   }
 }

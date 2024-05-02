@@ -7,14 +7,16 @@ export interface ICustomResizerProp {
   isMouseDown?: boolean,
   onTouchStartCapture?: any,
   name?: string,
-  size?: number
+  size?: number,
+  id?: string
 }
 
+// eslint-disable-next-line complexity
 export const CustomResizerFirst = ({
   horizontal, onMouseDown,
   isMouseDown,
   onTouchStartCapture,
-  name, size
+  name, size, id
 }: ICustomResizerProp) => {
   // const isMouseDown = true
   const vertical = !horizontal
@@ -57,7 +59,7 @@ export const CustomResizerFirst = ({
         onMouseDown={onMouseDown}
         onTouchStartCapture={onTouchStartCapture}
       >
-        {name}
+        {name || id}
       </div>
     </div>
   )
