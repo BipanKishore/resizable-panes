@@ -27,7 +27,7 @@ export const Pane = (props: IPane) => {
     id,
     destroyOnHide
   } = props
-
+  // Task nullish coalescing operator
   const shouldDestroy = destroyOnHide !== undefined ? destroyOnHide : destroyOnHideGlobal
 
   console.log('destroyOnHide', destroyOnHide)
