@@ -27,11 +27,8 @@ export const Pane = (props: IPane) => {
     id,
     destroyOnHide
   } = props
-  // Task nullish coalescing operator
-  const shouldDestroy = destroyOnHide !== undefined ? destroyOnHide : destroyOnHideGlobal
 
-  console.log('destroyOnHide', destroyOnHide)
-  console.log('destroyOnHideGlobal', destroyOnHideGlobal)
+  const shouldDestroy = destroyOnHide ?? destroyOnHideGlobal
 
   const [setPaneRef]: any = useHookWithRefCallback((node: HTMLElement) => {
     const setSize = getSetSize(node, vertical)

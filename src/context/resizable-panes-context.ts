@@ -31,6 +31,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   const {
     vertical, children, unit,
     uniqueId, storageApi,
+    zipping,
     onResizeStop, onChangeVisibility,
     onResize
   } = props
@@ -129,7 +130,10 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     contextDetails.axisCoordinate = e.mouseCoordinate
 
     setVirtualOrderList(contextDetails)
-    setResizersLimits(contextDetails)
+    if (zipping) {
+      setResizersLimits(contextDetails)
+    }
+
     syncAxisSizes()
     setCurrentMinMax(contextDetails)
     calculateAxes(contextDetails)
