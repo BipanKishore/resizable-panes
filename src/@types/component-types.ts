@@ -63,12 +63,14 @@ export interface IResizablePaneProviderProps {
   storageApi?: any,
   resizer?: ReactNode,
   resizerSize?: number,
-  visibility?: IKeyToBoolMap
+  visibility?: IKeyToBoolMap,
+  destroyOnHide?: boolean
 }
 
 export interface IPane {
   id: string,
   size: number,
+  destroyOnHide?: boolean,
   className?: string,
   children?: ReactNode[] | ReactNode,
   maxSize?: number

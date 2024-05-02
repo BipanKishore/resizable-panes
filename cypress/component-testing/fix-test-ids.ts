@@ -13,7 +13,11 @@ const {
 const rScontainerId = 'rScontainerId'
 const mountUnMountButtonId = 'hide-resizable-panes'
 
+const loadingId = 'loading'
+const loadedId = 'loaded'
 export {
+  loadingId,
+  loadedId,
   mountUnMountButtonId,
   rScontainerId,
   R0, R1, R2, R3, R4, R5,

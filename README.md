@@ -85,6 +85,7 @@ Sponsors will be prominently displayed on the project's README and other relevan
 | Prop              | Type               | Default | Required            | Description                                                                                                                        |
 |--------------------|--------------------|---------|---------------------|------------------------------------------------------------------------------------------------------------------------------------|
 | uniqueId           | string             |         | true                | Helps identify ResizablePanes component.                                                                                           |
+| destroyOnHide      | boolean            | true    | false               | true - Unmounts the child or children of Pane in Hidden state. <br /> false - keeps the child or children of Pane in DOM in Hidden state.|
 | className          | string             |         | false               | It will get attached to ResizablePanes  container element.                                                                         |
 | vertical           | boolean            | false   | false               | It sets the orientation of Panes.                                                                                                  |
 | unit               | 'ratio' or 'pixel' | 'ratio' | false               | It sets the unit of size of panes.                                                                                                 |
@@ -106,6 +107,7 @@ Sponsors will be prominently displayed on the project's README and other relevan
 |-------------|--------------|----------|---------------------|----------------------------------------------------------------------------------------------------------|
 | id          | string       |          | true                | Helps identify Pane component.                                                                           |
 | size        | number       |          | true                | Sets the size of Pane.                                                                                   |
+| destroyOnHide | boolean    |          |                     | Same behaviour as of ResizablePanes Prop but works for individual Pane.                                  |
 | className   | string       |          | false               | It will get attached to Pane element.                                                                    |
 | maxSize     | number       | Infinity | false               | The maximum size limit of the Pane.                                                                      |
 | minSize     | number       | 0        | false               | The minimum size limit of the Pane.                                                                      |
@@ -125,6 +127,7 @@ Sponsors will be prominently displayed on the project's README and other relevan
 | Method          | Params | Description                                                           |
 |-----------------|--------|-----------------------------------------------------------------------|
 | restoreDefault  |        | It restores the default view of layout.                               |
+| setSize         | (paneId: string, size: number) | It excepts the positive number. It sets the size of Pane depending upon: <br /> 1. Its min and max.  <br />2. min and max of other panes. |
 | setVisibility   | Object | It sets the visibility of Panes using the Boolean map of id of Panes. |
 | getSizesMap        |        | It returns the size map object  of Ids of Panes                       |
 | getVisibilitiesMap |        | It returns the visibility map object of Ids of Panes                  |

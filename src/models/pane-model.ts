@@ -329,6 +329,7 @@ export class PaneModel {
       this.maxSize = 0
       this.minSize = 0
     }
+    if (this.api && this.api.destroy) { this.api?.destroy(visibility) }
   }
 
   setOldVisibilityModel () {
