@@ -13,7 +13,6 @@ const rCy = new RCy({
   resizerSize: 10,
   vertical: true
 })
-const {resizerSize} = rCy
 
 describe('Initial visibility use case', () => {
   beforeEach(() => {
