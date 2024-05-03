@@ -306,7 +306,6 @@ describe('Test Visibility for 2 panes', () => {
     rCy.setViewPort()
     cy.mount(
       <RPTestWrapper
-        unSafeVisibilityMode
         panesList={_2PaneWithNoMinMax}
         resizerClass='bg-slate-500'
         resizerSize={1}
