@@ -721,6 +721,7 @@ describe('Resizing with min and max with visibility operations written here for 
     })
     rCy.checkContainerWidth()
     rCy.moveNPixel(R3, 100, 'right')
+    rCy.moveNPixel(R3, 100, 'left')
     rCy.checkWidths({
       [P0]: 0,
       [P1]: 0,
