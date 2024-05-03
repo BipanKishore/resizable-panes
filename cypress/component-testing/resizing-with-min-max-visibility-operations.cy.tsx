@@ -4,6 +4,8 @@ import {CK0, P0, P1, P2, P3, P4, R0, R1, R2, R3, CK1, CK2, CK3, CK4, rScontainer
 import {withMinMaxEqualSize5PanesSet} from './pane-model-config-sets'
 import {RPTestWrapper} from '../components/rp-test-wrapper'
 import {CustomResizerFirst} from '../components/custom-resizer'
+import {ResizableComponentCustomPanesTestWrapper} from '../components/rp-test-wrapper/resizable-component-custom-panes-test-wrapper'
+import {Pane} from '../../src'
 
 const containerId = rScontainerId
 const rCy = new RCy({
@@ -755,5 +757,49 @@ describe('Resizing with min and max with visibility operations', () => {
       })
       rCy.checkContainerWidth()
     })
+  })
+})
+
+describe.only('Pane visibility for 2 Panes', () => {
+  const rCy = new RCy({
+    resizerSize: 1,
+    containerId,
+    len: 2
+  })
+
+  beforeEach(() => {
+    rCy.setViewPort()
+    cy.mount(
+      <ResizableComponentCustomPanesTestWrapper
+        // detectionSize={5}
+
+        resizerSize={1}
+        uniqueId={containerId}
+        vertical
+      >
+
+        <Pane className='bg-orange-500' id='P0' size={1} />
+        <Pane className='bg-teal-500' id='P1' size={1} />
+
+      </ResizableComponentCustomPanesTestWrapper>
+    )
+  })
+
+  it('Check initial size', () => {
+    rCy.checkWidths({
+      P0: 500,
+      P1: 500
+    })
+    rCy.checkContainerWidth()
+  })
+
+  it('Check initial size', () => {
+    rCy.cyGet(CK0).click()
+    rCy.checkWidthsAndSum([0, 0, 1001])
+  })
+
+  it('Check initial size', () => {
+    rCy.cyGet(CK1).click()
+    rCy.checkWidthsAndSum([1001, 0, 0])
   })
 })
