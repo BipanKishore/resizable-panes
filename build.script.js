@@ -33,23 +33,37 @@ export const BUILD_INPUT_FILE_PATH = path.resolve(__dirname, '../src/index.ts')
 export const cjsOutOptionsDevelopment = {
   file: `${CJS_BUILD_PATH}${'index.cjs.js'}`,
   format: 'cjs',
-  sourcemap: true
+  sourcemap: true,
+  sourcemapPathTransform: (sourcePath) => {
+    return sourcePath.substring('../'.length)
+  }
 }
 
 export const cjsOutOptionsProduction = {
   file: `${CJS_BUILD_PATH}${'index.cjs.js'}`,
-  format: 'cjs'
+  format: 'cjs',
+  sourcemap: true,
+  sourcemapPathTransform: (sourcePath) => {
+    return sourcePath.substring('../'.length)
+  }
 }
 
 export const esmOutOptionsDevelopment = {
   file: `${ESM_BUILD_PATH}${'index.esm.js'}`,
   format: 'esm',
-  sourcemap: true
+  sourcemap: true,
+  sourcemapPathTransform: (sourcePath) => {
+    return sourcePath.substring('../'.length)
+  }
 }
 
 export const esmOutOptionsProduction = {
   file: `${ESM_BUILD_PATH}${'index.esm.js'}`,
-  format: 'esm'
+  format: 'esm',
+  sourcemap: true,
+  sourcemapPathTransform: (sourcePath) => {
+    return sourcePath.substring('../'.length)
+  }
 }
 
 export const developmentPlugins = [

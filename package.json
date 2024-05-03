@@ -15,7 +15,7 @@
     "test:clean": "rimraf coverage .nyc_output",
     "prod": "rimraf lib && cross-env NODE_ENV=prod rollup -c --bundleConfigAsCjs",
     "dev": "rimraf lib && cross-env NODE_ENV=dev rollup -c -w --bundleConfigAsCjs",
-    "link-local": "npm link",
+    "link-local": "npm link && cd ./node_modules/react && npm link",
     "start": "run-s -n link-local dev",
     "patch": "npm version patch",
     "predeploy": "run-s -n patch clean Install test prod",

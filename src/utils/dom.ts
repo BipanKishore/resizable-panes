@@ -85,7 +85,7 @@ export const generateResizerStyle = (resizerSize: number,
 
   if (vertical) {
     return {
-      margin: `0 -${detectionSizePx}`,
+      margin: `auto -${detectionSizePx}`,
       minWidth: minSize,
       borderLeft: border,
       borderRight: border
@@ -93,7 +93,7 @@ export const generateResizerStyle = (resizerSize: number,
   }
 
   return {
-    margin: `-${detectionSizePx} 0`,
+    margin: `-${detectionSizePx} auto`,
     minHeight: minSize,
     borderTop: border,
     borderBottom: border
