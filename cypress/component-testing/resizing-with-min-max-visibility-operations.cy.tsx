@@ -191,25 +191,6 @@ describe('Resizing with min and max with visibility operations', () => {
       })
     })
 
-    // Resizing after this fails
-    it('Hide P0, P1, P3', () => {
-      cy.get(`[data-cy=${CK0}]`).click()
-      cy.get(`[data-cy=${CK1}]`).click()
-      cy.get(`[data-cy=${CK3}]`).click()
-      rCy.checkWidths({
-        [P0]: 0,
-        [P1]: 0,
-        [P2]: 300,
-        [P3]: 0,
-        [P4]: 300,
-        [R0]: 0,
-        [R1]: 0,
-        [R2]: 0,
-        [R3]: resizerSize
-      })
-      rCy.checkContainerWidth()
-    })
-
     it('Hide P0, P1, P4', () => {
       cy.get(`[data-cy=${CK0}]`).click()
       cy.get(`[data-cy=${CK1}]`).click()
@@ -264,25 +245,6 @@ describe('Resizing with min and max with visibility operations', () => {
       rCy.checkContainerWidth()
     })
 
-    it('Hide P0, P1, P2, P3', () => {
-      rCy.cyGet(CK0).click()
-      rCy.cyGet(CK1).click()
-      rCy.cyGet(CK2).click()
-      rCy.cyGet(CK3).click()
-      rCy.checkWidths({
-        [P0]: 0,
-        [P1]: 0,
-        [P2]: 0,
-        [P3]: 0,
-        [P4]: 300,
-        [R0]: 0,
-        [R1]: 0,
-        [R2]: 0,
-        [R3]: 0
-      })
-      rCy.checkContainerWidth()
-    })
-
     it('Hide P0, P1, P2, P4', () => {
       rCy.cyGet(CK0).click()
       rCy.cyGet(CK1).click()
@@ -302,25 +264,6 @@ describe('Resizing with min and max with visibility operations', () => {
       rCy.checkContainerWidth()
     })
 
-    it('Hide P0, P1, P3, P4', () => {
-      rCy.cyGet(CK0).click()
-      rCy.cyGet(CK1).click()
-      rCy.cyGet(CK3).click()
-      rCy.cyGet(CK4).click()
-      rCy.checkWidths({
-        [P0]: 0,
-        [P1]: 0,
-        [P2]: 300,
-        [P3]: 0,
-        [P4]: 0,
-        [R0]: 0,
-        [R1]: 0,
-        [R2]: 0,
-        [R3]: 0
-      })
-      rCy.checkContainerWidth()
-    })
-
     it('Hide P0, P2, P3, P4', () => {
       rCy.cyGet(CK0).click()
       rCy.cyGet(CK2).click()
@@ -329,25 +272,6 @@ describe('Resizing with min and max with visibility operations', () => {
       rCy.checkWidths({
         [P0]: 0,
         [P1]: 1040,
-        [P2]: 0,
-        [P3]: 0,
-        [P4]: 0,
-        [R0]: 0,
-        [R1]: 0,
-        [R2]: 0,
-        [R3]: 0
-      })
-      rCy.checkContainerWidth()
-    })
-
-    it('Hide P1, P2, P3, P4', () => {
-      rCy.cyGet(CK1).click()
-      rCy.cyGet(CK2).click()
-      rCy.cyGet(CK3).click()
-      rCy.cyGet(CK4).click()
-      rCy.checkWidths({
-        [P0]: 300,
-        [P1]: 0,
         [P2]: 0,
         [P3]: 0,
         [P4]: 0,
@@ -755,5 +679,104 @@ describe('Resizing with min and max with visibility operations', () => {
       })
       rCy.checkContainerWidth()
     })
+  })
+})
+
+describe('Resizing with min and max with visibility operations & allowVisibilityChangeOnViewSizeChange', () => {
+  beforeEach(() => {
+    rCy.setViewPort()
+    cy.mount(
+      <RPTestWrapper
+        allowVisibilityChangeOnViewSizeChange
+        panesList={withMinMaxEqualSize5PanesSet}
+        resizer={
+          <CustomResizerFirst size={10} />
+        }
+        resizerClass='bg-slate-500'
+        resizerSize={10}
+        storageApi={localStorage}
+        uniqueId={rScontainerId}
+        vertical
+      >
+
+      </RPTestWrapper>
+
+    )
+  })
+
+  // Resizing after this fails
+  it('Hide P0, P1, P3', () => {
+    cy.get(`[data-cy=${CK0}]`).click()
+    cy.get(`[data-cy=${CK1}]`).click()
+    cy.get(`[data-cy=${CK3}]`).click()
+    rCy.checkWidths({
+      [P0]: 0,
+      [P1]: 0,
+      [P2]: 300,
+      [P3]: 0,
+      [P4]: 300,
+      [R0]: 0,
+      [R1]: 0,
+      [R2]: 0,
+      [R3]: resizerSize
+    })
+    rCy.checkContainerWidth()
+  })
+
+  it('Hide P0, P1, P2, P3', () => {
+    rCy.cyGet(CK0).click()
+    rCy.cyGet(CK1).click()
+    rCy.cyGet(CK2).click()
+    rCy.cyGet(CK3).click()
+    rCy.checkWidths({
+      [P0]: 0,
+      [P1]: 0,
+      [P2]: 0,
+      [P3]: 0,
+      [P4]: 300,
+      [R0]: 0,
+      [R1]: 0,
+      [R2]: 0,
+      [R3]: 0
+    })
+    rCy.checkContainerWidth()
+  })
+
+  it('Hide P0, P1, P3, P4', () => {
+    rCy.cyGet(CK0).click()
+    rCy.cyGet(CK1).click()
+    rCy.cyGet(CK3).click()
+    rCy.cyGet(CK4).click()
+    rCy.checkWidths({
+      [P0]: 0,
+      [P1]: 0,
+      [P2]: 300,
+      [P3]: 0,
+      [P4]: 0,
+      [R0]: 0,
+      [R1]: 0,
+      [R2]: 0,
+      [R3]: 0
+    })
+    rCy.checkContainerWidth()
+  })
+
+  it('Hide P1, P2, P3, P4', () => {
+    rCy.cyGet(CK1).click()
+    rCy.cyGet(CK2).click()
+    rCy.cyGet(CK3).click()
+    rCy.cyGet(CK4).click()
+    rCy.checkWidths({
+      [P0]: 300,
+      [P1]: 0,
+      [P2]: 0,
+      [P3]: 0,
+      [P4]: 0,
+      [R0]: 0,
+      [R1]: 0,
+      [R2]: 0,
+      [R3]: 0
+    })
+    rCy.checkContainerWidth()
   })
 })

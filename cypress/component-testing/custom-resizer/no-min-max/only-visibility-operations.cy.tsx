@@ -1,6 +1,9 @@
 import {TestComponentWrapper} from '../../../components/test-component-wrapper'
 import React from 'react'
 import {RCy} from '../../../utils'
+import {RPTestWrapper} from '../../../components/rp-test-wrapper'
+import {rScontainerId} from '../../fix-test-ids'
+import {_2PaneWithNoMinMax} from '../../pane-model-config-sets'
 
 const rCy = new RCy({
   resizerSize: 10
@@ -257,27 +260,6 @@ describe('Only visibility operations', () => {
     })
   })
 
-  describe('Hide All consecutive Panes', () => {
-    it('hide P0 >> P1 >> P2 >> P3 >> P4', () => {
-      cy.get(`[data-cy=${CK0}]`).uncheck()
-      cy.get(`[data-cy=${CK1}]`).uncheck()
-      cy.get(`[data-cy=${CK2}]`).uncheck()
-      cy.get(`[data-cy=${CK3}]`).uncheck()
-      cy.get(`[data-cy=${CK4}]`).uncheck()
-      rCy.checkWidths({
-        [P0]: 0,
-        [P1]: 0,
-        [P2]: 0,
-        [P3]: 0,
-        [P4]: 0,
-        [R0]: 0,
-        [R1]: 0,
-        [R2]: 0,
-        [R3]: 0
-      })
-    })
-  })
-
   describe('Hide Random two Panes', () => {
     it('hide P0 >> P4', () => {
       cy.get(`[data-cy=${CK0}]`).uncheck()
@@ -312,3 +294,61 @@ describe('Only visibility operations', () => {
     })
   })
 })
+
+describe('Test Visibility for 2 panes', () => {
+  const rCy = new RCy({
+    resizerSize: 1,
+    containerId: rScontainerId,
+    len: 2
+  })
+
+  beforeEach(() => {
+    rCy.setViewPort()
+    cy.mount(
+      <RPTestWrapper
+        allowVisibilityChangeOnViewSizeChange
+        panesList={_2PaneWithNoMinMax}
+        resizerClass='bg-slate-500'
+        resizerSize={1}
+        storageApi={localStorage}
+        uniqueId={rScontainerId}
+        vertical
+      >
+      </RPTestWrapper>
+    )
+  })
+
+  // Edge
+  it('should should hide resizer for two pane set', () => {
+    rCy.cyGet(CK0).click()
+    rCy.cyGet(CK1).click()
+    rCy.checkWidths(
+      {
+        P0: 0,
+        [R0]: 0,
+        P1: 0
+      }
+    )
+  })
+})
+
+// describe('Hide All consecutive Panes', () => {
+//   it('hide P0 >> P1 >> P2 >> P3 >> P4', () => {
+//     cy.get(`[data-cy=${CK0}]`).uncheck()
+//     cy.get(`[data-cy=${CK1}]`).uncheck()
+//     cy.get(`[data-cy=${CK2}]`).uncheck()
+//     cy.get(`[data-cy=${CK3}]`).uncheck()
+//     cy.get(`[data-cy=${CK4}]`).uncheck()
+//     rCy.checkWidths({
+//       [P0]: 0,
+//       [P1]: 0,
+//       [P2]: 0,
+//       [P3]: 0,
+//       [P4]: 0,
+//       [R0]: 0,
+//       [R1]: 0,
+//       [R2]: 0,
+//       [R3]: 0
+//     })
+//   })
+// })

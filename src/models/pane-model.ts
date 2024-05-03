@@ -131,31 +131,25 @@ export class PaneModel {
 
   setSizeAndReturnRemaining (newSize: number) {
     let size
-    if (newSize >= this.minSize && newSize <= this.maxSize) {
-      size = newSize
-    } else if (newSize > this.maxSize) {
+    if (newSize > this.minSize && newSize < this.maxSize) {
+      this.size = newSize
+      return true
+    } else if (newSize >= this.maxSize) {
       size = this.maxSize
     } else {
       size = this.minSize
     }
     this.size = size
     // console.log(newSize, size)
-    return Math.abs(newSize - size)
+    return false
   }
 
   // No visibility check required here, we are only using this method for visible panes
   setVisibilitySize (sizeChange: number, operation: addAndRemoveType) {
     const newSize = this.size + (operation === PLUS ? sizeChange : -sizeChange)
     this.restoreLimits()
-    if (newSize >= this.minSize && newSize <= this.maxSize) {
-      this.size = newSize
-      return ZERO
-    } else if (newSize > this.maxSize) {
-      this.size = this.maxSize
-    } else {
-      this.size = this.minSize
-    }
-    return newSize - this.size
+    const remainingSize = this.setSizeAndReturnRemaining(newSize)
+    return remainingSize
   }
 
   setHiddenResizer (newSize: number, direction: number) {
@@ -220,6 +214,10 @@ export class PaneModel {
   syncAxisSize () {
     this.axisSize = this.size
   }
+
+  // updateDefaultMaxSizeForInfinity (containerSize: number, maxRatioValue: number, sizeToUse: number) {
+  //   const storeSizeCalculated = ratioAndRoundOff(containerSize, maxRatioValue, sizeToUse)
+  // }
 
   restore () {
     this.size = this.defaultSize

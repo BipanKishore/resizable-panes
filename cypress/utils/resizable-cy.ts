@@ -72,7 +72,6 @@ export class RCy {
 
     this.containerYLen = height
     this.containerXLen = this.maxInitialPaneSize + (this.len - 1) * this.resizerSize
-    console.log('containerXLen', this.containerXLen)
     this.viewPortXLen = this.containerXLen + (2 * VIEW_PORT_PADDING)
     this.viewPortYLen = this.containerYLen + (2 * VIEW_PORT_PADDING)
 

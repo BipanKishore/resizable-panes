@@ -41,11 +41,7 @@ export const cjsOutOptionsDevelopment = {
 
 export const cjsOutOptionsProduction = {
   file: `${CJS_BUILD_PATH}${'index.cjs.js'}`,
-  format: 'cjs',
-  sourcemap: true,
-  sourcemapPathTransform: (sourcePath) => {
-    return sourcePath.substring('../'.length)
-  }
+  format: 'cjs'
 }
 
 export const esmOutOptionsDevelopment = {
@@ -59,11 +55,7 @@ export const esmOutOptionsDevelopment = {
 
 export const esmOutOptionsProduction = {
   file: `${ESM_BUILD_PATH}${'index.esm.js'}`,
-  format: 'esm',
-  sourcemap: true,
-  sourcemapPathTransform: (sourcePath) => {
-    return sourcePath.substring('../'.length)
-  }
+  format: 'esm'
 }
 
 export const developmentPlugins = [

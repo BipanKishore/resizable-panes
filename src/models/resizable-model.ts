@@ -5,6 +5,7 @@ import {ResizerModel} from './resizer-model'
 export class ResizableModel {
   isSetRatioMode = false
   newVisibilityModel = false
+  isViewSizeChanged = false
 
   vertical: boolean
 

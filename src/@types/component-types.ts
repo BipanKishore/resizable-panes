@@ -47,6 +47,10 @@ export interface IResizableApi {
 }
 export type onReadyType = (api: IResizableApi) => void
 
+export interface IVisibilityOtherOptions {
+  accepted: boolean
+}
+
 export interface IResizablePaneProviderProps {
   uniqueId: string,
   className?: string,
@@ -58,14 +62,15 @@ export interface IResizablePaneProviderProps {
   onResize?: onResizeType,
   onResizeStop?: onResizeType,
   onReady?: onReadyType,
-  onChangeVisibility?: (map: IKeyToBoolMap) => unknown,
+  onChangeVisibility?: (map: IKeyToBoolMap, param: IVisibilityOtherOptions) => unknown,
   children: ReactNode | ReactNode[],
   storageApi?: any,
   resizer?: ReactNode,
   resizerSize?: number,
   visibility?: IKeyToBoolMap,
   destroyOnHide?: boolean,
-  zipping?: boolean
+  zipping?: boolean,
+  allowVisibilityChangeOnViewSizeChange?: boolean
 }
 
 export interface IPane {

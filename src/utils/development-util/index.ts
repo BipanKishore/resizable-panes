@@ -44,8 +44,12 @@ export const consoleDefaultMinAndDefaultMaxSize = (list: any[]) => {
 }
 
 export const consoleGetSize = (list: any[]) => {
-  const sizes = list.map((i) => i.getSize())
-  console.log('consoleGetSize', sizes)
+  let sum = 0
+  const sizes = list.map((i) => {
+    sum += i.getSize()
+    return i.getSize()
+  })
+  console.log('consoleGetSize', sizes, sum)
 }
 
 export const consoleAttachResizer = (list: any[]) => {
