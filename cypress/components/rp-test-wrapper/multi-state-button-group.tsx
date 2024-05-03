@@ -8,6 +8,7 @@ export const MultiStateButtonGroup = ({stateMap, onClick}: any) => {
         .keys(stateMap)
         .map((id) => (
           <MultiStateButton
+            key={id}
             name={id}
             state={stateMap[id]}
             onClick={onClick}

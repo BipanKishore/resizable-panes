@@ -25,7 +25,7 @@ export const generatePaneModel = (list: PaneModelConfig[]) => {
       <Pane
         className={`${bgClasses[index]} text-align-center`}
         id={`P${index}`}
-        key={index}
+        key={`P${index}`}
         maxSize={maxSize}
         minSize={minSize}
         size={size}

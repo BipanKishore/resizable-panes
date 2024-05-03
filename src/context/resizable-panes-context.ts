@@ -240,10 +240,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     remainingVisiblePanes.splice(requestIndex, 1)
 
     const newMaxPaneSizeAllowd = initialSizeSum - pane.size - addOnSizeChange
-
-    const actionList = remainingVisiblePanes.map((_, i) => i)
-
-    setSizesAfterVisibilityChange(remainingVisiblePanes, actionList, newMaxPaneSizeAllowd)
+    setSizesAfterVisibilityChange(remainingVisiblePanes, newMaxPaneSizeAllowd)
 
     const nowSizeSum = getPanesSizeSum(visiblePanes)
 

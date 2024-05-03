@@ -147,15 +147,8 @@ export class PaneModel {
   setVisibilitySize (sizeChange: number, operation: addAndRemoveType) {
     const newSize = this.size + (operation === PLUS ? sizeChange : -sizeChange)
     this.restoreLimits()
-    if (newSize >= this.minSize && newSize <= this.maxSize) {
-      this.size = newSize
-      return ZERO
-    } else if (newSize > this.maxSize) {
-      this.size = this.maxSize
-    } else {
-      this.size = this.minSize
-    }
-    return newSize - this.size
+    const remainingSize = this.setSizeAndReturnRemaining(newSize)
+    return !remainingSize
   }
 
   setHiddenResizer (newSize: number, direction: number) {

@@ -2,7 +2,10 @@ import {IKeyToBoolMap, IResizableItem} from '../@types'
 import {DIRECTIONS, LEFT, MINUS, PLUS, RIGHT} from '../constant'
 import {ResizableModel, PaneModel} from '../models'
 import {consoleGetSize} from './development-util'
-import {change1PixelToPanes, getItemsByIndexes, getPanesSizeSum, getSizeByIndexes, setUISizesFn} from './panes'
+import {
+  change1PixelToPanes, getItemsByIndexes,
+  getPanesSizeSum, getVisibleItems, setUISizesFn
+} from './panes'
 import {getMaxContainerSizes} from './resizable-pane'
 
 const findNextVisibleResizer = (items : IResizableItem[], start: number) => {
@@ -155,45 +158,45 @@ export const setVisibilityOfResizers = (contextDetails: ResizableModel) => {
 }
 // actionList it can be removed
 export const setSizesAfterVisibilityChange = (
-  panesList: PaneModel[],
-  actionList: number[],
-  maxPaneSize: number
+  allVisiblePanes: PaneModel[],
+  maxPaneSize: number,
+  actionVisibleList: PaneModel[] = allVisiblePanes
 ) => {
-  const currentPanesSize = getPanesSizeSum(panesList)
+  const currentPanesSize = getPanesSizeSum(allVisiblePanes)
   const sizeChange = maxPaneSize - currentPanesSize
 
-  if (sizeChange === 0 || actionList.length === 0) {
+  console.log('setSizesAfterVisibilityChange', maxPaneSize, currentPanesSize, sizeChange)
+  if (sizeChange === 0 || actionVisibleList.length === 0) {
     return
   }
-
-  changeSizeInRatio(panesList, actionList, sizeChange, maxPaneSize)
+  changeSizeInRatio(allVisiblePanes, actionVisibleList, sizeChange, maxPaneSize)
 }
 
-export const changeSizeInRatio = (panesList: PaneModel[], actionList: number[],
+export const changeSizeInRatio = (allVisiblePanes: PaneModel[], actionVisibleList: PaneModel[],
   sizeChange: number, maxPaneSize: number) => {
   const operation = sizeChange > 0 ? PLUS : MINUS
 
   const sizeChangeAbsolute = Math.abs(sizeChange)
 
-  if (sizeChangeAbsolute <= actionList.length) {
-    change1PixelToPanes(panesList, sizeChangeAbsolute, operation)
+  if (sizeChangeAbsolute <= actionVisibleList.length) {
+    change1PixelToPanes(actionVisibleList, sizeChangeAbsolute, operation)
     return
   }
 
-  const ratioSum = getSizeByIndexes(panesList, actionList)
+  const ratioSum = getPanesSizeSum(actionVisibleList)
 
-  const nextActionList: number[] = []
-  actionList.forEach((i) => {
-    const size = panesList[i].getSize()
+  const nextActionVisibleList: PaneModel[] = []
+  actionVisibleList.forEach((pane) => {
+    const size = pane.getSize()
     const newSize = Math.round(sizeChangeAbsolute * (size / ratioSum))
 
-    const remainingSize = panesList[i].setVisibilitySize(newSize, operation)
-    if (remainingSize === 0) {
-      nextActionList.push(i)
+    const remainingSize = pane.setVisibilitySize(newSize, operation)
+    if (remainingSize) {
+      nextActionVisibleList.push(pane)
     }
   })
 
-  setSizesAfterVisibilityChange(panesList, nextActionList, maxPaneSize)
+  setSizesAfterVisibilityChange(allVisiblePanes, maxPaneSize, nextActionVisibleList)
 }
 
 export const setVisibilityFn = (contextDetails: ResizableModel, idMap: IKeyToBoolMap) => {
@@ -201,23 +204,18 @@ export const setVisibilityFn = (contextDetails: ResizableModel, idMap: IKeyToBoo
     panesList, items
   } = contextDetails
 
-  const visiblePanesIndexes: number[] = []
-
-  panesList.forEach((pane, i) => {
+  panesList.forEach((pane) => {
     pane.syncToOldVisibilityModel()
     const {id} = pane
     const visibility = idMap[id]
-    if (visibility) {
-      visiblePanesIndexes.push(i)
-    }
     pane.setVisibility(visibility)
   })
 
   setVisibilityOfResizers(contextDetails)
 
   const {maxPaneSize} = getMaxContainerSizes(contextDetails)
-
-  setSizesAfterVisibilityChange(panesList, visiblePanesIndexes, maxPaneSize)
+  const visiblePanes = getVisibleItems(panesList)
+  setSizesAfterVisibilityChange(visiblePanes, maxPaneSize)
 
   setUISizesFn(items, DIRECTIONS.NONE)
   consoleGetSize(items)

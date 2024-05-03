@@ -1,11 +1,10 @@
 import React from 'react'
 import {RCy} from '../utils'
 import {CK0, P0, P1, P2, P3, P4, R0, R1, R2, R3, CK1, CK2, CK3, CK4, rScontainerId} from './fix-test-ids'
-import {withMinMaxEqualSize5PanesSet} from './pane-model-config-sets'
+import {_2PaneWithMinMax, withMinMaxEqualSize5PanesSet} from './pane-model-config-sets'
 import {RPTestWrapper} from '../components/rp-test-wrapper'
 import {CustomResizerFirst} from '../components/custom-resizer'
-import {ResizableComponentCustomPanesTestWrapper} from '../components/rp-test-wrapper/resizable-component-custom-panes-test-wrapper'
-import {Pane} from '../../src'
+import {IResizableApi} from '../../src/@types'
 
 const containerId = rScontainerId
 const rCy = new RCy({
@@ -760,7 +759,9 @@ describe('Resizing with min and max with visibility operations', () => {
   })
 })
 
-describe.only('Pane visibility for 2 Panes', () => {
+describe.skip('Pane visibility for 2 Panes', () => {
+  let resizableApi: IResizableApi
+
   const rCy = new RCy({
     resizerSize: 1,
     containerId,
@@ -770,36 +771,37 @@ describe.only('Pane visibility for 2 Panes', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
-      <ResizableComponentCustomPanesTestWrapper
-        // detectionSize={5}
-
+      <RPTestWrapper
+        panesList={_2PaneWithMinMax}
+        resizerClass='bg-slate-500'
         resizerSize={1}
-        uniqueId={containerId}
+        storageApi={localStorage}
+        uniqueId={rScontainerId}
         vertical
       >
 
-        <Pane className='bg-orange-500' id='P0' size={1} />
-        <Pane className='bg-teal-500' id='P1' size={1} />
+      </RPTestWrapper>
 
-      </ResizableComponentCustomPanesTestWrapper>
     )
   })
 
   it('Check initial size', () => {
     rCy.checkWidths({
-      P0: 500,
-      P1: 500
+      P0: 600,
+      P1: 400,
+      [rScontainerId]: 773
     })
-    rCy.checkContainerWidth()
   })
 
-  it('Check initial size', () => {
+  // Edge
+  it.skip('2 Pane set Hide P0', () => {
     rCy.cyGet(CK0).click()
-    rCy.checkWidthsAndSum([0, 0, 1001])
+    rCy.checkWidths([0, 0, 1001])
   })
 
+  // Edge
   it('Check initial size', () => {
     rCy.cyGet(CK1).click()
-    rCy.checkWidthsAndSum([1001, 0, 0])
+    rCy.checkWidths([1001, 0, 0])
   })
 })

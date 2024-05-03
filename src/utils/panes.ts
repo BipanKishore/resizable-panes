@@ -42,15 +42,6 @@ export function getSum <T> (list: T[], getNumber: (item:T) => number, start = 0,
   return sum
 }
 
-// may not required
-export const getSizeByIndexes = (panesList: PaneModel[], indexList: number[]) => {
-  let sum = 0
-  indexList.forEach((i) => {
-    sum += panesList[i].getSize()
-  })
-  return sum
-}
-
 export const synPanesMaxToSize = (panesList: PaneModel[], start: number, end: number) =>
   getSum(panesList, (pane) => pane.synMaxToSize(), start, end)
 
