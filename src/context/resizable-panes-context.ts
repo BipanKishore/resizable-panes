@@ -14,7 +14,8 @@ import {
 } from '../utils/panes'
 import {
   calculateAxes, setVirtualOrderList, movingLogic, setCurrentMinMax,
-  toRatioModeFn
+  toRatioModeFn,
+  getIsViewSizeChanged
 } from '../utils/resizable-pane'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
@@ -32,6 +33,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     vertical, children, unit,
     uniqueId, storageApi,
     zipping,
+    allowVisibilityChangeOnViewSizeChange,
     onResizeStop, onChangeVisibility,
     onResize
   } = props
@@ -66,9 +68,12 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     onResizeStop(resizeParams)
   }
 
-  const emitChangeVisibility = () => {
+  const emitChangeVisibility = (accepted = true) => {
     const map = getVisibilityState(panesList)
-    onChangeVisibility(map)
+    if (!accepted) {
+      console.warn('Try chaning the Min and Max Size of Panes or pass allowVisibilityChangeOnViewSizeChange prop')
+    }
+    onChangeVisibility(map, {accepted})
   }
 
   const registerItem = (api: any, id: string) => {
@@ -101,6 +106,10 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   const calculateAndSetHeight = (e: any) => {
+    if (contextDetails.isViewSizeChanged) {
+      return
+    }
+
     const {movement} = e
     if (movement) {
       setDirection(e)
@@ -161,19 +170,28 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     return getSizeStyle(vertical, size as number)
   }
 
+  const reflectVisibilityChange = () => {
+    setUISizesFn(items, DIRECTIONS.NONE)
+    emitResizeStop()
+    emitChangeVisibility()
+    storage.setStorage(contextDetails)
+  }
+
   // It is getting default empty Object param
   const setVisibility = (param: IKeyToBoolMap) => {
-    // it can be removed with change in default props
-    const oldVisibilityMap = createMap(panesList, VISIBILITY)
+    const {
+      newVisibilityModel,
+      isViewSizeChanged
+    } = contextDetails
+
+    const currentVisibilityMap = isViewSizeChanged ? {} : createMap(panesList, VISIBILITY)
+
+    console.log('v-- currentVisibilityMap', currentVisibilityMap, param)
 
     const newMap = {
-      ...oldVisibilityMap,
+      ...currentVisibilityMap,
       ...param
     }
-
-    const {
-      newVisibilityModel
-    } = contextDetails
 
     if (!newVisibilityModel) {
       contextDetails.newVisibilityModel = true
@@ -181,10 +199,21 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     }
 
     setVisibilityFn(contextDetails, newMap)
-    emitResizeStop()
-    emitChangeVisibility()
 
-    storage.setStorage(contextDetails)
+    const isViewSizeChangedLocal = getIsViewSizeChanged(contextDetails)
+
+    contextDetails.isViewSizeChanged = isViewSizeChangedLocal
+
+    if (allowVisibilityChangeOnViewSizeChange) {
+      reflectVisibilityChange()
+    } else {
+      if (isViewSizeChangedLocal) {
+        emitChangeVisibility(false)
+        setVisibility(currentVisibilityMap)
+      } else {
+        reflectVisibilityChange()
+      }
+    }
   }
 
   const onMoveEndFn = () => {

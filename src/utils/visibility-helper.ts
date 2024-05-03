@@ -6,7 +6,7 @@ import {
   change1PixelToPanes, getItemsByIndexes,
   getPanesSizeSum, getVisibleItems, setUISizesFn
 } from './panes'
-import {getMaxContainerSizes} from './resizable-pane'
+import {getIsViewSizeChanged, getMaxContainerSizes} from './resizable-pane'
 
 const findNextVisibleResizer = (items : IResizableItem[], start: number) => {
   for (let i = start; i < items.length; i++) {
@@ -123,6 +123,10 @@ export const setVisibilityOfResizers = (contextDetails: ResizableModel) => {
 
   const firstVisiblePaneIndex = getFirstVisiblePaneIndexAndHideAllBeforeIt(items)
 
+  if (firstVisiblePaneIndex === -1) {
+    setVisibilityOfLeftResizers(items, 0)
+  }
+
   // When we are hiding the resizer attached left to pane
 
   setVisibilityOfLeftResizers(items, firstVisiblePaneIndex)
@@ -217,6 +221,5 @@ export const setVisibilityFn = (contextDetails: ResizableModel, idMap: IKeyToBoo
   const visiblePanes = getVisibleItems(panesList)
   setSizesAfterVisibilityChange(visiblePanes, maxPaneSize)
 
-  setUISizesFn(items, DIRECTIONS.NONE)
   consoleGetSize(items)
 }

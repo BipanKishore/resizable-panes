@@ -3,7 +3,7 @@ import {DIRECTIONS, MINUS, PLUS} from '../constant'
 import {PaneModel, ResizableModel} from '../models'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
-  getPanesSizeSum, getRatioSizeSum, getResizerSum, getVisibleItems, setUISizesFn,
+  getPanesSizeSum, getRatioSizeSum, getResizerSum, getSum, getVisibleItems, setUISizesFn,
   synPanesMaxToSize, synPanesMinToSize
 } from './panes'
 import {findIndex, isItUp, reverse} from './util'
@@ -388,4 +388,13 @@ export const toRatioModeFn = (contextDetails: ResizableModel, isOnResize = false
   change1PixelToPanes(panesList, Math.abs(leftOverTotalSize), changeOperation)
 
   setUISizesFn(items, DIRECTIONS.DOWN)
+}
+
+export const getIsViewSizeChanged = (contextDetails: ResizableModel) => {
+  const {items} = contextDetails
+  const {containerSize} = getMaxContainerSizes(contextDetails)
+  const allItemsSum = getPanesSizeSum(items)
+  console.log('v-- containerSize', containerSize, 'allItemsSum', allItemsSum)
+  const isViewSizeChange = allItemsSum !== containerSize
+  return isViewSizeChange
 }

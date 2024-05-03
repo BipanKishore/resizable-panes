@@ -1,10 +1,9 @@
 import React from 'react'
 import {RCy} from '../utils'
 import {CK0, P0, P1, P2, P3, P4, R0, R1, R2, R3, CK1, CK2, CK3, CK4, rScontainerId} from './fix-test-ids'
-import {_2PaneWithMinMax, withMinMaxEqualSize5PanesSet} from './pane-model-config-sets'
+import {withMinMaxEqualSize5PanesSet} from './pane-model-config-sets'
 import {RPTestWrapper} from '../components/rp-test-wrapper'
 import {CustomResizerFirst} from '../components/custom-resizer'
-import {IResizableApi} from '../../src/@types'
 
 const containerId = rScontainerId
 const rCy = new RCy({
@@ -192,25 +191,6 @@ describe('Resizing with min and max with visibility operations', () => {
       })
     })
 
-    // Resizing after this fails
-    it('Hide P0, P1, P3', () => {
-      cy.get(`[data-cy=${CK0}]`).click()
-      cy.get(`[data-cy=${CK1}]`).click()
-      cy.get(`[data-cy=${CK3}]`).click()
-      rCy.checkWidths({
-        [P0]: 0,
-        [P1]: 0,
-        [P2]: 300,
-        [P3]: 0,
-        [P4]: 300,
-        [R0]: 0,
-        [R1]: 0,
-        [R2]: 0,
-        [R3]: resizerSize
-      })
-      rCy.checkContainerWidth()
-    })
-
     it('Hide P0, P1, P4', () => {
       cy.get(`[data-cy=${CK0}]`).click()
       cy.get(`[data-cy=${CK1}]`).click()
@@ -265,25 +245,6 @@ describe('Resizing with min and max with visibility operations', () => {
       rCy.checkContainerWidth()
     })
 
-    it('Hide P0, P1, P2, P3', () => {
-      rCy.cyGet(CK0).click()
-      rCy.cyGet(CK1).click()
-      rCy.cyGet(CK2).click()
-      rCy.cyGet(CK3).click()
-      rCy.checkWidths({
-        [P0]: 0,
-        [P1]: 0,
-        [P2]: 0,
-        [P3]: 0,
-        [P4]: 300,
-        [R0]: 0,
-        [R1]: 0,
-        [R2]: 0,
-        [R3]: 0
-      })
-      rCy.checkContainerWidth()
-    })
-
     it('Hide P0, P1, P2, P4', () => {
       rCy.cyGet(CK0).click()
       rCy.cyGet(CK1).click()
@@ -303,25 +264,6 @@ describe('Resizing with min and max with visibility operations', () => {
       rCy.checkContainerWidth()
     })
 
-    it('Hide P0, P1, P3, P4', () => {
-      rCy.cyGet(CK0).click()
-      rCy.cyGet(CK1).click()
-      rCy.cyGet(CK3).click()
-      rCy.cyGet(CK4).click()
-      rCy.checkWidths({
-        [P0]: 0,
-        [P1]: 0,
-        [P2]: 300,
-        [P3]: 0,
-        [P4]: 0,
-        [R0]: 0,
-        [R1]: 0,
-        [R2]: 0,
-        [R3]: 0
-      })
-      rCy.checkContainerWidth()
-    })
-
     it('Hide P0, P2, P3, P4', () => {
       rCy.cyGet(CK0).click()
       rCy.cyGet(CK2).click()
@@ -330,25 +272,6 @@ describe('Resizing with min and max with visibility operations', () => {
       rCy.checkWidths({
         [P0]: 0,
         [P1]: 1040,
-        [P2]: 0,
-        [P3]: 0,
-        [P4]: 0,
-        [R0]: 0,
-        [R1]: 0,
-        [R2]: 0,
-        [R3]: 0
-      })
-      rCy.checkContainerWidth()
-    })
-
-    it('Hide P1, P2, P3, P4', () => {
-      rCy.cyGet(CK1).click()
-      rCy.cyGet(CK2).click()
-      rCy.cyGet(CK3).click()
-      rCy.cyGet(CK4).click()
-      rCy.checkWidths({
-        [P0]: 300,
-        [P1]: 0,
         [P2]: 0,
         [P3]: 0,
         [P4]: 0,
@@ -759,22 +682,18 @@ describe('Resizing with min and max with visibility operations', () => {
   })
 })
 
-describe.skip('Pane visibility for 2 Panes', () => {
-  let resizableApi: IResizableApi
-
-  const rCy = new RCy({
-    resizerSize: 1,
-    containerId,
-    len: 2
-  })
-
+describe('Resizing with min and max with visibility operations & allowVisibilityChangeOnViewSizeChange', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
       <RPTestWrapper
-        panesList={_2PaneWithMinMax}
+        allowVisibilityChangeOnViewSizeChange
+        panesList={withMinMaxEqualSize5PanesSet}
+        resizer={
+          <CustomResizerFirst size={10} />
+        }
         resizerClass='bg-slate-500'
-        resizerSize={1}
+        resizerSize={10}
         storageApi={localStorage}
         uniqueId={rScontainerId}
         vertical
@@ -785,23 +704,79 @@ describe.skip('Pane visibility for 2 Panes', () => {
     )
   })
 
-  it('Check initial size', () => {
+  // Resizing after this fails
+  it('Hide P0, P1, P3', () => {
+    cy.get(`[data-cy=${CK0}]`).click()
+    cy.get(`[data-cy=${CK1}]`).click()
+    cy.get(`[data-cy=${CK3}]`).click()
     rCy.checkWidths({
-      P0: 600,
-      P1: 400,
-      [rScontainerId]: 773
+      [P0]: 0,
+      [P1]: 0,
+      [P2]: 300,
+      [P3]: 0,
+      [P4]: 300,
+      [R0]: 0,
+      [R1]: 0,
+      [R2]: 0,
+      [R3]: resizerSize
     })
+    rCy.checkContainerWidth()
   })
 
-  // Edge
-  it.skip('2 Pane set Hide P0', () => {
+  it('Hide P0, P1, P2, P3', () => {
     rCy.cyGet(CK0).click()
-    rCy.checkWidths([0, 0, 1001])
+    rCy.cyGet(CK1).click()
+    rCy.cyGet(CK2).click()
+    rCy.cyGet(CK3).click()
+    rCy.checkWidths({
+      [P0]: 0,
+      [P1]: 0,
+      [P2]: 0,
+      [P3]: 0,
+      [P4]: 300,
+      [R0]: 0,
+      [R1]: 0,
+      [R2]: 0,
+      [R3]: 0
+    })
+    rCy.checkContainerWidth()
   })
 
-  // Edge
-  it('Check initial size', () => {
+  it('Hide P0, P1, P3, P4', () => {
+    rCy.cyGet(CK0).click()
     rCy.cyGet(CK1).click()
-    rCy.checkWidths([1001, 0, 0])
+    rCy.cyGet(CK3).click()
+    rCy.cyGet(CK4).click()
+    rCy.checkWidths({
+      [P0]: 0,
+      [P1]: 0,
+      [P2]: 300,
+      [P3]: 0,
+      [P4]: 0,
+      [R0]: 0,
+      [R1]: 0,
+      [R2]: 0,
+      [R3]: 0
+    })
+    rCy.checkContainerWidth()
+  })
+
+  it('Hide P1, P2, P3, P4', () => {
+    rCy.cyGet(CK1).click()
+    rCy.cyGet(CK2).click()
+    rCy.cyGet(CK3).click()
+    rCy.cyGet(CK4).click()
+    rCy.checkWidths({
+      [P0]: 300,
+      [P1]: 0,
+      [P2]: 0,
+      [P3]: 0,
+      [P4]: 0,
+      [R0]: 0,
+      [R1]: 0,
+      [R2]: 0,
+      [R3]: 0
+    })
+    rCy.checkContainerWidth()
   })
 })

@@ -2,7 +2,7 @@ import React, {useRef, useState} from 'react'
 
 import '../../styles/style.css'
 import {ResizablePanes} from '../../../src'
-import {addDefaultProps} from '../../../src/utils/util'
+import {addDefaultProps, noop} from '../../../src/utils/util'
 import {testResizablePanesId} from './constant'
 import {generatePaneModel} from './util'
 import {MultiStateButtonGroup} from './multi-state-button-group'
@@ -16,7 +16,7 @@ export const RPTestWrapper = (props: any) => {
     uniqueId: testResizablePanesId
   })
 
-  const {panesList, initalVisibility} = currentProps
+  const {panesList, initalVisibility, onChangeVisibility = noop} = currentProps
 
   const [formValues, setFormValues] = useState<any>({
     paneId: '',
@@ -109,7 +109,10 @@ export const RPTestWrapper = (props: any) => {
             }}
             {...currentProps}
             resizerClass='bg-slate-500'
-            onChangeVisibility={setPaneVisibilityState}
+            onChangeVisibility={(...e) => {
+              onChangeVisibility(...e)
+              setPaneVisibilityState(e[0])
+            }}
           >
             {paneComponentLists}
           </ResizablePanes>
