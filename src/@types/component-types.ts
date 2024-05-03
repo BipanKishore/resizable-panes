@@ -62,15 +62,14 @@ export interface IResizablePaneProviderProps {
   onResize?: onResizeType,
   onResizeStop?: onResizeType,
   onReady?: onReadyType,
-  onChangeVisibility?: (map: IKeyToBoolMap, param: IVisibilityOtherOptions) => unknown,
+  onChangeVisibility?: (map: IKeyToBoolMap) => void,
   children: ReactNode | ReactNode[],
   storageApi?: any,
   resizer?: ReactNode,
   resizerSize?: number,
   visibility?: IKeyToBoolMap,
   destroyOnHide?: boolean,
-  zipping?: boolean,
-  unSafeVisibilityMode?: boolean
+  zipping?: boolean
 }
 
 export interface IPane {

@@ -33,7 +33,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     vertical, children, unit,
     uniqueId, storageApi,
     zipping,
-    unSafeVisibilityMode,
     onResizeStop, onChangeVisibility,
     onResize
   } = props
@@ -68,12 +67,9 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     onResizeStop(resizeParams)
   }
 
-  const emitChangeVisibility = (accepted = true) => {
+  const emitChangeVisibility = () => {
     const map = getVisibilityState(panesList)
-    if (!accepted) {
-      console.warn('Try chaning the Min and Max Size of Panes or pass unSafeVisibilityMode prop')
-    }
-    onChangeVisibility(map, {accepted})
+    onChangeVisibility(map)
   }
 
   const registerItem = (api: any, id: string) => {
@@ -204,16 +200,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
     contextDetails.isViewSizeChanged = isViewSizeChangedLocal
 
-    if (unSafeVisibilityMode) {
-      reflectVisibilityChange()
-    } else {
-      if (isViewSizeChangedLocal) {
-        emitChangeVisibility(false)
-        setVisibility(currentVisibilityMap)
-      } else {
-        reflectVisibilityChange()
-      }
-    }
+    reflectVisibilityChange()
   }
 
   const onMoveEndFn = () => {

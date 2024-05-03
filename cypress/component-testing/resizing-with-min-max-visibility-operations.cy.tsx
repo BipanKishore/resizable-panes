@@ -682,12 +682,11 @@ describe('Resizing with min and max with visibility operations', () => {
   })
 })
 
-describe('Resizing with min and max with visibility operations & unSafeVisibilityMode', () => {
+describe('Resizing with min and max with visibility operations written here for unSafeVisibilityMode', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
       <RPTestWrapper
-        unSafeVisibilityMode
         panesList={withMinMaxEqualSize5PanesSet}
         resizer={
           <CustomResizerFirst size={10} />
