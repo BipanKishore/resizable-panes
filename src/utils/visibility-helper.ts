@@ -1,12 +1,12 @@
 import {IKeyToBoolMap, IResizableItem} from '../@types'
-import {DIRECTIONS, LEFT, MINUS, PLUS, RIGHT} from '../constant'
+import {LEFT, MINUS, PLUS, RIGHT} from '../constant'
 import {ResizableModel, PaneModel} from '../models'
 import {consoleGetSize} from './development-util'
 import {
   change1PixelToPanes, getItemsByIndexes,
-  getPanesSizeSum, getVisibleItems, setUISizesFn
+  getPanesSizeSum, getVisibleItems
 } from './panes'
-import {getIsViewSizeChanged, getMaxContainerSizes} from './resizable-pane'
+import {getMaxContainerSizes} from './resizable-pane'
 
 const findNextVisibleResizer = (items : IResizableItem[], start: number) => {
   for (let i = start; i < items.length; i++) {

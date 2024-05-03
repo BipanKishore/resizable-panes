@@ -3,7 +3,7 @@ import {DIRECTIONS, MINUS, PLUS} from '../constant'
 import {PaneModel, ResizableModel} from '../models'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
-  getPanesSizeSum, getRatioSizeSum, getResizerSum, getSum, getVisibleItems, setUISizesFn,
+  getPanesSizeSum, getRatioSizeSum, getResizerSum, getVisibleItems, setUISizesFn,
   synPanesMaxToSize, synPanesMinToSize
 } from './panes'
 import {findIndex, isItUp, reverse} from './util'
