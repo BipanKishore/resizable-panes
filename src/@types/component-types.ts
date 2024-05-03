@@ -70,7 +70,7 @@ export interface IResizablePaneProviderProps {
   visibility?: IKeyToBoolMap,
   destroyOnHide?: boolean,
   zipping?: boolean,
-  allowVisibilityChangeOnViewSizeChange?: boolean
+  unSafeVisibilityMode?: boolean
 }
 
 export interface IPane {
