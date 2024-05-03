@@ -47,7 +47,8 @@ describe('Dom utils', () => {
   describe('should test generateResizerStyle', () => {
     it('should run generateResizerStyle for vertical direction', () => {
       const retValue = {
-        margin: '0 -5px',
+        marginLeft: '-5px',
+        marginRight: '-5px',
         minWidth: '12px',
         borderLeft: '5px solid transparent',
         borderRight: '5px solid transparent'
@@ -59,7 +60,8 @@ describe('Dom utils', () => {
 
     it('should run generateResizerStyle for horizontal direction', () => {
       const retValue = {
-        margin: '-5px 0',
+        marginTop: '-5px',
+        marginBottom: '-5px',
         minHeight: '12px',
         borderTop: '5px solid transparent',
         borderBottom: '5px solid transparent'
