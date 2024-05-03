@@ -176,13 +176,10 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   // It is getting default empty Object param
   const setVisibility = (param: IKeyToBoolMap) => {
     const {
-      newVisibilityModel,
-      isViewSizeChanged
+      newVisibilityModel
     } = contextDetails
 
-    const currentVisibilityMap = isViewSizeChanged ? {} : createMap(panesList, VISIBILITY)
-
-    console.log('v-- currentVisibilityMap', currentVisibilityMap, param)
+    const currentVisibilityMap = createMap(panesList, VISIBILITY)
 
     const newMap = {
       ...currentVisibilityMap,
@@ -195,11 +192,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     }
 
     setVisibilityFn(contextDetails, newMap)
-
-    const isViewSizeChangedLocal = getIsViewSizeChanged(contextDetails)
-
-    contextDetails.isViewSizeChanged = isViewSizeChangedLocal
-
+    contextDetails.isViewSizeChanged = getIsViewSizeChanged(contextDetails)
     reflectVisibilityChange()
   }
 

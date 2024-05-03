@@ -331,6 +331,7 @@ describe('Test Visibility for 2 panes', () => {
   })
 })
 
+// https://github.com/BipanKishore/resizable-panes-react/pull/64
 // describe('Hide All consecutive Panes', () => {
 //   it('hide P0 >> P1 >> P2 >> P3 >> P4', () => {
 //     cy.get(`[data-cy=${CK0}]`).uncheck()
