@@ -1,4 +1,4 @@
-import {ISetSizeBehaviour, IResizableItem} from '../@types'
+import {ISetSizeBehaviour, IResizableItem, addAndRemoveType} from '../@types'
 import {RATIO, LEFT, RIGHT, BUTTOM_FIRST, MINUS, DIRECTIONS, NONE, PLUS, TOP_FIRST} from '../constant'
 import {ResizableModel} from '../models'
 import {consoleIds, consoleGetSize} from './development-util'
@@ -15,21 +15,19 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
   behavior: ISetSizeBehaviour = RATIO, isSecondAttemp = false) => {
   const {panesList, items} = resizable
 
-  if (resizable.setSizeKey === id) {
-    panesList.forEach((pane) => pane.restoreBeforeSetSize())
-  } else {
-    panesList.forEach((pane) => pane.storeForNewSetSizeKey())
-  }
-
-  resizable.setSizeKey = id
-
   const visiblePanes = getVisibleItems(panesList)
   const visibleItems = getVisibleItems(items)
 
   const requestIndex = findIndex(visiblePanes, id)
-
   if (requestIndex === -1 || newSize < 1) {
     return
+  }
+
+  if (resizable.setSizeKey === id) {
+    panesList.forEach((pane) => pane.restoreBeforeSetSize())
+  } else {
+    panesList.forEach((pane) => pane.storeForNewSetSizeKey())
+    resizable.setSizeKey = id
   }
 
   const initialSizeSum = getPanesSizeSum(visiblePanes)
@@ -76,23 +74,20 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     const acceptableNewSize = pane.size
     let sizeChange = pane.size - preSize
     if (sizeChange > 0) { // Need to reduce other
-      const virtualOrderedItems = visibleItems.slice(requestIndexInVisibleItems + 2)
-      const remainingVirtualOrderedItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
+      const firstInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
+      const secondInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
 
-      consoleIds(virtualOrderedItems)
-      consoleIds(remainingVirtualOrderedItems)
+      consoleIds(firstInningItems)
+      consoleIds(secondInningItems)
 
-      virtualOrderedItems.forEach(item => {
+      const getActionOnItem = (operation: addAndRemoveType, direction: number) => (item: IResizableItem) => {
         item.syncAxisSize()
         item.restoreLimits()
-        sizeChange = item.changeSize(sizeChange, MINUS, DIRECTIONS.DOWN)
-      })
+        sizeChange = item.changeSize(sizeChange, operation, direction)
+      }
 
-      remainingVirtualOrderedItems.forEach(item => {
-        item.syncAxisSize()
-        item.restoreLimits()
-        sizeChange = item.changeSize(sizeChange, MINUS, DIRECTIONS.UP)
-      })
+      firstInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.DOWN))
+      secondInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.UP))
 
       const changeInView = getChangeInViewSize(resizable)
 
