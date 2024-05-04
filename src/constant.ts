@@ -13,6 +13,7 @@ export const MINUS_ONE = -1
 // export const APP_NAME = 'react-split-pane'
 
 export const RATIO = 'ratio'
+export const SET_SIZE = 'setSize'
 
 export const RESIZER = 'resizer'
 

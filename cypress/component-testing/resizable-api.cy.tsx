@@ -2,7 +2,7 @@ import React from 'react'
 import {RCy} from '../utils'
 import {withMinMaxEqualSize5PanesSet} from './pane-model-config-sets'
 import {RPTestWrapper} from '../components/rp-test-wrapper'
-import {CK0, CK1, CK4, P0, P1, P2, P3, P4, P5, R0, R1, R2, R3, rScontainerId} from './fix-test-ids'
+import {CK0, CK1, CK4, P0, P1, P2, P3, P4, P5, R0, R1, R2, R3, containerId, rScontainerId} from './fix-test-ids'
 import {CustomResizerFirst} from '../components/custom-resizer'
 import {Pane, ResizablePanes} from '../../src'
 import {IGetState, IResizableApi} from '../../src/@types'
@@ -265,6 +265,63 @@ describe('Custom resizer:API: Method setSize', () => {
     rCy.checkWidths(
       [128, 10, 100, 10, 257, 10, 386, 10, 129]
     )
+  })
+})
+
+describe('Custom resizer:API: Method setSize', () => {
+  const rCy = new RCy({
+    resizerSize: 10,
+    containerId: rScontainerId,
+    len: 5
+  })
+  let resizableApi: IResizableApi
+
+  beforeEach(() => {
+    rCy.setViewPort()
+    cy.mount(
+      <div className='h-300 w-100p'>
+        <ResizablePanes
+          resizer={
+            <CustomResizerFirst horizontal={false} size={10} />
+        }
+          resizerSize={10}
+          storageApi={localStorage}
+          uniqueId={rScontainerId}
+          vertical
+          onReady={(api: IResizableApi) => {
+            resizableApi = api
+          }}
+        >
+
+          <Pane className='bg-cyan-500' id={P0} minSize={0.1} size={1}>
+          </Pane>
+
+          <Pane className='bg-red-500' id={P1} maxSize={5} minSize={1} size={3}>
+          </Pane>
+          <Pane className='bg-cyan-500' id={P2} maxSize={4} minSize={0.5} size={2}>
+          </Pane>
+
+          <Pane className='bg-red-500' id={P3} maxSize={5} minSize={1} size={3}>
+          </Pane>
+          <Pane className='bg-cyan-500' id={P4} minSize={0} size={1} >
+          </Pane>
+
+        </ResizablePanes>
+      </div>
+    )
+    cy.wait(50)
+  })
+
+  // Edge
+  it('Should work for last Hidden Pane', () => {
+    rCy.move(R3, containerId, 'right')
+    cy.wait(50)
+      .then(() => {
+        resizableApi.setSize(P4, 400)
+        rCy.checkWidths(
+          [60, 10, 180, 10, 120, 10, 240, 10, 400]
+        )
+      })
   })
 })
 
