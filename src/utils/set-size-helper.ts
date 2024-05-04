@@ -88,9 +88,6 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     if (sizeChange > 0) { // Need to reduce other
       firstInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.DOWN))
       secondInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.UP))
-      if (isSecondAttemp) {
-        return
-      }
 
       const changeInView = getChangeInViewSize(resizable)
       allowedChange = newSize + changeInView - addOnSizeChange
@@ -101,15 +98,13 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
       firstInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.DOWN))
       secondInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.UP))
 
-      if (isSecondAttemp) {
-        return
-      }
-
       const changeInView = getChangeInViewSize(resizable)
-
       allowedChange = acceptableNewSize + changeInView
     }
-    setSizeMethod(resizable, id, allowedChange, behavior, true)
+
+    if (!isSecondAttemp) {
+      setSizeMethod(resizable, id, allowedChange, behavior, true)
+    }
   } else if (behavior === TOP_FIRST) {
     console.log('TOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRST')
     const preSize = pane.size
@@ -126,51 +121,26 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
       item.restoreLimits()
       sizeChange = item.changeSize(sizeChange, operation, direction)
     }
-
+    let allowedChange: number
     if (sizeChange > 0) { // Need to reduce other
       firstInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.UP))
       secondInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.DOWN))
 
-      if (isSecondAttemp) {
-        return
-      }
-
       const changeInView = getChangeInViewSize(resizable)
-
-      const allowedChange = newSize + changeInView - addOnSizeChange
-      setSizeMethod(resizable, id, allowedChange, behavior, true)
+      allowedChange = newSize + changeInView - addOnSizeChange
     }
 
     if (sizeChange < 0) { // Need to increase other
       sizeChange = Math.abs(sizeChange)
 
-      consoleIds(secondInningItems)
-      consoleIds(firstInningItems)
-
-      firstInningItems.forEach(item => {
-        item.syncAxisSize()
-        item.restoreLimits()
-        sizeChange = item.changeSize(sizeChange, PLUS, DIRECTIONS.UP)
-      })
-
-      secondInningItems.forEach(item => {
-        item.syncAxisSize()
-        item.restoreLimits()
-        sizeChange = item.changeSize(sizeChange, PLUS, DIRECTIONS.DOWN)
-      })
+      firstInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.UP))
+      secondInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.DOWN))
 
       const changeInView = getChangeInViewSize(resizable)
-
-      if (changeInView !== 0) {
-        visibleItems.forEach((item) => item.setPreSize())
-        safeSetVisibility(resizer, true, true)
-
-        if (!isSecondAttemp) {
-          const allowedChange = acceptableNewSize + changeInView
-          console.log('newSize', newSize, 'changeInView', changeInView, addOnSizeChange)
-          setSizeMethod(resizable, id, allowedChange, behavior, true)
-        }
-      }
+      allowedChange = acceptableNewSize + changeInView
+    }
+    if (!isSecondAttemp) {
+      setSizeMethod(resizable, id, allowedChange, behavior, true)
     }
   }
 
