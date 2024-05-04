@@ -4,7 +4,8 @@ import {RPTestWrapper} from '../../components/rp-test-wrapper'
 import {mix3PanesSet, noMinMax5PanesSet, withMinMaxWithMinMaxUnitPixel5PanesSet} from '../pane-model-config-sets'
 import {CK0, R0, R1, rScontainerId} from '../fix-test-ids'
 import {CustomResizerFirst} from '../../components/custom-resizer'
-import {ResizableComponentCustomPanesTestWrapper} from '../../components/rp-test-wrapper/resizable-component-custom-panes-test-wrapper'
+import {ResizableComponentCustomPanesTestWrapper}
+  from '../../components/rp-test-wrapper/resizable-component-custom-panes-test-wrapper'
 import {Pane} from '../../../src'
 import {Loading} from '../../components/Loading'
 
