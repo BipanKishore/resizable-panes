@@ -97,24 +97,21 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
       setSizeMethod(resizable, id, allowedChange, behavior, true)
     }
     if (sizeChange < 0) { // Need to increase other
-      const virtualOrderedItems = visibleItems.slice(requestIndexInVisibleItems + 2)
-      const remainingVirtualOrderedItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
+      const firstInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
+      const secondInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
       sizeChange = Math.abs(sizeChange)
 
-      consoleIds(virtualOrderedItems)
-      consoleIds(remainingVirtualOrderedItems)
+      consoleIds(firstInningItems)
+      consoleIds(secondInningItems)
 
-      virtualOrderedItems.forEach(item => {
+      const getActionOnItem = (operation: addAndRemoveType, direction: number) => (item: IResizableItem) => {
         item.syncAxisSize()
         item.restoreLimits()
-        sizeChange = item.changeSize(sizeChange, PLUS, DIRECTIONS.DOWN)
-      })
+        sizeChange = item.changeSize(sizeChange, operation, direction)
+      }
 
-      remainingVirtualOrderedItems.forEach(item => {
-        item.syncAxisSize()
-        item.restoreLimits()
-        sizeChange = item.changeSize(sizeChange, PLUS, DIRECTIONS.UP)
-      })
+      firstInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.DOWN))
+      secondInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.UP))
 
       const changeInView = getChangeInViewSize(resizable)
 
