@@ -225,8 +225,11 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   const getState = () => createMap(panesList, SIZE, VISIBILITY, MIN_SIZE, MAX_SIZE)
   const getVisibilitiesMap = () => getVisibilityState(panesList)
 
-  const setSize = (id: string, newSize: number, behavior: ISetSizeBehaviour = RATIO) => {
+  const setSize = (id: string, newSize: number, behavior?: ISetSizeBehaviour) => {
     setSizeMethod(resizable, id, newSize, behavior)
+
+    // setUISizesFn(items, DIRECTIONS.NONE)
+    // consoleGetSize(items)
     emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
     clearflagsOnNewView(SET_SIZE)
   }

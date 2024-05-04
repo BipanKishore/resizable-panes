@@ -1,10 +1,10 @@
 import {ISetSizeBehaviour, IResizableItem} from '../@types'
-import {RATIO, LEFT, RIGHT, BUTTOM_FIRST, MINUS, DIRECTIONS, NONE, SET_SIZE, PLUS, TOP_FIRST} from '../constant'
+import {RATIO, LEFT, RIGHT, BUTTOM_FIRST, MINUS, DIRECTIONS, NONE, PLUS, TOP_FIRST} from '../constant'
 import {ResizableModel} from '../models'
 import {consoleIds, consoleGetSize} from './development-util'
 import {
   getVisibleItems, getPanesSizeSum, setUISizesFn,
-  emitIfChangeInPartialHiddenState, safeSetVisibility
+  safeSetVisibility
 } from './panes'
 import {getChangeInViewSize} from './resizable-pane'
 import {findIndex} from './util'
@@ -55,6 +55,7 @@ export const setSizeMethod = (resizable: ResizableModel,
 
   pane.restoreLimits()
   if (behavior === RATIO) {
+    console.log('RATIORATIORATIORATIORATIORATIORATIORATIORATIORATIORATIORATIO')
     pane.setSizeNIsLimitReached(newSize)
 
     const remainingVisiblePanes = [...visiblePanes]
@@ -62,7 +63,23 @@ export const setSizeMethod = (resizable: ResizableModel,
 
     const newMaxPaneSizeAllowd = initialSizeSum - pane.size - addOnSizeChange
     setSizesAfterVisibilityChange(remainingVisiblePanes, newMaxPaneSizeAllowd)
+
+    const nowSizeSum = getPanesSizeSum(visiblePanes)
+
+    if (initialSizeSum === nowSizeSum + addOnSizeChange) {
+      pane.hiddenResizer = NONE
+      setUISizesFn(items, DIRECTIONS.NONE)
+      consoleGetSize(items)
+    } else {
+      visibleItems.forEach((item) => item.setPreSize())
+      safeSetVisibility(resizer, true, true)
+      if (!isSecondAttemp) {
+        const allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
+        setSizeMethod(resizable, id, allowedChange, behavior)
+      }
+    }
   } else if (behavior === BUTTOM_FIRST) {
+    console.log('BUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRST')
     const preSize = pane.size
     pane.changeSizeAndReturnRemaing(newSize)
     const acceptableNewSize = pane.size
@@ -135,8 +152,8 @@ export const setSizeMethod = (resizable: ResizableModel,
 
     setUISizesFn(items, DIRECTIONS.NONE)
     consoleGetSize(items)
-    return
   } else if (behavior === TOP_FIRST) {
+    console.log('TOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRST')
     const preSize = pane.size
     pane.changeSizeAndReturnRemaing(newSize)
     const acceptableNewSize = pane.size
@@ -211,21 +228,5 @@ export const setSizeMethod = (resizable: ResizableModel,
 
     setUISizesFn(items, DIRECTIONS.NONE)
     consoleGetSize(items)
-    return
-  }
-
-  const nowSizeSum = getPanesSizeSum(visiblePanes)
-
-  if (initialSizeSum === nowSizeSum + addOnSizeChange) {
-    pane.hiddenResizer = NONE
-    setUISizesFn(items, DIRECTIONS.NONE)
-    consoleGetSize(items)
-  } else {
-    visibleItems.forEach((item) => item.setPreSize())
-    safeSetVisibility(resizer, true, true)
-    if (!isSecondAttemp) {
-      const allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
-      setSizeMethod(resizable, id, allowedChange, behavior)
-    }
   }
 }

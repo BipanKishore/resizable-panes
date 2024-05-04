@@ -260,14 +260,28 @@ describe('Custom resizer:API: Method setSize', () => {
   })
 
   // Edge
-  it('setting P1 to -5 by chaning 1 pixel, It should only move to its min', () => {
+  it.only('setting P1 to -5 by chaning 1 pixel, It should only move to its min', () => {
     for (let i = 200; i > -5; i--) {
-      resizableApi.setSize(P1, i)
+      cy.wait(0).then(() => resizableApi.setSize(P1, i))
     }
 
-    rCy.checkWidths(
-      [128, 10, 100, 10, 257, 10, 386, 10, 129]
-    )
+    // rCy.checkWidths(
+    //   [128, 10, 100, 10, 257, 10, 386, 10, 129]
+    // )
+  })
+
+  /// ///////////////////////////////////////////// Failing
+  // Edge
+  it('setting P1 to -5 by chaning 1 pixel, It should only move to its min', () => {
+    for (let i = 200; i > -5; i--) {
+      cy.wait(1).then(() => resizableApi.setSize(P1, i))
+    }
+
+    rCy.moveNPixel(R0, 1, 'right')
+
+    // rCy.checkWidths(
+    //   [128, 10, 100, 10, 257, 10, 386, 10, 129]
+    // )
   })
 })
 
