@@ -48,7 +48,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     resizer.setVisibility(true, false)
     addOnSizeChange = resizer.resizerSize
   }
-
+  let allowedChange: number
   pane.restoreLimits()
   if (behavior === RATIO) {
     console.log('RATIORATIORATIORATIORATIORATIORATIORATIORATIORATIORATIORATIO')
@@ -59,14 +59,8 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
 
     const newMaxPaneSizeAllowd = initialSizeSum - pane.size - addOnSizeChange
     setSizesAfterVisibilityChange(remainingVisiblePanes, newMaxPaneSizeAllowd)
-
-    if (isSecondAttemp) {
-      return
-    }
-
     const nowSizeSum = getPanesSizeSum(visiblePanes)
-    const allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
-    setSizeMethod(resizable, id, allowedChange, behavior, true)
+    allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
   } else if (behavior === BUTTOM_FIRST) {
     console.log('BUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRST')
     const preSize = pane.size
@@ -84,7 +78,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
       item.restoreLimits()
       sizeChange = item.changeSize(sizeChange, operation, direction)
     }
-    let allowedChange: number
+
     if (sizeChange > 0) { // Need to reduce other
       firstInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.DOWN))
       secondInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.UP))
@@ -100,10 +94,6 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
 
       const changeInView = getChangeInViewSize(resizable)
       allowedChange = acceptableNewSize + changeInView
-    }
-
-    if (!isSecondAttemp) {
-      setSizeMethod(resizable, id, allowedChange, behavior, true)
     }
   } else if (behavior === TOP_FIRST) {
     console.log('TOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRST')
@@ -121,7 +111,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
       item.restoreLimits()
       sizeChange = item.changeSize(sizeChange, operation, direction)
     }
-    let allowedChange: number
+
     if (sizeChange > 0) { // Need to reduce other
       firstInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.UP))
       secondInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.DOWN))
@@ -139,9 +129,10 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
       const changeInView = getChangeInViewSize(resizable)
       allowedChange = acceptableNewSize + changeInView
     }
-    if (!isSecondAttemp) {
-      setSizeMethod(resizable, id, allowedChange, behavior, true)
-    }
+  }
+
+  if (!isSecondAttemp) {
+    setSizeMethod(resizable, id, allowedChange, behavior, true)
   }
 
   pane.hiddenResizer = NONE
