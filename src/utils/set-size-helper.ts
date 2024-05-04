@@ -73,10 +73,10 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     pane.changeSizeAndReturnRemaing(newSize)
     const acceptableNewSize = pane.size
     let sizeChange = pane.size - preSize
-    if (sizeChange > 0) { // Need to reduce other
-      const firstInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
-      const secondInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
 
+    const firstInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
+    const secondInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
+    if (sizeChange > 0) { // Need to reduce other
       consoleIds(firstInningItems)
       consoleIds(secondInningItems)
 
@@ -97,8 +97,6 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
       setSizeMethod(resizable, id, allowedChange, behavior, true)
     }
     if (sizeChange < 0) { // Need to increase other
-      const firstInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
-      const secondInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
       sizeChange = Math.abs(sizeChange)
 
       consoleIds(firstInningItems)
