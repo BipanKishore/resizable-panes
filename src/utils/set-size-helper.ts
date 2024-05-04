@@ -53,6 +53,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
   pane.restoreLimits()
   const preSize = pane.size
   pane.changeSizeAndReturnRemaing(newSize)
+  const acceptableNewSize = pane.size
 
   const getActionOnItem = (operation: addAndRemoveType, direction: number) => (item: IResizableItem) => {
     item.syncAxisSize()
@@ -68,18 +69,14 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
 
     const newMaxPaneSizeAllowd = initialSizeSum - pane.size - addOnSizeChange
     setSizesAfterVisibilityChange(remainingVisiblePanes, newMaxPaneSizeAllowd)
+
     const nowSizeSum = getPanesSizeSum(visiblePanes)
     allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
   } else if (behavior === BUTTOM_FIRST) {
-    console.log('BUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRST')
-
-    const acceptableNewSize = pane.size
     sizeChange = pane.size - preSize
 
     const firstInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
     const secondInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
-    consoleIds(firstInningItems)
-    consoleIds(secondInningItems)
 
     if (sizeChange > 0) { // Need to reduce other
       firstInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.DOWN))
@@ -98,14 +95,9 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
       allowedChange = acceptableNewSize + changeInView
     }
   } else if (behavior === TOP_FIRST) {
-    console.log('TOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRST')
-
-    const acceptableNewSize = pane.size
     sizeChange = acceptableNewSize - preSize
     const secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
     const firstInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
-    consoleIds(secondInningItems)
-    consoleIds(firstInningItems)
 
     if (sizeChange > 0) { // Need to reduce other
       firstInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.UP))
