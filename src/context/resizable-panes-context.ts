@@ -3,14 +3,16 @@ import {createMap, findById, findIndex} from '../utils/util'
 import {
   DIRECTIONS, LEFT, MAX_SIZE, MIN_SIZE,
   NONE,
-  RATIO, RIGHT, SIZE, VISIBILITY
+  RATIO, RIGHT, SET_SIZE, SIZE, VISIBILITY
 } from '../constant'
 import {
   createPaneModelListAndResizerModelList,
-  getPanesAndResizers, getVisibilityState, emitIfChangeInPartialHiddenState, restoreDefaultFn, setDownMaxLimits,
+  getPanesAndResizers, getVisibilityState,
+  emitIfChangeInPartialHiddenState, restoreDefaultFn, setDownMaxLimits,
   setUISizesFn, setUpMaxLimits, syncAxisSizesFn,
   getVisibleItems,
-  getPanesSizeSum
+  getPanesSizeSum,
+  safeSetVisibility
 } from '../utils/panes'
 import {
   calculateAxes, setVirtualOrderList, movingLogic, setCurrentMinMax,
@@ -20,6 +22,7 @@ import {
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
 import {
+  IClearFlagsParam,
   IKeyToBoolMap, IResizableContext
   , IResizableEvent, IResizableItem, IResizablePaneProviderProps
 } from '../@types'
@@ -33,7 +36,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     vertical, children, unit,
     uniqueId, storageApi,
     zipping,
-    onResizeStop, onChangeVisibility,
+    onResizeStop,
+    onChangeVisibility,
     onResize
   } = props
 
@@ -77,12 +81,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       .register(api)
   }
 
-  // const clearflagsOnNewView = (except: 'setSizeKey') => {
-  //   resizable.newVisibilityModel = false
-  //   panesList.forEach((item) => item.syncRatioSizeToSize())
-  //   resizable.setSizeKey = null
-  // }
-
   const registerContainer = (getContainerRect: any) => {
     resizable.getContainerRect = getContainerRect
     let visibilityMap = props.visibility
@@ -107,6 +105,18 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     syncAxisSizes()
   }
 
+  const clearflagsOnNewView = (except: IClearFlagsParam = '') => {
+    if (except !== RATIO) {
+      panesList.forEach((item) => item.syncRatioSizeToSize())
+    }
+    if (except !== VISIBILITY) {
+      resizable.newVisibilityModel = false
+    }
+    if (except !== SET_SIZE) {
+      resizable.setSizeKey = null
+    }
+  }
+
   const calculateAndSetHeight = (e: IResizableEvent) => {
     const {movement} = e
     if (resizable.isViewSizeChanged || !movement) {
@@ -120,8 +130,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       movingLogic(e, resizable)
     }
     setUISizesFn(items, resizable.direction)
-    resizable.newVisibilityModel = false
-    panesList.forEach((item) => item.syncRatioSizeToSize())
+    clearflagsOnNewView()
     emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
   }
 
@@ -175,6 +184,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     emitResizeStop()
     emitChangeVisibility()
     storage.setStorage(resizable)
+    clearflagsOnNewView(VISIBILITY)
   }
 
   // It is getting default empty Object param
@@ -208,8 +218,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   const restoreDefault = () => {
-    restoreDefaultFn(resizable)
-    resizable.newVisibilityModel = false
+    restoreDefaultFn(resizable.items)
+    clearflagsOnNewView()
     emitResizeStop()
     emitChangeVisibility()
   }
@@ -248,10 +258,11 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     // setting hiddenResizer state to NONE in final State
     if (pane.hiddenResizer === LEFT) {
       resizer = visibleItems[requestIndexInItems - 1]
-      resizer.setVisibility(true, false)
-      addOnSizeChange = resizer.resizerSize
     } else if (pane.hiddenResizer === RIGHT) {
       resizer = visibleItems[requestIndexInItems + 1]
+    }
+
+    if (resizer) {
       resizer.setVisibility(true, false)
       addOnSizeChange = resizer.resizerSize
     }
@@ -273,10 +284,11 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       resizable.newVisibilityModel = false
       panesList.forEach((item) => item.syncRatioSizeToSize())
       emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
+      clearflagsOnNewView(SET_SIZE)
       consoleGetSize(items)
     } else {
       visibleItems.forEach((item) => item.setPreSize())
-      resizer?.setVisibility(true, true)
+      safeSetVisibility(resizer, true, true)
       if (!isSecondAttemp) {
         const allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
         setSize(id, allowedChange, true)

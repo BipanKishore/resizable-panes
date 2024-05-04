@@ -65,7 +65,7 @@ export const getMinSizeSum = (panesList: PaneModel[], start: number, end: number
   getSum(panesList, (pane) => pane.minSize, start, end)
 
 // Need to check for hidden element
-export const restoreDefaultFn = ({items}: any) => {
+export const restoreDefaultFn = (items: IResizableItem[]) => {
   items.forEach(pane => pane.restore())
   setUISizesFn(items, DIRECTIONS.NONE)
 }
@@ -89,6 +89,12 @@ export const setUpMaxLimits = (panesList: PaneModel[], index: number) => {
 
   for (let i = index + 1; i < panesList.length; i++) {
     panesList[i].synSizeToMaxSize()
+  }
+}
+
+export const safeSetVisibility = (item : IResizableItem, visibility: boolean, isPartiallyHidden: boolean) => {
+  if (item) {
+    item.setVisibility(visibility, isPartiallyHidden)
   }
 }
 
