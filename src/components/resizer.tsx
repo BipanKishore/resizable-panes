@@ -24,10 +24,10 @@ export const Resizer = (props: IResizer) => {
   const context: any = useContext(ResizablePaneContext)
 
   const {
-    getIdToSizeMap, onMoveEndFn, contextDetails,
+    getIdToSizeMap, onMoveEndFn, resizable,
     emitResize
   } = context
-  const {panesList} = contextDetails
+  const {panesList} = resizable
 
   const {vertical, uniqueId, resizerSize, detectionSize, resizerClass, activeResizerClass} = context.props
 

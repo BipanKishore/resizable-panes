@@ -18,8 +18,8 @@ export class ResizeStorage {
     this.getStorage()
   }
 
-  setStorage (contextDetails: ResizableModel, _containerSize?: number) {
-    const {getContainerRect, panesList, vertical, resizersList} = contextDetails
+  setStorage (resizable: ResizableModel, _containerSize?: number) {
+    const {getContainerRect, panesList, vertical, resizersList} = resizable
     const {uniqueId, storageApi} = this
     const {width, height} = getContainerRect()
 
@@ -96,7 +96,7 @@ export class ResizeStorage {
   //     return
   //   }
 
-  //   const {panesList} = context.contextDetails
+  //   const {panesList} = context.resizable
   //   let isVisibilityChanged = false
 
   //   const visibleIds = children.map((child: any) => child.props.id)
@@ -112,7 +112,7 @@ export class ResizeStorage {
 
   //   if (isVisibilityChanged) {
   //     // toRatioModeFn(panesList, containerSize)
-  //     context.contextDetails.isSetRatioMode = true
+  //     context.resizable.isSetRatioMode = true
   //   }
   // }
 }

@@ -37,18 +37,18 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
 
   const resizableRef : any = useRef(getResizableContext(currentProps))
 
-  const {api, contextDetails} = resizableRef.current
+  const {api, resizable} = resizableRef.current
 
   useEffect(() => {
     const onResize = () => {
       if (unit === RATIO) {
-        toRatioModeFn(contextDetails, true)
+        toRatioModeFn(resizable, true)
       }
     }
     window.addEventListener(RESIZE_HTML_EVENT, onResize)
 
     return () => window.removeEventListener(RESIZE_HTML_EVENT, onResize)
-  }, [unit, contextDetails])
+  }, [unit, resizable])
 
   const ref = useRef(true)
   useEffect(() => {

@@ -118,8 +118,8 @@ export const findConsecutiveAdjacentResizer = (items : IResizableItem[], indexes
   return consecutiveResizers
 }
 
-export const setVisibilityOfResizers = (contextDetails: ResizableModel) => {
-  const {items} = contextDetails
+export const setVisibilityOfResizers = (resizable: ResizableModel) => {
+  const {items} = resizable
 
   const firstVisiblePaneIndex = getFirstVisiblePaneIndexAndHideAllBeforeIt(items)
 
@@ -203,10 +203,10 @@ export const changeSizeInRatio = (allVisiblePanes: PaneModel[], actionVisibleLis
   setSizesAfterVisibilityChange(allVisiblePanes, maxPaneSize, nextActionVisibleList)
 }
 
-export const setVisibilityFn = (contextDetails: ResizableModel, idMap: IKeyToBoolMap) => {
+export const setVisibilityFn = (resizable: ResizableModel, idMap: IKeyToBoolMap) => {
   const {
     panesList, items
-  } = contextDetails
+  } = resizable
 
   panesList.forEach((pane) => {
     pane.syncToOldVisibilityModel()
@@ -215,9 +215,9 @@ export const setVisibilityFn = (contextDetails: ResizableModel, idMap: IKeyToBoo
     pane.setVisibility(visibility)
   })
 
-  setVisibilityOfResizers(contextDetails)
+  setVisibilityOfResizers(resizable)
 
-  const {maxPaneSize} = getMaxContainerSizes(contextDetails)
+  const {maxPaneSize} = getMaxContainerSizes(resizable)
   const visiblePanes = getVisibleItems(panesList)
   setSizesAfterVisibilityChange(visiblePanes, maxPaneSize)
 
