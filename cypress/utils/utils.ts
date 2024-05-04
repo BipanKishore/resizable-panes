@@ -164,7 +164,7 @@ export const moveItem = (sourceCyId: string, targetCyId: string, isTouch = false
       sourceRect,
       targetRect
     ]: any) => {
-      console.log(sourceRect, targetRect)
+      // console.log(sourceRect, targetRect)
 
       const {x: resizerX, width} = sourceRect
       const widthHalf = width / 2

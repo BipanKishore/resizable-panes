@@ -220,7 +220,6 @@ export class RCy {
       .then(([resizerRect]) => {
         const {x, width} = resizerRect
         const mouseDownX = x + width / 2
-        console.log('moveResizerToStart', mouseDownX, this.containerXStart)
         moveElementLeft(cyResizerId, mouseDownX, this.containerXStart)
       })
   }
