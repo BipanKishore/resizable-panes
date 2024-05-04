@@ -92,7 +92,7 @@ export const setUpMaxLimits = (panesList: PaneModel[], index: number) => {
   }
 }
 
-export const safeSetVisibility = (item : IResizableItem, visibility: boolean, isPartiallyHidden: boolean) => {
+export const safeSetVisibility = (item : IResizableItem, visibility: boolean, isPartiallyHidden?: boolean) => {
   if (item) {
     item.setVisibility(visibility, isPartiallyHidden)
   }
