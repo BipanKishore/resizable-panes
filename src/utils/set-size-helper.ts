@@ -47,10 +47,18 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     resizer.setVisibility(true, false)
     addOnSizeChange = resizer.resizerSize
   }
+
   let allowedChange: number
+  let sizeChange: number
   pane.restoreLimits()
   const preSize = pane.size
   pane.changeSizeAndReturnRemaing(newSize)
+
+  const getActionOnItem = (operation: addAndRemoveType, direction: number) => (item: IResizableItem) => {
+    item.syncAxisSize()
+    item.restoreLimits()
+    sizeChange = item.changeSize(sizeChange, operation, direction)
+  }
 
   if (behavior === RATIO) {
     console.log('RATIORATIORATIORATIORATIORATIORATIORATIORATIORATIORATIORATIO')
@@ -66,18 +74,12 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     console.log('BUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRST')
 
     const acceptableNewSize = pane.size
-    let sizeChange = pane.size - preSize
+    sizeChange = pane.size - preSize
 
     const firstInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
     const secondInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
     consoleIds(firstInningItems)
     consoleIds(secondInningItems)
-
-    const getActionOnItem = (operation: addAndRemoveType, direction: number) => (item: IResizableItem) => {
-      item.syncAxisSize()
-      item.restoreLimits()
-      sizeChange = item.changeSize(sizeChange, operation, direction)
-    }
 
     if (sizeChange > 0) { // Need to reduce other
       firstInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.DOWN))
@@ -99,17 +101,11 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     console.log('TOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRST')
 
     const acceptableNewSize = pane.size
-    let sizeChange = acceptableNewSize - preSize
+    sizeChange = acceptableNewSize - preSize
     const secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
     const firstInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
     consoleIds(secondInningItems)
     consoleIds(firstInningItems)
-
-    const getActionOnItem = (operation: addAndRemoveType, direction: number) => (item: IResizableItem) => {
-      item.syncAxisSize()
-      item.restoreLimits()
-      sizeChange = item.changeSize(sizeChange, operation, direction)
-    }
 
     if (sizeChange > 0) { // Need to reduce other
       firstInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.UP))
