@@ -113,18 +113,14 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
       firstInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.DOWN))
       secondInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.UP))
 
+      if (isSecondAttemp) {
+        return
+      }
+
       const changeInView = getChangeInViewSize(resizable)
 
-      if (changeInView !== 0) {
-        visibleItems.forEach((item) => item.setPreSize())
-        safeSetVisibility(resizer, true, true)
-
-        if (!isSecondAttemp) {
-          const allowedChange = acceptableNewSize + changeInView
-          console.log('newSize', newSize, 'changeInView', changeInView, addOnSizeChange)
-          setSizeMethod(resizable, id, allowedChange, behavior, true)
-        }
-      }
+      const allowedChange = acceptableNewSize + changeInView
+      setSizeMethod(resizable, id, allowedChange, behavior, true)
     }
   } else if (behavior === TOP_FIRST) {
     console.log('TOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRST')
