@@ -21,7 +21,7 @@ import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
 import {
   IKeyToBoolMap, IResizableContext
-  , IResizableItem, IResizablePaneProviderProps
+  , IResizableEvent, IResizableItem, IResizablePaneProviderProps
 } from '../@types'
 import {PaneModel, ResizableModel} from '../models'
 import {consoleGetSize} from '../utils/development-util'
@@ -101,27 +101,25 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     syncAxisSizes()
   }
 
-  const calculateAndSetHeight = (e: any) => {
-    if (contextDetails.isViewSizeChanged) {
+  const calculateAndSetHeight = (e: IResizableEvent) => {
+    const {movement} = e
+    if (contextDetails.isViewSizeChanged || !movement) {
       return
     }
 
-    const {movement} = e
-    if (movement) {
-      setDirection(e)
-      const isChangeRequired = setAxisConfig(e)
+    setDirection(e)
+    const isAxisLimitReached = setAxisConfig(e)
 
-      if (isChangeRequired) {
-        movingLogic(e, contextDetails)
-      }
-      setUISizesFn(items, contextDetails.direction)
-      contextDetails.newVisibilityModel = false
-      panesList.forEach((item) => item.syncRatioSizeToSize())
-      emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
+    if (isAxisLimitReached) {
+      movingLogic(e, contextDetails)
     }
+    setUISizesFn(items, contextDetails.direction)
+    contextDetails.newVisibilityModel = false
+    panesList.forEach((item) => item.syncRatioSizeToSize())
+    emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
   }
 
-  const setDirection = (e: any) => {
+  const setDirection = (e: IResizableEvent) => {
     const {direction} = contextDetails
     const currentDirection = getDirection(e)
 
@@ -131,7 +129,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     }
   }
 
-  const directionChangeActions = (e: any) => {
+  const directionChangeActions = (e: IResizableEvent) => {
     contextDetails.axisCoordinate = e.mouseCoordinate
 
     setVirtualOrderList(contextDetails)
@@ -144,7 +142,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     calculateAxes(contextDetails)
   }
 
-  const setAxisConfig = (e: any) => {
+  const setAxisConfig = (e: IResizableEvent) => {
     const {virtualActiveIndex, virtualOrderList, topAxis, bottomAxis} = contextDetails
 
     if (e.mouseCoordinate <= topAxis) {
@@ -176,13 +174,10 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   // It is getting default empty Object param
   const setVisibility = (param: IKeyToBoolMap) => {
     const {
-      newVisibilityModel,
-      isViewSizeChanged
+      newVisibilityModel
     } = contextDetails
 
-    const currentVisibilityMap = isViewSizeChanged ? {} : createMap(panesList, VISIBILITY)
-
-    console.log('v-- currentVisibilityMap', currentVisibilityMap, param)
+    const currentVisibilityMap = createMap(panesList, VISIBILITY)
 
     const newMap = {
       ...currentVisibilityMap,
@@ -195,11 +190,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     }
 
     setVisibilityFn(contextDetails, newMap)
-
-    const isViewSizeChangedLocal = getIsViewSizeChanged(contextDetails)
-
-    contextDetails.isViewSizeChanged = isViewSizeChangedLocal
-
+    contextDetails.isViewSizeChanged = getIsViewSizeChanged(contextDetails)
     reflectVisibilityChange()
   }
 

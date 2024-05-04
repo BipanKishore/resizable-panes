@@ -704,7 +704,7 @@ describe('Resizing with min and max with visibility operations written here for 
   })
 
   // Resizing after this fails
-  it('Hide P0, P1, P3', () => {
+  it('Hide P0, P1, P3 - should not allow movement when View Size Changed has changed (isViewSizeChanged)', () => {
     cy.get(`[data-cy=${CK0}]`).click()
     cy.get(`[data-cy=${CK1}]`).click()
     cy.get(`[data-cy=${CK3}]`).click()
@@ -720,6 +720,19 @@ describe('Resizing with min and max with visibility operations written here for 
       [R3]: resizerSize
     })
     rCy.checkContainerWidth()
+    rCy.moveNPixel(R3, 100, 'right')
+    rCy.moveNPixel(R3, 100, 'left')
+    rCy.checkWidths({
+      [P0]: 0,
+      [P1]: 0,
+      [P2]: 300,
+      [P3]: 0,
+      [P4]: 300,
+      [R0]: 0,
+      [R1]: 0,
+      [R2]: 0,
+      [R3]: resizerSize
+    })
   })
 
   it('Hide P0, P1, P2, P3', () => {
