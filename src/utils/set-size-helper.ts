@@ -66,9 +66,7 @@ export const setSizeMethod = (resizable: ResizableModel,
 
     const nowSizeSum = getPanesSizeSum(visiblePanes)
 
-    if (initialSizeSum === nowSizeSum + addOnSizeChange) {
-      pane.hiddenResizer = NONE
-    } else {
+    if (initialSizeSum !== nowSizeSum + addOnSizeChange) {
       visibleItems.forEach((item) => item.setPreSize())
       safeSetVisibility(resizer, true, true)
       if (!isSecondAttemp) {
@@ -221,4 +219,6 @@ export const setSizeMethod = (resizable: ResizableModel,
       }
     }
   }
+
+  pane.hiddenResizer = NONE
 }
