@@ -48,12 +48,14 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     addOnSizeChange = resizer.resizerSize
   }
 
-  let allowedChange: number
-  let sizeChange: number
   pane.restoreLimits()
   const preSize = pane.size
   pane.changeSizeAndReturnRemaing(newSize)
+
   const acceptableNewSize = pane.size
+  let allowedChange: number
+  let sizeChange = acceptableNewSize - preSize
+  pane.hiddenResizer = NONE
 
   const getActionOnItem = (operation: addAndRemoveType, direction: number) => (item: IResizableItem) => {
     item.syncAxisSize()
@@ -62,8 +64,6 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
   }
 
   if (behavior === RATIO) {
-    console.log('RATIORATIORATIORATIORATIORATIORATIORATIORATIORATIORATIORATIO')
-
     const remainingVisiblePanes = [...visiblePanes]
     remainingVisiblePanes.splice(requestIndex, 1)
 
@@ -73,8 +73,6 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     const nowSizeSum = getPanesSizeSum(visiblePanes)
     allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
   } else if (behavior === BUTTOM_FIRST) {
-    sizeChange = pane.size - preSize
-
     const firstInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
     const secondInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
 
@@ -95,7 +93,6 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
       allowedChange = acceptableNewSize + changeInView
     }
   } else if (behavior === TOP_FIRST) {
-    sizeChange = acceptableNewSize - preSize
     const secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
     const firstInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
 
@@ -121,6 +118,4 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
   if (!isSecondAttemp) {
     setSizeMethod(resizable, id, allowedChange, behavior, true)
   }
-
-  pane.hiddenResizer = NONE
 }
