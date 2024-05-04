@@ -68,8 +68,6 @@ export const setSizeMethod = (resizable: ResizableModel,
 
     if (initialSizeSum === nowSizeSum + addOnSizeChange) {
       pane.hiddenResizer = NONE
-      setUISizesFn(items, DIRECTIONS.NONE)
-      consoleGetSize(items)
     } else {
       visibleItems.forEach((item) => item.setPreSize())
       safeSetVisibility(resizer, true, true)
@@ -149,9 +147,6 @@ export const setSizeMethod = (resizable: ResizableModel,
         }
       }
     }
-
-    setUISizesFn(items, DIRECTIONS.NONE)
-    consoleGetSize(items)
   } else if (behavior === TOP_FIRST) {
     console.log('TOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRST')
     const preSize = pane.size
@@ -225,8 +220,5 @@ export const setSizeMethod = (resizable: ResizableModel,
         }
       }
     }
-
-    setUISizesFn(items, DIRECTIONS.NONE)
-    consoleGetSize(items)
   }
 }
