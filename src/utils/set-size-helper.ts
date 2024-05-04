@@ -67,8 +67,6 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     }
 
     const nowSizeSum = getPanesSizeSum(visiblePanes)
-    visibleItems.forEach((item) => item.setPreSize())
-    safeSetVisibility(resizer, true, true)
     const allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
     setSizeMethod(resizable, id, allowedChange, behavior, true)
   } else if (behavior === BUTTOM_FIRST) {
