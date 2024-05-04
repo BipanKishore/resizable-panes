@@ -1,10 +1,9 @@
 import {ISetSizeBehaviour, IResizableItem, addAndRemoveType} from '../@types'
 import {RATIO, LEFT, RIGHT, BUTTOM_FIRST, MINUS, DIRECTIONS, NONE, PLUS, TOP_FIRST} from '../constant'
 import {ResizableModel} from '../models'
-import {consoleIds, consoleGetSize} from './development-util'
+import {consoleIds} from './development-util'
 import {
-  getVisibleItems, getPanesSizeSum, setUISizesFn,
-  safeSetVisibility
+  getVisibleItems, getPanesSizeSum
 } from './panes'
 import {getChangeInViewSize} from './resizable-pane'
 import {findIndex} from './util'
@@ -50,9 +49,11 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
   }
   let allowedChange: number
   pane.restoreLimits()
+  const preSize = pane.size
+  pane.changeSizeAndReturnRemaing(newSize)
+
   if (behavior === RATIO) {
     console.log('RATIORATIORATIORATIORATIORATIORATIORATIORATIORATIORATIORATIO')
-    pane.setSizeNIsLimitReached(newSize)
 
     const remainingVisiblePanes = [...visiblePanes]
     remainingVisiblePanes.splice(requestIndex, 1)
@@ -63,8 +64,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
   } else if (behavior === BUTTOM_FIRST) {
     console.log('BUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRST')
-    const preSize = pane.size
-    pane.changeSizeAndReturnRemaing(newSize)
+
     const acceptableNewSize = pane.size
     let sizeChange = pane.size - preSize
 
@@ -97,8 +97,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     }
   } else if (behavior === TOP_FIRST) {
     console.log('TOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRSTTOP_FIRST')
-    const preSize = pane.size
-    pane.changeSizeAndReturnRemaing(newSize)
+
     const acceptableNewSize = pane.size
     let sizeChange = acceptableNewSize - preSize
     const secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
