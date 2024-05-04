@@ -116,43 +116,32 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     pane.changeSizeAndReturnRemaing(newSize)
     const acceptableNewSize = pane.size
     let sizeChange = acceptableNewSize - preSize
+    const secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
+    const firstInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
+    consoleIds(secondInningItems)
+    consoleIds(firstInningItems)
+
+    const getActionOnItem = (operation: addAndRemoveType, direction: number) => (item: IResizableItem) => {
+      item.syncAxisSize()
+      item.restoreLimits()
+      sizeChange = item.changeSize(sizeChange, operation, direction)
+    }
 
     if (sizeChange > 0) { // Need to reduce other
-      const secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
-      const firstInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
+      firstInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.UP))
+      secondInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.DOWN))
 
-      consoleIds(secondInningItems)
-      consoleIds(firstInningItems)
-
-      firstInningItems.forEach(item => {
-        item.syncAxisSize()
-        item.restoreLimits()
-        sizeChange = item.changeSize(sizeChange, MINUS, DIRECTIONS.UP)
-      })
-
-      secondInningItems.forEach(item => {
-        item.syncAxisSize()
-        item.restoreLimits()
-        sizeChange = item.changeSize(sizeChange, MINUS, DIRECTIONS.DOWN)
-      })
+      if (isSecondAttemp) {
+        return
+      }
 
       const changeInView = getChangeInViewSize(resizable)
 
-      if (changeInView !== 0) {
-        visibleItems.forEach((item) => item.setPreSize())
-        safeSetVisibility(resizer, true, true)
-
-        if (!isSecondAttemp) {
-          const allowedChange = newSize + changeInView - addOnSizeChange
-          console.log('newSize', newSize, 'changeInView', changeInView, addOnSizeChange)
-          setSizeMethod(resizable, id, allowedChange, behavior, true)
-        }
-      }
+      const allowedChange = newSize + changeInView - addOnSizeChange
+      setSizeMethod(resizable, id, allowedChange, behavior, true)
     }
 
     if (sizeChange < 0) { // Need to increase other
-      const secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
-      const firstInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
       sizeChange = Math.abs(sizeChange)
 
       consoleIds(secondInningItems)
