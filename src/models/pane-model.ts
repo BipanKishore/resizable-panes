@@ -179,6 +179,16 @@ export class PaneModel {
     }
   }
 
+  changeSizeAndReturnRemaing (newSize: number) {
+    if (newSize >= this.minSize && newSize <= this.maxSize) {
+      this.size = newSize
+    } else if (newSize > this.maxSize) {
+      this.size = this.maxSize
+    } else {
+      this.size = this.minSize
+    }
+  }
+
   changeSize (sizeChange: number, operation: addAndRemoveType, direction: number) {
     const newSize = this.axisSize + (operation === PLUS ? sizeChange : -sizeChange)
 

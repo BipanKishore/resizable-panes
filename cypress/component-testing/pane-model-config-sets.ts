@@ -28,6 +28,14 @@ export const withMinMaxEqualSize5PanesSet = [
   new PaneModelConfig(1, 0.1, 3)
 ]
 
+export const withMinMaxAllPaneEqualSizeExcept15PanesSet = [
+  new PaneModelConfig(1, 0.1, 2),
+  new PaneModelConfig(6, 0.1),
+  new PaneModelConfig(1, 1, 2),
+  new PaneModelConfig(1, 1, 2),
+  new PaneModelConfig(1, 0.1, 2)
+]
+
 export const withMinMaxPixelMode5PanesSet = [
   new PaneModelConfig(100, 50, 300),
   new PaneModelConfig(300, 100, 500),

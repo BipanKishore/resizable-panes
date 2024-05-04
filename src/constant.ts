@@ -15,6 +15,9 @@ export const MINUS_ONE = -1
 export const RATIO = 'ratio'
 export const SET_SIZE = 'setSize'
 
+export const BUTTOM_FIRST = 'buttom_first'
+export const TOP_FIRST = 'top_first'
+
 export const RESIZER = 'resizer'
 
 export const VISIBILITY = 'visibility'

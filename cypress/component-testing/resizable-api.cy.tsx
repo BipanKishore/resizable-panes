@@ -1,12 +1,12 @@
 import React from 'react'
 import {RCy} from '../utils'
-import {withMinMaxEqualSize5PanesSet} from './pane-model-config-sets'
+import {noMinMax5PanesSet, withMinMaxAllPaneEqualSizeExcept15PanesSet, withMinMaxEqualSize5PanesSet} from './pane-model-config-sets'
 import {RPTestWrapper} from '../components/rp-test-wrapper'
 import {CK0, CK1, CK4, P0, P1, P2, P3, P4, P5, R0, R1, R2, R3, containerId, rScontainerId} from './fix-test-ids'
 import {CustomResizerFirst} from '../components/custom-resizer'
 import {Pane, ResizablePanes} from '../../src'
 import {IGetState, IResizableApi} from '../../src/@types'
-import {HIDDEN, VISIBLE} from '../../src/constant'
+import {BUTTOM_FIRST, HIDDEN, VISIBLE} from '../../src/constant'
 
 describe('Storage api', () => {
   const rCy = new RCy({
@@ -488,8 +488,6 @@ describe('PartialHidden:Plain resizer:API: Method setSize', () => {
 })
 
 describe('Storage api', () => {
-  let resizableApi: IResizableApi
-
   const rCy = new RCy({
     resizerSize: 1,
     detectionSize: 5
@@ -518,5 +516,138 @@ describe('Storage api', () => {
     rCy.cyGet(CK4).click()
 
     rCy.move(R2, rScontainerId, 'left')
+  })
+})
+
+describe('Should make partial hidden visible with setSize', () => {
+  let resizableApi: IResizableApi
+
+  const rCy = new RCy({
+    resizerSize: 1,
+    detectionSize: 5
+  })
+  beforeEach(() => {
+    rCy.setViewPort()
+    cy.mount(
+      <RPTestWrapper
+        panesList={noMinMax5PanesSet}
+        resizer={
+          <CustomResizerFirst horizontal={false} size={10} />
+    }
+        resizerClass='bg-slate-500'
+        resizerSize={10}
+        storageApi={localStorage}
+        uniqueId={rScontainerId}
+
+        vertical
+
+        onReady={(api: IResizableApi) => {
+          resizableApi = api
+        }}
+      >
+
+      </RPTestWrapper>
+    )
+  })
+
+  // Edge
+  it('Should make partial hidden visible with setSize test', () => {
+    rCy.move(R0, containerId, 'right')
+    cy.wait(50)
+      .then(() => {
+        resizableApi.setSize(P4, 100)
+        resizableApi.setSize(P3, 100)
+        resizableApi.setSize(P2, 100)
+        resizableApi.setSize(P1, 100)
+        rCy.checkWidths(
+          [626, 10, 100, 10, 89, 10, 79, 10, 70]
+        )
+      })
+  })
+})
+
+describe('setSize should work in bottom_first behaviour', () => {
+  let resizableApi: IResizableApi
+
+  const rCy = new RCy({
+    resizerSize: 1,
+    detectionSize: 5
+  })
+  beforeEach(() => {
+    rCy.setViewPort()
+    cy.mount(
+      <RPTestWrapper
+        panesList={withMinMaxEqualSize5PanesSet}
+        resizer={
+          <CustomResizerFirst horizontal={false} size={10} />
+    }
+        resizerClass='bg-slate-500'
+        resizerSize={10}
+        storageApi={localStorage}
+        uniqueId={rScontainerId}
+
+        vertical
+
+        onReady={(api: IResizableApi) => {
+          resizableApi = api
+        }}
+      >
+
+      </RPTestWrapper>
+    )
+  })
+
+  // Edge
+  it(`
+  -- Increase size using setSize above acceptable size(1000) by the system
+  -- Result it should only get increased to acceptable size(752)
+  `, () => {
+    resizableApi.setSize(P1, 1000, BUTTOM_FIRST)
+    rCy.checkWidths(
+      [10, 10, 752, 10, 96, 10, 96, 10, 10]
+    )
+  })
+})
+
+describe('setSize should work in bottom_first behaviour', () => {
+  let resizableApi: IResizableApi
+
+  const rCy = new RCy({
+    resizerSize: 1,
+    detectionSize: 5
+  })
+  beforeEach(() => {
+    rCy.setViewPort()
+    cy.mount(
+      <RPTestWrapper
+        panesList={withMinMaxAllPaneEqualSizeExcept15PanesSet}
+        resizer={
+          <CustomResizerFirst horizontal={false} size={10} />
+    }
+        resizerClass='bg-slate-500'
+        resizerSize={10}
+        storageApi={localStorage}
+        uniqueId={rScontainerId}
+
+        vertical
+
+        onReady={(api: IResizableApi) => {
+          resizableApi = api
+        }}
+      >
+
+      </RPTestWrapper>
+    )
+  })
+
+  // Edge
+  it.only(`
+  -- Reduce size using setSize bellow acceptable size(100) by the system
+  -- Result it should only get reduced to acceptable size(192)
+  `, () => {
+    resizableApi.setSize(P1, 100, BUTTOM_FIRST)
+    rCy.checkWidths(
+      [193, 10, 192, 10, 193, 10, 193, 10, 193]
+    )
   })
 })
