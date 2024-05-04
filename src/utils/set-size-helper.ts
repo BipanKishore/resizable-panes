@@ -1,5 +1,5 @@
 import {ISetSizeBehaviour, IResizableItem} from '../@types'
-import {RATIO, LEFT, RIGHT, BUTTOM_FIRST, MINUS, DIRECTIONS, NONE, SET_SIZE, PLUS} from '../constant'
+import {RATIO, LEFT, RIGHT, BUTTOM_FIRST, MINUS, DIRECTIONS, NONE, SET_SIZE, PLUS, TOP_FIRST} from '../constant'
 import {ResizableModel} from '../models'
 import {consoleIds, consoleGetSize} from './development-util'
 import {
@@ -117,6 +117,82 @@ export const setSizeMethod = (resizable: ResizableModel,
         item.syncAxisSize()
         item.restoreLimits()
         sizeChange = item.changeSize(sizeChange, PLUS, DIRECTIONS.UP)
+      })
+
+      const changeInView = getChangeInViewSize(resizable)
+
+      if (changeInView !== 0) {
+        visibleItems.forEach((item) => item.setPreSize())
+        safeSetVisibility(resizer, true, true)
+
+        if (!isSecondAttemp) {
+          const allowedChange = acceptableNewSize + changeInView
+          console.log('newSize', newSize, 'changeInView', changeInView, addOnSizeChange)
+          setSizeMethod(resizable, id, allowedChange, behavior, true)
+        }
+      }
+    }
+
+    setUISizesFn(items, DIRECTIONS.NONE)
+    consoleGetSize(items)
+    return
+  } else if (behavior === TOP_FIRST) {
+    const preSize = pane.size
+    pane.changeSizeAndReturnRemaing(newSize)
+    const acceptableNewSize = pane.size
+    let sizeChange = acceptableNewSize - preSize
+
+    if (sizeChange > 0) { // Need to reduce other
+      const secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
+      const firstInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
+
+      consoleIds(secondInningItems)
+      consoleIds(firstInningItems)
+
+      firstInningItems.forEach(item => {
+        item.syncAxisSize()
+        item.restoreLimits()
+        sizeChange = item.changeSize(sizeChange, MINUS, DIRECTIONS.UP)
+      })
+
+      secondInningItems.forEach(item => {
+        item.syncAxisSize()
+        item.restoreLimits()
+        sizeChange = item.changeSize(sizeChange, MINUS, DIRECTIONS.DOWN)
+      })
+
+      const changeInView = getChangeInViewSize(resizable)
+
+      if (changeInView !== 0) {
+        visibleItems.forEach((item) => item.setPreSize())
+        safeSetVisibility(resizer, true, true)
+
+        if (!isSecondAttemp) {
+          const allowedChange = newSize + changeInView - addOnSizeChange
+          console.log('newSize', newSize, 'changeInView', changeInView, addOnSizeChange)
+          setSizeMethod(resizable, id, allowedChange, behavior, true)
+        }
+      }
+    }
+
+    if (sizeChange < 0) { // Need to increase other
+      const secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
+      const firstInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
+      sizeChange = Math.abs(sizeChange)
+
+      consoleIds(secondInningItems)
+      consoleIds(firstInningItems)
+
+      firstInningItems.forEach(item => {
+        item.syncAxisSize()
+        item.restoreLimits()
+        sizeChange = item.changeSize(sizeChange, PLUS, DIRECTIONS.UP)
+      })
+
+      secondInningItems.forEach(item => {
+        item.syncAxisSize()
+        item.restoreLimits()
+        sizeChange = item.changeSize(sizeChange, PLUS, DIRECTIONS.DOWN)
       })
 
       const changeInView = getChangeInViewSize(resizable)

@@ -1,12 +1,15 @@
 import React from 'react'
 import {RCy} from '../utils'
-import {noMinMax5PanesSet, withMinMaxAllPaneEqualSizeExcept15PanesSet, withMinMaxEqualSize5PanesSet} from './pane-model-config-sets'
+import {
+  noMinMax5PanesSet, withMinMaxAllPaneEqualSizeExcept15PanesSet,
+  withMinMaxEqualSize5PanesSet
+} from './pane-model-config-sets'
 import {RPTestWrapper} from '../components/rp-test-wrapper'
 import {CK0, CK1, CK4, P0, P1, P2, P3, P4, P5, R0, R1, R2, R3, containerId, rScontainerId} from './fix-test-ids'
 import {CustomResizerFirst} from '../components/custom-resizer'
 import {Pane, ResizablePanes} from '../../src'
 import {IGetState, IResizableApi} from '../../src/@types'
-import {BUTTOM_FIRST, HIDDEN, VISIBLE} from '../../src/constant'
+import {BUTTOM_FIRST, HIDDEN, TOP_FIRST, VISIBLE} from '../../src/constant'
 
 describe('Storage api', () => {
   const rCy = new RCy({
@@ -597,9 +600,21 @@ describe('setSize should work in bottom_first behaviour', () => {
     )
   })
 
+  it(`
+  -- Increase size using setSize
+  -- BUTTOM_FIRST
+  -- Result it should  it should execute in BUTTOM_FIRST Order
+  `, () => {
+    resizableApi.setSize(P1, 500, BUTTOM_FIRST)
+    rCy.checkWidths(
+      [97, 10, 500, 10, 96, 10, 175, 10, 96]
+    )
+  })
+
   // Edge
   it(`
   -- Increase size using setSize above acceptable size(1000) by the system
+  -- BUTTOM_FIRST
   -- Result it should only get increased to acceptable size(752)
   `, () => {
     resizableApi.setSize(P1, 1000, BUTTOM_FIRST)
@@ -607,9 +622,32 @@ describe('setSize should work in bottom_first behaviour', () => {
       [10, 10, 752, 10, 96, 10, 96, 10, 10]
     )
   })
+
+  // Edge
+  it(`
+    -- Increase size using setSize above acceptable size(1000) by the system
+    -- TOP_FIRST
+    -- Result it should only get increased to acceptable size(752)
+    `, () => {
+    resizableApi.setSize(P1, 1000, TOP_FIRST)
+    rCy.checkWidths(
+      [10, 10, 752, 10, 96, 10, 96, 10, 10]
+    )
+  })
+
+  it(`
+  -- Increase size using setSize
+  -- TOP_FIRST
+  -- Result it should  it should execute in TOP_FIRST Order
+  `, () => {
+    resizableApi.setSize(P1, 500, TOP_FIRST)
+    rCy.checkWidths(
+      [10, 10, 500, 10, 96, 10, 262, 10, 96]
+    )
+  })
 })
 
-describe('setSize should work in bottom_first behaviour', () => {
+describe('setSize should work in TOP_FIRST & BUTTOM_FIRST', () => {
   let resizableApi: IResizableApi
 
   const rCy = new RCy({
@@ -639,15 +677,51 @@ describe('setSize should work in bottom_first behaviour', () => {
       </RPTestWrapper>
     )
   })
+  /// ///////////////////////////////////////////////////////////////////////
+
+  it(`
+  -- decrease size using setSize
+  -- BUTTOM_FIRST
+  -- Result it should  it should execute in BUTTOM_FIRST Order
+  `, () => {
+    resizableApi.setSize(P1, 400, BUTTOM_FIRST)
+    rCy.checkWidths(
+      [97, 10, 400, 10, 193, 10, 178, 10, 96]
+    )
+  })
 
   // Edge
-  it.only(`
-  -- Reduce size using setSize bellow acceptable size(100) by the system
+  it(`
+  -- decrease size using setSize bellow acceptable size(100) by the system
+  -- BUTTOM_FIRST
   -- Result it should only get reduced to acceptable size(192)
   `, () => {
     resizableApi.setSize(P1, 100, BUTTOM_FIRST)
     rCy.checkWidths(
       [193, 10, 192, 10, 193, 10, 193, 10, 193]
+    )
+  })
+
+  // Edge
+  it(`
+    -- decrease size using setSize bellow acceptable size(100) by the system
+    -- TOP_FIRST
+    -- Result it should only get reduced to acceptable size(192)
+    `, () => {
+    resizableApi.setSize(P1, 100, TOP_FIRST)
+    rCy.checkWidths(
+      [193, 10, 192, 10, 193, 10, 193, 10, 193]
+    )
+  })
+
+  it(`
+  -- decrease size using setSize
+  -- TOP_FIRST
+  -- Result it should  it should execute in TOP_FIRST Order
+  `, () => {
+    resizableApi.setSize(P1, 400, TOP_FIRST)
+    rCy.checkWidths(
+      [193, 10, 400, 10, 179, 10, 96, 10, 96]
     )
   })
 })
