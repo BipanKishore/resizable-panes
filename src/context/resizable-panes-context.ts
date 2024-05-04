@@ -77,6 +77,12 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       .register(api)
   }
 
+  // const clearflagsOnNewView = (except: 'setSizeKey') => {
+  //   contextDetails.newVisibilityModel = false
+  //   panesList.forEach((item) => item.syncRatioSizeToSize())
+  //   contextDetails.setSizeKey = null
+  // }
+
   const registerContainer = (getContainerRect: any) => {
     contextDetails.getContainerRect = getContainerRect
     let visibilityMap = props.visibility
@@ -213,6 +219,16 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
 
   // eslint-disable-next-line complexity
   const setSize = (id: string, newSize: number, isSecondAttemp = false) => {
+    if (!contextDetails.setSizeKey) {
+      panesList.forEach((pane) => pane.storeForNewSetSizeKey())
+    }
+
+    if (contextDetails.setSizeKey === id) {
+      panesList.forEach((pane) => pane.restoreBeforeSetSize())
+    }
+
+    contextDetails.setSizeKey = id
+
     const visiblePanes = getVisibleItems(panesList)
     const visibleItems = getVisibleItems(items)
 
@@ -241,7 +257,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     }
 
     pane.restoreLimits()
-    pane.setSizeAndReturnRemaining(newSize)
+    pane.setSizeNIsLimitReached(newSize)
 
     const remainingVisiblePanes = [...visiblePanes]
     remainingVisiblePanes.splice(requestIndex, 1)

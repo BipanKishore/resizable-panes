@@ -20,6 +20,9 @@ export class PaneModel {
   hiddenResizer: IHiddenResizer = NONE
   prevHiddenResizer: IHiddenResizer = NONE
 
+  initialSetSize: number
+  initialSetSizeResizer: IHiddenResizer
+
   resizerSize: number
 
   id: string
@@ -129,7 +132,7 @@ export class PaneModel {
     return this.isRegistered && this.visibility ? this.size : 0
   }
 
-  setSizeAndReturnRemaining (newSize: number) {
+  setSizeNIsLimitReached (newSize: number) {
     let size
     if (newSize > this.minSize && newSize < this.maxSize) {
       this.size = newSize
@@ -140,7 +143,6 @@ export class PaneModel {
       size = this.minSize
     }
     this.size = size
-    // console.log(newSize, size)
     return false
   }
 
@@ -148,7 +150,7 @@ export class PaneModel {
   setVisibilitySize (sizeChange: number, operation: addAndRemoveType) {
     const newSize = this.size + (operation === PLUS ? sizeChange : -sizeChange)
     this.restoreLimits()
-    const remainingSize = this.setSizeAndReturnRemaining(newSize)
+    const remainingSize = this.setSizeNIsLimitReached(newSize)
     return remainingSize
   }
 
@@ -338,6 +340,16 @@ export class PaneModel {
   syncToOldVisibilityModel () {
     this.size = this.oldVisibleSize
     this.visibility = this.oldVisibility
+  }
+
+  storeForNewSetSizeKey () {
+    this.initialSetSize = this.size
+    this.initialSetSizeResizer = this.hiddenResizer
+  }
+
+  restoreBeforeSetSize () {
+    this.size = this.initialSetSize
+    this.hiddenResizer = this.initialSetSizeResizer
   }
 
   syncSizeToRatioSize () {
