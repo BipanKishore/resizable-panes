@@ -11,16 +11,14 @@ import {findIndex} from './util'
 import {setSizesAfterVisibilityChange} from './visibility-helper'
 
 // eslint-disable-next-line complexity
-export const setSizeMethod = (resizable: ResizableModel,
-  id: string, newSize: number, behavior: ISetSizeBehaviour = RATIO, isSecondAttemp = false) => {
+export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: number,
+  behavior: ISetSizeBehaviour = RATIO, isSecondAttemp = false) => {
   const {panesList, items} = resizable
-
-  if (!resizable.setSizeKey) {
-    panesList.forEach((pane) => pane.storeForNewSetSizeKey())
-  }
 
   if (resizable.setSizeKey === id) {
     panesList.forEach((pane) => pane.restoreBeforeSetSize())
+  } else {
+    panesList.forEach((pane) => pane.storeForNewSetSizeKey())
   }
 
   resizable.setSizeKey = id
@@ -64,16 +62,15 @@ export const setSizeMethod = (resizable: ResizableModel,
     const newMaxPaneSizeAllowd = initialSizeSum - pane.size - addOnSizeChange
     setSizesAfterVisibilityChange(remainingVisiblePanes, newMaxPaneSizeAllowd)
 
-    const nowSizeSum = getPanesSizeSum(visiblePanes)
-
-    if (initialSizeSum !== nowSizeSum + addOnSizeChange) {
-      visibleItems.forEach((item) => item.setPreSize())
-      safeSetVisibility(resizer, true, true)
-      if (!isSecondAttemp) {
-        const allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
-        setSizeMethod(resizable, id, allowedChange, behavior)
-      }
+    if (isSecondAttemp) {
+      return
     }
+
+    const nowSizeSum = getPanesSizeSum(visiblePanes)
+    visibleItems.forEach((item) => item.setPreSize())
+    safeSetVisibility(resizer, true, true)
+    const allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
+    setSizeMethod(resizable, id, allowedChange, behavior, true)
   } else if (behavior === BUTTOM_FIRST) {
     console.log('BUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRSTBUTTOM_FIRST')
     const preSize = pane.size
