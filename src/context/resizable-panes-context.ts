@@ -1,21 +1,14 @@
 import {createContext} from 'react'
-import {createMap, findById, findIndex} from '../utils/util'
+import {createMap, findById} from '../utils/util'
 import {
-  BORDER_BOTTOM,
-  BUTTOM_FIRST,
-  DIRECTIONS, LEFT, MAX_SIZE, MINUS, MIN_SIZE,
-  NONE,
-  PLUS,
-  RATIO, RIGHT, SET_SIZE, SIZE, VISIBILITY
+  DIRECTIONS, MAX_SIZE, MIN_SIZE,
+  RATIO, SET_SIZE, SIZE, VISIBILITY
 } from '../constant'
 import {
   createPaneModelListAndResizerModelList,
   getPanesAndResizers, getVisibilityState,
   emitIfChangeInPartialHiddenState, restoreDefaultFn, setDownMaxLimits,
-  setUISizesFn, setUpMaxLimits, syncAxisSizesFn,
-  getVisibleItems,
-  getPanesSizeSum,
-  safeSetVisibility
+  setUISizesFn, setUpMaxLimits, syncAxisSizesFn
 } from '../utils/panes'
 import {
   calculateAxes, setVirtualOrderList, movingLogic, setCurrentMinMax,
@@ -27,12 +20,12 @@ import {ResizeStorage} from '../utils/storage'
 import {
   IClearFlagsParam,
   IKeyToBoolMap, IResizableContext
-  , IResizableEvent, IResizableItem, IResizablePaneProviderProps,
+  , IResizableEvent, IResizablePaneProviderProps,
   ISetSizeBehaviour
 } from '../@types'
 import {PaneModel, ResizableModel} from '../models'
-import {consoleGetSize, consoleIds} from '../utils/development-util'
-import {setSizesAfterVisibilityChange, setVisibilityFn} from '../utils/visibility-helper'
+import {consoleGetSize} from '../utils/development-util'
+import {setVisibilityFn} from '../utils/visibility-helper'
 import {fixPartialHiddenResizer, setResizersLimits} from '../utils/resizer'
 import {setSizeMethod} from '../utils/set-size-helper'
 
