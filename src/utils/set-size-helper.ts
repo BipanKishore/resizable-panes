@@ -52,7 +52,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
   pane.changeSizeAndReturnRemaing(newSize)
 
   const acceptableNewSize = pane.size
-  let allowedChange: number
+  let allowedChange: number // Task it has only two condition, It (can be calc) smaller or greater than container Size
   let sizeChange = acceptableNewSize - preSize
   pane.hiddenResizer = NONE
 
