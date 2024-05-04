@@ -157,7 +157,7 @@ describe('Custom resizer:API: Method setSize', () => {
     containerId: rScontainerId,
     len: 5
   })
-  let resizableApi
+  let resizableApi: IResizableApi
 
   beforeEach(() => {
     rCy.setViewPort()
@@ -243,6 +243,28 @@ describe('Custom resizer:API: Method setSize', () => {
     resizableApi.setSize(P2, 10)
     rCy.checkWidths(
       [119, 10, 356, 10, 50, 10, 356, 10, 119]
+    )
+  })
+
+  // Edge
+  it('setting P1 to 600 by chaning 1 pixel, It should only move to its max', () => {
+    for (let i = 400; i < 600; i++) {
+      resizableApi.setSize(P1, i)
+    }
+
+    rCy.checkWidths(
+      [72, 10, 500, 10, 143, 10, 214, 10, 71]
+    )
+  })
+
+  // Edge
+  it('setting P1 to -5 by chaning 1 pixel, It should only move to its min', () => {
+    for (let i = 200; i > -5; i--) {
+      resizableApi.setSize(P1, i)
+    }
+
+    rCy.checkWidths(
+      [128, 10, 100, 10, 257, 10, 386, 10, 129]
     )
   })
 })

@@ -3,9 +3,11 @@ import {PaneModel} from './pane-model'
 import {ResizerModel} from './resizer-model'
 
 export class ResizableModel {
+  // Need to clear on all operations
   isSetRatioMode = false
   newVisibilityModel = false
   isViewSizeChanged = false
+  setSizeKey: string
 
   vertical: boolean
 
