@@ -4,7 +4,8 @@ import {ResizableModel, PaneModel} from '../models'
 import {consoleGetSize} from './development-util'
 import {
   change1PixelToPanes, getItemsByIndexes,
-  getPanesSizeSum, getVisibleItems
+  getPanesSizeSum, getVisibleItems,
+  safeSetVisibility
 } from './panes'
 import {getMaxContainerSizes} from './resizable-pane'
 
@@ -60,7 +61,7 @@ const setVisibilityOfLeftResizers = (items: IResizableItem[], start: number) => 
   for (let a = start + 2; a < items.length; a += 2) {
     const {visibility} = items[a]
     const inBetweenResizer = items[a - 1]
-    inBetweenResizer?.setVisibility(visibility)
+    safeSetVisibility(inBetweenResizer, visibility)
   }
 }
 
@@ -141,7 +142,7 @@ export const setVisibilityOfResizers = (resizable: ResizableModel) => {
           r = findPrevVisibleResizer(items, i - 1)
           oppoR = findNextVisibleResizer(items, i)
           if (oppoR) {
-            r?.setVisibility(true, true)
+            safeSetVisibility(r, true, true)
           }
           break
 
@@ -150,7 +151,7 @@ export const setVisibilityOfResizers = (resizable: ResizableModel) => {
           oppoR = findPrevVisibleResizer(items, i)
 
           if (oppoR) {
-            r?.setVisibility(true, true)
+            safeSetVisibility(r, true, true)
           }
 
           break
