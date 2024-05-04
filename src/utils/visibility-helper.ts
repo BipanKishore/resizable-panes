@@ -170,7 +170,6 @@ export const setSizesAfterVisibilityChange = (
   const currentPanesSize = getPanesSizeSum(allVisiblePanes)
   const sizeChange = maxPaneSize - currentPanesSize
 
-  console.log('setSizesAfterVisibilityChange', maxPaneSize, currentPanesSize, sizeChange)
   if (sizeChange === 0 || actionVisibleList.length === 0) {
     return
   }
