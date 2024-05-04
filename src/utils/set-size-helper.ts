@@ -1,7 +1,6 @@
 import {ISetSizeBehaviour, IResizableItem, addAndRemoveType} from '../@types'
 import {RATIO, LEFT, RIGHT, BUTTOM_FIRST, MINUS, DIRECTIONS, NONE, PLUS, TOP_FIRST} from '../constant'
 import {ResizableModel} from '../models'
-import {consoleIds} from './development-util'
 import {
   getVisibleItems, getPanesSizeSum
 } from './panes'
