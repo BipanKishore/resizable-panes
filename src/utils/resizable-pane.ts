@@ -394,7 +394,5 @@ export const getIsViewSizeChanged = (contextDetails: ResizableModel) => {
   const {items} = contextDetails
   const {containerSize} = getMaxContainerSizes(contextDetails)
   const allItemsSum = getPanesSizeSum(items)
-  console.log('v-- containerSize', containerSize, 'allItemsSum', allItemsSum)
-  const isViewSizeChange = allItemsSum !== containerSize
-  return isViewSizeChange
+  return allItemsSum !== containerSize
 }

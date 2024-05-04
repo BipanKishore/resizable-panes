@@ -173,7 +173,6 @@ describe('Custom resizer:API: Method setSize', () => {
           vertical
           onReady={(api: IResizableApi) => {
             resizableApi = api
-            console.log(resizableApi)
           }}
         >
 
@@ -288,7 +287,6 @@ describe('Plain resizer:API: Method setSize', () => {
           vertical
           onReady={(api: IResizableApi) => {
             resizableApi = api
-            console.log(resizableApi)
           }}
         >
 
@@ -370,7 +368,6 @@ describe('PartialHidden:Plain resizer:API: Method setSize', () => {
           vertical
           onReady={(api: IResizableApi) => {
             resizableApi = api
-            console.log(resizableApi)
           }}
         >
 

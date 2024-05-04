@@ -279,10 +279,6 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       resizer?.setVisibility(true, true)
       if (!isSecondAttemp) {
         const allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
-        console.log('allowedChange', allowedChange)
-        console.log('nowSizeSum', nowSizeSum)
-        console.log('initialSizeSum', initialSizeSum)
-        console.error('Reeeeetttttrrrrry', newSize, addOnSizeChange)
         setSize(id, allowedChange, true)
       }
     }
