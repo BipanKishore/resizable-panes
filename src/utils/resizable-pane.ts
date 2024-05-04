@@ -126,13 +126,13 @@ export const setCurrentMinMax = (serviceRefCurrent: ResizableModel) => {
   minMaxLogicDown(virtualOrderList, bMaxChangeDown - aMaxChangeDown, virtualActiveIndex, nextIdx, 0, containerSize)
 }
 
-export const calculateAxes = (contextDetails: ResizableModel) => {
-  const {items, virtualActiveIndex} = contextDetails
-  const {maxTopAxis} = getMaxContainerSizes(contextDetails)
+export const calculateAxes = (resizable: ResizableModel) => {
+  const {items, virtualActiveIndex} = resizable
+  const {maxTopAxis} = getMaxContainerSizes(resizable)
   const visibleItemsList = getVisibleItems(items)
 
-  contextDetails.bottomAxis = maxTopAxis + getMaxSizeSum(visibleItemsList, 0, virtualActiveIndex - 1)
-  contextDetails.topAxis = maxTopAxis + getMinSizeSum(visibleItemsList, 0, virtualActiveIndex - 1)
+  resizable.bottomAxis = maxTopAxis + getMaxSizeSum(visibleItemsList, 0, virtualActiveIndex - 1)
+  resizable.topAxis = maxTopAxis + getMinSizeSum(visibleItemsList, 0, virtualActiveIndex - 1)
 }
 
 // aIndex will decrease and bIndex will increase
@@ -367,9 +367,9 @@ export const getMaxContainerSizes = ({getContainerRect, vertical, resizersList} 
   }
 }
 
-export const toRatioModeFn = (contextDetails: ResizableModel, isOnResize = false) => {
-  const {panesList, items} = contextDetails
-  const {maxPaneSize} = getMaxContainerSizes(contextDetails)
+export const toRatioModeFn = (resizable: ResizableModel, isOnResize = false) => {
+  const {panesList, items} = resizable
+  const {maxPaneSize} = getMaxContainerSizes(resizable)
 
   const maxRatioValue = getRatioSizeSum(panesList)
   if (maxRatioValue < 0) {
@@ -390,9 +390,9 @@ export const toRatioModeFn = (contextDetails: ResizableModel, isOnResize = false
   setUISizesFn(items, DIRECTIONS.DOWN)
 }
 
-export const getIsViewSizeChanged = (contextDetails: ResizableModel) => {
-  const {items} = contextDetails
-  const {containerSize} = getMaxContainerSizes(contextDetails)
+export const getIsViewSizeChanged = (resizable: ResizableModel) => {
+  const {items} = resizable
+  const {containerSize} = getMaxContainerSizes(resizable)
   const allItemsSum = getPanesSizeSum(items)
   return allItemsSum !== containerSize
 }
