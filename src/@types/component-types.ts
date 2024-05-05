@@ -87,9 +87,9 @@ export interface IPane {
   minSize?: number;
   resizer?: ReactNode;
   resizerSize?: number;
-  onMinSize?: (minSize:number) => void,
-  onMaxSize?: (maxSize:number) => void,
-  onNormalSize?: () => void
+  onMinSize?: (id: string, minSize:number) => void,
+  onMaxSize?: (id: string, maxSize:number) => void,
+  onNormalSize?: (id: string) => void
 }
 
 export interface IPaneRef {

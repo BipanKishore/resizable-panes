@@ -195,7 +195,7 @@ export class PaneModel {
   // eslint-disable-next-line complexity
   updatSizeState () {
     if (this.visibility) {
-      const {size, props} = this
+      const {size, props, id} = this
       let newSetSize : ISizeState
       if (size === this.defaultMaxSize) {
         newSetSize = MAX_SIZE_STATE
@@ -207,13 +207,13 @@ export class PaneModel {
 
       if (this.sizeState !== newSetSize) {
         if (newSetSize === NORMAL_SIZE_STATE) {
-          props.onNormalSize()
+          props.onNormalSize(id)
         }
         if (newSetSize === MIN_SIZE_STATE) {
-          props.onMinSize(size)
+          props.onMinSize(id, size)
         }
         if (newSetSize === MAX_SIZE_STATE) {
-          props.onMaxSize(size)
+          props.onMaxSize(id, size)
         }
         this.sizeState = newSetSize
       }
