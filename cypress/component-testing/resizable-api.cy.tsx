@@ -5,7 +5,10 @@ import {
   withMinMaxEqualSize5PanesSet
 } from './pane-model-config-sets'
 import {RPTestWrapper} from '../components/rp-test-wrapper'
-import {CK0, CK1, CK4, P0, P1, P2, P3, P4, P5, R0, R1, R2, R3, containerId, rScontainerId} from './fix-test-ids'
+import {
+  CK0, CK1, CK4, P0, P1, P2, P3, P4, R0, R1, R2,
+  R3, containerId, rScontainerId
+} from './fix-test-ids'
 import {CustomResizerFirst} from '../components/custom-resizer'
 import {Pane, ResizablePanes} from '../../src'
 import {IGetState, IResizableApi} from '../../src/@types'
@@ -225,7 +228,7 @@ describe('Custom resizer:API: Method setSize', () => {
     )
   })
 
-  it(`setSize of Pane to Infinity have maxSize = Infinity 
+  it(`setSize of Pane to Infinity have maxSize = Infinity
   should only allow max possible depending on others`, () => {
     resizableApi.setSize(P0, 5000)
 
@@ -644,6 +647,75 @@ describe('setSize should work in bottom_first behaviour', () => {
     resizableApi.setSize(P1, 500, TOP_FIRST)
     rCy.checkWidths(
       [10, 10, 500, 10, 96, 10, 262, 10, 96]
+    )
+  })
+
+  // Edge
+  it(`
+  -- setSize in TOP_FIRST
+  -- setSize in BUTTOM_FIRST with same size
+  -- Result it should change size second time if there is no change in size
+  `, () => {
+    resizableApi.setSize(P2, 300, TOP_FIRST)
+    const currentSize = resizableApi.getSizesMap()
+
+    resizableApi.setSize(P2, 300, BUTTOM_FIRST)
+    rCy.checkWidths(
+      currentSize
+    )
+  })
+
+  // Edge
+  it(`
+    -- setSize in TOP_FIRST
+    -- setSize in TOP_FIRST with same size
+    -- Result it should change size second time
+    `, () => {
+    resizableApi.setSize(P2, 300, TOP_FIRST)
+
+    const currentSize = resizableApi.getSizesMap()
+
+    resizableApi.setSize(P2, 300, TOP_FIRST)
+    rCy.checkWidths(
+      currentSize
+    )
+  })
+
+  // Edge
+  it(`
+    -- decrease x amount using setSize in TOP_FIRST
+    -- increase x amount using setSize in BUTTOM_FIRST
+    -- Result it should behave as it has moved down
+    `, () => {
+    const X = 93
+
+    const p2SizeStep1 = resizableApi.getSizesMap()[P2]
+    resizableApi.setSize(P2, p2SizeStep1 - X, TOP_FIRST)
+
+    const p2SizeStep2 = resizableApi.getSizesMap()[P2]
+    resizableApi.setSize(P2, p2SizeStep2 + X, BUTTOM_FIRST)
+
+    rCy.checkWidths(
+      [97, 10, 382, 10, 193, 10, 196, 10, 96]
+    )
+  })
+
+  // Edge
+  it(`
+    -- decrease x amount using setSize in BUTTOM_FIRST
+    -- increase x amount using setSize in TOP_FIRST
+    -- Result it should behave as it has moved Up
+    `, () => {
+    const X = 93
+
+    const p2SizeStep1 = resizableApi.getSizesMap()[P2]
+    resizableApi.setSize(P2, p2SizeStep1 - X, BUTTOM_FIRST)
+
+    const p2SizeStep2 = resizableApi.getSizesMap()[P2]
+    resizableApi.setSize(P2, p2SizeStep2 + X, TOP_FIRST)
+
+    rCy.checkWidths(
+      [97, 10, 196, 10, 193, 10, 382, 10, 96]
     )
   })
 })

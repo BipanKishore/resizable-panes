@@ -162,7 +162,7 @@ describe('Test Pane Model', () => {
         })
     })
 
-    it.only('destoryOnHide: false at Pane level', () => {
+    it('destoryOnHide: false at Pane level', () => {
       cy.viewport(1000, 1000)
       cy.mount(
         <ResizableComponentCustomPanesTestWrapper
@@ -186,7 +186,7 @@ describe('Test Pane Model', () => {
         })
     })
 
-    it.only('destoryOnHide: true at Pane level', () => {
+    it('destoryOnHide: true at Pane level', () => {
       cy.viewport(1000, 1000)
       cy.mount(
         <ResizableComponentCustomPanesTestWrapper

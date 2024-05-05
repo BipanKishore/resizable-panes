@@ -1,5 +1,8 @@
 import {ISetSizeBehaviour, IResizableItem, addAndRemoveType} from '../@types'
-import {RATIO, LEFT, RIGHT, BUTTOM_FIRST, MINUS, DIRECTIONS, NONE, PLUS, TOP_FIRST} from '../constant'
+import {
+  RATIO, LEFT, RIGHT, BUTTOM_FIRST,
+  MINUS, DIRECTIONS, NONE, PLUS, TOP_FIRST
+} from '../constant'
 import {ResizableModel} from '../models'
 import {
   getVisibleItems, getPanesSizeSum
@@ -21,16 +24,29 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     return
   }
 
-  if (resizable.setSizeKey === id) {
+  const currentSetSizeKey = `${id}-${behavior}`
+  if (resizable.setSizeKey === currentSetSizeKey) {
     panesList.forEach((pane) => pane.restoreBeforeSetSize())
   } else {
     panesList.forEach((pane) => pane.storeForNewSetSizeKey())
-    resizable.setSizeKey = id
+    resizable.setSizeKey = currentSetSizeKey
   }
 
   const initialSizeSum = getPanesSizeSum(visiblePanes)
 
   const pane = visiblePanes[requestIndex]
+  pane.restoreLimits()
+  const preSize = pane.size
+  pane.changeSizeAndReturnRemaing(newSize)
+
+  const acceptableNewSize = pane.size
+  let allowedChange: number // Task it has only two condition, It (can be calc) smaller or greater than container Size
+  let sizeChange = acceptableNewSize - preSize
+
+  if (!sizeChange) {
+    return
+  }
+
   const requestIndexInVisibleItems = findIndex(visibleItems, id)
 
   let addOnSizeChange = 0
@@ -45,16 +61,8 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
   if (resizer) {
     resizer.setVisibility(true, false)
     addOnSizeChange = resizer.resizerSize
+    pane.hiddenResizer = NONE
   }
-
-  pane.restoreLimits()
-  const preSize = pane.size
-  pane.changeSizeAndReturnRemaing(newSize)
-
-  const acceptableNewSize = pane.size
-  let allowedChange: number // Task it has only two condition, It (can be calc) smaller or greater than container Size
-  let sizeChange = acceptableNewSize - preSize
-  pane.hiddenResizer = NONE
 
   const getActionOnItem = (operation: addAndRemoveType, direction: number) => (item: IResizableItem) => {
     item.syncAxisSize()
@@ -92,8 +100,8 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
       allowedChange = acceptableNewSize + changeInView
     }
   } else if (behavior === TOP_FIRST) {
-    const secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
     const firstInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
+    const secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
 
     if (sizeChange > 0) { // Need to reduce other
       firstInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.UP))
