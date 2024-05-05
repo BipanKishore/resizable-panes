@@ -1,5 +1,8 @@
 import React, {useEffect, useRef} from 'react'
-import {ResizablePaneContext, getResizableContext} from '../context/resizable-panes-context'
+import {
+  ResizablePaneContext,
+  getResizableContext
+} from '../context/resizable-panes-context'
 import {ResizablePanes} from './resizable-panes'
 import {deleteUndefined, noop} from '../utils/util'
 import {IResizablePaneProviderProps} from '../@types'
@@ -8,7 +11,9 @@ import {toRatioModeFn} from '../utils/resizable-pane'
 
 const emptyObhect = {}
 
-export const attachDefaultPaneProps = (attachedProps: IResizablePaneProviderProps) => {
+export const attachDefaultPaneProps = (
+  attachedProps: IResizablePaneProviderProps
+) => {
   const propsWithNoUndefined = deleteUndefined({...attachedProps})
   return {
     onResize: noop,
@@ -25,17 +30,19 @@ export const attachDefaultPaneProps = (attachedProps: IResizablePaneProviderProp
     detectionSize: 5,
     visibility: emptyObhect,
     minMaxUnit: RATIO,
-    destroyOnHide: true,
+    unmountOnHide: true,
     zipping: true,
     ...propsWithNoUndefined
   }
 }
 
 export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
-  const currentProps = attachDefaultPaneProps(props) as IResizablePaneProviderProps
+  const currentProps = attachDefaultPaneProps(
+    props
+  ) as IResizablePaneProviderProps
   const {visibility, onReady, unit} = currentProps
 
-  const resizableRef : any = useRef(getResizableContext(currentProps))
+  const resizableRef: any = useRef(getResizableContext(currentProps))
 
   const {api, resizable} = resizableRef.current
 
@@ -58,15 +65,15 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
 
   useEffect(() => {
     if (ref.current === false) {
-      resizableRef.current.setVisibility(visibility)
+      resizableRef.current.api.setVisibilities(visibility)
     } else {
       ref.current = false
     }
   }, [visibility, ref])
 
   return (
-    <ResizablePaneContext.Provider value={resizableRef.current} >
-      <ResizablePanes {...currentProps}/>
+    <ResizablePaneContext.Provider value={resizableRef.current}>
+      <ResizablePanes {...currentProps} />
     </ResizablePaneContext.Provider>
   )
 }

@@ -65,7 +65,7 @@ export const getMinSizeSum = (panesList: PaneModel[], start: number, end: number
   getSum(panesList, (pane) => pane.minSize, start, end)
 
 // Need to check for hidden element
-export const restoreDefaultFn = (items: IResizableItem[]) => {
+export const restoreFn = (items: IResizableItem[]) => {
   items.forEach(pane => pane.restore())
   setUISizesFn(items, DIRECTIONS.NONE)
 }

@@ -52,7 +52,7 @@ export const TestComponentWrapper = (props: any) => {
 
   const onRestore = () => {
     setVisibilityMap(ENUMS.initialVisibility)
-    apiRef.current.restoreDefault()
+    apiRef.current.restore()
   }
 
   return (

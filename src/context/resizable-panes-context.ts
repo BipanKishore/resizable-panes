@@ -1,17 +1,30 @@
 import {createContext} from 'react'
 import {createMap, findById} from '../utils/util'
 import {
-  DIRECTIONS, MAX_SIZE, MIN_SIZE,
-  RATIO, SET_SIZE, SIZE, VISIBILITY
+  DIRECTIONS,
+  MAX_SIZE,
+  MIN_SIZE,
+  RATIO,
+  SET_SIZE,
+  SIZE,
+  VISIBILITY
 } from '../constant'
 import {
   createPaneModelListAndResizerModelList,
-  getPanesAndResizers, getVisibilityState,
-  emitIfChangeInPartialHiddenState, restoreDefaultFn, setDownMaxLimits,
-  setUISizesFn, setUpMaxLimits, syncAxisSizesFn
+  getPanesAndResizers,
+  getVisibilityState,
+  emitIfChangeInPartialHiddenState,
+  restoreFn,
+  setDownMaxLimits,
+  setUISizesFn,
+  setUpMaxLimits,
+  syncAxisSizesFn
 } from '../utils/panes'
 import {
-  calculateAxes, setVirtualOrderList, movingLogic, setCurrentMinMax,
+  calculateAxes,
+  setVirtualOrderList,
+  movingLogic,
+  setCurrentMinMax,
   toRatioModeFn,
   getIsViewSizeChanged
 } from '../utils/resizable-pane'
@@ -19,8 +32,10 @@ import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
 import {
   IClearFlagsParam,
-  IKeyToBoolMap, IResizableContext
-  , IResizableEvent, IResizablePaneProviderProps,
+  IKeyToBoolMap,
+  IResizableContext,
+  IResizableEvent,
+  IResizablePaneProviderProps,
   ISetSizeBehaviour
 } from '../@types'
 import {PaneModel, ResizableModel} from '../models'
@@ -29,10 +44,15 @@ import {setVisibilityFn} from '../utils/visibility-helper'
 import {fixPartialHiddenResizer, setResizersLimits} from '../utils/resizer'
 import {setSizeMethod} from '../utils/set-size-helper'
 
-export const getResizableContext = (props: IResizablePaneProviderProps): IResizableContext => {
+export const getResizableContext = (
+  props: IResizablePaneProviderProps
+): IResizableContext => {
   const {
-    vertical, children, unit,
-    uniqueId, storageApi,
+    vertical,
+    children,
+    unit,
+    uniqueId,
+    storageApi,
     zipping,
     onResizeStop,
     onChangeVisibility,
@@ -44,7 +64,11 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   // reference will never change for these items: storage,
   // panesList, PaneModels, resizersList, ResizerModels
   const storage = new ResizeStorage(uniqueId, storageApi, myChildren)
-  const items = createPaneModelListAndResizerModelList(myChildren, props, storage)
+  const items = createPaneModelListAndResizerModelList(
+    myChildren,
+    props,
+    storage
+  )
   // const resizersList = createResizerModelList(myChildren, props, storage)
   // reference will never change for these items: storage, panesList, resizersList
 
@@ -75,8 +99,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   const registerItem = (api: any, id: string) => {
-    findById(items, id)
-      .register(api)
+    findById(items, id).register(api)
   }
 
   const registerContainer = (getContainerRect: any) => {
@@ -89,7 +112,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
       const {panes} = storage.getStorage()
       visibilityMap = createMap(panes, VISIBILITY)
     }
-    setVisibility(visibilityMap)
+    setVisibilities(visibilityMap)
   }
 
   const getIdToSizeMap = () => createMap(panesList, SIZE)
@@ -156,7 +179,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   const setAxisConfig = (e: IResizableEvent) => {
-    const {virtualActiveIndex, virtualOrderList, topAxis, bottomAxis} = resizable
+    const {virtualActiveIndex, virtualOrderList, topAxis, bottomAxis} =
+      resizable
 
     if (e.mouseCoordinate <= topAxis) {
       setUpMaxLimits(virtualOrderList, virtualActiveIndex)
@@ -186,10 +210,8 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   // It is getting default empty Object param
-  const setVisibility = (param: IKeyToBoolMap) => {
-    const {
-      newVisibilityModel
-    } = resizable
+  const setVisibilities = (param: IKeyToBoolMap) => {
+    const {newVisibilityModel} = resizable
 
     const currentVisibilityMap = createMap(panesList, VISIBILITY)
 
@@ -215,17 +237,22 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     consoleGetSize(items)
   }
 
-  const restoreDefault = () => {
-    restoreDefaultFn(resizable.items)
+  const restore = () => {
+    restoreFn(resizable.items)
     clearflagsOnNewView()
     emitResizeStop()
     emitChangeVisibility()
   }
 
-  const getState = () => createMap(panesList, SIZE, VISIBILITY, MIN_SIZE, MAX_SIZE)
-  const getVisibilitiesMap = () => getVisibilityState(panesList)
+  const getState = () =>
+    createMap(panesList, SIZE, VISIBILITY, MIN_SIZE, MAX_SIZE)
+  const getVisibilities = () => getVisibilityState(panesList)
 
-  const setSize = (id: string, newSize: number, behavior?: ISetSizeBehaviour) => {
+  const setSize = (
+    id: string,
+    newSize: number,
+    behavior?: ISetSizeBehaviour
+  ) => {
     setSizeMethod(resizable, id, newSize, behavior)
 
     setUISizesFn(items, DIRECTIONS.NONE)
@@ -235,10 +262,10 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
   }
 
   const api = {
-    restoreDefault,
-    setVisibility,
-    getSizesMap: getIdToSizeMap,
-    getVisibilitiesMap,
+    restore,
+    setVisibilities,
+    getSizes: getIdToSizeMap,
+    getVisibilities,
     getState,
     setSize
   }
@@ -256,8 +283,7 @@ export const getResizableContext = (props: IResizablePaneProviderProps): IResiza
     props,
     resizable,
     storage,
-    getPaneSizeStyle,
-    setVisibility
+    getPaneSizeStyle
   }
 }
 

@@ -1,13 +1,26 @@
 import React from 'react'
 import {RCy} from '../utils'
 import {
-  noMinMax5PanesSet, withMinMaxAllPaneEqualSizeExcept15PanesSet,
+  noMinMax5PanesSet,
+  withMinMaxAllPaneEqualSizeExcept15PanesSet,
   withMinMaxEqualSize5PanesSet
 } from './pane-model-config-sets'
 import {RPTestWrapper} from '../components/rp-test-wrapper'
 import {
-  CK0, CK1, CK4, P0, P1, P2, P3, P4, R0, R1, R2,
-  R3, containerId, rScontainerId
+  CK0,
+  CK1,
+  CK4,
+  P0,
+  P1,
+  P2,
+  P3,
+  P4,
+  R0,
+  R1,
+  R2,
+  R3,
+  containerId,
+  rScontainerId
 } from './fix-test-ids'
 import {CustomResizerFirst} from '../components/custom-resizer'
 import {Pane, ResizablePanes} from '../../src'
@@ -24,11 +37,9 @@ describe('Storage api', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
-      <div className='h-300 w-100p'>
+      <div className="h-300 w-100p">
         <ResizablePanes
-          resizer={
-            <CustomResizerFirst horizontal={false} size={10} />
-        }
+          resizer={<CustomResizerFirst horizontal={false} size={10} />}
           resizerSize={10}
           storageApi={localStorage}
           uniqueId={rScontainerId}
@@ -37,13 +48,9 @@ describe('Storage api', () => {
             resizableApi = api
           }}
         >
+          <Pane className="bg-cyan-500" id={P0} size={1}></Pane>
 
-          <Pane className='bg-cyan-500' id={P0} size={1}>
-          </Pane>
-
-          <Pane className='bg-red-500' id={P1} size={1}>
-          </Pane>
-
+          <Pane className="bg-red-500" id={P1} size={1}></Pane>
         </ResizablePanes>
       </div>
     )
@@ -51,8 +58,8 @@ describe('Storage api', () => {
     cy.wait(50)
   })
 
-  it('Check initial sizes with fixed values and API.getSizesMap method', () => {
-    const sizeMap = resizableApi.getSizesMap()
+  it('Check initial sizes with fixed values and API.getSizes method', () => {
+    const sizeMap = resizableApi.getSizes()
     rCy.checkWidths(sizeMap)
     rCy.checkWidths({
       P0: 515,
@@ -60,17 +67,17 @@ describe('Storage api', () => {
     })
   })
 
-  it('Check initial visibility with fixed values and API.getSizesMap method', () => {
-    const visibilityMap = resizableApi.getVisibilitiesMap()
+  it('Check initial visibility with fixed values and API.getSizes method', () => {
+    const visibilityMap = resizableApi.getVisibilities()
     expect(visibilityMap).to.deep.equal({
       P1: VISIBLE,
       P0: VISIBLE
     })
   })
 
-  it('Hide P0 using API.setVisibility method', () => {
-    resizableApi.setVisibility({P0: false})
-    const visibilityMap = resizableApi.getVisibilitiesMap()
+  it('Hide P0 using API.setVisibilities method', () => {
+    resizableApi.setVisibilities({P0: false})
+    const visibilityMap = resizableApi.getVisibilities()
 
     expect(visibilityMap).to.deep.equal({
       P1: VISIBLE,
@@ -97,17 +104,17 @@ describe('Storage api', () => {
     })
   })
 
-  it('Hide P0 using API.setVisibility method -- Then restore using API.restoreDefault', () => {
-    resizableApi.setVisibility({}) // For isNoChange code branch
-    resizableApi.setVisibility({P0: false})
-    const visibilityMap = resizableApi.getVisibilitiesMap()
+  it('Hide P0 using API.setVisibilities method -- Then restore using API.restore', () => {
+    resizableApi.setVisibilities({}) // For isNoChange code branch
+    resizableApi.setVisibilities({P0: false})
+    const visibilityMap = resizableApi.getVisibilities()
 
     expect(visibilityMap).to.deep.equal({
       P1: VISIBLE,
       P0: HIDDEN
     })
 
-    resizableApi.restoreDefault()
+    resizableApi.restore()
 
     const state: IGetState = resizableApi.getState()
 
@@ -127,7 +134,7 @@ describe('Storage api', () => {
     })
   })
 
-  it('Move R0 -- Then restore using API.restoreDefault', () => {
+  it('Move R0 -- Then restore using API.restore', () => {
     rCy.moveNPixel(R0, 100, 'right')
 
     rCy.checkWidths({
@@ -136,7 +143,7 @@ describe('Storage api', () => {
       P1: 415
     })
 
-    resizableApi.restoreDefault()
+    resizableApi.restore()
 
     const state: IGetState = resizableApi.getState()
 
@@ -168,11 +175,9 @@ describe('Custom resizer:API: Method setSize', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
-      <div className='h-300 w-100p'>
+      <div className="h-300 w-100p">
         <ResizablePanes
-          resizer={
-            <CustomResizerFirst horizontal={false} size={10} />
-        }
+          resizer={<CustomResizerFirst horizontal={false} size={10} />}
           resizerSize={10}
           storageApi={localStorage}
           uniqueId={rScontainerId}
@@ -181,20 +186,34 @@ describe('Custom resizer:API: Method setSize', () => {
             resizableApi = api
           }}
         >
+          <Pane className="bg-cyan-500" id={P0} minSize={0.1} size={1}></Pane>
 
-          <Pane className='bg-cyan-500' id={P0} minSize={0.1} size={1}>
+          <Pane
+            className="bg-red-500"
+            id={P1}
+            maxSize={5}
+            minSize={1}
+            size={3}
+          >
+          </Pane>
+          <Pane
+            className="bg-cyan-500"
+            id={P2}
+            maxSize={4}
+            minSize={0.5}
+            size={2}
+          >
           </Pane>
 
-          <Pane className='bg-red-500' id={P1} maxSize={5} minSize={1} size={3}>
+          <Pane
+            className="bg-red-500"
+            id={P3}
+            maxSize={5}
+            minSize={1}
+            size={3}
+          >
           </Pane>
-          <Pane className='bg-cyan-500' id={P2} maxSize={4} minSize={0.5} size={2}>
-          </Pane>
-
-          <Pane className='bg-red-500' id={P3} maxSize={5} minSize={1} size={3}>
-          </Pane>
-          <Pane className='bg-cyan-500' id={P4} minSize={0.1} size={1} >
-          </Pane>
-
+          <Pane className="bg-cyan-500" id={P4} minSize={0.1} size={1}></Pane>
         </ResizablePanes>
       </div>
     )
@@ -204,51 +223,39 @@ describe('Custom resizer:API: Method setSize', () => {
   it('setSize should not make any change for Zero of Negative numbers', () => {
     resizableApi.setSize(P0, 0)
 
-    rCy.checkWidths(
-      [100, 10, 300, 10, 200, 10, 300, 10, 100]
-    )
+    rCy.checkWidths([100, 10, 300, 10, 200, 10, 300, 10, 100])
   })
 
   it('setSize should not fork for hidden items', () => {
-    resizableApi.setVisibility({
+    resizableApi.setVisibilities({
       P0: false
     })
     resizableApi.setSize(P0, 500)
 
-    rCy.checkWidths(
-      [0, 0, 337, 10, 224, 10, 337, 10, 112]
-    )
+    rCy.checkWidths([0, 0, 337, 10, 224, 10, 337, 10, 112])
   })
 
   it('should setSize of First Pane to 500', () => {
     resizableApi.setSize(P0, 500)
 
-    rCy.checkWidths(
-      [500, 10, 166, 10, 111, 10, 167, 10, 56]
-    )
+    rCy.checkWidths([500, 10, 166, 10, 111, 10, 167, 10, 56])
   })
 
   it(`setSize of Pane to Infinity have maxSize = Infinity
   should only allow max possible depending on others`, () => {
     resizableApi.setSize(P0, 5000)
 
-    rCy.checkWidths(
-      [740, 10, 100, 10, 50, 10, 100, 10, 10]
-    )
+    rCy.checkWidths([740, 10, 100, 10, 50, 10, 100, 10, 10])
   })
 
   it('setting P2 to 500 Result it should set P2 to only max allowed ie 400', () => {
     resizableApi.setSize(P2, 500)
-    rCy.checkWidths(
-      [75, 10, 225, 10, 400, 10, 225, 10, 75]
-    )
+    rCy.checkWidths([75, 10, 225, 10, 400, 10, 225, 10, 75])
   })
 
   it('setting P2 to 10 Result it should set P2 to only min allowed ie 50', () => {
     resizableApi.setSize(P2, 10)
-    rCy.checkWidths(
-      [119, 10, 356, 10, 50, 10, 356, 10, 119]
-    )
+    rCy.checkWidths([119, 10, 356, 10, 50, 10, 356, 10, 119])
   })
 
   // Edge
@@ -257,9 +264,7 @@ describe('Custom resizer:API: Method setSize', () => {
       resizableApi.setSize(P1, i)
     }
 
-    rCy.checkWidths(
-      [72, 10, 500, 10, 143, 10, 214, 10, 71]
-    )
+    rCy.checkWidths([72, 10, 500, 10, 143, 10, 214, 10, 71])
   })
 
   // Edge Edge
@@ -269,9 +274,7 @@ describe('Custom resizer:API: Method setSize', () => {
       resizableApi.setSize(P1, i)
     }
 
-    rCy.checkWidths(
-      [128, 10, 100, 10, 257, 10, 386, 10, 129]
-    )
+    rCy.checkWidths([128, 10, 100, 10, 257, 10, 386, 10, 129])
   })
 })
 
@@ -286,11 +289,9 @@ describe('Custom resizer:API: Method setSize', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
-      <div className='h-300 w-100p'>
+      <div className="h-300 w-100p">
         <ResizablePanes
-          resizer={
-            <CustomResizerFirst horizontal={false} size={10} />
-        }
+          resizer={<CustomResizerFirst horizontal={false} size={10} />}
           resizerSize={10}
           storageApi={localStorage}
           uniqueId={rScontainerId}
@@ -299,20 +300,34 @@ describe('Custom resizer:API: Method setSize', () => {
             resizableApi = api
           }}
         >
+          <Pane className="bg-cyan-500" id={P0} minSize={0.1} size={1}></Pane>
 
-          <Pane className='bg-cyan-500' id={P0} minSize={0.1} size={1}>
+          <Pane
+            className="bg-red-500"
+            id={P1}
+            maxSize={5}
+            minSize={1}
+            size={3}
+          >
+          </Pane>
+          <Pane
+            className="bg-cyan-500"
+            id={P2}
+            maxSize={4}
+            minSize={0.5}
+            size={2}
+          >
           </Pane>
 
-          <Pane className='bg-red-500' id={P1} maxSize={5} minSize={1} size={3}>
+          <Pane
+            className="bg-red-500"
+            id={P3}
+            maxSize={5}
+            minSize={1}
+            size={3}
+          >
           </Pane>
-          <Pane className='bg-cyan-500' id={P2} maxSize={4} minSize={0.5} size={2}>
-          </Pane>
-
-          <Pane className='bg-red-500' id={P3} maxSize={5} minSize={1} size={3}>
-          </Pane>
-          <Pane className='bg-cyan-500' id={P4} minSize={0} size={1} >
-          </Pane>
-
+          <Pane className="bg-cyan-500" id={P4} minSize={0} size={1}></Pane>
         </ResizablePanes>
       </div>
     )
@@ -322,13 +337,10 @@ describe('Custom resizer:API: Method setSize', () => {
   // Edge
   it('Should work for last Hidden Pane', () => {
     rCy.move(R3, containerId, 'right')
-    cy.wait(50)
-      .then(() => {
-        resizableApi.setSize(P4, 400)
-        rCy.checkWidths(
-          [60, 10, 180, 10, 120, 10, 240, 10, 400]
-        )
-      })
+    cy.wait(50).then(() => {
+      resizableApi.setSize(P4, 400)
+      rCy.checkWidths([60, 10, 180, 10, 120, 10, 240, 10, 400])
+    })
   })
 })
 
@@ -343,7 +355,7 @@ describe('Plain resizer:API: Method setSize', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
-      <div className='h-300 w-100p'>
+      <div className="h-300 w-100p">
         <ResizablePanes
           resizerSize={10}
           storageApi={localStorage}
@@ -353,20 +365,34 @@ describe('Plain resizer:API: Method setSize', () => {
             resizableApi = api
           }}
         >
+          <Pane className="bg-cyan-500" id={P0} minSize={0.1} size={1}></Pane>
 
-          <Pane className='bg-cyan-500' id={P0} minSize={0.1} size={1}>
+          <Pane
+            className="bg-red-500"
+            id={P1}
+            maxSize={5}
+            minSize={1}
+            size={3}
+          >
+          </Pane>
+          <Pane
+            className="bg-cyan-500"
+            id={P2}
+            maxSize={4}
+            minSize={0.5}
+            size={2}
+          >
           </Pane>
 
-          <Pane className='bg-red-500' id={P1} maxSize={5} minSize={1} size={3}>
+          <Pane
+            className="bg-red-500"
+            id={P3}
+            maxSize={5}
+            minSize={1}
+            size={3}
+          >
           </Pane>
-          <Pane className='bg-cyan-500' id={P2} maxSize={4} minSize={0.5} size={2}>
-          </Pane>
-
-          <Pane className='bg-red-500' id={P3} maxSize={5} minSize={1} size={3}>
-          </Pane>
-          <Pane className='bg-cyan-500' id={P4} minSize={0.1} size={1} >
-          </Pane>
-
+          <Pane className="bg-cyan-500" id={P4} minSize={0.1} size={1}></Pane>
         </ResizablePanes>
       </div>
     )
@@ -421,11 +447,9 @@ describe('PartialHidden:Plain resizer:API: Method setSize', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
-      <div className='h-300 w-100p'>
+      <div className="h-300 w-100p">
         <ResizablePanes
-          resizer={
-            <CustomResizerFirst horizontal={false} size={10} />
-        }
+          resizer={<CustomResizerFirst horizontal={false} size={10} />}
           resizerSize={10}
           storageApi={localStorage}
           uniqueId={rScontainerId}
@@ -434,26 +458,24 @@ describe('PartialHidden:Plain resizer:API: Method setSize', () => {
             resizableApi = api
           }}
         >
-
-          <Pane className='bg-cyan-500' id={P0} size={1}>
+          <Pane className="bg-cyan-500" id={P0} size={1}>
             P0
           </Pane>
 
-          <Pane className='bg-red-500' id={P1} maxSize={5} size={3}>
+          <Pane className="bg-red-500" id={P1} maxSize={5} size={3}>
             P1
           </Pane>
-          <Pane className='bg-orange-500' id={P2} maxSize={4} size={2}>
+          <Pane className="bg-orange-500" id={P2} maxSize={4} size={2}>
             P2
           </Pane>
 
-          <Pane className='bg-red-500' id={P3} maxSize={5} size={3}>
+          <Pane className="bg-red-500" id={P3} maxSize={5} size={3}>
             P3
           </Pane>
 
-          <Pane className='bg-amber-500' id={P4} size={1} >
+          <Pane className="bg-amber-500" id={P4} size={1}>
             P4
           </Pane>
-
         </ResizablePanes>
       </div>
     )
@@ -464,33 +486,25 @@ describe('PartialHidden:Plain resizer:API: Method setSize', () => {
     rCy.move(R3, R0, 'left')
 
     resizableApi.setSize(P0, 500)
-    rCy.checkWidths(
-      [500, 0, 0, 0, 0, 0, 0, 10, 530]
-    )
+    rCy.checkWidths([500, 0, 0, 0, 0, 0, 0, 10, 530])
   })
 
   it('setting P2 to 500 Result it should set P2 to only max allowed ie 400', () => {
     rCy.move(R3, R1, 'left')
-    cy.wait(50)
-      .then(() => {
-        resizableApi.setSize(P2, 500)
-      })
+    cy.wait(50).then(() => {
+      resizableApi.setSize(P2, 500)
+    })
 
-    rCy.checkWidths(
-      [60, 10, 179, 10, 400, 0, 0, 10, 371]
-    )
+    rCy.checkWidths([60, 10, 179, 10, 400, 0, 0, 10, 371])
   })
 
   it('setting P2 to 10 Result it should set P2 to only min allowed ie 50', () => {
     rCy.move(R1, R3, 'left')
-    cy.wait(50)
-      .then(() => {
-        resizableApi.setSize(P2, 10)
-      })
+    cy.wait(50).then(() => {
+      resizableApi.setSize(P2, 10)
+    })
 
-    rCy.checkWidths(
-      [402, 10, 490, 10, 10, 10, 0, 10, 98]
-    )
+    rCy.checkWidths([402, 10, 490, 10, 10, 10, 0, 10, 98])
   })
 })
 
@@ -505,19 +519,17 @@ describe('Storage api', () => {
       <RPTestWrapper
         detectionSize={5}
         panesList={withMinMaxEqualSize5PanesSet}
-        resizerClass='bg-slate-500'
+        resizerClass="bg-slate-500"
         resizerSize={1}
         storageApi={localStorage}
         uniqueId={rScontainerId}
-
         vertical
       >
-
       </RPTestWrapper>
     )
   })
 
-  it('Move R0 -- Then restore using API.restoreDefault', () => {
+  it('Move R0 -- Then restore using API.restore', () => {
     rCy.cyGet(CK0).click()
     rCy.cyGet(CK1).click()
     rCy.cyGet(CK4).click()
@@ -538,21 +550,16 @@ describe('Should make partial hidden visible with setSize', () => {
     cy.mount(
       <RPTestWrapper
         panesList={noMinMax5PanesSet}
-        resizer={
-          <CustomResizerFirst horizontal={false} size={10} />
-    }
-        resizerClass='bg-slate-500'
+        resizer={<CustomResizerFirst horizontal={false} size={10} />}
+        resizerClass="bg-slate-500"
         resizerSize={10}
         storageApi={localStorage}
         uniqueId={rScontainerId}
-
         vertical
-
         onReady={(api: IResizableApi) => {
           resizableApi = api
         }}
       >
-
       </RPTestWrapper>
     )
   })
@@ -560,16 +567,13 @@ describe('Should make partial hidden visible with setSize', () => {
   // Edge Edge
   it('Should make partial hidden visible with setSize test', () => {
     rCy.move(R0, containerId, 'right')
-    cy.wait(50)
-      .then(() => {
-        resizableApi.setSize(P4, 100)
-        resizableApi.setSize(P3, 100)
-        resizableApi.setSize(P2, 100)
-        resizableApi.setSize(P1, 100)
-        rCy.checkWidths(
-          [626, 10, 100, 10, 89, 10, 79, 10, 70]
-        )
-      })
+    cy.wait(50).then(() => {
+      resizableApi.setSize(P4, 100)
+      resizableApi.setSize(P3, 100)
+      resizableApi.setSize(P2, 100)
+      resizableApi.setSize(P1, 100)
+      rCy.checkWidths([626, 10, 100, 10, 89, 10, 79, 10, 70])
+    })
   })
 })
 
@@ -585,21 +589,16 @@ describe('setSize should work in bottom_first behaviour', () => {
     cy.mount(
       <RPTestWrapper
         panesList={withMinMaxEqualSize5PanesSet}
-        resizer={
-          <CustomResizerFirst horizontal={false} size={10} />
-    }
-        resizerClass='bg-slate-500'
+        resizer={<CustomResizerFirst horizontal={false} size={10} />}
+        resizerClass="bg-slate-500"
         resizerSize={10}
         storageApi={localStorage}
         uniqueId={rScontainerId}
-
         vertical
-
         onReady={(api: IResizableApi) => {
           resizableApi = api
         }}
       >
-
       </RPTestWrapper>
     )
   })
@@ -610,9 +609,7 @@ describe('setSize should work in bottom_first behaviour', () => {
   -- Result it should  it should execute in BUTTOM_FIRST Order
   `, () => {
     resizableApi.setSize(P1, 500, BUTTOM_FIRST)
-    rCy.checkWidths(
-      [97, 10, 500, 10, 96, 10, 175, 10, 96]
-    )
+    rCy.checkWidths([97, 10, 500, 10, 96, 10, 175, 10, 96])
   })
 
   // Edge
@@ -622,9 +619,7 @@ describe('setSize should work in bottom_first behaviour', () => {
   -- Result it should only get increased to acceptable size(752)
   `, () => {
     resizableApi.setSize(P1, 1000, BUTTOM_FIRST)
-    rCy.checkWidths(
-      [10, 10, 752, 10, 96, 10, 96, 10, 10]
-    )
+    rCy.checkWidths([10, 10, 752, 10, 96, 10, 96, 10, 10])
   })
 
   // Edge
@@ -634,9 +629,7 @@ describe('setSize should work in bottom_first behaviour', () => {
     -- Result it should only get increased to acceptable size(752)
     `, () => {
     resizableApi.setSize(P1, 1000, TOP_FIRST)
-    rCy.checkWidths(
-      [10, 10, 752, 10, 96, 10, 96, 10, 10]
-    )
+    rCy.checkWidths([10, 10, 752, 10, 96, 10, 96, 10, 10])
   })
 
   it(`
@@ -645,9 +638,7 @@ describe('setSize should work in bottom_first behaviour', () => {
   -- Result it should  it should execute in TOP_FIRST Order
   `, () => {
     resizableApi.setSize(P1, 500, TOP_FIRST)
-    rCy.checkWidths(
-      [10, 10, 500, 10, 96, 10, 262, 10, 96]
-    )
+    rCy.checkWidths([10, 10, 500, 10, 96, 10, 262, 10, 96])
   })
 
   // Edge
@@ -657,12 +648,10 @@ describe('setSize should work in bottom_first behaviour', () => {
   -- Result it should change size second time if there is no change in size
   `, () => {
     resizableApi.setSize(P2, 300, TOP_FIRST)
-    const currentSize = resizableApi.getSizesMap()
+    const currentSize = resizableApi.getSizes()
 
     resizableApi.setSize(P2, 300, BUTTOM_FIRST)
-    rCy.checkWidths(
-      currentSize
-    )
+    rCy.checkWidths(currentSize)
   })
 
   // Edge
@@ -673,12 +662,10 @@ describe('setSize should work in bottom_first behaviour', () => {
     `, () => {
     resizableApi.setSize(P2, 300, TOP_FIRST)
 
-    const currentSize = resizableApi.getSizesMap()
+    const currentSize = resizableApi.getSizes()
 
     resizableApi.setSize(P2, 300, TOP_FIRST)
-    rCy.checkWidths(
-      currentSize
-    )
+    rCy.checkWidths(currentSize)
   })
 
   // Edge
@@ -689,15 +676,13 @@ describe('setSize should work in bottom_first behaviour', () => {
     `, () => {
     const X = 93
 
-    const p2SizeStep1 = resizableApi.getSizesMap()[P2]
+    const p2SizeStep1 = resizableApi.getSizes()[P2]
     resizableApi.setSize(P2, p2SizeStep1 - X, TOP_FIRST)
 
-    const p2SizeStep2 = resizableApi.getSizesMap()[P2]
+    const p2SizeStep2 = resizableApi.getSizes()[P2]
     resizableApi.setSize(P2, p2SizeStep2 + X, BUTTOM_FIRST)
 
-    rCy.checkWidths(
-      [97, 10, 382, 10, 193, 10, 196, 10, 96]
-    )
+    rCy.checkWidths([97, 10, 382, 10, 193, 10, 196, 10, 96])
   })
 
   // Edge
@@ -708,15 +693,13 @@ describe('setSize should work in bottom_first behaviour', () => {
     `, () => {
     const X = 93
 
-    const p2SizeStep1 = resizableApi.getSizesMap()[P2]
+    const p2SizeStep1 = resizableApi.getSizes()[P2]
     resizableApi.setSize(P2, p2SizeStep1 - X, BUTTOM_FIRST)
 
-    const p2SizeStep2 = resizableApi.getSizesMap()[P2]
+    const p2SizeStep2 = resizableApi.getSizes()[P2]
     resizableApi.setSize(P2, p2SizeStep2 + X, TOP_FIRST)
 
-    rCy.checkWidths(
-      [97, 10, 196, 10, 193, 10, 382, 10, 96]
-    )
+    rCy.checkWidths([97, 10, 196, 10, 193, 10, 382, 10, 96])
   })
 })
 
@@ -732,21 +715,16 @@ describe('setSize should work in TOP_FIRST & BUTTOM_FIRST', () => {
     cy.mount(
       <RPTestWrapper
         panesList={withMinMaxAllPaneEqualSizeExcept15PanesSet}
-        resizer={
-          <CustomResizerFirst horizontal={false} size={10} />
-    }
-        resizerClass='bg-slate-500'
+        resizer={<CustomResizerFirst horizontal={false} size={10} />}
+        resizerClass="bg-slate-500"
         resizerSize={10}
         storageApi={localStorage}
         uniqueId={rScontainerId}
-
         vertical
-
         onReady={(api: IResizableApi) => {
           resizableApi = api
         }}
       >
-
       </RPTestWrapper>
     )
   })
@@ -758,9 +736,7 @@ describe('setSize should work in TOP_FIRST & BUTTOM_FIRST', () => {
   -- Result it should  it should execute in BUTTOM_FIRST Order
   `, () => {
     resizableApi.setSize(P1, 400, BUTTOM_FIRST)
-    rCy.checkWidths(
-      [97, 10, 400, 10, 193, 10, 178, 10, 96]
-    )
+    rCy.checkWidths([97, 10, 400, 10, 193, 10, 178, 10, 96])
   })
 
   // Edge
@@ -770,9 +746,7 @@ describe('setSize should work in TOP_FIRST & BUTTOM_FIRST', () => {
   -- Result it should only get reduced to acceptable size(192)
   `, () => {
     resizableApi.setSize(P1, 100, BUTTOM_FIRST)
-    rCy.checkWidths(
-      [193, 10, 192, 10, 193, 10, 193, 10, 193]
-    )
+    rCy.checkWidths([193, 10, 192, 10, 193, 10, 193, 10, 193])
   })
 
   // Edge
@@ -782,9 +756,7 @@ describe('setSize should work in TOP_FIRST & BUTTOM_FIRST', () => {
     -- Result it should only get reduced to acceptable size(192)
     `, () => {
     resizableApi.setSize(P1, 100, TOP_FIRST)
-    rCy.checkWidths(
-      [193, 10, 192, 10, 193, 10, 193, 10, 193]
-    )
+    rCy.checkWidths([193, 10, 192, 10, 193, 10, 193, 10, 193])
   })
 
   it(`
@@ -793,8 +765,6 @@ describe('setSize should work in TOP_FIRST & BUTTOM_FIRST', () => {
   -- Result it should  it should execute in TOP_FIRST Order
   `, () => {
     resizableApi.setSize(P1, 400, TOP_FIRST)
-    rCy.checkWidths(
-      [193, 10, 400, 10, 179, 10, 96, 10, 96]
-    )
+    rCy.checkWidths([193, 10, 400, 10, 179, 10, 96, 10, 96])
   })
 })

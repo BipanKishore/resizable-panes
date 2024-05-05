@@ -26,7 +26,7 @@ export const ResizableComponentCustomPanesTestWrapper = (props: any) => {
 
   const onRestore = () => {
     setVisibilityMap(visibility)
-    apiRef.current.restoreDefault()
+    apiRef.current.restore()
   }
 
   const updateVisibilityMap = (e: any) => {

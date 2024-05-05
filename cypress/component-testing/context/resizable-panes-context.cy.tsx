@@ -73,7 +73,7 @@ describe('should test ResizableContext: clearflagsOnNewView', () => {
         rCy.cyGet(CK3).click()
       })
     // resizableApi.setSize(P0, 10000)
-    // resizableApi.restoreDefault()
+    // resizableApi.restore()
     // resizableApi.setSize(P1, 10000)
     // cy.wait(50)
     //   .then(() => {

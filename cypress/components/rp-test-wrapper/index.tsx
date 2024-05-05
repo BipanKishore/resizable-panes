@@ -43,7 +43,7 @@ export const RPTestWrapper = (props: any) => {
 
   const onRestore = () => {
     setVisibilityMap(initialPaneState)
-    apiRef.current.restoreDefault()
+    apiRef.current.restore()
   }
 
   const apiRef = useRef <any>({})
