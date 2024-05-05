@@ -2,11 +2,12 @@ import {
   IHiddenResizer,
   IPane,
   IResizablePaneProviderProps,
+  ISizeState,
   IStoreResizableItemsModel, UnitTypes, addAndRemoveType
 } from '../@types'
 import {
-  DIRECTIONS, LEFT, NONE, PLUS,
-  RATIO, RIGHT, SIZE, VISIBILITY, ZERO
+  DIRECTIONS, LEFT, MAX_SIZE_STATE, MIN_SIZE_STATE, NONE, NORMAL_SIZE_STATE, PLUS,
+  RATIO, RIGHT, SIZE, VISIBILITY
 } from '../constant'
 import {ResizeStorage} from '../utils/storage'
 import {filterKeys, isItDown, isItUp, ratioAndRoundOff} from '../utils/util'
@@ -31,6 +32,8 @@ export class PaneModel {
   sizeRatio: number
   minSizeRatio: number
   maxSizeRatio: number
+
+  sizeState: ISizeState = NORMAL_SIZE_STATE
 
   minMaxUnit: UnitTypes
 
@@ -66,7 +69,7 @@ export class PaneModel {
   props:IPane
   // Development Variables
 
-  constructor (paneProps: any, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
+  constructor (paneProps: IPane, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
     this.props = attachDefaultPaneProps(paneProps)
     const {
       id, minSize, size, maxSize
@@ -189,6 +192,34 @@ export class PaneModel {
     }
   }
 
+  // eslint-disable-next-line complexity
+  updatSizeState () {
+    if (this.visibility) {
+      const {size, props} = this
+      let newSetSize : ISizeState
+      if (size === this.defaultMaxSize) {
+        newSetSize = MAX_SIZE_STATE
+      } else if (size === this.defaultMinSize) {
+        newSetSize = MIN_SIZE_STATE
+      } else {
+        newSetSize = NORMAL_SIZE_STATE
+      }
+
+      if (this.sizeState !== newSetSize) {
+        if (newSetSize === NORMAL_SIZE_STATE) {
+          props.onNormalSize()
+        }
+        if (newSetSize === MIN_SIZE_STATE) {
+          props.onMinSize(size)
+        }
+        if (newSetSize === MAX_SIZE_STATE) {
+          props.onMaxSize(size)
+        }
+        this.sizeState = newSetSize
+      }
+    }
+  }
+
   changeSize (sizeChange: number, operation: addAndRemoveType, direction: number) {
     const newSize = this.axisSize + (operation === PLUS ? sizeChange : -sizeChange)
 
@@ -196,8 +227,6 @@ export class PaneModel {
 
     if (newSize >= this.minSize && newSize <= this.maxSize) {
       this.size = newSize
-      this.clearHiddenResizer()
-      return ZERO
     } else if (newSize > this.maxSize) {
       this.size = this.maxSize
     } else {

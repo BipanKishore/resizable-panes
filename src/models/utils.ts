@@ -1,5 +1,5 @@
 import {IPane} from '../@types'
-import {deleteUndefined} from '../utils/util'
+import {deleteUndefined, noop} from '../utils/util'
 
 export const checkPaneModelErrors = (size: number, minSize: number, maxSize: number, id: string) => {
   if (size < minSize) {
@@ -14,6 +14,9 @@ export const checkPaneModelErrors = (size: number, minSize: number, maxSize: num
 export const attachDefaultPaneProps = (paneProps: IPane) => {
   const propsWithNoUndefined = deleteUndefined({...paneProps})
   return {
+    onNormalSize: noop,
+    onMinSize: noop,
+    onMaxSize: noop,
     minSize: 0,
     maxSize: Infinity,
     ...propsWithNoUndefined
