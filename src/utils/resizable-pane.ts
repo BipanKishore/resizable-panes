@@ -390,6 +390,14 @@ export const toRatioModeFn = (resizable: ResizableModel, isOnResize = false) => 
   setUISizesFn(items, DIRECTIONS.DOWN)
 }
 
+export const getChangeInViewSize = (resizable: ResizableModel) => {
+  const {items} = resizable
+  const {containerSize} = getMaxContainerSizes(resizable)
+  const allItemsSum = getPanesSizeSum(items)
+  console.log('containerSize', containerSize, 'allItemsSum', allItemsSum)
+  return containerSize - allItemsSum
+}
+
 export const getIsViewSizeChanged = (resizable: ResizableModel) => {
   const {items} = resizable
   const {containerSize} = getMaxContainerSizes(resizable)

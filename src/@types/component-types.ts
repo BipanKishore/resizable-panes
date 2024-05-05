@@ -2,7 +2,7 @@ import {MouseEventHandler, ReactElement, ReactNode} from 'react'
 import {IKeyToBoolMap, IMapIdToSize} from './general-type'
 import {PaneModel, ResizerModel, ResizableModel} from '../models'
 import {ResizeStorage} from '../utils/storage'
-import {UnitTypes, IHiddenResizer, IVisibilityState} from './basic-types'
+import {UnitTypes, IHiddenResizer, IVisibilityState, ISetSizeBehaviour} from './basic-types'
 
 export type IResizableItem = PaneModel | ResizerModel
 
@@ -43,7 +43,7 @@ export interface IResizableApi {
   getVisibilitiesMap: () => IVisibilityMap,
   getSizesMap: () => INumberMap,
   getState: () => IGetState,
-  setSize: (id: string, size: number) => void
+  setSize: (id: string, size: number, behavior?: ISetSizeBehaviour) => void
 }
 export type onReadyType = (api: IResizableApi) => void
 
