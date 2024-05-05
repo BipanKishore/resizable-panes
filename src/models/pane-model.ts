@@ -201,7 +201,7 @@ export class PaneModel {
 
   // eslint-disable-next-line complexity
   updatSizeState () {
-    if (this.visibility) {
+    if (this.visibility && !this.isHandle) {
       const {size, props, id} = this
       let newSetSize : ISizeState
       if (size === this.defaultMaxSize) {
