@@ -207,17 +207,17 @@ export class PaneModel {
 
       if (this.sizeState !== newSetSize) {
         if (newSetSize === NORMAL_SIZE_STATE) {
-          // this.api.node.classList.remove(props.minSizeClass, props.maxSizeClass)
+          this.api.node.classList.remove(props.minSizeClass, props.maxSizeClass)
           props.onNormalSize(id)
         }
         if (newSetSize === MIN_SIZE_STATE) {
-          // this.api.node.classList.remove(props.maxSizeClass)
-          // this.api.node.classList.add(props.minSizeClass)
+          this.api.node.classList.remove(props.maxSizeClass)
+          this.api.node.classList.add(props.minSizeClass)
           props.onMinSize(id, size)
         }
         if (newSetSize === MAX_SIZE_STATE) {
-          // this.api.node.classList.remove(props.minSizeClass)
-          // this.api.node.classList.add(props.maxSizeClass)
+          this.api.node.classList.remove(props.minSizeClass)
+          this.api.node.classList.add(props.maxSizeClass)
           props.onMaxSize(id, size)
         }
         this.sizeState = newSetSize

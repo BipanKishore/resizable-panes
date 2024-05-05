@@ -17,8 +17,8 @@ export const attachDefaultPaneProps = (paneProps: IPane) => {
     onNormalSize: noop,
     onMinSize: noop,
     onMaxSize: noop,
-    maxSizeClass: '',
-    minSizeClass: '',
+    maxSizeClass: '--',
+    minSizeClass: '--',
     minSize: 0,
     maxSize: Infinity,
     ...propsWithNoUndefined
