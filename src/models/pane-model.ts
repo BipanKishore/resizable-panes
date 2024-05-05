@@ -10,7 +10,7 @@ import {
   RATIO, RIGHT, SIZE, VISIBILITY
 } from '../constant'
 import {ResizeStorage} from '../utils/storage'
-import {filterKeys, isItDown, isItUp, ratioAndRoundOff} from '../utils/util'
+import {filterKeys, isItDown, isItUp, ratioAndRoundOff, safeSplit} from '../utils/util'
 import {attachDefaultPaneProps, checkPaneModelErrors} from './utils'
 
 export class PaneModel {
@@ -23,6 +23,9 @@ export class PaneModel {
 
   initialSetSize: number
   initialSetSizeResizer: IHiddenResizer
+
+  maxSizeClassList : string[]
+  minSizeClassList : string[]
 
   resizerSize: number
 
@@ -71,6 +74,10 @@ export class PaneModel {
 
   constructor (paneProps: IPane, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
     this.props = attachDefaultPaneProps(paneProps)
+
+    this.maxSizeClassList = safeSplit(paneProps.maxSizeClass)
+    this.minSizeClassList = safeSplit(paneProps.minSizeClass)
+
     const {
       id, minSize, size, maxSize
     } = this.props
@@ -205,21 +212,35 @@ export class PaneModel {
         newSetSize = NORMAL_SIZE_STATE
       }
 
+      let classListToRemove : string[] = []
+      let classListToAdd : string[] = []
+
       if (this.sizeState !== newSetSize) {
         if (newSetSize === NORMAL_SIZE_STATE) {
-          this.api.node.classList.remove(props.minSizeClass, props.maxSizeClass)
+          classListToRemove = [...this.minSizeClassList, ...this.maxSizeClassList]
           props.onNormalSize(id)
         }
         if (newSetSize === MIN_SIZE_STATE) {
-          this.api.node.classList.remove(props.maxSizeClass)
-          this.api.node.classList.add(props.minSizeClass)
+          classListToRemove = this.maxSizeClassList
+          classListToAdd = this.minSizeClassList
           props.onMinSize(id, size)
         }
         if (newSetSize === MAX_SIZE_STATE) {
-          this.api.node.classList.remove(props.minSizeClass)
-          this.api.node.classList.add(props.maxSizeClass)
+          classListToRemove = this.minSizeClassList
+          classListToAdd = this.maxSizeClassList
           props.onMaxSize(id, size)
         }
+
+        classListToRemove
+          .forEach(className => {
+            this.api.node.classList.remove(className)
+          })
+
+        classListToAdd
+          .forEach(className => {
+            this.api.node.classList.add(className)
+          })
+
         this.sizeState = newSetSize
       }
     }

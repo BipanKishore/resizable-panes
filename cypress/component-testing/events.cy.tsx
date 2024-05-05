@@ -136,7 +136,7 @@ describe('sdf', () => {
     )
   })
 
-  it.only('sh', () => {
+  it('sh', () => {
     rCy.move(R2, rScontainerId, 'left')
     cy.wait(100)
       .then(() => {
@@ -146,7 +146,7 @@ describe('sdf', () => {
       })
   })
 
-  it.only('sh', () => {
+  it('sh', () => {
     rCy.move(R2, rScontainerId, 'right')
     cy.wait(100)
       .then(() => {

@@ -73,3 +73,8 @@ export const deleteUndefined = (anyObject: any) => {
 }
 
 export const reverse = <T>(list: T[]): T[] => [...list].reverse()
+export const filterEmpty = (list: any[]) => list.filter(_ => _)
+
+export const safeSplit = (value: string = '') => {
+  return filterEmpty(value.split(' '))
+}

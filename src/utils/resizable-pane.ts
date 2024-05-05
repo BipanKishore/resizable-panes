@@ -6,9 +6,7 @@ import {
   getPanesSizeSum, getRatioSizeSum, getResizerSum, getVisibleItems, setUISizesFn,
   synPanesMaxToSize, synPanesMinToSize
 } from './panes'
-import {findIndex, isItUp, reverse} from './util'
-
-const filterEmpty = (list: any[]) => list.filter(_ => _)
+import {filterEmpty, findIndex, isItUp, reverse} from './util'
 
 export const movingLogic = (e: IResizableEvent, {
   axisCoordinate,
