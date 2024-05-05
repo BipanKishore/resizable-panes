@@ -22,8 +22,8 @@ export const RESIZER = 'resizer'
 
 export const VISIBILITY = 'visibility'
 export const SIZE = 'size'
-export const MIN_SIZE = 'minSize'
-export const MAX_SIZE = 'maxSize'
+export const DEFAULT_MIN_SIZE = 'defaultMinSize'
+export const DEFAULT_MAX_SIZE = 'defaultMaxSize'
 
 export const PLUS = '+'
 export const MINUS = '-'

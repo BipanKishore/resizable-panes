@@ -2,8 +2,8 @@ import {createContext} from 'react'
 import {createMap, findById} from '../utils/util'
 import {
   DIRECTIONS,
-  MAX_SIZE,
-  MIN_SIZE,
+  DEFAULT_MAX_SIZE,
+  DEFAULT_MIN_SIZE,
   RATIO,
   SET_SIZE,
   SIZE,
@@ -245,7 +245,7 @@ export const getResizableContext = (
   }
 
   const getState = () =>
-    createMap(panesList, SIZE, VISIBILITY, MIN_SIZE, MAX_SIZE)
+    createMap(panesList, SIZE, VISIBILITY, DEFAULT_MIN_SIZE, DEFAULT_MAX_SIZE)
   const getVisibilities = () => getVisibilityState(panesList)
 
   const setSize = (

@@ -25,7 +25,10 @@ import {
 import {CustomResizerFirst} from '../components/custom-resizer'
 import {Pane, ResizablePanes} from '../../src'
 import {IGetState, IResizableApi} from '../../src/@types'
-import {BUTTOM_FIRST, HIDDEN, TOP_FIRST, VISIBLE} from '../../src/constant'
+import {
+  BUTTOM_FIRST, DEFAULT_MAX_SIZE, DEFAULT_MIN_SIZE,
+  HIDDEN, TOP_FIRST, VISIBLE
+} from '../../src/constant'
 
 describe('Storage api', () => {
   const rCy = new RCy({
@@ -92,14 +95,14 @@ describe('Storage api', () => {
       P1: {
         size: 515,
         visibility: true,
-        minSize: 0,
-        maxSize: Infinity
+        [DEFAULT_MIN_SIZE]: 0,
+        [DEFAULT_MAX_SIZE]: Infinity
       },
       P0: {
         size: 515,
         visibility: true,
-        minSize: 0,
-        maxSize: Infinity
+        [DEFAULT_MIN_SIZE]: 0,
+        [DEFAULT_MAX_SIZE]: Infinity
       }
     })
   })
@@ -122,14 +125,14 @@ describe('Storage api', () => {
       P1: {
         size: 515,
         visibility: true,
-        minSize: 0,
-        maxSize: Infinity
+        [DEFAULT_MIN_SIZE]: 0,
+        [DEFAULT_MAX_SIZE]: Infinity
       },
       P0: {
         size: 515,
         visibility: true,
-        minSize: 0,
-        maxSize: Infinity
+        [DEFAULT_MIN_SIZE]: 0,
+        [DEFAULT_MAX_SIZE]: Infinity
       }
     })
   })
@@ -151,14 +154,14 @@ describe('Storage api', () => {
       P1: {
         size: 515,
         visibility: true,
-        minSize: 0,
-        maxSize: Infinity
+        [DEFAULT_MIN_SIZE]: 0,
+        [DEFAULT_MAX_SIZE]: Infinity
       },
       P0: {
         size: 515,
         visibility: true,
-        minSize: 0,
-        maxSize: Infinity
+        [DEFAULT_MIN_SIZE]: 0,
+        [DEFAULT_MAX_SIZE]: Infinity
       }
     })
   })
