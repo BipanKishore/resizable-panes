@@ -1,49 +1,49 @@
-import React, { useContext, Fragment, useState } from "react";
-import { IPane } from "../@types";
-import { getSetSize, joinClassName } from "../utils/dom";
-import { ResizablePaneContext } from "../context/resizable-panes-context";
-import { Resizer } from "./resizer";
-import { useHookWithRefCallback } from "../hook/useHookWithRefCallback";
+import React, {useContext, Fragment, useState} from 'react'
+import {IPane} from '../@types'
+import {getSetSize, joinClassName} from '../utils/dom'
+import {ResizablePaneContext} from '../context/resizable-panes-context'
+import {Resizer} from './resizer'
+import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
 
 export const Pane = (props: IPane) => {
-  const context: any = useContext(ResizablePaneContext);
+  const context: any = useContext(ResizablePaneContext)
 
-  const [mountIt, setMountIt] = useState(true);
+  const [mountIt, setMountIt] = useState(true)
 
   const {
     vertical,
     registerItem,
     getPaneSizeStyle,
-    props: { resizer: parentResizer, unmountOnHide: unmountOnHideGlobal },
-  } = context;
+    props: {resizer: parentResizer, unmountOnHide: unmountOnHideGlobal}
+  } = context
 
-  const { className, children, resizer, id, unmountOnHide } = props;
+  const {className, children, resizer, id, unmountOnHide} = props
 
-  const shouldDestroy = unmountOnHide ?? unmountOnHideGlobal;
+  const shouldDestroy = unmountOnHide ?? unmountOnHideGlobal
 
   const [setPaneRef]: any = useHookWithRefCallback((node: HTMLElement) => {
-    const setSize = getSetSize(node, vertical);
+    const setSize = getSetSize(node, vertical)
     const destroy = (visibility: boolean) => {
       if (shouldDestroy) {
-        setMountIt(visibility);
+        setMountIt(visibility)
       }
-    };
+    }
 
     registerItem(
       {
         destroy,
-        setSize,
+        setSize
       },
       id
-    );
-  });
+    )
+  })
 
   const classname = joinClassName({
-    "overflow-hidden flex-shrink-0": true,
-    [className]: className,
-  });
+    'overflow-hidden flex-shrink-0': true,
+    [className]: className
+  })
 
-  const style = getPaneSizeStyle(id);
+  const style = getPaneSizeStyle(id)
 
   return (
     <Fragment>
@@ -58,5 +58,5 @@ export const Pane = (props: IPane) => {
       </div>
       <Resizer id={id}>{resizer || parentResizer}</Resizer>
     </Fragment>
-  );
-};
+  )
+}
