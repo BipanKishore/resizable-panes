@@ -10,6 +10,48 @@ import {SinonSpy} from 'cypress/types/sinon'
 import {Pane, ResizablePanes} from '../../src'
 import {CustomResizerFirst} from '../components/custom-resizer'
 
+
+
+
+
+
+
+describe('Test inital events', () => {
+
+
+  it('Should emit onResize' , () => {
+
+
+    <div className="h-300 w-100p">
+    <ResizablePanes
+      maxSizeClass={maxSizeClassTest}
+      minSizeClass={minSizeClassTest}
+      resizer={<CustomResizerFirst horizontal={false} size={10} />}
+      resizerSize={10}
+      storageApi={localStorage}
+      uniqueId={rScontainerId}
+      vertical
+      onMaxSize={onMaxSize} onMinSize={onMinSize} onNormalSize={onNormalSize}
+    >
+      <Pane className="bg-cyan-500" id={P0} minSize={0.1} size={1}></Pane>
+      <Pane className="bg-red-500" id={P1} maxSize={5} minSize={1} size={3}>
+      </Pane>
+      <Pane className="bg-cyan-500" id={P2} maxSize={4} minSize={0.5} size={2}>
+      </Pane>
+
+      <Pane className="bg-red-500" id={P3} maxSize={5} minSize={1} size={3} >
+      </Pane>
+      <Pane className="bg-cyan-500" id={P4} minSize={0.1} size={1}></Pane>
+    </ResizablePanes>
+  </div>
+
+  })
+
+
+
+})
+
+
 describe('Test onChangeVisibility Rejected param', () => {
   let onChangeVisibility: SinonSpy
 
