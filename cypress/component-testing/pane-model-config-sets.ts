@@ -10,6 +10,12 @@ export const _2PaneWithNoMinMax = [
   new PaneModelConfig(4)
 ]
 
+export const _3PanesWithMinMax = [
+  new PaneModelConfig(3, 1, 6),
+  new PaneModelConfig(2),
+  new PaneModelConfig(3, 1, 6)
+]
+
 export const noMinMaxEqualSize7PanesSet = [
   new PaneModelConfig(1),
   new PaneModelConfig(1),

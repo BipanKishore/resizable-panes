@@ -58,7 +58,7 @@ describe('should test ResizableContext: clearflagsOnNewView', () => {
       })
   })
 
-  it.only(`
+  it(`
   - using api.setSize set P0 to MAX 
   - hide P4, P3
   - using api.setSize set P0 to MAX

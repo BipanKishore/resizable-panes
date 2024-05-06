@@ -73,7 +73,7 @@ export class PaneModel {
   // Development Variables
 
   constructor (paneProps: IPane, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
-    this.props = attachDefaultPaneProps(paneProps)
+    this.props = attachDefaultPaneProps(paneProps, resizableProps)
 
     this.maxSizeClassList = safeSplit(paneProps.maxSizeClass)
     this.minSizeClassList = safeSplit(paneProps.minSizeClass)
