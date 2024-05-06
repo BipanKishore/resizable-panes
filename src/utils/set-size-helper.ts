@@ -46,7 +46,6 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
   if (!sizeChange) {
     return
   }
-
   const requestIndexInVisibleItems = findIndex(visibleItems, id)
 
   let addOnSizeChange = 0
@@ -61,8 +60,9 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
   if (resizer) {
     resizer.setVisibility(true, false)
     addOnSizeChange = resizer.resizerSize
-    pane.hiddenResizer = NONE
+    sizeChange += addOnSizeChange
   }
+  pane.hiddenResizer = NONE
 
   const getActionOnItem = (operation: addAndRemoveType, direction: number) => (item: IResizableItem) => {
     item.syncAxisSize()
@@ -86,18 +86,12 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     if (sizeChange > 0) { // Need to reduce other
       firstInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.DOWN))
       secondInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.UP))
-
-      const changeInView = getChangeInViewSize(resizable)
-      allowedChange = newSize + changeInView - addOnSizeChange
     }
     if (sizeChange < 0) { // Need to increase other
       sizeChange = Math.abs(sizeChange)
 
       firstInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.DOWN))
       secondInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.UP))
-
-      const changeInView = getChangeInViewSize(resizable)
-      allowedChange = acceptableNewSize + changeInView
     }
   } else if (behavior === TOP_FIRST) {
     const firstInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
@@ -106,9 +100,6 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     if (sizeChange > 0) { // Need to reduce other
       firstInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.UP))
       secondInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.DOWN))
-
-      const changeInView = getChangeInViewSize(resizable)
-      allowedChange = newSize + changeInView - addOnSizeChange
     }
 
     if (sizeChange < 0) { // Need to increase other
@@ -116,12 +107,10 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
 
       firstInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.UP))
       secondInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.DOWN))
-
-      const changeInView = getChangeInViewSize(resizable)
-      allowedChange = acceptableNewSize + changeInView
     }
   }
-
+  const changeInView = getChangeInViewSize(resizable)
+  allowedChange = newSize + changeInView
   if (!isSecondAttemp) {
     setSizeMethod(resizable, id, allowedChange, behavior, true)
   }

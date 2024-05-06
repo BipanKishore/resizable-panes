@@ -1,3 +1,4 @@
+import {SinonSpy} from 'cypress/types/sinon'
 import {checkWidths} from './check-widths'
 import {VIEW_PORT_PADDING} from './constants'
 import {IMoveEvent, ISizeMap} from './types'
@@ -229,4 +230,6 @@ export class RCy {
       .wait(50)
     this.cyGet(mountUnMountButtonId).click()
   }
+
+  getAllArgs = (spy: SinonSpy) => spy.getCalls().map(({args}) => args)
 }

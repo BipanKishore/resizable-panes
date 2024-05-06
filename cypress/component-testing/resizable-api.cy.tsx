@@ -29,6 +29,7 @@ import {
   BUTTOM_FIRST, DEFAULT_MAX_SIZE, DEFAULT_MIN_SIZE,
   HIDDEN, TOP_FIRST, VISIBLE
 } from '../../src/constant'
+import {SinonSpy} from 'cypress/types/sinon'
 
 describe('Storage api', () => {
   const rCy = new RCy({
@@ -543,6 +544,8 @@ describe('Storage api', () => {
 
 describe('Should make partial hidden visible with setSize', () => {
   let resizableApi: IResizableApi
+  let onResizeStop: SinonSpy
+  let onChangeVisibility: SinonSpy
 
   const rCy = new RCy({
     resizerSize: 1,
@@ -550,6 +553,8 @@ describe('Should make partial hidden visible with setSize', () => {
   })
   beforeEach(() => {
     rCy.setViewPort()
+    onResizeStop = cy.spy()
+    onChangeVisibility = cy.spy()
     cy.mount(
       <RPTestWrapper
         panesList={noMinMax5PanesSet}
@@ -559,12 +564,101 @@ describe('Should make partial hidden visible with setSize', () => {
         storageApi={localStorage}
         uniqueId={rScontainerId}
         vertical
+        onChangeVisibility={onChangeVisibility}
         onReady={(api: IResizableApi) => {
           resizableApi = api
         }}
+        onResizeStop={onResizeStop}
       >
       </RPTestWrapper>
     )
+  })
+
+  // Edge
+  it(`
+  -- Partially hide P2 moving R2 to R1
+  -- setSize P2 with 150 and BUTTOM_FIRST
+  -- should emit onResizeStop haveing P2 = 150
+  `, () => {
+    rCy.move(R2, R1, 'left')
+    cy.wait(50)
+      .then(() => {
+        resizableApi.setSize(P2, 150, BUTTOM_FIRST)
+        expect(onResizeStop.getCalls()[2].lastArg).to.deep.equal(
+          {P0: 97, P1: 289, P2: 150, P3: 332, P4: 96}
+        )
+      })
+  })
+
+  // Edge
+  it(`
+    -- Partially hide P2 moving R1 to R2
+    -- setSize P2 with 150 and BUTTOM_FIRST
+    -- should emit onResizeStop haveing P2 = 150
+    `, () => {
+    rCy.move(R2, R1, 'left')
+    cy.wait(50)
+      .then(() => {
+        resizableApi.setSize(P2, 150, BUTTOM_FIRST)
+        console.log(onResizeStop.getCalls()[2].lastArg)
+        expect(onResizeStop.getCalls()[2].lastArg).to.deep.equal(
+          {P0: 97, P1: 289, P2: 150, P3: 332, P4: 96}
+        )
+      })
+  })
+
+  // Edge
+  it(`
+    -- Partially hide P2 moving R1 to R2
+    -- setSize P2 with 150 and TOP_FIRST
+    -- should emit onResizeStop haveing P2 = 150
+    `, () => {
+    rCy.move(R2, R1, 'left')
+    cy.wait(50)
+      .then(() => {
+        resizableApi.setSize(P2, 150, TOP_FIRST)
+        console.log(onResizeStop.getCalls()[2].lastArg)
+        expect(onResizeStop.getCalls()[2].lastArg).to.deep.equal(
+          {P0: 97, P1: 129, P2: 150, P3: 492, P4: 96}
+        )
+      })
+  })
+
+  // Edge
+  it(`
+    -- Partially hide P2 moving R2 to R1
+    -- setSize P2 with 150 and TOP_FIRST
+    -- should emit onResizeStop haveing P2 = 150
+    `, () => {
+    rCy.move(R1, R2, 'left')
+    cy.wait(50)
+      .then(() => {
+        resizableApi.setSize(P2, 150, TOP_FIRST)
+        console.log(onResizeStop.getCalls()[2].lastArg)
+        expect(onResizeStop.getCalls()[2].lastArg).to.deep.equal(
+          {P0: 97, P1: 332, P2: 150, P3: 289, P4: 96}
+        )
+      })
+  })
+
+  // Edge
+  it(`
+    -- Partially hide last Pane moving last Resizer to right
+    -- setSize last Pane with 150 and BUTTOM_FIRST
+    -- should emit onChangeVisibility haveing P4 = visible
+    -- should emit onResizeStop haveing P4 = 150
+    `, () => {
+    rCy.move(R3, containerId, 'right')
+    cy.wait(50)
+      .then(() => {
+        resizableApi.setSize(P4, 150, BUTTOM_FIRST)
+        expect(onChangeVisibility.getCalls()[2].lastArg).to.deep.equal(
+          {P0: 'visible', P1: 'visible', P2: 'visible', P3: 'visible', P4: 'visible'}
+        )
+        expect(onResizeStop.getCalls()[2].lastArg).to.deep.equal(
+          {P0: 97, P1: 289, P2: 193, P3: 235, P4: 150}
+        )
+      })
   })
 
   // Edge Edge

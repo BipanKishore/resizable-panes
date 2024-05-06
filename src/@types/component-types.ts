@@ -75,6 +75,11 @@ export interface IResizablePaneProviderProps {
   visibility?: IKeyToBoolMap;
   unmountOnHide?: boolean;
   zipping?: boolean;
+  minSizeClass?: string,
+  maxSizeClass?: string,
+  onMinSize?: (id: string, minSize:number) => void,
+  onMaxSize?: (id: string, maxSize:number) => void,
+  onNormalSize?: (id: string) => void
 }
 
 export interface IPane {
@@ -87,6 +92,11 @@ export interface IPane {
   minSize?: number;
   resizer?: ReactNode;
   resizerSize?: number;
+  minSizeClass?: string,
+  maxSizeClass?: string,
+  onMinSize?: (id: string, minSize:number) => void,
+  onMaxSize?: (id: string, maxSize:number) => void,
+  onNormalSize?: (id: string) => void
 }
 
 export interface IPaneRef {

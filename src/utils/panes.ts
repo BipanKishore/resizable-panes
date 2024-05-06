@@ -92,6 +92,10 @@ export const setUpMaxLimits = (panesList: PaneModel[], index: number) => {
   }
 }
 
+export const updatSizeStateAllPanes = (panesList: PaneModel[]) => {
+  panesList.forEach(item => item.updatSizeState())
+}
+
 export const safeSetVisibility = (item : IResizableItem, visibility: boolean, isPartiallyHidden?: boolean) => {
   if (item) {
     item.setVisibility(visibility, isPartiallyHidden)

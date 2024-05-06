@@ -2,14 +2,15 @@ import {
   IHiddenResizer,
   IPane,
   IResizablePaneProviderProps,
+  ISizeState,
   IStoreResizableItemsModel, UnitTypes, addAndRemoveType
 } from '../@types'
 import {
-  DIRECTIONS, LEFT, NONE, PLUS,
-  RATIO, RIGHT, SIZE, VISIBILITY, ZERO
+  DIRECTIONS, LEFT, MAX_SIZE_STATE, MIN_SIZE_STATE, NONE, NORMAL_SIZE_STATE, PLUS,
+  RATIO, RIGHT, SIZE, VISIBILITY
 } from '../constant'
 import {ResizeStorage} from '../utils/storage'
-import {filterKeys, isItDown, isItUp, ratioAndRoundOff} from '../utils/util'
+import {filterKeys, isItDown, isItUp, ratioAndRoundOff, safeSplit} from '../utils/util'
 import {attachDefaultPaneProps, checkPaneModelErrors} from './utils'
 
 export class PaneModel {
@@ -23,6 +24,9 @@ export class PaneModel {
   initialSetSize: number
   initialSetSizeResizer: IHiddenResizer
 
+  maxSizeClassList : string[]
+  minSizeClassList : string[]
+
   resizerSize: number
 
   id: string
@@ -31,6 +35,8 @@ export class PaneModel {
   sizeRatio: number
   minSizeRatio: number
   maxSizeRatio: number
+
+  sizeState: ISizeState = NORMAL_SIZE_STATE
 
   minMaxUnit: UnitTypes
 
@@ -66,8 +72,12 @@ export class PaneModel {
   props:IPane
   // Development Variables
 
-  constructor (paneProps: any, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
-    this.props = attachDefaultPaneProps(paneProps)
+  constructor (paneProps: IPane, resizableProps: IResizablePaneProviderProps, store: ResizeStorage) {
+    this.props = attachDefaultPaneProps(paneProps, resizableProps)
+
+    this.maxSizeClassList = safeSplit(paneProps.maxSizeClass)
+    this.minSizeClassList = safeSplit(paneProps.minSizeClass)
+
     const {
       id, minSize, size, maxSize
     } = this.props
@@ -189,6 +199,53 @@ export class PaneModel {
     }
   }
 
+  // eslint-disable-next-line complexity
+  updatSizeState () {
+    if (this.visibility && !this.isHandle) {
+      const {size, props, id} = this
+      let newSetSize : ISizeState
+      if (size === this.defaultMaxSize) {
+        newSetSize = MAX_SIZE_STATE
+      } else if (size === this.defaultMinSize) {
+        newSetSize = MIN_SIZE_STATE
+      } else {
+        newSetSize = NORMAL_SIZE_STATE
+      }
+
+      let classListToRemove : string[] = []
+      let classListToAdd : string[] = []
+
+      if (this.sizeState !== newSetSize) {
+        if (newSetSize === NORMAL_SIZE_STATE) {
+          classListToRemove = [...this.minSizeClassList, ...this.maxSizeClassList]
+          props.onNormalSize(id)
+        }
+        if (newSetSize === MIN_SIZE_STATE) {
+          classListToRemove = this.maxSizeClassList
+          classListToAdd = this.minSizeClassList
+          props.onMinSize(id, size)
+        }
+        if (newSetSize === MAX_SIZE_STATE) {
+          classListToRemove = this.minSizeClassList
+          classListToAdd = this.maxSizeClassList
+          props.onMaxSize(id, size)
+        }
+
+        classListToRemove
+          .forEach(className => {
+            this.api.node.classList.remove(className)
+          })
+
+        classListToAdd
+          .forEach(className => {
+            this.api.node.classList.add(className)
+          })
+
+        this.sizeState = newSetSize
+      }
+    }
+  }
+
   changeSize (sizeChange: number, operation: addAndRemoveType, direction: number) {
     const newSize = this.axisSize + (operation === PLUS ? sizeChange : -sizeChange)
 
@@ -196,8 +253,6 @@ export class PaneModel {
 
     if (newSize >= this.minSize && newSize <= this.maxSize) {
       this.size = newSize
-      this.clearHiddenResizer()
-      return ZERO
     } else if (newSize > this.maxSize) {
       this.size = this.maxSize
     } else {

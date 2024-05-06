@@ -1,5 +1,5 @@
 import {IAnyMap, IPaneModelKey, IStoreResizableItemsModel} from '../@types'
-import {DIRECTIONS, RESIZER} from '../constant'
+import {DIRECTIONS, RESIZER, SIZE} from '../constant'
 import {PaneModel} from '../models'
 
 export type INoop = (_: any) => any
@@ -12,12 +12,14 @@ export const findById = <T>(list: T[] | any[], _id: string) =>
 export const createMap = (paneList: PaneModel[] | IStoreResizableItemsModel[], ...keys: IPaneModelKey[]) => {
   const map: IAnyMap = {}
   paneList.forEach((pane) => {
+    const getValue = (key: string) => key === SIZE ? pane.getSize() : pane[key]
+
     const {id} = pane
     if (keys.length === 1) {
-      map[id] = pane[keys[0]]
+      map[id] = getValue(keys[0])
     } else {
       map[id] = keys.reduce((acc: any, key) => {
-        acc[key] = pane[key]
+        acc[key] = getValue(key)
         return acc
       }, {})
     }
@@ -48,7 +50,7 @@ export const addDefaultProps = (props: any, defaultProps: any) => {
   return newProps
 }
 
-export const filterKeys = <T> (obj: T, ...keys: (keyof T)[]) => {
+export const filterKeys = <T>(obj: T, ...keys: (keyof T)[]) => {
   const retObj: any = {}
   keys.forEach(key => {
     retObj[key] = obj[key as keyof T]
@@ -73,3 +75,8 @@ export const deleteUndefined = (anyObject: any) => {
 }
 
 export const reverse = <T>(list: T[]): T[] => [...list].reverse()
+export const filterEmpty = (list: any[]) => list.filter(_ => _)
+
+export const safeSplit = (value: string = '') => {
+  return filterEmpty(value.split(' '))
+}

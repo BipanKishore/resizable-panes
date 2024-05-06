@@ -14,6 +14,9 @@ const rScontainerId = 'rScontainerId'
 const containerId = rScontainerId
 const mountUnMountButtonId = 'hide-resizable-panes'
 
+export const minSizeClassTest = 'minSizeClassTest'
+export const maxSizeClassTest = 'maxSizeClassTest'
+
 const loadingId = 'loading'
 const loadedId = 'loaded'
 export {

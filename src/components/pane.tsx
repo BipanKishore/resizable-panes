@@ -31,6 +31,7 @@ export const Pane = (props: IPane) => {
 
     registerItem(
       {
+        node,
         destroy,
         setSize
       },

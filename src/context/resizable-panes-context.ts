@@ -18,7 +18,8 @@ import {
   setDownMaxLimits,
   setUISizesFn,
   setUpMaxLimits,
-  syncAxisSizesFn
+  syncAxisSizesFn,
+  updatSizeStateAllPanes
 } from '../utils/panes'
 import {
   calculateAxes,
@@ -83,6 +84,7 @@ export const getResizableContext = (
   })
 
   const syncAxisSizes = () => syncAxisSizesFn(items)
+  const updateSizeStates = () => updatSizeStateAllPanes(panesList)
 
   const emitResize = () => {
     const resizeParams = getIdToSizeMap()
@@ -138,6 +140,11 @@ export const getResizableContext = (
     }
   }
 
+  const onNewView = (except: IClearFlagsParam = '') => {
+    clearflagsOnNewView(except)
+    updateSizeStates()
+  }
+
   const calculateAndSetHeight = (e: IResizableEvent) => {
     const {movement} = e
     if (resizable.isViewSizeChanged || !movement) {
@@ -151,7 +158,7 @@ export const getResizableContext = (
       movingLogic(e, resizable)
     }
     setUISizesFn(items, resizable.direction)
-    clearflagsOnNewView()
+    onNewView()
     emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
   }
 
@@ -206,7 +213,7 @@ export const getResizableContext = (
     emitResizeStop()
     emitChangeVisibility()
     storage.setStorage(resizable)
-    clearflagsOnNewView(VISIBILITY)
+    onNewView(VISIBILITY)
   }
 
   // It is getting default empty Object param
@@ -239,7 +246,7 @@ export const getResizableContext = (
 
   const restore = () => {
     restoreFn(resizable.items)
-    clearflagsOnNewView()
+    onNewView()
     emitResizeStop()
     emitChangeVisibility()
   }
@@ -258,7 +265,8 @@ export const getResizableContext = (
     setUISizesFn(items, DIRECTIONS.NONE)
     consoleGetSize(items)
     emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
-    clearflagsOnNewView(SET_SIZE)
+    emitResizeStop()
+    onNewView(SET_SIZE)
   }
 
   const api = {

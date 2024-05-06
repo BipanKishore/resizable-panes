@@ -45,3 +45,7 @@ export const BORDER_TOP = 'borderTop'
 export const BORDER_BOTTOM = 'borderBottom'
 
 export const RESIZE_HTML_EVENT = 'resize'
+
+export const MIN_SIZE_STATE = 'minSizeState'
+export const MAX_SIZE_STATE = 'maxSizeState'
+export const NORMAL_SIZE_STATE = 'normalSizeState'
