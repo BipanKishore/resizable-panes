@@ -265,6 +265,7 @@ export const getResizableContext = (
     setUISizesFn(items, DIRECTIONS.NONE)
     consoleGetSize(items)
     emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
+    emitResizeStop()
     onNewView(SET_SIZE)
   }
 
