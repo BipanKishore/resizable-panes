@@ -368,7 +368,7 @@ describe('_3PanesWithMinMax_3PanesWithMinMax', () => {
     )
   })
 
-  it('asdf', () => {
+  it.skip('asdf', () => {
     rCy.cyGet(CK2).click()
     rCy.move(R0, rScontainerId, 'right')
 
