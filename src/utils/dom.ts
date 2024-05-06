@@ -4,7 +4,9 @@ import {
 } from '../@types'
 import {
   BORDER_BOTTOM, BORDER_LEFT, BORDER_RIGHT,
-  DIRECTIONS, HIDDEN, MARGIN, MIN_HEIGHT, MIN_WIDTH, RATIO,
+  BORDER_TOP,
+  DIRECTIONS, HIDDEN, MARGIN, MARGIN_BOTTOM, MARGIN_LEFT,
+  MARGIN_RIGHT, MARGIN_TOP, MIN_HEIGHT, MIN_WIDTH, RATIO,
   VISIBLE
 } from '../constant'
 
@@ -66,8 +68,14 @@ export const getDirection = (e: IResizableEvent) => e.movement < 0 ? DIRECTIONS.
 export const toArray = (items: any) => Array.isArray(items) ? items : [items]
 
 const clearPlainResizerStyle = (node: any) => {
-  [MARGIN, MIN_WIDTH, MIN_HEIGHT, BORDER_LEFT,
-    BORDER_RIGHT, BORDER_BOTTOM, BORDER_RIGHT].forEach((key:string) => {
+  [
+    MARGIN,
+    MARGIN_LEFT,
+    MARGIN_RIGHT,
+    MARGIN_TOP,
+    MARGIN_BOTTOM,
+    MIN_WIDTH, MIN_HEIGHT,
+    BORDER_LEFT, BORDER_RIGHT, BORDER_BOTTOM, BORDER_TOP].forEach((key:string) => {
     node.style[key] = null
   })
 }
@@ -83,22 +91,24 @@ export const generateResizerStyle = (resizerSize: number,
   const minSize = toPx(resizerSize + 2 * detectionSize)
   const border = `${detectionSizePx} solid transparent`
 
+  const negativeDetectionSizePxString = `-${detectionSizePx}`
+
   if (vertical) {
     return {
-      marginLeft: `-${detectionSizePx}`,
-      marginRight: `-${detectionSizePx}`,
+      [MARGIN_LEFT]: negativeDetectionSizePxString,
+      [MARGIN_RIGHT]: negativeDetectionSizePxString,
       minWidth: minSize,
-      borderLeft: border,
-      borderRight: border
+      [BORDER_LEFT]: border,
+      [BORDER_RIGHT]: border
     }
   }
 
   return {
-    marginTop: `-${detectionSizePx}`,
-    marginBottom: `-${detectionSizePx}`,
+    [MARGIN_TOP]: negativeDetectionSizePxString,
+    [MARGIN_BOTTOM]: negativeDetectionSizePxString,
     minHeight: minSize,
-    borderTop: border,
-    borderBottom: border
+    [BORDER_TOP]: border,
+    [BORDER_BOTTOM]: border
   }
 }
 
