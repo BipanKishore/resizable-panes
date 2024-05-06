@@ -36,13 +36,26 @@ export const ZIPPED = 'zipped'
 export const VISIBLE = 'visible'
 export const HIDDEN = 'hidden'
 
-export const MARGIN = 'margin'
+export const MARGIN = 'margin' // Not required to export
+export const BORDER = 'border' // Not required to export
 export const MIN_WIDTH = 'minWidth'
 export const MIN_HEIGHT = 'minHeight'
-export const BORDER_LEFT = 'borderLeft'
-export const BORDER_RIGHT = 'borderRight'
-export const BORDER_TOP = 'borderTop'
-export const BORDER_BOTTOM = 'borderBottom'
+
+const CSS_POSITION_KEYS = ['Left', 'Right', 'Top', 'Bottom']
+
+export const [
+  MARGIN_LEFT,
+  MARGIN_RIGHT,
+  MARGIN_TOP,
+  MARGIN_BOTTOM
+] = CSS_POSITION_KEYS.map(key => `${MARGIN}${key}`)
+
+export const [
+  BORDER_LEFT,
+  BORDER_RIGHT,
+  BORDER_TOP,
+  BORDER_BOTTOM
+] = CSS_POSITION_KEYS.map(key => `${BORDER}${key}`)
 
 export const RESIZE_HTML_EVENT = 'resize'
 
