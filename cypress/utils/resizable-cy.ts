@@ -4,8 +4,9 @@ import {VIEW_PORT_PADDING} from './constants'
 import {IMoveEvent, ISizeMap} from './types'
 import {
   continousMovements,
+  getHookMethod,
   getPaneIds, getRects, move, moveElementLeft,
-  moveItem, moveLeftEvent, moveNPixel,
+  moveItem, moveLeftEvent,
   moveRightEvent
 } from './utils'
 
@@ -146,6 +147,16 @@ export class RCy {
     resizerIds.pop()
     const checkboxIds = paneIds.map((id) => `checkbox-${id}`)
 
+    const laodingIds = paneIds.map((id) => {
+      const createHook = getHookMethod(id)
+      return createHook('loading')
+    })
+
+    const laodedIds = paneIds.map((id) => {
+      const createHook = getHookMethod(id)
+      return createHook('loaded')
+    })
+
     this.paneIds = paneIds
     this.resizerIds = resizerIds
 
@@ -160,6 +171,8 @@ export class RCy {
     this.itemItems = itemItems
 
     return {
+      laodedIds,
+      laodingIds,
       resizerIds,
       checkboxIds,
       paneIds

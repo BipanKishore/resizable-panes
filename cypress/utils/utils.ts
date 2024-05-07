@@ -311,3 +311,9 @@ export const mountingWithRetry = (mounting: any, resizablePanesId: string, retry
       }
     })
 }
+
+export const getHookMethod = (parentHook: string) => {
+  return (hook: string) => {
+    return `${parentHook}-${hook}`
+  }
+}
