@@ -46,15 +46,15 @@ export const movingLogic = (e: IResizableEvent, {
 }
 
 // eslint-disable-next-line complexity
-export const setVirtualOrderList = (serviceRefCurrent: ResizableModel) => {
-  const {items, direction, handleId} = serviceRefCurrent
+export const setVirtualOrderList = (resizable: ResizableModel) => {
+  const {items, direction, handleId} = resizable
 
   const visibleItems = getVisibleItems(items)
   const visibleActiveIndex = findIndex(visibleItems, handleId)
 
   const decreasingItems: (IResizableItem | undefined)[] = []
   let increasingItems: (IResizableItem | undefined)[] = []
-  let virtualOrderList: (IResizableItem | undefined)[]
+  let virtualOrderList: (IResizableItem)[]
 
   if (isItUp(direction)) {
     for (let i = visibleActiveIndex - 1; i > -1; i -= 2) {
@@ -101,17 +101,17 @@ export const setVirtualOrderList = (serviceRefCurrent: ResizableModel) => {
     virtualOrderList = [...increasingItems, ...decreasingItems]
   }
 
-  serviceRefCurrent.virtualOrderList = getVisibleItems(filterEmpty(virtualOrderList))
-  serviceRefCurrent.increasingItems = getVisibleItems(filterEmpty(increasingItems))
-  serviceRefCurrent.decreasingItems = getVisibleItems(filterEmpty(decreasingItems))
+  resizable.virtualOrderList = getVisibleItems(filterEmpty(virtualOrderList))
+  resizable.increasingItems = getVisibleItems(filterEmpty(increasingItems))
+  resizable.decreasingItems = getVisibleItems(filterEmpty(decreasingItems))
 
-  serviceRefCurrent.virtualActiveIndex = findIndex(serviceRefCurrent.virtualOrderList, handleId)
+  resizable.virtualActiveIndex = findIndex(resizable.virtualOrderList, handleId)
 }
 
-export const setCurrentMinMax = (serviceRefCurrent: ResizableModel) => {
-  const {containerSize} = getMaxContainerSizes(serviceRefCurrent)
+export const setCurrentMinMax = (resizable: ResizableModel) => {
+  const {containerSize} = getMaxContainerSizes(resizable)
 
-  const {virtualOrderList, virtualActiveIndex} = serviceRefCurrent
+  const {virtualOrderList, virtualActiveIndex} = resizable
 
   const nextIdx = virtualActiveIndex + 1
   const aMaxChangeUp = virtualOrderList[virtualActiveIndex].getMinDiff()

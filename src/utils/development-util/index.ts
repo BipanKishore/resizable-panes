@@ -69,11 +69,11 @@ export const consoleResizerLimitCrossedDown = () => {
   console.error('setDownMaxLimits setDownMaxLimits')
 }
 
-export const consoleVirtualOrder = (serviceRefCurrent: ResizableModel) => {
+export const consoleVirtualOrder = (resizable: ResizableModel) => {
   console.log(
-    'visibleActiveIndex', serviceRefCurrent.virtualActiveIndex
+    'visibleActiveIndex', resizable.virtualActiveIndex
   )
-  console.log('increasingItems', getList((serviceRefCurrent.increasingItems), 'id'))
-  console.log('decreasingItems', getList(serviceRefCurrent.decreasingItems, 'id'))
-  console.log('virtualOrderList', getList(serviceRefCurrent.virtualOrderList, 'id'))
+  console.log('increasingItems', getList((resizable.increasingItems), 'id'))
+  console.log('decreasingItems', getList(resizable.decreasingItems, 'id'))
+  console.log('virtualOrderList', getList(resizable.virtualOrderList, 'id'))
 }
