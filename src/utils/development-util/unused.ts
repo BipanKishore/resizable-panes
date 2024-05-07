@@ -1,5 +1,7 @@
 import {IResizableItem} from '../../@types'
-import {DIRECTIONS, RIGHT_BUTTON_VALUE} from '../../constant'
+import {DIRECTIONS} from '../../constant'
+
+export const RIGHT_BUTTON_VALUE = 0
 
 // eslint-disable-next-line complexity
 export const directionBehaviourConsole = (direction: number, prevDirection: number) => {
