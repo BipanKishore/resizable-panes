@@ -1,8 +1,9 @@
 import {ReactElement} from 'react'
 import {IStoreModel, IStoreResizableItemsModel} from '../@types'
-import {getResizerSum} from './panes'
+import {getPanesSizeSum} from './panes'
 import {findById} from './util'
 import {ResizableModel} from '../models'
+import {DEFAULT_MAX_SIZE} from '../constant'
 
 export class ResizeStorage {
   panesComponents: ReactElement[]
@@ -25,11 +26,10 @@ export class ResizeStorage {
 
     // Need to make sure if we are using it containerSize
     const containerSize = _containerSize || (vertical ? width : height) -
-    getResizerSum(resizersList, 0, resizersList.length - 1)
+    getPanesSizeSum(resizersList, 0, resizersList.length)
 
     const objectToSave = {
       panes: panesList.map(item => item.getStoreModel()),
-      resizers: resizersList.map(item => item.getStoreModel()), // Now not required
       containerSize
     }
     this.store = objectToSave
@@ -48,7 +48,7 @@ export class ResizeStorage {
     if (storageApi) {
       value = storageApi.getItem(uniqueId)
       const parsedValue: IStoreModel = JSON.parse(value, function (key, value) {
-        if (key === 'defaultMaxSize') {
+        if (key === DEFAULT_MAX_SIZE) {
           return Number(value)
         }
         return value
@@ -73,8 +73,7 @@ export class ResizeStorage {
     }
     this.empty = true
     return {
-      panes: [],
-      resizers: []
+      panes: []
     } as IStoreModel
   }
 
@@ -83,36 +82,4 @@ export class ResizeStorage {
     const {panes} = this.getStorage()
     return findById(panes, id) ?? null
   }
-
-  // getStoredResizer (id: string) {
-  //   const {resizers} = this.getStorage()
-  //   return findById(resizers, id) ?? null
-  // }
-
-  // Need to check this
-  // readPaneChange (children: ReactElement[], context: any) {
-  //   const {panes, containerSize} = this.getStorage()
-  //   if (!containerSize) {
-  //     return
-  //   }
-
-  //   const {panesList} = context.resizable
-  //   let isVisibilityChanged = false
-
-  //   const visibleIds = children.map((child: any) => child.props.id)
-
-  //   panesList.forEach((pane: any) => {
-  //     const visibility = visibleIds.includes(pane.id)
-  //     if (pane.visibility !== visibility) {
-  //       pane.visibility = visibility
-  //       isVisibilityChanged = true
-  //     }
-  //     pane.size = findById(panes, pane.id).size
-  //   })
-
-  //   if (isVisibilityChanged) {
-  //     // toRatioModeFn(panesList, containerSize)
-  //     context.resizable.isSetRatioMode = true
-  //   }
-  // }
 }

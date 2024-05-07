@@ -124,7 +124,6 @@ export interface IStoreResizableItemsModel {
 
 export interface IStoreModel {
   panes: IStoreResizableItemsModel[];
-  resizers: IStoreResizableItemsModel[];
   containerSize?: number;
 }
 

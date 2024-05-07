@@ -54,10 +54,6 @@ export const getPanesSizeSum = (panesList: PaneModel[], start?: number, end?: nu
 export const getRatioSizeSum = (panesList: PaneModel[]) =>
   getSum(panesList, pane => pane.getRatioSize())
 
-// returns the visible resizer size
-export const getResizerSum = (resizersList: ResizerModel[], start?: number, end?: number) =>
-  getSum(resizersList, resizer => resizer.getSize(), start, end)
-
 export const getMaxSizeSum = (panesList: PaneModel[], start?: number, end?: number) =>
   getSum(panesList, (pane) => pane.maxSize, start, end)
 
