@@ -5,18 +5,13 @@ export const DIRECTIONS = {
   UP: 1
 }
 
-export const RIGHT_BUTTON_VALUE = 0
-
-export const ZERO = 0
-export const MINUS_ONE = -1
-
 // export const APP_NAME = 'react-split-pane'
 
 export const RATIO = 'ratio'
 export const SET_SIZE = 'setSize'
 
-export const BUTTOM_FIRST = 'buttom_first'
-export const TOP_FIRST = 'top_first'
+export const BUTTOM_FIRST = 'buttomFirst'
+export const TOP_FIRST = 'topFirst'
 
 export const RESIZER = 'resizer'
 
@@ -37,7 +32,7 @@ export const VISIBLE = 'visible'
 export const HIDDEN = 'hidden'
 
 export const MARGIN = 'margin' // Not required to export
-export const BORDER = 'border' // Not required to export
+const BORDER = 'border'
 export const MIN_WIDTH = 'minWidth'
 export const MIN_HEIGHT = 'minHeight'
 

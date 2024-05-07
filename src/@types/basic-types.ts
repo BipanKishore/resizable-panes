@@ -16,6 +16,6 @@ export type IStringOrUndefined = string | undefined
 export type IVisibilityState = 'zipped' | 'visible' | 'hidden'
 
 export type IClearFlagsParam = 'setSize' | 'ratio' | 'visibility' | ''
-export type ISetSizeBehaviour = 'ratio' | 'buttom_first' | 'top_first'
+export type ISetSizeBehaviour = 'ratio' | 'buttomFirst' | 'topFirst'
 
 export type ISizeState = 'minSizeState' | 'maxSizeState' | 'normalSizeState'
