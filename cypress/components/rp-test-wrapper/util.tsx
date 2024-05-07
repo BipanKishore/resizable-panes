@@ -1,6 +1,6 @@
 import React from 'react'
 import {Pane} from '../../../src'
-import {Loading} from '../Loading'
+import {PaneChild} from '../pane-child'
 import {maxSizeClassTest, minSizeClassTest} from '../../component-testing/fix-test-ids'
 
 export class PaneModelConfig {
@@ -34,7 +34,7 @@ export const generatePaneModel = (list: PaneModelConfig[]) => {
         size={size}
       >
         {<h2>{`P${index}`}</h2>}
-        <Loading />
+        <PaneChild hook={`P${index}`} />
       </Pane>
     )
   )

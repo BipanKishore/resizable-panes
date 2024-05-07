@@ -6,12 +6,13 @@ import {
   noMinMax5PanesSet,
   withMinMaxWithMinMaxUnitPixel5PanesSet
 } from '../pane-model-config-sets'
-import {CK0, R0, R1, rScontainerId} from '../fix-test-ids'
+import {CK0, L0, LG0, R0, R1, rScontainerId} from '../fix-test-ids'
 import {CustomResizerFirst} from '../../components/custom-resizer'
 import {ResizableComponentCustomPanesTestWrapper}
   from '../../components/rp-test-wrapper/resizable-component-custom-panes-test-wrapper'
 import {Pane} from '../../../src'
-import {Loading} from '../../components/Loading'
+import {PaneChild} from '../../components/pane-child'
+import {LOADED_TEXT, LOADING_TEXT} from '../../utils/constants'
 
 const containerId = rScontainerId
 
@@ -100,7 +101,7 @@ describe('Test Pane Model', () => {
   })
 
   describe('visibility + unmountOnHide', () => {
-    it('destoryOnHide: true at parent level', () => {
+    it('unmountOnHide: true at parent level', () => {
       cy.viewport(1000, 1000)
       cy.mount(
         <RPTestWrapper
@@ -113,13 +114,17 @@ describe('Test Pane Model', () => {
         >
         </RPTestWrapper>
       )
+      rCy.cyGet(CK0).click()
       cy.wait(1000).then(() => {
         rCy.cyGet(CK0).click()
-        rCy.cyGet(CK0).click()
+        cy.wait(50).then(() => {
+          rCy.cyGet(LG0)
+            .should('have.text', LOADING_TEXT)
+        })
       })
     })
 
-    it('destoryOnHide: false at parent level', () => {
+    it('unmountOnHide: false at parent level', () => {
       cy.viewport(1000, 1000)
       cy.mount(
         <RPTestWrapper
@@ -134,13 +139,17 @@ describe('Test Pane Model', () => {
         </RPTestWrapper>
       )
 
+      rCy.cyGet(CK0).click()
       cy.wait(1000).then(() => {
         rCy.cyGet(CK0).click()
-        rCy.cyGet(CK0).click()
+        cy.wait(50).then(() => {
+          rCy.cyGet(L0)
+            .should('have.text', LOADED_TEXT)
+        })
       })
     })
 
-    it('destoryOnHide: false at Pane level', () => {
+    it('unmountOnHide: false at Pane level', () => {
       cy.viewport(1000, 1000)
       cy.mount(
         <ResizableComponentCustomPanesTestWrapper
@@ -157,22 +166,26 @@ describe('Test Pane Model', () => {
             unmountOnHide={false}
           >
             {' '}
-            <Loading />{' '}
+            <PaneChild hook='P0' />{' '}
           </Pane>
           <Pane className="bg-teal-500" id="P1" size={1}>
             {' '}
-            <Loading />{' '}
+            <PaneChild hook='P1' />{' '}
           </Pane>
         </ResizableComponentCustomPanesTestWrapper>
       )
 
+      rCy.cyGet(CK0).click()
       cy.wait(1000).then(() => {
         rCy.cyGet(CK0).click()
-        rCy.cyGet(CK0).click()
+        cy.wait(50).then(() => {
+          rCy.cyGet(L0)
+            .should('have.text', LOADED_TEXT)
+        })
       })
     })
 
-    it('destoryOnHide: true at Pane level', () => {
+    it('unmountOnHide: true at Pane level', () => {
       cy.viewport(1000, 1000)
       cy.mount(
         <ResizableComponentCustomPanesTestWrapper
@@ -183,20 +196,27 @@ describe('Test Pane Model', () => {
           unmountOnHide={false}
           vertical
         >
-          <Pane className="bg-orange-500" id="P0" size={1} unmountOnHide={true}>
+          <Pane
+            className="bg-orange-500" id="P0" size={1}
+            unmountOnHide={true}
+          >
             {' '}
-            <Loading />{' '}
+            <PaneChild hook='P0' />{' '}
           </Pane>
           <Pane className="bg-teal-500" id="P1" size={1}>
             {' '}
-            <Loading />{' '}
+            <PaneChild hook='P1' />{' '}
           </Pane>
         </ResizableComponentCustomPanesTestWrapper>
       )
 
+      rCy.cyGet(CK0).click()
       cy.wait(1000).then(() => {
         rCy.cyGet(CK0).click()
-        rCy.cyGet(CK0).click()
+        cy.wait(50).then(() => {
+          rCy.cyGet(LG0)
+            .should('have.text', LOADING_TEXT)
+        })
       })
     })
   })
