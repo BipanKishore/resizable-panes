@@ -6,7 +6,9 @@ various applications where flexible layout management is required.
 
 [Cypress Recoreded tests are available here](https://cloud.cypress.io/projects/2xc7po/branches/master/overview)
 
-## Key Features
+## [Quick Demo](https://bipankishore.github.io/resizable-panes/)
+
+## Key Features    
 
 - **Smooth Resizing:** Enjoy smooth and fast pane resizing without performance issues.
 
@@ -75,9 +77,7 @@ Sponsors will be prominently displayed on the project's README and other relevan
 
 **Influence Roadmap**: Your feedback and suggestions will carry significant weight in shaping the project's future direction and features.
 
-🙏 Your sponsorship, no matter the size, is greatly appreciated and goes a long way in sustaining this project's growth.
-
-### [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
+🙏 If You liked this project do give it a star
 
 ## ResizablePanes Props
 
@@ -133,4 +133,4 @@ Sponsors will be prominently displayed on the project's README and other relevan
 | getVisibilities |                                                              | It returns the visibility map object of Ids of Panes                                                                                     |
 | getState        |                                                              | It return the current state of all Panes.                                                                                                |
 
-### [Demo and Docs](https://bipankishore.github.io/resizable-panes-demo/)
+## [Quick Demo](https://bipankishore.github.io/resizable-panes/)
