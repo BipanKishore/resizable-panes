@@ -27,7 +27,7 @@ import {
   movingLogic,
   setCurrentMinMax,
   toRatioModeFn,
-  getIsViewSizeChanged
+  getChangeInViewSize
 } from '../utils/resizable-pane'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
@@ -40,7 +40,6 @@ import {
   ISetSizeBehaviour
 } from '../@types'
 import {PaneModel, ResizableModel} from '../models'
-import {consoleGetSize} from '../utils/development-util'
 import {setVisibilityFn} from '../utils/visibility-helper'
 import {fixPartialHiddenResizer, setResizersLimits} from '../utils/resizer'
 import {setSizeMethod} from '../utils/set-size-helper'
@@ -233,7 +232,8 @@ export const getResizableContext = (
     }
 
     setVisibilityFn(resizable, newMap)
-    resizable.isViewSizeChanged = getIsViewSizeChanged(resizable)
+    const changeInViewSize = getChangeInViewSize(resizable)
+    resizable.isViewSizeChanged = !!changeInViewSize
     reflectVisibilityChange()
   }
 
@@ -241,7 +241,6 @@ export const getResizableContext = (
     fixPartialHiddenResizer(resizable)
     storage.setStorage(resizable)
     emitResizeStop()
-    consoleGetSize(items)
   }
 
   const restore = () => {
@@ -263,7 +262,6 @@ export const getResizableContext = (
     setSizeMethod(resizable, id, newSize, behavior)
 
     setUISizesFn(items, DIRECTIONS.NONE)
-    consoleGetSize(items)
     emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
     emitResizeStop()
     onNewView(SET_SIZE)

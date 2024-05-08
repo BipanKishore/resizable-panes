@@ -2,7 +2,6 @@ import {DIRECTIONS} from '../../constant'
 import {ResizableModel, PaneModel} from '../../models'
 
 export const localConsole = (obj: any, key : string) => {
-  // console.log(key, obj)
   localStorage.setItem(key, JSON.stringify(obj))
 }
 

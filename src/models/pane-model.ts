@@ -119,7 +119,6 @@ export class PaneModel {
 
   initializeSizes (size: number, minSize: number, maxSize: number,
     defaultSize: number, storedSize: number, visibility: boolean) {
-    // console.log(this.id, size, minSize, maxSize, visibility, this.storedSize)
     this.initializeSize(size)
     this.defaultSize = defaultSize
     this.minSize = minSize
@@ -335,7 +334,6 @@ export class PaneModel {
     if (this.visibility) {
       this.size = this.minSize
       if (this.defaultMinSize === 0) {
-        console.log(this.id, this.size)
         this.setHiddenResizer(this.size, direction, 1)
       }
     }
