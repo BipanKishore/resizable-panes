@@ -204,7 +204,7 @@ export const getResizableContext = (
   }
 
   const getPaneSizeStyle = (id: string) => {
-    const size = findById(panesList, id)?.getSize()
+    const size = findById(panesList, id).getSize()
     return getSizeStyle(vertical, size as number)
   }
 
@@ -247,6 +247,7 @@ export const getResizableContext = (
   const restore = () => {
     restoreFn(resizable.items)
     onNewView()
+    storage.setStorage(resizable)
     emitResizeStop()
     emitChangeVisibility()
   }
