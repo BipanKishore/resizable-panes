@@ -69,6 +69,7 @@ export class PaneModel {
 
   oldVisibleSize: number = 0
   oldVisibility: boolean = true
+  oldHiddenResizer: IHiddenResizer
   props:IPane
   // Development Variables
 
@@ -402,11 +403,13 @@ export class PaneModel {
   setOldVisibilityModel () {
     this.oldVisibleSize = this.size
     this.oldVisibility = this.visibility
+    this.oldHiddenResizer = this.hiddenResizer
   }
 
   syncToOldVisibilityModel () {
     this.size = this.oldVisibleSize
     this.visibility = this.oldVisibility
+    this.hiddenResizer = this.oldHiddenResizer
   }
 
   storeForNewSetSizeKey () {

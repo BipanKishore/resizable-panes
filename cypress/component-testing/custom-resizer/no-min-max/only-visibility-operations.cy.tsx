@@ -3,7 +3,8 @@ import React from 'react'
 import {RCy} from '../../../utils'
 import {RPTestWrapper} from '../../../components/rp-test-wrapper'
 import {rScontainerId} from '../../fix-test-ids'
-import {_2PaneWithNoMinMax} from '../../pane-model-config-sets'
+import {_2PaneWithNoMinMax, noMinMax5PanesSet} from '../../pane-model-config-sets'
+import {CustomResizerFirst} from '../../../components/custom-resizer'
 
 const rCy = new RCy({
   resizerSize: 10
@@ -328,6 +329,49 @@ describe('Test Visibility for 2 panes', () => {
         P1: 0
       }
     )
+  })
+})
+
+describe('Test Visibility for 5 panes', () => {
+  const rCy = new RCy({
+    resizerSize: 10,
+    containerId: rScontainerId,
+    len: 5
+  })
+
+  beforeEach(() => {
+    rCy.setViewPort()
+    cy.mount(
+      <RPTestWrapper
+        panesList={noMinMax5PanesSet}
+        resizer={
+          <CustomResizerFirst size={10} />
+        }
+        resizerClass='bg-slate-500'
+        resizerSize={10}
+        storageApi={localStorage}
+        uniqueId={rScontainerId}
+        vertical
+      >
+      </RPTestWrapper>
+    )
+  })
+
+  // Edge
+  it.only(`
+  -- 1st Partially hide P2, P3, P4 (One Half)
+  -- Hide P0, 01 (Other Half)
+  -- Result It should make visible Partially hidden panes
+  -- 2nd Show P0, and P1
+  -- Partially hidden should hide again`, () => {
+    rCy.move(R1, rScontainerId, 'right')
+    rCy.cyGet(CK0).click()
+    rCy.cyGet(CK1).click()
+
+    rCy.checkWidths([0, 0, 0, 0, 340, 10, 340, 10, 340])
+    rCy.cyGet(CK0).click()
+    rCy.cyGet(CK1).click()
+    rCy.checkWidths([100, 10, 920, 10, 0, 0, 0, 0, 0])
   })
 })
 
