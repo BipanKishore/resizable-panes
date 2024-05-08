@@ -1,7 +1,6 @@
 import {IKeyToBoolMap, IResizableItem} from '../@types'
 import {LEFT, MINUS, NONE, PLUS, RIGHT} from '../constant'
 import {ResizableModel, PaneModel} from '../models'
-import {consoleGetSize} from './development-util'
 import {
   change1PixelToPanes, getItemsByIndexes,
   getPanesSizeSum, getVisibleItems,
@@ -236,6 +235,4 @@ export const setVisibilityFn = (resizable: ResizableModel, idMap: IKeyToBoolMap)
   const {maxPaneSize} = getMaxContainerSizes(resizable)
 
   updateSizeInRatio(visiblePanes, maxPaneSize, visiblePanes)
-
-  consoleGetSize(items)
 }

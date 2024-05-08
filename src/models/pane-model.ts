@@ -335,7 +335,6 @@ export class PaneModel {
     if (this.visibility) {
       this.size = this.minSize
       if (this.defaultMinSize === 0) {
-        console.log(this.id, this.size)
         this.setHiddenResizer(this.size, direction, 1)
       }
     }

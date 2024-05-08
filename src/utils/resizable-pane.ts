@@ -392,7 +392,6 @@ export const getChangeInViewSize = (resizable: ResizableModel) => {
   const {items} = resizable
   const {containerSize} = getMaxContainerSizes(resizable)
   const allItemsSum = getPanesSizeSum(items)
-  console.log('containerSize', containerSize, 'allItemsSum', allItemsSum)
   return containerSize - allItemsSum
 }
 

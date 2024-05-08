@@ -11,6 +11,47 @@ import {getChangeInViewSize} from './resizable-pane'
 import {findIndex} from './util'
 import {updateSizeInRatio} from './visibility-helper'
 
+export const setSizeTopAndBottom = (
+  sizeChange: number,
+  behavior: ISetSizeBehaviour,
+  visibleItems: IResizableItem[],
+  requestIndexInVisibleItems: number
+) => {
+  let firstInningItems : IResizableItem[]
+  let secondInningItems: IResizableItem[]
+  const getActionOnItem = (operation: addAndRemoveType, direction: number) => (item: IResizableItem) => {
+    item.syncAxisSize()
+    item.restoreLimits()
+    sizeChange = item.changeSize(sizeChange, operation, direction)
+  }
+
+  const changeSizeOfFirstAndSecondInningsItems = (firstInningDirection: number, secondInningDirection: number) => {
+    if (sizeChange > 0) { // Need to reduce other
+      firstInningItems.forEach(getActionOnItem(MINUS, firstInningDirection))
+      secondInningItems.forEach(getActionOnItem(MINUS, secondInningDirection))
+    }
+
+    if (sizeChange < 0) { // Need to increase other
+      sizeChange = Math.abs(sizeChange)
+
+      firstInningItems.forEach(getActionOnItem(PLUS, firstInningDirection))
+      secondInningItems.forEach(getActionOnItem(PLUS, secondInningDirection))
+    }
+  }
+
+  if (behavior === BUTTOM_FIRST) {
+    firstInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
+    secondInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
+
+    changeSizeOfFirstAndSecondInningsItems(DIRECTIONS.DOWN, DIRECTIONS.UP)
+  } else if (behavior === TOP_FIRST) {
+    firstInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
+    secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
+
+    changeSizeOfFirstAndSecondInningsItems(DIRECTIONS.UP, DIRECTIONS.DOWN)
+  }
+}
+
 // eslint-disable-next-line complexity
 export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: number,
   behavior: ISetSizeBehaviour = RATIO, isSecondAttemp = false) => {
@@ -49,24 +90,18 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
 
   let addOnSizeChange = 0
   let resizer: IResizableItem
-  // setting hiddenResizer state to NONE in final State
+
   if (pane.hiddenResizer === LEFT) {
     resizer = visibleItems[requestIndexInVisibleItems - 1]
   } else if (pane.hiddenResizer === RIGHT) {
     resizer = visibleItems[requestIndexInVisibleItems + 1]
   }
+  pane.hiddenResizer = NONE
 
   if (resizer) {
     resizer.setVisibility(true, false)
     addOnSizeChange = resizer.resizerSize
     sizeChange += addOnSizeChange
-  }
-  pane.hiddenResizer = NONE
-
-  const getActionOnItem = (operation: addAndRemoveType, direction: number) => (item: IResizableItem) => {
-    item.syncAxisSize()
-    item.restoreLimits()
-    sizeChange = item.changeSize(sizeChange, operation, direction)
   }
 
   if (behavior === RATIO) {
@@ -75,36 +110,10 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
 
     const newMaxPaneSizeAllowd = initialSizeSum - pane.size - addOnSizeChange
     updateSizeInRatio(remainingVisiblePanes, newMaxPaneSizeAllowd, remainingVisiblePanes)
-  } else if (behavior === BUTTOM_FIRST) {
-    const firstInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
-    const secondInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
-
-    if (sizeChange > 0) { // Need to reduce other
-      firstInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.DOWN))
-      secondInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.UP))
-    }
-    if (sizeChange < 0) { // Need to increase other
-      sizeChange = Math.abs(sizeChange)
-
-      firstInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.DOWN))
-      secondInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.UP))
-    }
-  } else if (behavior === TOP_FIRST) {
-    const firstInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
-    const secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
-
-    if (sizeChange > 0) { // Need to reduce other
-      firstInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.UP))
-      secondInningItems.forEach(getActionOnItem(MINUS, DIRECTIONS.DOWN))
-    }
-
-    if (sizeChange < 0) { // Need to increase other
-      sizeChange = Math.abs(sizeChange)
-
-      firstInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.UP))
-      secondInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.DOWN))
-    }
   }
+
+  setSizeTopAndBottom(sizeChange, behavior, visibleItems, requestIndexInVisibleItems)
+
   if (!isSecondAttemp) {
     const changeInView = getChangeInViewSize(resizable)
     const allowedChange = newSize + changeInView
