@@ -250,7 +250,7 @@ describe('should store memory', () => {
       })
   })
 
-  it.only('Should store memory after visibility change', () => {
+  it('Should store memory after visibility change', () => {
     rCy.setViewPort()
     cy.mount(
       <RPTestWrapper
