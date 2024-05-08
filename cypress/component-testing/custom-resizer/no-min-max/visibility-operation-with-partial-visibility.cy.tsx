@@ -3,12 +3,15 @@ import {RCy} from '../../../utils'
 import {ENUMS} from '../../../components/test-component-wrapper'
 import {RPTestWrapper} from '../../../components/rp-test-wrapper'
 import {CustomResizerFirst} from '../../../components/custom-resizer'
-import {noMinMaxEqualSize7PanesSet} from '../../pane-model-config-sets'
+import {_3PanesWithMinMax, noMinMaxEqualSize7PanesSet} from '../../pane-model-config-sets'
 import {
   R0, R1, R2, R3, R4, R5,
   CK0, CK1, CK2, CK3, CK6,
-  P1, P6
+  P1, P6,
+  containerId
 } from '../../fix-test-ids'
+import {IResizableApi} from '../../../../src/@types'
+import {SinonSpy} from 'cypress/types/sinon'
 
 const uniqueIdResizablePanes = ENUMS.resizablePanesId
 const rCy = new RCy({
@@ -35,9 +38,9 @@ describe('Move Panes on', () => {
   })
 
   it(`
-  -- Move R0 to R3 
-  -- hide P3,P2,P1 
-  -- Move  R3 to right by 100  
+  -- Move R0 to R3
+  -- hide P3,P2,P1
+  -- Move  R3 to right by 100
   Result- P1,R0,P2,R1,P3 should remain hidden`, () => {
     rCy.move(R0, R3)
 
@@ -51,9 +54,9 @@ describe('Move Panes on', () => {
 
   it(`
   -- Move R0 to R2
-  -- Move R5 to R3 
-  -- hide P3 
-  -- Move  R0 to right by 100  
+  -- Move R5 to R3
+  -- hide P3
+  -- Move  R0 to right by 100
   Result- P0,R0,P6 visible`, () => {
     rCy.move(R0, R2)
     rCy.move(R5, R3, 'left')
@@ -188,6 +191,53 @@ describe('Move Panes on', () => {
       [R2]: 0,
       [R3]: resizerSize
     })
+  })
+})
+
+describe('Should not emit Partial hidden ', () => {
+  let resizableApi: IResizableApi
+  let onChangeVisibility: SinonSpy
+  const rCy = new RCy({
+    resizerSize: 10,
+    containerId,
+    len: 3
+  })
+
+  beforeEach(() => {
+    rCy.setViewPort()
+
+    onChangeVisibility = cy.spy()
+    cy.mount(
+      <RPTestWrapper
+        panesList={_3PanesWithMinMax}
+        resizer={<CustomResizerFirst size={10} />}
+        resizerSize={10}
+        uniqueId={containerId}
+        vertical
+
+        onChangeVisibility={onChangeVisibility}
+        onReady={(api: IResizableApi) => {
+          resizableApi = api
+        }}
+      />
+    )
+  })
+
+  // Edge
+  it(`
+  -- Move R1 to R0 
+  -- hide R2 to R0
+  Result- It Should not emit Partial hidden`, () => {
+    rCy.move(R0, containerId, 'left')
+
+    rCy.move(R1, R0, 'left')
+    cy.wait(500)
+      .then(() => {
+        expect(resizableApi.getVisibilities()).to.deep.equal(
+          {P0: 'visible', P1: 'visible', P2: 'visible'}
+        )
+        rCy.checkWidthsAndSum([125, 10, 125, 10, 750])
+      })
   })
 })
 

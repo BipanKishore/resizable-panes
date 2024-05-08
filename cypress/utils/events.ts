@@ -1,5 +1,3 @@
-import {IResizableEvent} from '../../src/@types'
-
 export const RIGHT_MOVEMENT_VALUE = 1
 export const LEFT_MOVEMENT_VALUE = -1
 
