@@ -9,7 +9,7 @@ import {
 } from './panes'
 import {getChangeInViewSize} from './resizable-pane'
 import {findIndex} from './util'
-import {setSizesAfterVisibilityChange} from './visibility-helper'
+import {updateSizeInRatio} from './visibility-helper'
 
 // eslint-disable-next-line complexity
 export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: number,
@@ -40,7 +40,6 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
   pane.changeSizeAndReturnRemaing(newSize)
 
   const acceptableNewSize = pane.size
-  let allowedChange: number // Task it has only two condition, It (can be calc) smaller or greater than container Size
   let sizeChange = acceptableNewSize - preSize
 
   if (!sizeChange) {
@@ -75,10 +74,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     remainingVisiblePanes.splice(requestIndex, 1)
 
     const newMaxPaneSizeAllowd = initialSizeSum - pane.size - addOnSizeChange
-    setSizesAfterVisibilityChange(remainingVisiblePanes, newMaxPaneSizeAllowd, remainingVisiblePanes)
-
-    const nowSizeSum = getPanesSizeSum(visiblePanes)
-    allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
+    updateSizeInRatio(remainingVisiblePanes, newMaxPaneSizeAllowd, remainingVisiblePanes)
   } else if (behavior === BUTTOM_FIRST) {
     const firstInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
     const secondInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
@@ -109,9 +105,9 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
       secondInningItems.forEach(getActionOnItem(PLUS, DIRECTIONS.DOWN))
     }
   }
-  const changeInView = getChangeInViewSize(resizable)
-  allowedChange = newSize + changeInView
   if (!isSecondAttemp) {
+    const changeInView = getChangeInViewSize(resizable)
+    const allowedChange = newSize + changeInView
     setSizeMethod(resizable, id, allowedChange, behavior, true)
   }
 }

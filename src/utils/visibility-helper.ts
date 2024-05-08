@@ -162,7 +162,7 @@ export const setVisibilityOfResizers = (resizable: ResizableModel) => {
   getItemsVisibleAndNoPartialHidden(items)
 }
 // actionList it can be removed
-export const setSizesAfterVisibilityChange = (
+export const updateSizeInRatio = (
   allVisiblePanes: PaneModel[],
   maxPaneSize: number,
   actionVisibleList: PaneModel[]
@@ -196,7 +196,7 @@ export const setSizesAfterVisibilityChange = (
     }
   })
 
-  setSizesAfterVisibilityChange(allVisiblePanes, maxPaneSize, nextActionVisibleList)
+  updateSizeInRatio(allVisiblePanes, maxPaneSize, nextActionVisibleList)
 }
 
 export const setVisibilityFn = (resizable: ResizableModel, idMap: IKeyToBoolMap) => {
@@ -235,7 +235,7 @@ export const setVisibilityFn = (resizable: ResizableModel, idMap: IKeyToBoolMap)
 
   const {maxPaneSize} = getMaxContainerSizes(resizable)
 
-  setSizesAfterVisibilityChange(visiblePanes, maxPaneSize, visiblePanes)
+  updateSizeInRatio(visiblePanes, maxPaneSize, visiblePanes)
 
   consoleGetSize(items)
 }
