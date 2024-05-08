@@ -48,7 +48,7 @@ export const synPanesMaxToSize = (panesList: PaneModel[], start: number, end: nu
 export const synPanesMinToSize = (panesList: PaneModel[], start: number, end: number) =>
   getSum(panesList, (pane) => pane.synMinToSize(), start, end)
 
-export const getPanesSizeSum = (panesList: PaneModel[], start?: number, end?: number) =>
+export const getItemsSizeSum = (panesList: PaneModel[], start?: number, end?: number) =>
   getSum(panesList, pane => pane.getSize(), start, end)
 
 export const getRatioSizeSum = (panesList: PaneModel[]) =>

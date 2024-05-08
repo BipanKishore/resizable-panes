@@ -27,7 +27,7 @@ import {
   movingLogic,
   setCurrentMinMax,
   toRatioModeFn,
-  getIsViewSizeChanged
+  getChangeInViewSize
 } from '../utils/resizable-pane'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage} from '../utils/storage'
@@ -232,7 +232,8 @@ export const getResizableContext = (
     }
 
     setVisibilityFn(resizable, newMap)
-    resizable.isViewSizeChanged = getIsViewSizeChanged(resizable)
+    const changeInViewSize = getChangeInViewSize(resizable)
+    resizable.isViewSizeChanged = !!changeInViewSize
     reflectVisibilityChange()
   }
 

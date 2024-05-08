@@ -5,7 +5,7 @@ import {
 } from '../constant'
 import {ResizableModel} from '../models'
 import {
-  getVisibleItems, getPanesSizeSum
+  getVisibleItems, getItemsSizeSum
 } from './panes'
 import {getChangeInViewSize} from './resizable-pane'
 import {findIndex} from './util'
@@ -32,7 +32,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     resizable.setSizeKey = currentSetSizeKey
   }
 
-  const initialSizeSum = getPanesSizeSum(visiblePanes)
+  const initialSizeSum = getItemsSizeSum(visiblePanes)
 
   const pane = visiblePanes[requestIndex]
   pane.restoreLimits()
@@ -77,7 +77,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     const newMaxPaneSizeAllowd = initialSizeSum - pane.size - addOnSizeChange
     setSizesAfterVisibilityChange(remainingVisiblePanes, newMaxPaneSizeAllowd)
 
-    const nowSizeSum = getPanesSizeSum(visiblePanes)
+    const nowSizeSum = getItemsSizeSum(visiblePanes)
     allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
   } else if (behavior === BUTTOM_FIRST) {
     const firstInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)

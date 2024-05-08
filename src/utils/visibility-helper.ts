@@ -1,10 +1,9 @@
 import {IKeyToBoolMap, IResizableItem} from '../@types'
 import {LEFT, MINUS, NONE, PLUS, RIGHT} from '../constant'
 import {ResizableModel, PaneModel} from '../models'
-import {consoleGetSize} from './development-util'
 import {
   change1PixelToPanes, getItemsByIndexes,
-  getPanesSizeSum, getVisibleItems,
+  getItemsSizeSum, getVisibleItems,
   safeSetVisibility
 } from './panes'
 import {getMaxContainerSizes} from './resizable-pane'
@@ -167,7 +166,7 @@ export const setSizesAfterVisibilityChange = (
   maxPaneSize: number,
   actionVisibleList: PaneModel[] = allVisiblePanes
 ) => {
-  const currentPanesSize = getPanesSizeSum(allVisiblePanes)
+  const currentPanesSize = getItemsSizeSum(allVisiblePanes)
   const sizeChange = maxPaneSize - currentPanesSize
 
   if (sizeChange === 0 || actionVisibleList.length === 0) {
@@ -187,7 +186,7 @@ export const changeSizeInRatio = (allVisiblePanes: PaneModel[], actionVisibleLis
     return
   }
 
-  const ratioSum = getPanesSizeSum(actionVisibleList)
+  const ratioSum = getItemsSizeSum(actionVisibleList)
 
   const nextActionVisibleList: PaneModel[] = []
   actionVisibleList.forEach((pane) => {
@@ -211,25 +210,25 @@ export const setVisibilityFn = (resizable: ResizableModel, idMap: IKeyToBoolMap)
   panesList.forEach((pane) => {
     pane.syncToOldVisibilityModel()
     const {id} = pane
-    const visibility = idMap[id]
-    pane.setVisibility(visibility)
+    pane.setVisibility(idMap[id])
   })
 
   const visiblePanes = getVisibleItems(panesList)
-  const currentPanesSize = getPanesSizeSum(visiblePanes)
+  const currentPanesSize = getItemsSizeSum(visiblePanes)
+  const visibleItems = getVisibleItems(items)
   if (currentPanesSize === 0) {
-    visiblePanes.forEach((pane, index) => {
+    visibleItems.forEach((pane, index) => {
       if (!pane.isHandle) {
         if (pane.hiddenResizer === LEFT) {
           pane.size = 1
           pane.hiddenResizer = NONE
-          safeSetVisibility(visiblePanes[index - 1], true)
+          safeSetVisibility(visibleItems[index - 1], true)
         }
 
         if (pane.hiddenResizer === RIGHT) {
           pane.hiddenResizer = NONE
           pane.size = 1
-          safeSetVisibility(visiblePanes[index + 1], true)
+          safeSetVisibility(visibleItems[index + 1], true)
         }
       }
     })
@@ -240,6 +239,4 @@ export const setVisibilityFn = (resizable: ResizableModel, idMap: IKeyToBoolMap)
   const {maxPaneSize} = getMaxContainerSizes(resizable)
 
   setSizesAfterVisibilityChange(visiblePanes, maxPaneSize)
-
-  consoleGetSize(items)
 }
