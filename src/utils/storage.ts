@@ -1,6 +1,6 @@
 import {ReactElement} from 'react'
 import {IStoreModel, IStoreResizableItemsModel} from '../@types'
-import {getResizerSum} from './panes'
+import {getPanesSizeSum} from './panes'
 import {findById} from './util'
 import {ResizableModel} from '../models'
 
@@ -25,7 +25,7 @@ export class ResizeStorage {
 
     // Need to make sure if we are using it containerSize
     const containerSize = _containerSize || (vertical ? width : height) -
-    getResizerSum(resizersList, 0, resizersList.length - 1)
+    getPanesSizeSum(resizersList, 0, resizersList.length - 1)
 
     const objectToSave = {
       panes: panesList.map(item => item.getStoreModel()),
