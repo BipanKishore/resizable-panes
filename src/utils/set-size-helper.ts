@@ -5,7 +5,7 @@ import {
 } from '../constant'
 import {ResizableModel} from '../models'
 import {
-  getVisibleItems, getPanesSizeSum
+  getVisibleItems, getItemsSizeSum
 } from './panes'
 import {getChangeInViewSize} from './resizable-pane'
 import {findIndex} from './util'
@@ -73,7 +73,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     resizable.setSizeKey = currentSetSizeKey
   }
 
-  const initialSizeSum = getPanesSizeSum(visiblePanes)
+  const initialSizeSum = getItemsSizeSum(visiblePanes)
 
   const pane = visiblePanes[requestIndex]
   pane.restoreLimits()
