@@ -358,7 +358,7 @@ describe('Test Visibility for 5 panes', () => {
   })
 
   // Edge
-  it.only(`
+  it(`
   -- 1st Partially hide P2, P3, P4 (One Half)
   -- Hide P0, 01 (Other Half)
   -- Result It should make visible Partially hidden panes
