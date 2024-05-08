@@ -101,9 +101,9 @@ export const setVirtualOrderList = (resizable: ResizableModel) => {
     virtualOrderList = [...increasingItems, ...decreasingItems]
   }
 
-  resizable.virtualOrderList = getVisibleItems(filterEmpty(virtualOrderList))
-  resizable.increasingItems = getVisibleItems(filterEmpty(increasingItems))
-  resizable.decreasingItems = getVisibleItems(filterEmpty(decreasingItems))
+  resizable.virtualOrderList = filterEmpty(virtualOrderList)
+  resizable.increasingItems = filterEmpty(increasingItems)
+  resizable.decreasingItems = filterEmpty(decreasingItems)
 
   resizable.virtualActiveIndex = findIndex(resizable.virtualOrderList, handleId)
 }

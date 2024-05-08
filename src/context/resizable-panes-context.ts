@@ -89,9 +89,10 @@ export const getResizableContext = (
     const resizeParams = getIdToSizeMap()
     onResize(resizeParams)
   }
-  const emitResizeStop = () => {
+  const emitResizeStopAndStore = () => {
     const resizeParams = getIdToSizeMap()
     onResizeStop(resizeParams)
+    storage.setStorage(resizable)
   }
 
   const emitChangeVisibility = () => {
@@ -203,15 +204,14 @@ export const getResizableContext = (
   }
 
   const getPaneSizeStyle = (id: string) => {
-    const size = findById(panesList, id)?.getSize()
+    const size = findById(panesList, id).getSize()
     return getSizeStyle(vertical, size as number)
   }
 
   const reflectVisibilityChange = () => {
     setUISizesFn(items, DIRECTIONS.NONE)
-    emitResizeStop()
+    emitResizeStopAndStore()
     emitChangeVisibility()
-    storage.setStorage(resizable)
     onNewView(VISIBILITY)
   }
 
@@ -239,14 +239,13 @@ export const getResizableContext = (
 
   const onMoveEndFn = () => {
     fixPartialHiddenResizer(resizable)
-    storage.setStorage(resizable)
-    emitResizeStop()
+    emitResizeStopAndStore()
   }
 
   const restore = () => {
     restoreFn(resizable.items)
     onNewView()
-    emitResizeStop()
+    emitResizeStopAndStore()
     emitChangeVisibility()
   }
 
@@ -263,7 +262,7 @@ export const getResizableContext = (
 
     setUISizesFn(items, DIRECTIONS.NONE)
     emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
-    emitResizeStop()
+    emitResizeStopAndStore()
     onNewView(SET_SIZE)
   }
 
