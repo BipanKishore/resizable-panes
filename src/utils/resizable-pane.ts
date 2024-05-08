@@ -3,7 +3,7 @@ import {DIRECTIONS, MINUS, PLUS} from '../constant'
 import {PaneModel, ResizableModel} from '../models'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
-  getPanesSizeSum, getRatioSizeSum, getVisibleItems, setUISizesFn,
+  getItemsSizeSum, getRatioSizeSum, getVisibleItems, setUISizesFn,
   synPanesMaxToSize, synPanesMinToSize
 } from './panes'
 import {filterEmpty, findIndex, isItUp, reverse} from './util'
@@ -354,7 +354,7 @@ export const getMaxContainerSizes = ({getContainerRect, vertical, resizersList} 
   const {top, height, left, width} = getContainerRect()
   const maxTopAxis = vertical ? left : top
   const containerSize = Math.round(vertical ? width : height)
-  const resizersSize = getPanesSizeSum(resizersList)
+  const resizersSize = getItemsSizeSum(resizersList)
   const maxPaneSize = containerSize - resizersSize
 
   return {
@@ -380,7 +380,7 @@ export const toRatioModeFn = (resizable: ResizableModel, isOnResize = false) => 
       pane.toRatioMode(maxPaneSize, maxRatioValue, isOnResize)
     })
 
-  const sizeSum = getPanesSizeSum(panesList)
+  const sizeSum = getItemsSizeSum(panesList)
   const leftOverTotalSize = maxPaneSize - sizeSum
   const changeOperation = leftOverTotalSize < 0 ? MINUS : PLUS
   change1PixelToPanes(panesList, Math.abs(leftOverTotalSize), changeOperation)
@@ -391,6 +391,6 @@ export const toRatioModeFn = (resizable: ResizableModel, isOnResize = false) => 
 export const getChangeInViewSize = (resizable: ResizableModel) => {
   const {items} = resizable
   const {containerSize} = getMaxContainerSizes(resizable)
-  const allItemsSum = getPanesSizeSum(items)
+  const allItemsSum = getItemsSizeSum(items)
   return containerSize - allItemsSum
 }
