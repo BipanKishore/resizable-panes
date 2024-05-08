@@ -75,7 +75,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
     remainingVisiblePanes.splice(requestIndex, 1)
 
     const newMaxPaneSizeAllowd = initialSizeSum - pane.size - addOnSizeChange
-    setSizesAfterVisibilityChange(remainingVisiblePanes, newMaxPaneSizeAllowd)
+    setSizesAfterVisibilityChange(remainingVisiblePanes, newMaxPaneSizeAllowd, remainingVisiblePanes)
 
     const nowSizeSum = getPanesSizeSum(visiblePanes)
     allowedChange = newSize - (nowSizeSum - initialSizeSum + addOnSizeChange)
