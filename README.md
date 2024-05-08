@@ -73,16 +73,14 @@ function App() {
 
 <img height="24px" alt="GitHub Sponsors" src="https://img.shields.io/github/sponsors/BipanKishore">
 
-## 👋 Hi there! If you find this project useful or valuable, please consider [Sponsoring Its Development]() or [Buy Me a Coffee]()
+## 👋 Hi there! If you find this project useful or valuable do give it star on GitHub or please consider [Sponsoring Its Development]() or [Buy Me a Coffee]()
 
 🚀 By sponsoring, you'll:
 
 **Receive Recognition**:
-Sponsors will be prominently displayed on the project's README and other relevant documentation([Doc website](https://bipankishore.github.io/resizable-panes-demo/)).
+Sponsors will be prominently displayed on the project's README and other relevant documentation.
 
 **Influence Roadmap**: Your feedback and suggestions will carry significant weight in shaping the project's future direction and features.
-
-🙏 If You liked this project do give it a star
 
 ## ResizablePanes Props
 
@@ -132,7 +130,7 @@ Sponsors will be prominently displayed on the project's README and other relevan
 | Method          | Params                                                       | Description                                                                                                                              |
 | --------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | restore  |                                                              | It restores the default view of layout.                                                                                                  |
-| setSize         | (paneId: string, size: number, behaviour: ISetSizeBehaviour) | It excepts the positive number. It sets the size of Pane depending upon: <br /> 1. Its min and max. <br />2. min and max of other panes. <br/> type ISetSizeBehaviour = 'ratio' / 'buttomFirst' / 'topFirst'|
+| setSize         | (paneId: string, size: number, <br /> behaviour: ISetSizeBehaviour) | It excepts the positive number. It sets the size of Pane depending upon: <br /> 1. Its min and max. <br />2. min and max of other panes. <br/> type ISetSizeBehaviour = 'ratio' / 'buttomFirst' / 'topFirst'|
 | setVisibilities   | Object                                                       | It sets the visibility of Panes using the Boolean map of id of Panes.                                                                    |
 | getSizes        |                                                              | It returns the size map object of Ids of Panes                                                                                           |
 | getVisibilities |                                                              | It returns the visibility map object of Ids of Panes                                                                                     |
