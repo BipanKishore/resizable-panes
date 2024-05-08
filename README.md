@@ -66,9 +66,7 @@ function App() {
 }
 ```
 
-<img height="24px" alt="GitHub Sponsors" src="https://img.shields.io/github/sponsors/BipanKishore">
-
-## 👋 Hi there! If you find this project useful or valuable do give it star on GitHub or please consider [Sponsoring Its Development]() or [Buy Me a Coffee]()
+## 👋 Hi there! If you find this project useful or valuable do give it star on GitHub or [Buy Me a Coffee]()
 
 🚀 By sponsoring, you'll:
 
