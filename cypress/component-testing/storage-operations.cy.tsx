@@ -1,12 +1,17 @@
 import React from 'react'
 import {RCy} from '../utils'
-import {noMinMax5PanesSet} from './pane-model-config-sets'
+import {_2PaneWithNoMinMax, _3PanesWithMinMax, noMinMax5PanesSet} from './pane-model-config-sets'
 import {RPTestWrapper} from '../components/rp-test-wrapper'
-import {P0, P1, P2, R0, R1, R2, R3, mountUnMountButtonId, rScontainerId} from './fix-test-ids'
+import {
+  CK0,
+  P0, P1, P2, R0, R1, R2, R3,
+  containerId, mountUnMountButtonId, rScontainerId
+} from './fix-test-ids'
 import {CustomResizerFirst} from '../components/custom-resizer'
 import {Pane} from '../../src'
 import {ResizableComponentCustomPanesTestWrapper}
   from '../components/rp-test-wrapper/resizable-component-custom-panes-test-wrapper'
+import {IResizableApi} from '../../src/@types'
 
 const rCy = new RCy({
   resizerSize: 10,
@@ -14,19 +19,6 @@ const rCy = new RCy({
   containerId: rScontainerId
 })
 const {resizerSize} = rCy
-
-const INITIAL_SIZES: any = {
-  // [uniqueIdResizablePanes]: containerSize,
-  'resizer-P0': resizerSize,
-  'resizer-P1': resizerSize,
-  'resizer-P2': resizerSize,
-  'resizer-P3': resizerSize,
-  P0: 100,
-  P1: 300,
-  P2: 200,
-  P3: 300,
-  P4: 100
-}
 
 const storeInMemoryAndCheckSizeAfterRemounting = () => {
   rCy.moveNPixel(R2, 1000, 'left')
@@ -58,36 +50,6 @@ const storeInMemoryAndCheckSizeAfterRemounting = () => {
     P4: 100
   })
 }
-
-describe('Storage api', () => {
-  beforeEach(() => {
-    rCy.setViewPort()
-    cy.mount(
-      <RPTestWrapper
-        panesList={noMinMax5PanesSet}
-        resizer={
-          <CustomResizerFirst horizontal={false} size={10} />
-        }
-        resizerSize={10}
-        storageApi={localStorage}
-        uniqueId={rScontainerId}
-        vertical
-      >
-      </RPTestWrapper>
-    )
-  })
-
-  it('Check initial sizes', () => {
-    rCy.checkWidths(INITIAL_SIZES)
-
-    rCy.cyGet(mountUnMountButtonId).click()
-      .wait(50)
-    rCy.cyGet(mountUnMountButtonId).click()
-  })
-
-  it('Resize Panes then hide and show resizalbe comonent, all the sizes should be same',
-    storeInMemoryAndCheckSizeAfterRemounting)
-})
 
 describe('Check auto clear memory', () => {
   it('should clear memeory when a pane id changes', () => {
@@ -203,5 +165,124 @@ describe('Check auto clear memory', () => {
       P2: 224,
       P3: 337
     })
+  })
+})
+
+describe('should store memory', () => {
+  let resizableApi: IResizableApi
+  const rCy = new RCy({
+    resizerSize: 10,
+    containerId,
+    len: 2
+  })
+
+  it('Should store memory after restore', () => {
+    rCy.setViewPort()
+    cy.mount(
+      <RPTestWrapper
+        panesList={_2PaneWithNoMinMax}
+        resizer={
+          <CustomResizerFirst horizontal={false} size={10} />
+      }
+        resizerSize={10}
+        storageApi={localStorage}
+        uniqueId={rScontainerId}
+        vertical
+
+        onReady={(api: IResizableApi) => {
+          resizableApi = api
+        }}
+      />
+    )
+
+    rCy.moveNPixel(R0, 100)
+    let sizeMapAfterRestore
+    cy.wait(500)
+      .then(() => {
+        resizableApi.restore()
+
+        sizeMapAfterRestore = resizableApi.getSizes()
+      })
+
+    rCy.cyGet(mountUnMountButtonId).click()
+      .wait(50)
+      .then(() => rCy.cyGet(mountUnMountButtonId).click())
+      .wait(50)
+      .then(() => {
+        const sizeMapAfterRemount = resizableApi.getSizes()
+        expect(sizeMapAfterRemount).to.deep.equal(sizeMapAfterRestore)
+      })
+  })
+
+  it('Should store memory after size change', () => {
+    rCy.setViewPort()
+    cy.mount(
+      <RPTestWrapper
+        panesList={_2PaneWithNoMinMax}
+        resizer={
+          <CustomResizerFirst horizontal={false} size={10} />
+      }
+        resizerSize={10}
+        storageApi={localStorage}
+        uniqueId={rScontainerId}
+        vertical
+
+        onReady={(api: IResizableApi) => {
+          resizableApi = api
+        }}
+      />
+    )
+
+    rCy.moveNPixel(R0, 100)
+    let sizeMapAfterMovement
+    cy.wait(500)
+      .then(() => {
+        sizeMapAfterMovement = resizableApi.getSizes()
+      })
+
+    rCy.cyGet(mountUnMountButtonId).click()
+      .wait(50)
+      .then(() => rCy.cyGet(mountUnMountButtonId).click())
+      .wait(50)
+      .then(() => {
+        const sizeMapAfterRemount = resizableApi.getSizes()
+        expect(sizeMapAfterRemount).to.deep.equal(sizeMapAfterMovement)
+      })
+  })
+
+  it.only('Should store memory after visibility change', () => {
+    rCy.setViewPort()
+    cy.mount(
+      <RPTestWrapper
+        panesList={_3PanesWithMinMax}
+        resizer={
+          <CustomResizerFirst horizontal={false} size={10} />
+      }
+        resizerSize={10}
+        storageApi={localStorage}
+        uniqueId={rScontainerId}
+        vertical
+
+        onReady={(api: IResizableApi) => {
+          resizableApi = api
+        }}
+      />
+    )
+    rCy.moveNPixel(R1, 100)
+    rCy.cyGet(CK0).click()
+    let sizeMapAfterVisibilityChange
+    cy.wait(500)
+      .then(() => {
+        sizeMapAfterVisibilityChange = resizableApi.getSizes()
+      })
+
+    rCy.cyGet(mountUnMountButtonId).click()
+      .wait(50)
+      .then(() => rCy.cyGet(mountUnMountButtonId).click())
+      .wait(50)
+      .then(() => {
+        const sizeMapAfterRemount = resizableApi.getSizes()
+        expect(sizeMapAfterRemount).to.deep.equal(sizeMapAfterVisibilityChange)
+      })
   })
 })

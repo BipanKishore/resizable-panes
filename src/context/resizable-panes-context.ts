@@ -40,7 +40,6 @@ import {
   ISetSizeBehaviour
 } from '../@types'
 import {PaneModel, ResizableModel} from '../models'
-import {consoleGetSize} from '../utils/development-util'
 import {setVisibilityFn} from '../utils/visibility-helper'
 import {fixPartialHiddenResizer, setResizersLimits} from '../utils/resizer'
 import {setSizeMethod} from '../utils/set-size-helper'
@@ -90,9 +89,10 @@ export const getResizableContext = (
     const resizeParams = getIdToSizeMap()
     onResize(resizeParams)
   }
-  const emitResizeStop = () => {
+  const emitResizeStopAndStore = () => {
     const resizeParams = getIdToSizeMap()
     onResizeStop(resizeParams)
+    storage.setStorage(resizable)
   }
 
   const emitChangeVisibility = () => {
@@ -210,9 +210,8 @@ export const getResizableContext = (
 
   const reflectVisibilityChange = () => {
     setUISizesFn(items, DIRECTIONS.NONE)
-    emitResizeStop()
+    emitResizeStopAndStore()
     emitChangeVisibility()
-    storage.setStorage(resizable)
     onNewView(VISIBILITY)
   }
 
@@ -239,16 +238,13 @@ export const getResizableContext = (
 
   const onMoveEndFn = () => {
     fixPartialHiddenResizer(resizable)
-    storage.setStorage(resizable)
-    emitResizeStop()
-    consoleGetSize(items)
+    emitResizeStopAndStore()
   }
 
   const restore = () => {
     restoreFn(resizable.items)
     onNewView()
-    storage.setStorage(resizable)
-    emitResizeStop()
+    emitResizeStopAndStore()
     emitChangeVisibility()
   }
 
@@ -264,9 +260,8 @@ export const getResizableContext = (
     setSizeMethod(resizable, id, newSize, behavior)
 
     setUISizesFn(items, DIRECTIONS.NONE)
-    consoleGetSize(items)
     emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
-    emitResizeStop()
+    emitResizeStopAndStore()
     onNewView(SET_SIZE)
   }
 
