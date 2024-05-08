@@ -199,33 +199,6 @@ export const setSizesAfterVisibilityChange = (
   setSizesAfterVisibilityChange(allVisiblePanes, maxPaneSize, nextActionVisibleList)
 }
 
-export const changeSizeInRatio = (allVisiblePanes: PaneModel[], actionVisibleList: PaneModel[],
-  sizeChange: number, maxPaneSize: number) => {
-  const operation = sizeChange > 0 ? PLUS : MINUS
-
-  const sizeChangeAbsolute = Math.abs(sizeChange)
-
-  if (sizeChangeAbsolute <= actionVisibleList.length) {
-    change1PixelToPanes(actionVisibleList, sizeChangeAbsolute, operation)
-    return
-  }
-
-  const ratioSum = getPanesSizeSum(actionVisibleList)
-
-  const nextActionVisibleList: PaneModel[] = []
-  actionVisibleList.forEach((pane) => {
-    const size = pane.getSize()
-    const newSize = Math.round(sizeChangeAbsolute * (size / ratioSum))
-
-    const remainingSize = pane.setVisibilitySize(newSize, operation)
-    if (remainingSize) {
-      nextActionVisibleList.push(pane)
-    }
-  })
-
-  setSizesAfterVisibilityChange(allVisiblePanes, maxPaneSize, nextActionVisibleList)
-}
-
 export const setVisibilityFn = (resizable: ResizableModel, idMap: IKeyToBoolMap) => {
   const {
     panesList, items
