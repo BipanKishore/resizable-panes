@@ -38,9 +38,9 @@ describe('Move Panes on', () => {
   })
 
   it(`
-  -- Move R0 to R3 
-  -- hide P3,P2,P1 
-  -- Move  R3 to right by 100  
+  -- Move R0 to R3
+  -- hide P3,P2,P1
+  -- Move  R3 to right by 100
   Result- P1,R0,P2,R1,P3 should remain hidden`, () => {
     rCy.move(R0, R3)
 
@@ -54,9 +54,9 @@ describe('Move Panes on', () => {
 
   it(`
   -- Move R0 to R2
-  -- Move R5 to R3 
-  -- hide P3 
-  -- Move  R0 to right by 100  
+  -- Move R5 to R3
+  -- hide P3
+  -- Move  R0 to right by 100
   Result- P0,R0,P6 visible`, () => {
     rCy.move(R0, R2)
     rCy.move(R5, R3, 'left')

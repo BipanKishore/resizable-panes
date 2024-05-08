@@ -165,9 +165,9 @@ export class PaneModel {
   }
 
   // eslint-disable-next-line complexity
-  setHiddenResizer (newSize: number, direction: number) {
+  setHiddenResizer (newSize: number, direction: number, sizeToCompare: number) {
     if (!this.isHandle) {
-      if (newSize < 0 && this.defaultMinSize) {
+      if (newSize < sizeToCompare && this.defaultMinSize === 0) {
         if (isItUp(direction)) {
           this.hiddenResizer = LEFT
         }
@@ -180,7 +180,7 @@ export class PaneModel {
 
   setHiddenResizerWhileMovement (newSize: number, direction: number) {
     if (this.axisSize !== 0) {
-      this.setHiddenResizer(newSize, direction)
+      this.setHiddenResizer(newSize, direction, 0)
     }
   }
 
@@ -334,7 +334,8 @@ export class PaneModel {
     if (this.visibility) {
       this.size = this.minSize
       if (this.defaultMinSize === 0) {
-        this.setHiddenResizer(-1, direction)
+        console.log(this.id, this.size)
+        this.setHiddenResizer(this.size, direction, 1)
       }
     }
   }
