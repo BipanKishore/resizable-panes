@@ -164,9 +164,10 @@ export class PaneModel {
     return remainingSize
   }
 
+  // eslint-disable-next-line complexity
   setHiddenResizer (newSize: number, direction: number) {
     if (!this.isHandle) {
-      if (newSize < 0) {
+      if (newSize < 0 && this.defaultMinSize) {
         if (isItUp(direction)) {
           this.hiddenResizer = LEFT
         }
@@ -185,7 +186,7 @@ export class PaneModel {
 
   clearHiddenResizer () {
     if (this.size > 0) {
-      this.hiddenResizer = 'none'
+      this.hiddenResizer = NONE
     }
   }
 
