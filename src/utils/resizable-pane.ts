@@ -3,7 +3,7 @@ import {DIRECTIONS, MINUS, PLUS} from '../constant'
 import {PaneModel, ResizableModel} from '../models'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
-  getPanesSizeSum, getRatioSizeSum, getResizerSum, getVisibleItems, setUISizesFn,
+  getPanesSizeSum, getRatioSizeSum, getVisibleItems, setUISizesFn,
   synPanesMaxToSize, synPanesMinToSize
 } from './panes'
 import {filterEmpty, findIndex, isItUp, reverse} from './util'
@@ -354,7 +354,7 @@ export const getMaxContainerSizes = ({getContainerRect, vertical, resizersList} 
   const {top, height, left, width} = getContainerRect()
   const maxTopAxis = vertical ? left : top
   const containerSize = Math.round(vertical ? width : height)
-  const resizersSize = getResizerSum(resizersList)
+  const resizersSize = getPanesSizeSum(resizersList)
   const maxPaneSize = containerSize - resizersSize
 
   return {
