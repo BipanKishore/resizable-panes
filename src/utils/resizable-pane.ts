@@ -54,51 +54,48 @@ export const setVirtualOrderList = (resizable: ResizableModel) => {
   const {items, direction, handleId} = resizable
 
   const visibleItems = getVisibleItems(items)
-  const visibleActiveIndex = findIndex(visibleItems, handleId)
+  const handleIndex = findIndex(visibleItems, handleId)
 
   const decreasingItems: (IResizableItem | undefined)[] = []
   let increasingItems: (IResizableItem | undefined)[] = []
   let virtualOrderList: (IResizableItem)[]
 
+  const logicForIncreasingList = (i: number, attachedIndex: number) => {
+    const pane = visibleItems[i]
+    // i - Pane
+    // i + 1 - Resizer
+    if (pane.size) {
+      increasingItems[i] = pane
+      increasingItems[i + attachedIndex] = visibleItems[i + attachedIndex] // it is pane
+    } else {
+      increasingItems[i] = visibleItems[i + attachedIndex]
+      increasingItems[i + attachedIndex] = pane // it is pane
+    }
+  }
+
   if (isItUp(direction)) {
-    for (let i = visibleActiveIndex - 1; i > -1; i -= 2) {
+    for (let i = handleIndex - 1; i > -1; i -= 2) {
       decreasingItems.push(visibleItems[i], visibleItems[i - 1])
     }
     decreasingItems.reverse()
 
-    increasingItems = [visibleItems[visibleActiveIndex]]
+    increasingItems = [visibleItems[handleIndex]]
 
-    for (let i = visibleActiveIndex + 1; i < visibleItems.length; i += 2) {
-      const pane = visibleItems[i]
-      // i - Pane
-      // i + 1 - Resizer
-      if (pane.size) {
-        increasingItems[i] = pane
-        increasingItems[i + 1] = visibleItems[i + 1] // it is pane
-      } else {
-        increasingItems[i] = visibleItems[i + 1]
-        increasingItems[i + 1] = pane // it is pane
-      }
+    for (let i = handleIndex + 1; i < visibleItems.length; i += 2) {
+      logicForIncreasingList(i, 1)
     }
 
     virtualOrderList = [...decreasingItems, ...increasingItems]
   } else {
     increasingItems = [visibleItems[0]]
 
-    for (let i = visibleActiveIndex - 1; i > 0; i -= 2) {
-      const pane = visibleItems[i]
-      if (pane.size) {
-        increasingItems[i] = pane
-        increasingItems[i - 1] = visibleItems[i - 1]
-      } else {
-        increasingItems[i] = visibleItems[i - 1]
-        increasingItems[i - 1] = pane
-      }
+    for (let i = handleIndex - 1; i > 0; i -= 2) {
+      logicForIncreasingList(i, -1)
     }
 
-    increasingItems.push(visibleItems[visibleActiveIndex])
+    increasingItems.push(visibleItems[handleIndex])
 
-    for (let i = visibleActiveIndex + 1; i < visibleItems.length; i += 2) {
+    for (let i = handleIndex + 1; i < visibleItems.length; i += 2) {
       decreasingItems.push(visibleItems[i], visibleItems[i + 1])
     }
 
