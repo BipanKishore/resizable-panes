@@ -1,6 +1,7 @@
 import {IAnyMap, IPaneModelKey, IStoreResizableItemsModel} from '../@types'
 import {DIRECTIONS, RESIZER, SIZE} from '../constant'
 import {PaneModel} from '../models'
+import {getSize} from '../models/pane'
 
 export type INoop = (_: any) => any
 
@@ -12,7 +13,7 @@ export const findById = <T>(list: T[] | any[], _id: string) =>
 export const createMap = (paneList: PaneModel[] | IStoreResizableItemsModel[], ...keys: IPaneModelKey[]) => {
   const map: IAnyMap = {}
   paneList.forEach((pane) => {
-    const getValue = (key: string) => key === SIZE ? pane.getSize() : pane[key]
+    const getValue = (key: string) => key === SIZE ? getSize(pane) : pane[key]
 
     const {id} = pane
     if (keys.length === 1) {
@@ -76,7 +77,3 @@ export const deleteUndefined = (anyObject: any) => {
 
 export const reverse = <T>(list: T[]): T[] => [...list].reverse()
 export const filterEmpty = (list: any[]) => list.filter(_ => _)
-
-export const safeSplit = (value: string = '') => {
-  return filterEmpty(value.split(' '))
-}

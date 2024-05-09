@@ -1,12 +1,19 @@
 import {ReactElement} from 'react'
-import {IResizableItem, IResizablePaneProviderProps, addAndRemoveType} from '../@types'
-import {PaneModel, ResizerModel} from '../models'
+import {IResizableItem, IResizablePaneProviderProps} from '../@types'
+import {PaneModel, ResizableModel} from '../models'
 import {ResizeStorage} from './storage'
-import {DIRECTIONS, HIDDEN, NONE, PLUS, VISIBLE, ZIPPED} from '../constant'
+import {CHANGE, DIRECTIONS, HIDDEN, NONE, VISIBLE, ZIPPED} from '../constant'
 import {fixFacingHiddenResizersOrder} from './resizer'
+import {
+  getRatioSize,
+  getSize, initializeSize, restorePane, setUISize, synMaxToSize,
+  synMinToSize,
+  syncAxisSize, updatSizeState
+}
+  from '../models/pane'
 
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
-  panesList.forEach(pane => pane.syncAxisSize())
+  panesList.forEach(syncAxisSize)
 
 // It only checks if it is partially hiiden or not
 export const emitIfChangeInPartialHiddenState = (items: PaneModel[], emitChangeVisibility: any) => {
@@ -28,7 +35,7 @@ export const emitIfChangeInPartialHiddenState = (items: PaneModel[], emitChangeV
 }
 
 export const setUISizesFn = (items: IResizableItem[], direction: number) => {
-  items.forEach((pane: IResizableItem) => pane.setUISize())
+  items.forEach(setUISize)
   fixFacingHiddenResizersOrder(items, direction)
 }
 
@@ -43,16 +50,16 @@ export function getSum <T> (list: T[], getNumber: (item:T) => number, start = 0,
 }
 
 export const synPanesMaxToSize = (panesList: PaneModel[], start: number, end: number) =>
-  getSum(panesList, (pane) => pane.synMaxToSize(), start, end)
+  getSum(panesList, synMaxToSize, start, end)
 
 export const synPanesMinToSize = (panesList: PaneModel[], start: number, end: number) =>
-  getSum(panesList, (pane) => pane.synMinToSize(), start, end)
+  getSum(panesList, synMinToSize, start, end)
 
 export const getItemsSizeSum = (panesList: PaneModel[], start?: number, end?: number) =>
-  getSum(panesList, pane => pane.getSize(), start, end)
+  getSum(panesList, getSize, start, end)
 
 export const getRatioSizeSum = (panesList: PaneModel[]) =>
-  getSum(panesList, pane => pane.getRatioSize())
+  getSum(panesList, getRatioSize)
 
 export const getMaxSizeSum = (panesList: PaneModel[], start?: number, end?: number) =>
   getSum(panesList, (pane) => pane.maxSize, start, end)
@@ -62,40 +69,26 @@ export const getMinSizeSum = (panesList: PaneModel[], start: number, end: number
 
 // Need to check for hidden element
 export const restoreFn = (items: IResizableItem[]) => {
-  items.forEach(pane => pane.restore())
+  items.forEach(restorePane)
   setUISizesFn(items, DIRECTIONS.NONE)
 }
 
-// It is used when we rapidly changes mouse movements
-export const setDownMaxLimits = (panesList: PaneModel[], index: number) => {
-  for (let i = 0; i <= index; i++) {
-    panesList[i].synSizeToMaxSize()
-  }
+// It is used when we rapidly move out of axis
+export const setMaxLimits = (resizable: ResizableModel,
+  firstInningMethod: any, secondInningMethod: any, direction: number) => {
+  const {virtualOrderList, index} = resizable
 
-  for (let i = index + 1; i < panesList.length; i++) {
-    panesList[i].synSizeToMinSize(DIRECTIONS.DOWN)
-  }
-}
-
-// It is used when we rapidly changes mouse movements
-export const setUpMaxLimits = (panesList: PaneModel[], index: number) => {
-  for (let i = 0; i <= index; i++) {
-    panesList[i].synSizeToMinSize(DIRECTIONS.UP)
-  }
-
-  for (let i = index + 1; i < panesList.length; i++) {
-    panesList[i].synSizeToMaxSize()
+  for (let i = 0; i < virtualOrderList.length; i++) {
+    if (i <= index) {
+      firstInningMethod(virtualOrderList[i], direction)
+    } else {
+      secondInningMethod(virtualOrderList[i], direction)
+    }
   }
 }
 
 export const updatSizeStateAllPanes = (panesList: PaneModel[]) => {
-  panesList.forEach(item => item.updatSizeState())
-}
-
-export const safeSetVisibility = (item : IResizableItem, visibility: boolean, isPartiallyHidden?: boolean) => {
-  if (item) {
-    item.setVisibility(visibility, isPartiallyHidden)
-  }
+  panesList.forEach(updatSizeState)
 }
 
 export const getItemsByIndexes = (items : IResizableItem[], indexes: number[]) => {
@@ -111,13 +104,13 @@ export const getVisibilityState = (panesList: PaneModel[]) => {
   return map
 }
 
-const fixChangeCallBack = (pane: PaneModel, change: number, operation: addAndRemoveType) => {
-  const newSize = pane.size + (operation === PLUS ? change : -change)
-  pane.initializeSize(newSize)
+const fixChangeCallBack = (pane: PaneModel, change: number, operation: number) => {
+  const newSize = pane.size + (operation === CHANGE.ADD ? change : -change)
+  initializeSize(pane, newSize)
 }
 
 export const change1PixelToPanes = (panesList: PaneModel[], sizeChange: number,
-  operation: addAndRemoveType) => {
+  operation: number) => {
   let count = 0
   const len = panesList.length
   let index: number
@@ -143,13 +136,14 @@ export const change1PixelToPanes = (panesList: PaneModel[], sizeChange: number,
   }
 }
 
-export const getPanesAndResizers = (items: IResizableItem[]) => {
+export const getPanesAndResizers = (items: IResizableItem[]): [ panesList: IResizableItem[],
+  resizersList: IResizableItem[]] => {
   const panesList = items.filter((item) => !item.isHandle)
-  const resizersList = items.filter((item) => item.isHandle) as ResizerModel[]
-  return {
+  const resizersList = items.filter((item) => item.isHandle)
+  return [
     panesList,
     resizersList
-  }
+  ]
 }
 
 export const createPaneModelListAndResizerModelList = (
@@ -160,8 +154,8 @@ export const createPaneModelListAndResizerModelList = (
   const items: IResizableItem[] = []
   children.forEach(child =>
     items.push(
-      new PaneModel(child.props, resizableProps, store),
-      new ResizerModel(child.props, resizableProps, store)
+      new PaneModel(child.props, resizableProps, store, false),
+      new PaneModel(child.props, resizableProps, store, true)
     )
   )
   items.pop()

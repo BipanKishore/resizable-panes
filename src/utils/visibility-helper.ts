@@ -1,10 +1,10 @@
 import {IKeyToBoolMap, IResizableItem} from '../@types'
-import {LEFT, MINUS, NONE, PLUS, RIGHT} from '../constant'
+import {CHANGE, LEFT, NONE, RIGHT} from '../constant'
 import {ResizableModel, PaneModel} from '../models'
+import {getSize, setPaneVisibility, setVisibilitySize, syncPaneToOldVisibilityModel} from '../models/pane'
 import {
   change1PixelToPanes, getItemsByIndexes,
-  getItemsSizeSum, getVisibleItems,
-  safeSetVisibility
+  getItemsSizeSum, getVisibleItems
 } from './panes'
 import {getMaxContainerSizes} from './resizable-pane'
 
@@ -50,7 +50,7 @@ const getFirstVisiblePaneIndexAndHideAllBeforeIt = (items: IResizableItem[]) => 
   const firstVisiblePaneIndex = items.findIndex((i) => !i.isHandle && i.visibility)
 
   for (let i = 1; i < firstVisiblePaneIndex; i += 2) {
-    items[i].setVisibility(false)
+    setPaneVisibility(items[i], false)
   }
 
   return firstVisiblePaneIndex
@@ -60,7 +60,7 @@ const setVisibilityOfLeftResizers = (items: IResizableItem[], start: number) => 
   for (let a = start + 2; a < items.length; a += 2) {
     const {visibility} = items[a]
     const inBetweenResizer = items[a - 1]
-    safeSetVisibility(inBetweenResizer, visibility)
+    setPaneVisibility(inBetweenResizer, visibility)
   }
 }
 
@@ -110,7 +110,7 @@ export const findConsecutiveAdjacentResizer = (items: IResizableItem[], indexes:
   consecutiveResizers.forEach((set) => {
     set.forEach((i, index) => {
       if (index) {
-        itemsByIndexes[i].setVisibility(true, true)
+        setPaneVisibility(itemsByIndexes[i], true, true)
       }
     })
   })
@@ -141,7 +141,7 @@ export const setVisibilityOfResizers = (resizable: ResizableModel) => {
           r = findPrevVisibleResizer(items, i - 1)
           oppoR = findNextVisibleResizer(items, i)
           if (oppoR) {
-            safeSetVisibility(r, true, true)
+            setPaneVisibility(r, true, true)
           }
           break
 
@@ -150,7 +150,7 @@ export const setVisibilityOfResizers = (resizable: ResizableModel) => {
           oppoR = findPrevVisibleResizer(items, i)
 
           if (oppoR) {
-            safeSetVisibility(r, true, true)
+            setPaneVisibility(r, true, true)
           }
 
           break
@@ -173,7 +173,7 @@ export const updateSizeInRatio = (
     return
   }
 
-  const operation = sizeChange > 0 ? PLUS : MINUS
+  const operation = sizeChange > 0 ? CHANGE.ADD : CHANGE.REMOVE
 
   const sizeChangeAbsolute = Math.abs(sizeChange)
 
@@ -186,10 +186,10 @@ export const updateSizeInRatio = (
 
   const nextActionVisibleList: PaneModel[] = []
   actionVisibleList.forEach((pane) => {
-    const size = pane.getSize()
+    const size = getSize(pane)
     const newSize = Math.round(sizeChangeAbsolute * (size / ratioSum))
 
-    const remainingSize = pane.setVisibilitySize(newSize, operation)
+    const remainingSize = setVisibilitySize(pane, newSize, operation)
     if (remainingSize) {
       nextActionVisibleList.push(pane)
     }
@@ -204,9 +204,9 @@ export const setVisibilityFn = (resizable: ResizableModel, idMap: IKeyToBoolMap)
   } = resizable
 
   panesList.forEach((pane) => {
-    pane.syncToOldVisibilityModel()
+    syncPaneToOldVisibilityModel(pane)
     const {id} = pane
-    pane.setVisibility(idMap[id])
+    setPaneVisibility(pane, idMap[id])
   })
 
   const visiblePanes = getVisibleItems(panesList)
@@ -218,13 +218,13 @@ export const setVisibilityFn = (resizable: ResizableModel, idMap: IKeyToBoolMap)
         if (pane.hiddenResizer === LEFT) {
           pane.size = 1
           pane.hiddenResizer = NONE
-          safeSetVisibility(visibleItems[index - 1], true)
+          setPaneVisibility(visibleItems[index - 1], true)
         }
 
         if (pane.hiddenResizer === RIGHT) {
           pane.hiddenResizer = NONE
           pane.size = 1
-          safeSetVisibility(visibleItems[index + 1], true)
+          setPaneVisibility(visibleItems[index + 1], true)
         }
       }
     })

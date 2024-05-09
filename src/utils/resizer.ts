@@ -1,6 +1,7 @@
 import {IHiddenResizer, IResizableItem} from '../@types'
-import {LEFT, RIGHT, PLUS, DIRECTIONS, NONE} from '../constant'
+import {LEFT, RIGHT, DIRECTIONS, NONE, CHANGE} from '../constant'
 import {ResizableModel} from '../models'
+import {changePaneSize, restoreLimits, syncAxisSize} from '../models/pane'
 import {setUISizesFn} from './panes'
 import {findIndex, isItDown, isItUp, reverse} from './util'
 
@@ -29,12 +30,11 @@ export const setResizersLimits = (resizable: ResizableModel) => {
 export const fixPartialHiddenResizer = (resizable: ResizableModel) => {
   const {items} = resizable
 
-  let sizeChange = 0
   items.forEach(
     // eslint-disable-next-line complexity
     (item, index) => {
-      if (item.isHandle && item.defaultSize !== item.size && item.size) {
-        sizeChange = item.size
+      let sizeChange = item.size
+      if (item.isHandle && item.defaultSize !== sizeChange && sizeChange) {
         item.size = 0
         let virtualIndex
         const resizingOrder: IResizableItem[] = []
@@ -50,15 +50,15 @@ export const fixPartialHiddenResizer = (resizable: ResizableModel) => {
         }
 
         const visibleItems = resizingOrder.filter((item) => item.size)
-        visibleItems.forEach((item) => item.syncAxisSize())
+        visibleItems.forEach(syncAxisSize)
 
         visibleItems.forEach((item) => {
-          item.restoreLimits()
+          restoreLimits(item)
           // None is right for this
-          sizeChange = item.changeSize(sizeChange, PLUS, DIRECTIONS.NONE)
+          sizeChange = changePaneSize(item, sizeChange, CHANGE.ADD, DIRECTIONS.NONE)
         })
 
-        setUISizesFn(items, item.partialHiddenDirection)
+        setUISizesFn(items, DIRECTIONS.NONE)
       }
     }
   )

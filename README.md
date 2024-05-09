@@ -88,6 +88,9 @@ function App() {
 | onResizeStop       | function           |         | false               | It emits size map after the layout resizing is complete.                                                                                                          |
 | onReady            | function           |         | false               | It emits ResizablePanes component's api once it is constructed.                                                                                                   |
 | onChangeVisibility | function           |         | false               | It emits visibility map when there is change in visibility. A Pane can have 'visible', 'hidden' or 'zipped' state.                                                |
+| onMinSize       | (id: string, minSize:number) => void       |         | false               | It emits when a Pane enters min size. |
+| onMaxSize       | (id: string, maxSize:number) => void       |         | false               | It emits when a Pane enters max size. |
+| onNormalSize    | (id: string) => void       |         | false               | It emits when a Pane enters normal size. |
 
 ## Pane Props
 
@@ -101,6 +104,9 @@ function App() {
 | minSize       | number       | 0        | false               | The minimum size limit of the Pane.                                                                      |
 | resizer       | ReactElement |          | false               | It will replace the in build resizer of Pane.                                                            |
 | resizerSize   | number       |          | Optionally required | It is the size of attached Resizer Element. It is required when we have passed resizer prop to the Pane. |
+| onMinSize       | (id: string, minSize:number) => void       |         | false               | It emits when it enters min size of the Pane. |
+| onMaxSize       | (id: string, maxSize:number) => void       |         | false               | It emits when it enters max size of the Pane. |
+| onNormalSize    | (id: string) => void       |         | false               | It emits when it enters normal size of the Pane. |
 
 ## ResizablePanes component api
 

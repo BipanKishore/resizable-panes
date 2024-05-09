@@ -9,10 +9,7 @@ export interface IAnyMap {
       [key: string]: any
     }
 
-export interface IResizableEvent {
-    mouseCoordinate: number,
-    movement: number
-}
+export type IResizableEvent = [ mouseCoordinate: number, movement: number]
 
 export interface ISizeStyle {
   height?: string,

@@ -35,25 +35,20 @@ export const getContainerClass = (vertical: boolean, className: string, unit: Un
 
 export const isTouchEvent = (event: any) => event.type.startsWith('touch')
 
-const resizableEvent = (mouseCoordinate: number, movement: number) => ({
-  mouseCoordinate,
-  movement
-})
-
 export const getResizableEventFromTouch = (e: any, vertical: boolean, previousTouchEvent: any): IResizableEvent => {
   const currentTouch = e.targetTouches[0]
   const {pageX = 0, pageY = 0} = previousTouchEvent.current ?? {}
   previousTouchEvent.current = currentTouch
   if (vertical) {
-    return resizableEvent(currentTouch.clientX, currentTouch.pageX - pageX)
+    return [currentTouch.clientX, currentTouch.pageX - pageX]
   } else {
-    return resizableEvent(currentTouch.clientY, currentTouch.pageY - pageY)
+    return [currentTouch.clientY, currentTouch.pageY - pageY]
   }
 }
 
 export const getResizableEventFromMouse = (e: any, vertical: boolean): IResizableEvent => {
   const {clientX, clientY, movementX, movementY} = e
-  return vertical ? resizableEvent(clientX, movementX) : resizableEvent(clientY, movementY)
+  return vertical ? [clientX, movementX] : [clientY, movementY]
 }
 
 export const getResizableEvent = (e: any, vertical: boolean, previousTouchEvent: any): IResizableEvent => {
@@ -63,7 +58,7 @@ export const getResizableEvent = (e: any, vertical: boolean, previousTouchEvent:
     : getResizableEventFromMouse(e, vertical)
 }
 
-export const getDirection = (e: IResizableEvent) => e.movement < 0 ? DIRECTIONS.UP : DIRECTIONS.DOWN
+export const getDirection = (movement: number) => movement < 0 ? DIRECTIONS.UP : DIRECTIONS.DOWN
 
 export const toArray = (items: any) => Array.isArray(items) ? items : [items]
 

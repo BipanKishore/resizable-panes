@@ -1,6 +1,5 @@
 import {IResizableItem} from '../@types'
 import {PaneModel} from './pane-model'
-import {ResizerModel} from './resizer-model'
 
 export class ResizableModel {
   // Need to clear on all operations
@@ -13,7 +12,9 @@ export class ResizableModel {
 
   direction: number
   axisCoordinate: number
-  virtualActiveIndex: number
+
+  // Index of virtualOrderListm handleId Index
+  index: number
   topAxis: number
   bottomAxis: number
 
@@ -25,7 +26,7 @@ export class ResizableModel {
   increasingItems: IResizableItem[]
 
   panesList: PaneModel[]
-  resizersList: ResizerModel[]
+  resizersList: IResizableItem[]
 
   getContainerRect: () => any
 

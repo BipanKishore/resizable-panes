@@ -2,8 +2,8 @@ import {createContext} from 'react'
 import {createMap, findById} from '../utils/util'
 import {
   DIRECTIONS,
-  DEFAULT_MAX_SIZE,
-  DEFAULT_MIN_SIZE,
+  DEFAULT_MAX_SIZE_KEY,
+  DEFAULT_MIN_SIZE_KEY,
   RATIO,
   SET_SIZE,
   SIZE,
@@ -15,22 +15,21 @@ import {
   getVisibilityState,
   emitIfChangeInPartialHiddenState,
   restoreFn,
-  setDownMaxLimits,
   setUISizesFn,
-  setUpMaxLimits,
   syncAxisSizesFn,
-  updatSizeStateAllPanes
+  updatSizeStateAllPanes,
+  setMaxLimits
 } from '../utils/panes'
 import {
   calculateAxes,
   setVirtualOrderList,
   movingLogic,
   setCurrentMinMax,
-  toRatioModeFn,
+  toRatioModeAllPanes,
   getChangeInViewSize
 } from '../utils/resizable-pane'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
-import {ResizeStorage} from '../utils/storage'
+import {ResizeStorage, setStorage} from '../utils/storage'
 import {
   IClearFlagsParam,
   IKeyToBoolMap,
@@ -39,10 +38,14 @@ import {
   IResizablePaneProviderProps,
   ISetSizeBehaviour
 } from '../@types'
-import {PaneModel, ResizableModel} from '../models'
+import {ResizableModel} from '../models'
 import {setVisibilityFn} from '../utils/visibility-helper'
 import {fixPartialHiddenResizer, setResizersLimits} from '../utils/resizer'
 import {setSizeMethod} from '../utils/set-size-helper'
+import {
+  getSize, registerResizableItem, setPaneOldVisibilityModel,
+  synSizeToMaxSize, synSizeToMinSize, syncPaneRatioSizeToSize
+} from '../models/pane'
 
 export const getResizableContext = (
   props: IResizablePaneProviderProps
@@ -72,7 +75,7 @@ export const getResizableContext = (
   // const resizersList = createResizerModelList(myChildren, props, storage)
   // reference will never change for these items: storage, panesList, resizersList
 
-  const {panesList, resizersList} = getPanesAndResizers(items)
+  const [panesList, resizersList] = getPanesAndResizers(items)
 
   const resizable = new ResizableModel()
   resizable.register({
@@ -83,8 +86,6 @@ export const getResizableContext = (
   })
 
   const syncAxisSizes = () => syncAxisSizesFn(items)
-  const updateSizeStates = () => updatSizeStateAllPanes(panesList)
-
   const emitResize = () => {
     const resizeParams = getIdToSizeMap()
     onResize(resizeParams)
@@ -92,7 +93,7 @@ export const getResizableContext = (
   const emitResizeStopAndStore = () => {
     const resizeParams = getIdToSizeMap()
     onResizeStop(resizeParams)
-    storage.setStorage(resizable)
+    setStorage(uniqueId, storageApi, resizable)
   }
 
   const emitChangeVisibility = () => {
@@ -101,17 +102,17 @@ export const getResizableContext = (
   }
 
   const registerItem = (api: any, id: string) => {
-    findById(items, id).register(api)
+    registerResizableItem(findById(items, id), api)
   }
 
   const registerContainer = (getContainerRect: any) => {
     resizable.getContainerRect = getContainerRect
     let visibilityMap = props.visibility
     if (storage.empty && unit === RATIO && !resizable.isSetRatioMode) {
-      toRatioModeFn(resizable)
+      toRatioModeAllPanes(resizable)
       resizable.isSetRatioMode = true
     } else {
-      const {panes} = storage.getStorage()
+      const {panes} = storage.getStorage(uniqueId, storageApi)
       visibilityMap = createMap(panes, VISIBILITY)
     }
     setVisibilities(visibilityMap)
@@ -119,7 +120,7 @@ export const getResizableContext = (
 
   const getIdToSizeMap = () => createMap(panesList, SIZE)
 
-  const setMouseDownDetails = ({mouseCoordinate}: any, handleId: string) => {
+  const setMouseDownDetails = ([mouseCoordinate]: IResizableEvent, handleId: string) => {
     resizable.register({
       handleId,
       direction: DIRECTIONS.NONE,
@@ -130,7 +131,7 @@ export const getResizableContext = (
 
   const clearflagsOnNewView = (except: IClearFlagsParam = '') => {
     if (except !== RATIO) {
-      panesList.forEach((item) => item.syncRatioSizeToSize())
+      panesList.forEach(syncPaneRatioSizeToSize)
     }
     if (except !== VISIBILITY) {
       resizable.newVisibilityModel = false
@@ -142,38 +143,38 @@ export const getResizableContext = (
 
   const onNewView = (except: IClearFlagsParam = '') => {
     clearflagsOnNewView(except)
-    updateSizeStates()
+    updatSizeStateAllPanes(panesList)
   }
 
-  const calculateAndSetHeight = (e: IResizableEvent) => {
-    const {movement} = e
+  const calculateAndSetHeight = ([mouseCoordinate, movement]: IResizableEvent) => {
     if (resizable.isViewSizeChanged || !movement) {
       return
     }
 
-    setDirection(e)
-    const isAxisLimitReached = setAxisConfig(e)
+    setDirection(mouseCoordinate, movement)
+    const isAxisLimitReached = setAxisConfig(mouseCoordinate)
 
     if (isAxisLimitReached) {
-      movingLogic(e, resizable)
+      movingLogic(mouseCoordinate, resizable)
     }
     setUISizesFn(items, resizable.direction)
     onNewView()
     emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
+    emitResize()
   }
 
-  const setDirection = (e: IResizableEvent) => {
+  const setDirection = (mouseCoordinate: number, movement: number) => {
     const {direction} = resizable
-    const currentDirection = getDirection(e)
+    const currentDirection = getDirection(movement)
 
     if (currentDirection !== direction) {
       resizable.direction = currentDirection
-      directionChangeActions(e)
+      directionChangeActions(mouseCoordinate)
     }
   }
 
-  const directionChangeActions = (e: IResizableEvent) => {
-    resizable.axisCoordinate = e.mouseCoordinate
+  const directionChangeActions = (mouseCoordinate: number) => {
+    resizable.axisCoordinate = mouseCoordinate
 
     setVirtualOrderList(resizable)
     if (zipping) {
@@ -185,17 +186,16 @@ export const getResizableContext = (
     calculateAxes(resizable)
   }
 
-  const setAxisConfig = (e: IResizableEvent) => {
-    const {virtualActiveIndex, virtualOrderList, topAxis, bottomAxis} =
-      resizable
+  const setAxisConfig = (mouseCoordinate: number) => {
+    const {topAxis, bottomAxis} = resizable
 
-    if (e.mouseCoordinate <= topAxis) {
-      setUpMaxLimits(virtualOrderList, virtualActiveIndex)
+    if (mouseCoordinate <= topAxis) {
+      setMaxLimits(resizable, synSizeToMinSize, synSizeToMaxSize, DIRECTIONS.UP)
       syncAxisSizes()
       resizable.axisCoordinate = topAxis
       return false
-    } else if (e.mouseCoordinate >= bottomAxis) {
-      setDownMaxLimits(virtualOrderList, virtualActiveIndex)
+    } else if (mouseCoordinate >= bottomAxis) {
+      setMaxLimits(resizable, synSizeToMaxSize, synSizeToMinSize, DIRECTIONS.DOWN)
       syncAxisSizes()
       resizable.axisCoordinate = bottomAxis
       return false
@@ -204,8 +204,8 @@ export const getResizableContext = (
   }
 
   const getPaneSizeStyle = (id: string) => {
-    const size = findById(panesList, id).getSize()
-    return getSizeStyle(vertical, size as number)
+    const size = getSize(findById(panesList, id))
+    return getSizeStyle(vertical, size)
   }
 
   const reflectVisibilityChange = () => {
@@ -228,7 +228,7 @@ export const getResizableContext = (
 
     if (!newVisibilityModel) {
       resizable.newVisibilityModel = true
-      panesList.forEach((pane: PaneModel) => pane.setOldVisibilityModel())
+      panesList.forEach(setPaneOldVisibilityModel)
     }
 
     setVisibilityFn(resizable, newMap)
@@ -250,7 +250,7 @@ export const getResizableContext = (
   }
 
   const getState = () =>
-    createMap(panesList, SIZE, VISIBILITY, DEFAULT_MIN_SIZE, DEFAULT_MAX_SIZE)
+    createMap(panesList, SIZE, VISIBILITY, DEFAULT_MIN_SIZE_KEY, DEFAULT_MAX_SIZE_KEY)
   const getVisibilities = () => getVisibilityState(panesList)
 
   const setSize = (
@@ -276,18 +276,15 @@ export const getResizableContext = (
   }
 
   return {
-    emitResize,
     api,
     onMoveEndFn,
     registerItem,
     registerContainer,
-    getIdToSizeMap,
     setMouseDownDetails,
     vertical,
     calculateAndSetHeight,
     props,
     resizable,
-    storage,
     getPaneSizeStyle
   }
 }
