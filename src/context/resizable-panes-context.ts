@@ -29,7 +29,7 @@ import {
   getChangeInViewSize
 } from '../utils/resizable-pane'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
-import {ResizeStorage} from '../utils/storage'
+import {ResizeStorage, setStorage} from '../utils/storage'
 import {
   IClearFlagsParam,
   IKeyToBoolMap,
@@ -93,7 +93,7 @@ export const getResizableContext = (
   const emitResizeStopAndStore = () => {
     const resizeParams = getIdToSizeMap()
     onResizeStop(resizeParams)
-    storage.setStorage(resizable)
+    setStorage(uniqueId, storageApi, resizable)
   }
 
   const emitChangeVisibility = () => {
@@ -112,7 +112,7 @@ export const getResizableContext = (
       toRatioModeFn(resizable)
       resizable.isSetRatioMode = true
     } else {
-      const {panes} = storage.getStorage()
+      const {panes} = storage.getStorage(uniqueId, storageApi)
       visibilityMap = createMap(panes, VISIBILITY)
     }
     setVisibilities(visibilityMap)
@@ -287,7 +287,6 @@ export const getResizableContext = (
     calculateAndSetHeight,
     props,
     resizable,
-    storage,
     getPaneSizeStyle
   }
 }

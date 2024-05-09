@@ -136,7 +136,6 @@ export interface IResizableContext {
   calculateAndSetHeight: any;
   props: IResizablePaneProviderProps;
   resizable: ResizableModel;
-  storage: ResizeStorage;
   getPaneSizeStyle: (id: string) => void;
   // setVisibility: (param: IKeyToBoolMap) => void;
 }

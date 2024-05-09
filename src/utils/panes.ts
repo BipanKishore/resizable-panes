@@ -6,7 +6,7 @@ import {DIRECTIONS, HIDDEN, NONE, PLUS, VISIBLE, ZIPPED} from '../constant'
 import {fixFacingHiddenResizersOrder} from './resizer'
 import {
   getRatioSize,
-  getSize, initializeSize, restorePane, setUISize, synMaxToSize,
+  getSize, initializeSize, restorePane, setPaneVisibility, setUISize, synMaxToSize,
   synMinToSize,
   syncAxisSize, updatSizeState
 }
@@ -93,7 +93,7 @@ export const updatSizeStateAllPanes = (panesList: PaneModel[]) => {
 
 export const safeSetVisibility = (item : IResizableItem, visibility: boolean, isPartiallyHidden?: boolean) => {
   if (item) {
-    item.setVisibility(visibility, isPartiallyHidden)
+    setPaneVisibility(item, visibility, isPartiallyHidden)
   }
 }
 

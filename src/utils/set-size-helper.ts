@@ -7,6 +7,7 @@ import {ResizableModel} from '../models'
 import {
   changePaneSize, changePaneSizePlain, restoreLimits,
   restorePaneBeforeSetSize,
+  setPaneVisibility,
   storePaneForNewSetSizeKey, syncAxisSize
 } from '../models/pane'
 import {
@@ -103,7 +104,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
   pane.hiddenResizer = NONE
 
   if (resizer) {
-    resizer.setVisibility(true, false)
+    setPaneVisibility(resizer, true, false)
     addOnSizeChange = resizer.resizerSize
     sizeChange += addOnSizeChange
   }

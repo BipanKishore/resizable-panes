@@ -115,8 +115,4 @@ export class PaneModel {
       this.resizerSize = paneProps.resizerSize || resizerSize as number
     }
   }
-
-  setVisibility (visibility: boolean, isPartiallyHidden = false) {
-    setPaneVisibility(this, visibility, isPartiallyHidden)
-  }
 }

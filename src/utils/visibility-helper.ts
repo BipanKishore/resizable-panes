@@ -1,7 +1,7 @@
 import {IKeyToBoolMap, IResizableItem} from '../@types'
 import {LEFT, MINUS, NONE, PLUS, RIGHT} from '../constant'
 import {ResizableModel, PaneModel} from '../models'
-import {getSize, setVisibilitySize, syncPaneToOldVisibilityModel} from '../models/pane'
+import {getSize, setPaneVisibility, setVisibilitySize, syncPaneToOldVisibilityModel} from '../models/pane'
 import {
   change1PixelToPanes, getItemsByIndexes,
   getItemsSizeSum, getVisibleItems,
@@ -51,7 +51,7 @@ const getFirstVisiblePaneIndexAndHideAllBeforeIt = (items: IResizableItem[]) => 
   const firstVisiblePaneIndex = items.findIndex((i) => !i.isHandle && i.visibility)
 
   for (let i = 1; i < firstVisiblePaneIndex; i += 2) {
-    items[i].setVisibility(false)
+    setPaneVisibility(items[i], false)
   }
 
   return firstVisiblePaneIndex
@@ -111,7 +111,7 @@ export const findConsecutiveAdjacentResizer = (items: IResizableItem[], indexes:
   consecutiveResizers.forEach((set) => {
     set.forEach((i, index) => {
       if (index) {
-        itemsByIndexes[i].setVisibility(true, true)
+        setPaneVisibility(itemsByIndexes[i], true, true)
       }
     })
   })
@@ -207,7 +207,7 @@ export const setVisibilityFn = (resizable: ResizableModel, idMap: IKeyToBoolMap)
   panesList.forEach((pane) => {
     syncPaneToOldVisibilityModel(pane)
     const {id} = pane
-    pane.setVisibility(idMap[id])
+    setPaneVisibility(pane, idMap[id])
   })
 
   const visiblePanes = getVisibleItems(panesList)
