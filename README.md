@@ -151,6 +151,35 @@ export const CustomResizer = ({
 
 ```
 
+## Nesting
+
+```tsx
+
+      <ResizablePanes uniqueId="uniqueId" vertical resizerClass="bg-slate-500">
+
+      <Pane id="P0" size={1}>    
+          <ResizablePanes uniqueId="uniqueId2" resizerClass="bg-slate-500">
+
+            <Pane id="P01" size={2}>
+              Your child component 1
+            </Pane>
+            <Pane id="P01" size={3}>
+              Your child component 2
+            </Pane>
+
+          </ResizablePanes>
+      </Pane>
+
+        <Pane id="P1" size={2}>
+          Your component 2
+        </Pane>
+        <Pane id="P2" size={3}>
+          Your component 3
+        </Pane>
+      </ResizablePanes>
+
+```
+
 ## [Quick Demo](https://bipankishore.github.io/resizable-panes/)
 
 ### Feel Free to Raise Pull Request
