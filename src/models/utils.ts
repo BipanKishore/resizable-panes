@@ -14,15 +14,11 @@ export const checkPaneModelErrors = (size: number, minSize: number, maxSize: num
 export const attachDefaultPaneProps = (paneProps: IPane, resizableProps: IResizablePaneProviderProps) => {
   const propsWithNoUndefined = deleteUndefined({...paneProps})
   const {
-    minSizeClass,
-    maxSizeClass,
     onMinSize = noop,
     onMaxSize = noop,
     onNormalSize = noop
   } = resizableProps
   return {
-    minSizeClass,
-    maxSizeClass,
     onMinSize,
     onMaxSize,
     onNormalSize,

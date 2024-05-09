@@ -3,7 +3,7 @@ import {RPTestWrapper} from '../components/rp-test-wrapper'
 import {RCy} from '../utils'
 import {
   rScontainerId, CK0, CK1, R0, P0, P1,
-  P2, P3, P4, R2, minSizeClassTest, maxSizeClassTest, R1, CK2
+  P2, P3, P4, R2, R1, CK2
 } from './fix-test-ids'
 import {_2PaneWithMinMax, _3PanesWithMinMax} from './pane-model-config-sets'
 import {SinonSpy} from 'cypress/types/sinon'
@@ -17,8 +17,6 @@ describe('Test inital events', () => {
     cy.mount(
       <div className="h-300 w-100p">
         <ResizablePanes
-          maxSizeClass={maxSizeClassTest}
-          minSizeClass={minSizeClassTest}
           resizer={<CustomResizerFirst horizontal={false} size={10} />}
           resizerSize={10}
           storageApi={localStorage}
@@ -210,8 +208,7 @@ describe('sdf', () => {
     cy.mount(
       <div className="h-300 w-100p">
         <ResizablePanes
-          maxSizeClass={maxSizeClassTest}
-          minSizeClass={minSizeClassTest}
+
           resizer={<CustomResizerFirst horizontal={false} size={10} />}
           resizerSize={10}
           storageApi={localStorage}

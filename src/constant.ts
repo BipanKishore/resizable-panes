@@ -17,8 +17,8 @@ export const RESIZER = 'resizer'
 
 export const VISIBILITY = 'visibility'
 export const SIZE = 'size'
-export const DEFAULT_MIN_SIZE = 'defaultMinSize'
-export const DEFAULT_MAX_SIZE = 'defaultMaxSize'
+export const DEFAULT_MIN_SIZE_KEY = 'defaultMinSize'
+export const DEFAULT_MAX_SIZE_KEY = 'defaultMaxSize'
 
 export const PLUS = '+'
 export const MINUS = '-'
@@ -54,6 +54,7 @@ export const [
 
 export const RESIZE_HTML_EVENT = 'resize'
 
-export const MIN_SIZE_STATE = 'minSizeState'
-export const MAX_SIZE_STATE = 'maxSizeState'
-export const NORMAL_SIZE_STATE = 'normalSizeState'
+// written same name as of event to optimize the code
+export const MIN_SIZE_STATE = 'onMinSize'
+export const MAX_SIZE_STATE = 'onMaxSize'
+export const NORMAL_SIZE_STATE = 'onNormalSize'

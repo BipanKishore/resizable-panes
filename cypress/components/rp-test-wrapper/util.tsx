@@ -1,7 +1,6 @@
 import React from 'react'
 import {Pane} from '../../../src'
 import {PaneChild} from '../pane-child'
-import {maxSizeClassTest, minSizeClassTest} from '../../component-testing/fix-test-ids'
 
 export class PaneModelConfig {
   size:number
@@ -28,9 +27,9 @@ export const generatePaneModel = (list: PaneModelConfig[]) => {
         id={`P${index}`}
         key={`P${index}`}
         maxSize={maxSize}
-        maxSizeClass={maxSizeClassTest}
+
         minSize={minSize}
-        minSizeClass={minSizeClassTest}
+
         size={size}
       >
         {<h2>{`P${index}`}</h2>}

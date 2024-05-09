@@ -1,6 +1,7 @@
 import {IKeyToBoolMap, IResizableItem} from '../@types'
 import {LEFT, MINUS, NONE, PLUS, RIGHT} from '../constant'
 import {ResizableModel, PaneModel} from '../models'
+import {getSize, setVisibilitySize, syncPaneToOldVisibilityModel} from '../models/pane'
 import {
   change1PixelToPanes, getItemsByIndexes,
   getItemsSizeSum, getVisibleItems,
@@ -186,10 +187,10 @@ export const updateSizeInRatio = (
 
   const nextActionVisibleList: PaneModel[] = []
   actionVisibleList.forEach((pane) => {
-    const size = pane.getSize()
+    const size = getSize(pane)
     const newSize = Math.round(sizeChangeAbsolute * (size / ratioSum))
 
-    const remainingSize = pane.setVisibilitySize(newSize, operation)
+    const remainingSize = setVisibilitySize(pane, newSize, operation)
     if (remainingSize) {
       nextActionVisibleList.push(pane)
     }
@@ -204,7 +205,7 @@ export const setVisibilityFn = (resizable: ResizableModel, idMap: IKeyToBoolMap)
   } = resizable
 
   panesList.forEach((pane) => {
-    pane.syncToOldVisibilityModel()
+    syncPaneToOldVisibilityModel(pane)
     const {id} = pane
     pane.setVisibility(idMap[id])
   })

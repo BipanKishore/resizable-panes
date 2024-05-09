@@ -1,6 +1,7 @@
 import {IHiddenResizer, IResizableItem} from '../@types'
 import {LEFT, RIGHT, PLUS, DIRECTIONS, NONE} from '../constant'
 import {ResizableModel} from '../models'
+import {changePaneSize, restoreLimits, syncAxisSize} from '../models/pane'
 import {setUISizesFn} from './panes'
 import {findIndex, isItDown, isItUp, reverse} from './util'
 
@@ -50,12 +51,12 @@ export const fixPartialHiddenResizer = (resizable: ResizableModel) => {
         }
 
         const visibleItems = resizingOrder.filter((item) => item.size)
-        visibleItems.forEach((item) => item.syncAxisSize())
+        visibleItems.forEach(syncAxisSize)
 
         visibleItems.forEach((item) => {
-          item.restoreLimits()
+          restoreLimits(item)
           // None is right for this
-          sizeChange = item.changeSize(sizeChange, PLUS, DIRECTIONS.NONE)
+          sizeChange = changePaneSize(item, sizeChange, PLUS, DIRECTIONS.NONE)
         })
 
         setUISizesFn(items, item.partialHiddenDirection)

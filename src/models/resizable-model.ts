@@ -1,6 +1,5 @@
 import {IResizableItem} from '../@types'
 import {PaneModel} from './pane-model'
-import {ResizerModel} from './resizer-model'
 
 export class ResizableModel {
   // Need to clear on all operations
@@ -25,7 +24,7 @@ export class ResizableModel {
   increasingItems: IResizableItem[]
 
   panesList: PaneModel[]
-  resizersList: ResizerModel[]
+  resizersList: IResizableItem[]
 
   getContainerRect: () => any
 

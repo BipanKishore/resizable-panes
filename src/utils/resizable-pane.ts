@@ -2,6 +2,10 @@ import {IResizableEvent, IResizableItem} from '../@types'
 import {DIRECTIONS, MINUS, PLUS} from '../constant'
 import {PaneModel, ResizableModel} from '../models'
 import {
+  changePaneSize, getMaxDiff, getMinDiff,
+  resetMax, resetMin, syncPaneSizeToRatioSize, toRatioMode
+} from '../models/pane'
+import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
   getItemsSizeSum, getRatioSizeSum, getVisibleItems, setUISizesFn,
   synPanesMaxToSize, synPanesMinToSize
@@ -35,13 +39,13 @@ export const movingLogic = (e: IResizableEvent, {
   let reverseSizeChange = sizeChange
 
   decreasingItemsLocal.forEach(item => {
-    sizeChange = item.changeSize(sizeChange, MINUS, direction)
+    sizeChange = changePaneSize(item, sizeChange, MINUS, direction)
   })
 
   reverseSizeChange -= sizeChange
 
   increasingItemsLocal.forEach(item => {
-    reverseSizeChange = item.changeSize(reverseSizeChange, PLUS, direction)
+    reverseSizeChange = changePaneSize(item, reverseSizeChange, PLUS, direction)
   })
 }
 
@@ -114,13 +118,13 @@ export const setCurrentMinMax = (resizable: ResizableModel) => {
   const {virtualOrderList, virtualActiveIndex} = resizable
 
   const nextIdx = virtualActiveIndex + 1
-  const aMaxChangeUp = virtualOrderList[virtualActiveIndex].getMinDiff()
-  const bMaxChangeUp = virtualOrderList[nextIdx].getMaxDiff()
+  const aMaxChangeUp = getMinDiff(virtualOrderList[virtualActiveIndex])
+  const bMaxChangeUp = getMaxDiff(virtualOrderList[nextIdx])
 
   minMaxLogicUp(virtualOrderList, aMaxChangeUp - bMaxChangeUp, virtualActiveIndex, nextIdx, 0, containerSize)
 
-  const aMaxChangeDown = virtualOrderList[nextIdx].getMinDiff()
-  const bMaxChangeDown = virtualOrderList[virtualActiveIndex].getMaxDiff()
+  const aMaxChangeDown = getMinDiff(virtualOrderList[nextIdx])
+  const bMaxChangeDown = getMaxDiff(virtualOrderList[virtualActiveIndex])
   minMaxLogicDown(virtualOrderList, bMaxChangeDown - aMaxChangeDown, virtualActiveIndex, nextIdx, 0, containerSize)
 }
 
@@ -153,23 +157,23 @@ export const minMaxLogicUp = (
     case aIndex > 0 && bIndex < lastIndex:
       switch (true) {
         case value < 0:
-          sum += paneA.resetMin()
+          sum += resetMin(paneA)
           nextAIndex = aIndex - 1
-          nextValue = panesList[nextAIndex].getMinDiff() + value
+          nextValue = getMinDiff(panesList[nextAIndex]) + value
           break
 
         case value === 0:
-          sum += paneA.resetMin()
-          sum += paneB.resetMax()
+          sum += resetMin(paneA)
+          sum += resetMax(paneB)
           nextAIndex = aIndex - 1
           nextBIndex = bIndex + 1
-          nextValue = panesList[nextAIndex].getMinDiff() - panesList[nextBIndex].getMaxDiff()
+          nextValue = getMinDiff(panesList[nextAIndex]) - getMaxDiff(panesList[nextBIndex])
           break
 
         case value > 0:
-          sum += paneB.resetMax()
+          sum += resetMax(paneB)
           nextBIndex = bIndex + 1
-          nextValue = value - panesList[nextBIndex].getMaxDiff()
+          nextValue = value - getMaxDiff(panesList[nextBIndex])
           break
       }
       break
@@ -177,22 +181,22 @@ export const minMaxLogicUp = (
     case aIndex === 0 && bIndex < lastIndex:
       switch (true) {
         case value < 0:
-          sum += paneA.resetMin()
+          sum += resetMin(paneA)
           sum += synPanesMaxToSize(panesList, bIndex + 1, lastIndex)
           paneB.maxSize = maxPaneSize - sum
           return
 
         case value === 0:
-          sum += paneA.resetMin()
-          sum += paneB.resetMax()
+          sum += resetMin(paneA)
+          sum += resetMax(paneB)
           sum += synPanesMaxToSize(panesList, bIndex + 1, lastIndex)
           return
 
         case value > 0:
           // not change from previous switch
-          sum += paneB.resetMax()
+          sum += resetMax(paneB)
           nextBIndex = bIndex + 1
-          nextValue = value - panesList[nextBIndex].getMaxDiff()
+          nextValue = value - getMaxDiff(panesList[nextBIndex])
           break
       }
       break
@@ -200,19 +204,19 @@ export const minMaxLogicUp = (
     case aIndex > 0 && bIndex === lastIndex:
       switch (true) {
         case value < 0:
-          sum += paneA.resetMin()
+          sum += resetMin(paneA)
           nextAIndex = aIndex - 1
-          nextValue = panesList[nextAIndex].getMinDiff() + value
+          nextValue = getMinDiff(panesList[nextAIndex]) + value
           break
 
         case value === 0:
-          sum += paneA.resetMin()
-          sum += paneB.resetMax()
+          sum += resetMin(paneA)
+          sum += resetMax(paneB)
           sum += synPanesMinToSize(panesList, 0, aIndex - 1)
           return
 
         case value > 0:
-          sum += paneB.resetMax()
+          sum += resetMax(paneB)
           sum += synPanesMinToSize(panesList, 0, aIndex - 1)
           paneA.minSize = maxPaneSize - sum
           return
@@ -223,18 +227,18 @@ export const minMaxLogicUp = (
       // return for every case
       switch (true) {
         case value < 0:
-          sum += paneA.resetMin()
+          sum += resetMin(paneA)
           // synPanesMinToSize(panesList, bIndex + 1, lastIndex) // It wont run
           paneB.maxSize = maxPaneSize - sum
           return
 
         case value === 0:
-          sum += paneA.resetMin()
-          sum += paneB.resetMax()
+          sum += resetMin(paneA)
+          sum += resetMax(paneB)
           return
 
         case value > 0:
-          sum += paneB.resetMax()
+          sum += resetMax(paneB)
           // synPanesMaxToSize(panesList, 0, aIndex - 1) // It wont Run
           paneA.minSize = maxPaneSize - sum
           return
@@ -259,23 +263,23 @@ export const minMaxLogicDown = (
     case aIndex > 0 && bIndex < lastIndex:
       switch (true) {
         case value < 0:
-          sum += paneA.resetMax()
+          sum += resetMax(paneA)
           nextAIndex = aIndex - 1
-          nextValue = panesList[nextAIndex].getMaxDiff() + value
+          nextValue = getMaxDiff(panesList[nextAIndex]) + value
           break
 
         case value === 0:
-          sum += paneA.resetMax()
-          sum += paneB.resetMin()
+          sum += resetMax(paneA)
+          sum += resetMin(paneB)
           nextAIndex = aIndex - 1
           nextBIndex = bIndex + 1
-          nextValue = panesList[nextAIndex].getMaxDiff() - panesList[nextBIndex].getMinDiff()
+          nextValue = getMaxDiff(panesList[nextAIndex]) - getMinDiff(panesList[nextBIndex])
           break
 
         case value > 0:
-          sum += paneB.resetMin()
+          sum += resetMin(paneB)
           nextBIndex = bIndex + 1
-          nextValue = value - panesList[nextBIndex].getMinDiff()
+          nextValue = value - getMinDiff(panesList[nextBIndex])
           break
       }
       break
@@ -283,22 +287,22 @@ export const minMaxLogicDown = (
     case aIndex === 0 && bIndex < lastIndex:
       switch (true) {
         case value < 0:
-          sum += paneA.resetMax()
+          sum += resetMax(paneA)
           sum += synPanesMinToSize(panesList, bIndex + 1, lastIndex)
           paneB.minSize = maxPaneSize - sum
           return
 
         case value === 0:
-          sum += paneA.resetMax()
-          sum += paneB.resetMin()
+          sum += resetMax(paneA)
+          sum += resetMin(paneB)
           sum += synPanesMinToSize(panesList, bIndex + 1, lastIndex)
           return
 
         case value > 0:
           // not change from previous switch
-          sum += paneB.resetMin()
+          sum += resetMin(paneB)
           nextBIndex = bIndex + 1
-          nextValue = value - panesList[nextBIndex].getMinDiff()
+          nextValue = value - getMinDiff(panesList[nextBIndex])
           break
       }
       break
@@ -306,19 +310,19 @@ export const minMaxLogicDown = (
     case aIndex > 0 && bIndex === lastIndex:
       switch (true) {
         case value < 0:
-          sum += paneA.resetMax()
+          sum += resetMax(paneA)
           nextAIndex = aIndex - 1
-          nextValue = panesList[nextAIndex].getMaxDiff() + value
+          nextValue = getMaxDiff(panesList[nextAIndex]) + value
           break
 
         case value === 0:
-          sum += paneA.resetMax()
-          sum += paneB.resetMin()
+          sum += resetMax(paneA)
+          sum += resetMin(paneB)
           sum += synPanesMaxToSize(panesList, 0, aIndex - 1)
           return
 
         case value > 0:
-          sum += paneB.resetMin()
+          sum += resetMin(paneB)
           sum += synPanesMaxToSize(panesList, 0, aIndex - 1)
           paneA.maxSize = maxPaneSize - sum
           return
@@ -329,18 +333,18 @@ export const minMaxLogicDown = (
       // return for every case
       switch (true) {
         case value < 0:
-          sum += paneA.resetMax()
+          sum += resetMax(paneA)
           // synPanesMinToSize(panesList, bIndex + 1, lastIndex) // It wont run
           paneB.minSize = maxPaneSize - sum
           return
 
         case value === 0:
-          sum += paneB.resetMin()
-          sum += paneA.resetMax()
+          sum += resetMin(paneB)
+          sum += resetMax(paneA)
           return
 
         case value > 0:
-          sum += paneB.resetMin()
+          sum += resetMin(paneB)
           // synPanesMaxToSize(panesList, 0, aIndex - 1) // It wont Run
           paneA.maxSize = maxPaneSize - sum
           return
@@ -376,8 +380,8 @@ export const toRatioModeFn = (resizable: ResizableModel, isOnResize = false) => 
 
   panesList
     .forEach((pane: PaneModel) => {
-      pane.syncSizeToRatioSize()
-      pane.toRatioMode(maxPaneSize, maxRatioValue, isOnResize)
+      syncPaneSizeToRatioSize(pane)
+      toRatioMode(pane, maxPaneSize, maxRatioValue, isOnResize)
     })
 
   const sizeSum = getItemsSizeSum(panesList)

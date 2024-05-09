@@ -1,5 +1,6 @@
 import {DIRECTIONS} from '../../constant'
 import {ResizableModel, PaneModel} from '../../models'
+import {getSize} from '../../models/pane'
 
 export const localConsole = (obj: any, key : string) => {
   localStorage.setItem(key, JSON.stringify(obj))
@@ -45,8 +46,8 @@ export const consoleDefaultMinAndDefaultMaxSize = (list: any[]) => {
 export const consoleGetSize = (list: any[]) => {
   let sum = 0
   const sizes = list.map((i) => {
-    sum += i.getSize()
-    return i.getSize()
+    sum += getSize(i)
+    return getSize(i)
   })
   console.log('consoleGetSize', sizes, sum)
 }

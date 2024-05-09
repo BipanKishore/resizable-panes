@@ -5,6 +5,11 @@ import {
 } from '../constant'
 import {ResizableModel} from '../models'
 import {
+  changePaneSize, changePaneSizePlain, restoreLimits,
+  restorePaneBeforeSetSize,
+  storePaneForNewSetSizeKey, syncAxisSize
+} from '../models/pane'
+import {
   getVisibleItems, getItemsSizeSum
 } from './panes'
 import {getChangeInViewSize} from './resizable-pane'
@@ -20,9 +25,9 @@ export const setSizeTopAndBottom = (
   let firstInningItems : IResizableItem[]
   let secondInningItems: IResizableItem[]
   const getActionOnItem = (operation: addAndRemoveType, direction: number) => (item: IResizableItem) => {
-    item.syncAxisSize()
-    item.restoreLimits()
-    sizeChange = item.changeSize(sizeChange, operation, direction)
+    syncAxisSize(item)
+    restoreLimits(item)
+    sizeChange = changePaneSize(item, sizeChange, operation, direction)
   }
 
   const changeSizeOfFirstAndSecondInningsItems = (firstInningDirection: number, secondInningDirection: number) => {
@@ -67,20 +72,19 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
 
   const currentSetSizeKey = `${id}-${behavior}`
   if (resizable.setSizeKey === currentSetSizeKey) {
-    panesList.forEach((pane) => pane.restoreBeforeSetSize())
+    panesList.forEach(restorePaneBeforeSetSize)
   } else {
-    panesList.forEach((pane) => pane.storeForNewSetSizeKey())
+    panesList.forEach(storePaneForNewSetSizeKey)
     resizable.setSizeKey = currentSetSizeKey
   }
 
   const initialSizeSum = getItemsSizeSum(visiblePanes)
 
   const pane = visiblePanes[requestIndex]
-  pane.restoreLimits()
+  restoreLimits(pane)
   const preSize = pane.size
-  pane.changeSizeAndReturnRemaing(newSize)
 
-  const acceptableNewSize = pane.size
+  const acceptableNewSize = changePaneSizePlain(pane, newSize)
   let sizeChange = acceptableNewSize - preSize
 
   if (!sizeChange) {

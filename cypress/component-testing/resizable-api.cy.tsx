@@ -26,7 +26,7 @@ import {CustomResizerFirst} from '../components/custom-resizer'
 import {Pane, ResizablePanes} from '../../src'
 import {IGetState, IResizableApi} from '../../src/@types'
 import {
-  BUTTOM_FIRST, DEFAULT_MAX_SIZE, DEFAULT_MIN_SIZE,
+  BUTTOM_FIRST, DEFAULT_MAX_SIZE_KEY, DEFAULT_MIN_SIZE_KEY,
   HIDDEN, TOP_FIRST, VISIBLE
 } from '../../src/constant'
 import {SinonSpy} from 'cypress/types/sinon'
@@ -96,14 +96,14 @@ describe('Storage api', () => {
       P1: {
         size: 515,
         visibility: true,
-        [DEFAULT_MIN_SIZE]: 0,
-        [DEFAULT_MAX_SIZE]: Infinity
+        [DEFAULT_MIN_SIZE_KEY]: 0,
+        [DEFAULT_MAX_SIZE_KEY]: Infinity
       },
       P0: {
         size: 515,
         visibility: true,
-        [DEFAULT_MIN_SIZE]: 0,
-        [DEFAULT_MAX_SIZE]: Infinity
+        [DEFAULT_MIN_SIZE_KEY]: 0,
+        [DEFAULT_MAX_SIZE_KEY]: Infinity
       }
     })
   })
@@ -126,14 +126,14 @@ describe('Storage api', () => {
       P1: {
         size: 515,
         visibility: true,
-        [DEFAULT_MIN_SIZE]: 0,
-        [DEFAULT_MAX_SIZE]: Infinity
+        [DEFAULT_MIN_SIZE_KEY]: 0,
+        [DEFAULT_MAX_SIZE_KEY]: Infinity
       },
       P0: {
         size: 515,
         visibility: true,
-        [DEFAULT_MIN_SIZE]: 0,
-        [DEFAULT_MAX_SIZE]: Infinity
+        [DEFAULT_MIN_SIZE_KEY]: 0,
+        [DEFAULT_MAX_SIZE_KEY]: Infinity
       }
     })
   })
@@ -155,14 +155,14 @@ describe('Storage api', () => {
       P1: {
         size: 515,
         visibility: true,
-        [DEFAULT_MIN_SIZE]: 0,
-        [DEFAULT_MAX_SIZE]: Infinity
+        [DEFAULT_MIN_SIZE_KEY]: 0,
+        [DEFAULT_MAX_SIZE_KEY]: Infinity
       },
       P0: {
         size: 515,
         visibility: true,
-        [DEFAULT_MIN_SIZE]: 0,
-        [DEFAULT_MAX_SIZE]: Infinity
+        [DEFAULT_MIN_SIZE_KEY]: 0,
+        [DEFAULT_MAX_SIZE_KEY]: Infinity
       }
     })
   })

@@ -2,8 +2,8 @@ import {createContext} from 'react'
 import {createMap, findById} from '../utils/util'
 import {
   DIRECTIONS,
-  DEFAULT_MAX_SIZE,
-  DEFAULT_MIN_SIZE,
+  DEFAULT_MAX_SIZE_KEY,
+  DEFAULT_MIN_SIZE_KEY,
   RATIO,
   SET_SIZE,
   SIZE,
@@ -15,11 +15,10 @@ import {
   getVisibilityState,
   emitIfChangeInPartialHiddenState,
   restoreFn,
-  setDownMaxLimits,
   setUISizesFn,
-  setUpMaxLimits,
   syncAxisSizesFn,
-  updatSizeStateAllPanes
+  updatSizeStateAllPanes,
+  setMaxLimits
 } from '../utils/panes'
 import {
   calculateAxes,
@@ -39,10 +38,14 @@ import {
   IResizablePaneProviderProps,
   ISetSizeBehaviour
 } from '../@types'
-import {PaneModel, ResizableModel} from '../models'
+import {ResizableModel} from '../models'
 import {setVisibilityFn} from '../utils/visibility-helper'
 import {fixPartialHiddenResizer, setResizersLimits} from '../utils/resizer'
 import {setSizeMethod} from '../utils/set-size-helper'
+import {
+  getSize, registerResizableItem, setPaneOldVisibilityModel,
+  synSizeToMaxSize, synSizeToMinSize, syncPaneRatioSizeToSize
+} from '../models/pane'
 
 export const getResizableContext = (
   props: IResizablePaneProviderProps
@@ -83,8 +86,6 @@ export const getResizableContext = (
   })
 
   const syncAxisSizes = () => syncAxisSizesFn(items)
-  const updateSizeStates = () => updatSizeStateAllPanes(panesList)
-
   const emitResize = () => {
     const resizeParams = getIdToSizeMap()
     onResize(resizeParams)
@@ -101,7 +102,7 @@ export const getResizableContext = (
   }
 
   const registerItem = (api: any, id: string) => {
-    findById(items, id).register(api)
+    registerResizableItem(findById(items, id), api)
   }
 
   const registerContainer = (getContainerRect: any) => {
@@ -130,7 +131,7 @@ export const getResizableContext = (
 
   const clearflagsOnNewView = (except: IClearFlagsParam = '') => {
     if (except !== RATIO) {
-      panesList.forEach((item) => item.syncRatioSizeToSize())
+      panesList.forEach(syncPaneRatioSizeToSize)
     }
     if (except !== VISIBILITY) {
       resizable.newVisibilityModel = false
@@ -142,7 +143,7 @@ export const getResizableContext = (
 
   const onNewView = (except: IClearFlagsParam = '') => {
     clearflagsOnNewView(except)
-    updateSizeStates()
+    updatSizeStateAllPanes(panesList)
   }
 
   const calculateAndSetHeight = (e: IResizableEvent) => {
@@ -186,16 +187,15 @@ export const getResizableContext = (
   }
 
   const setAxisConfig = (e: IResizableEvent) => {
-    const {virtualActiveIndex, virtualOrderList, topAxis, bottomAxis} =
-      resizable
+    const {topAxis, bottomAxis} = resizable
 
     if (e.mouseCoordinate <= topAxis) {
-      setUpMaxLimits(virtualOrderList, virtualActiveIndex)
+      setMaxLimits(resizable, synSizeToMinSize, synSizeToMaxSize, DIRECTIONS.UP)
       syncAxisSizes()
       resizable.axisCoordinate = topAxis
       return false
     } else if (e.mouseCoordinate >= bottomAxis) {
-      setDownMaxLimits(virtualOrderList, virtualActiveIndex)
+      setMaxLimits(resizable, synSizeToMaxSize, synSizeToMinSize, DIRECTIONS.DOWN)
       syncAxisSizes()
       resizable.axisCoordinate = bottomAxis
       return false
@@ -204,7 +204,7 @@ export const getResizableContext = (
   }
 
   const getPaneSizeStyle = (id: string) => {
-    const size = findById(panesList, id).getSize()
+    const size = getSize(findById(panesList, id))
     return getSizeStyle(vertical, size as number)
   }
 
@@ -228,7 +228,7 @@ export const getResizableContext = (
 
     if (!newVisibilityModel) {
       resizable.newVisibilityModel = true
-      panesList.forEach((pane: PaneModel) => pane.setOldVisibilityModel())
+      panesList.forEach(setPaneOldVisibilityModel)
     }
 
     setVisibilityFn(resizable, newMap)
@@ -250,7 +250,7 @@ export const getResizableContext = (
   }
 
   const getState = () =>
-    createMap(panesList, SIZE, VISIBILITY, DEFAULT_MIN_SIZE, DEFAULT_MAX_SIZE)
+    createMap(panesList, SIZE, VISIBILITY, DEFAULT_MIN_SIZE_KEY, DEFAULT_MAX_SIZE_KEY)
   const getVisibilities = () => getVisibilityState(panesList)
 
   const setSize = (

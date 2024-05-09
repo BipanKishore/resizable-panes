@@ -18,4 +18,4 @@ export type IVisibilityState = 'zipped' | 'visible' | 'hidden'
 export type IClearFlagsParam = 'setSize' | 'ratio' | 'visibility' | ''
 export type ISetSizeBehaviour = 'ratio' | 'buttomFirst' | 'topFirst'
 
-export type ISizeState = 'minSizeState' | 'maxSizeState' | 'normalSizeState'
+export type ISizeState = 'onNormalSize' | 'onMinSize' | 'onMaxSize'
