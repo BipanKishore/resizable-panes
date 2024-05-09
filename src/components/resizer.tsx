@@ -24,7 +24,7 @@ export const Resizer = (props: IResizer) => {
   const context: any = useContext(ResizablePaneContext)
 
   const {
-    getIdToSizeMap, onMoveEndFn, resizable
+    onMoveEndFn, resizable
   } = context
   const {panesList} = resizable
 
@@ -50,7 +50,7 @@ export const Resizer = (props: IResizer) => {
     setIsMouseDown(false)
     document.removeEventListener('mouseup', onMoveEnd)
     document.removeEventListener('touchend', onMoveEnd)
-  }, [uniqueId, onMouseMove, context, getIdToSizeMap])
+  }, [uniqueId, onMouseMove, context])
 
   const onMouseDown = useCallback((e: any) => {
     setIsMouseDown(true)

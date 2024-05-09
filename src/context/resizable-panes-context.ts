@@ -280,7 +280,6 @@ export const getResizableContext = (
     onMoveEndFn,
     registerItem,
     registerContainer,
-    getIdToSizeMap,
     setMouseDownDetails,
     vertical,
     calculateAndSetHeight,

@@ -37,25 +37,12 @@ export const changePaneSize = (pane: PaneModel, sizeChange: number, operation: a
   return Math.abs(acceptedSize - newSize)
 }
 
-const setSizeNIsLimitReached = (pane: PaneModel, newSize: number) => {
-  let size
-  if (newSize > pane.minSize && newSize < pane.maxSize) {
-    pane.size = newSize
-    return true
-  } else if (newSize >= pane.maxSize) {
-    size = pane.maxSize
-  } else {
-    size = pane.minSize
-  }
-  pane.size = size
-  return false
-}
-
 // No visibility check required here, we are only using this method for visible panes
 export const setVisibilitySize = (pane: PaneModel, sizeChange: number, operation: addAndRemoveType) => {
   const newSize = pane.size + (operation === PLUS ? sizeChange : -sizeChange)
   restoreLimits(pane)
-  return setSizeNIsLimitReached(pane, newSize)
+  const acceptedSize = changePaneSizePlain(pane, newSize)
+  return acceptedSize === newSize
 }
 
 export const setHiddenResizerWhileMovement = (pane: PaneModel, newSize: number, direction: number) => {

@@ -129,7 +129,6 @@ export interface IResizableContext {
   onMoveEndFn: any;
   registerItem: (api: any, id: string) => void;
   registerContainer: any;
-  getIdToSizeMap: any;
   setMouseDownDetails: any;
   vertical: boolean | undefined;
   calculateAndSetHeight: any;
