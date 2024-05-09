@@ -1,11 +1,10 @@
 import {IKeyToBoolMap, IResizableItem} from '../@types'
-import {LEFT, MINUS, NONE, PLUS, RIGHT} from '../constant'
+import {CHANGE, LEFT, NONE, RIGHT} from '../constant'
 import {ResizableModel, PaneModel} from '../models'
 import {getSize, setPaneVisibility, setVisibilitySize, syncPaneToOldVisibilityModel} from '../models/pane'
 import {
   change1PixelToPanes, getItemsByIndexes,
-  getItemsSizeSum, getVisibleItems,
-  safeSetVisibility
+  getItemsSizeSum, getVisibleItems
 } from './panes'
 import {getMaxContainerSizes} from './resizable-pane'
 
@@ -61,7 +60,7 @@ const setVisibilityOfLeftResizers = (items: IResizableItem[], start: number) => 
   for (let a = start + 2; a < items.length; a += 2) {
     const {visibility} = items[a]
     const inBetweenResizer = items[a - 1]
-    safeSetVisibility(inBetweenResizer, visibility)
+    setPaneVisibility(inBetweenResizer, visibility)
   }
 }
 
@@ -142,7 +141,7 @@ export const setVisibilityOfResizers = (resizable: ResizableModel) => {
           r = findPrevVisibleResizer(items, i - 1)
           oppoR = findNextVisibleResizer(items, i)
           if (oppoR) {
-            safeSetVisibility(r, true, true)
+            setPaneVisibility(r, true, true)
           }
           break
 
@@ -151,7 +150,7 @@ export const setVisibilityOfResizers = (resizable: ResizableModel) => {
           oppoR = findPrevVisibleResizer(items, i)
 
           if (oppoR) {
-            safeSetVisibility(r, true, true)
+            setPaneVisibility(r, true, true)
           }
 
           break
@@ -174,7 +173,7 @@ export const updateSizeInRatio = (
     return
   }
 
-  const operation = sizeChange > 0 ? PLUS : MINUS
+  const operation = sizeChange > 0 ? CHANGE.ADD : CHANGE.REMOVE
 
   const sizeChangeAbsolute = Math.abs(sizeChange)
 
@@ -219,13 +218,13 @@ export const setVisibilityFn = (resizable: ResizableModel, idMap: IKeyToBoolMap)
         if (pane.hiddenResizer === LEFT) {
           pane.size = 1
           pane.hiddenResizer = NONE
-          safeSetVisibility(visibleItems[index - 1], true)
+          setPaneVisibility(visibleItems[index - 1], true)
         }
 
         if (pane.hiddenResizer === RIGHT) {
           pane.hiddenResizer = NONE
           pane.size = 1
-          safeSetVisibility(visibleItems[index + 1], true)
+          setPaneVisibility(visibleItems[index + 1], true)
         }
       }
     })

@@ -1,7 +1,6 @@
 import {MouseEventHandler, ReactElement, ReactNode} from 'react'
 import {IKeyToBoolMap, IMapIdToSize} from './general-type'
 import {PaneModel, ResizableModel} from '../models'
-import {ResizeStorage} from '../utils/storage'
 import {
   UnitTypes,
   IHiddenResizer,

@@ -1,12 +1,12 @@
 import {ReactElement} from 'react'
-import {IResizableItem, IResizablePaneProviderProps, addAndRemoveType} from '../@types'
+import {IResizableItem, IResizablePaneProviderProps, IAddAndRemove} from '../@types'
 import {PaneModel, ResizableModel} from '../models'
 import {ResizeStorage} from './storage'
-import {DIRECTIONS, HIDDEN, NONE, PLUS, VISIBLE, ZIPPED} from '../constant'
+import {CHANGE, DIRECTIONS, HIDDEN, NONE, VISIBLE, ZIPPED} from '../constant'
 import {fixFacingHiddenResizersOrder} from './resizer'
 import {
   getRatioSize,
-  getSize, initializeSize, restorePane, setPaneVisibility, setUISize, synMaxToSize,
+  getSize, initializeSize, restorePane, setUISize, synMaxToSize,
   synMinToSize,
   syncAxisSize, updatSizeState
 }
@@ -91,12 +91,6 @@ export const updatSizeStateAllPanes = (panesList: PaneModel[]) => {
   panesList.forEach(updatSizeState)
 }
 
-export const safeSetVisibility = (item : IResizableItem, visibility: boolean, isPartiallyHidden?: boolean) => {
-  if (item) {
-    setPaneVisibility(item, visibility, isPartiallyHidden)
-  }
-}
-
 export const getItemsByIndexes = (items : IResizableItem[], indexes: number[]) => {
   const itemsByIndexes = items.filter((_, i) => indexes.includes(i))
   return itemsByIndexes
@@ -110,13 +104,13 @@ export const getVisibilityState = (panesList: PaneModel[]) => {
   return map
 }
 
-const fixChangeCallBack = (pane: PaneModel, change: number, operation: addAndRemoveType) => {
-  const newSize = pane.size + (operation === PLUS ? change : -change)
+const fixChangeCallBack = (pane: PaneModel, change: number, operation: IAddAndRemove) => {
+  const newSize = pane.size + (operation === CHANGE.ADD ? change : -change)
   initializeSize(pane, newSize)
 }
 
 export const change1PixelToPanes = (panesList: PaneModel[], sizeChange: number,
-  operation: addAndRemoveType) => {
+  operation: IAddAndRemove) => {
   let count = 0
   const len = panesList.length
   let index: number

@@ -1,5 +1,5 @@
 import {IResizableItem} from '../@types'
-import {DIRECTIONS, MINUS, PLUS} from '../constant'
+import {CHANGE, DIRECTIONS} from '../constant'
 import {PaneModel, ResizableModel} from '../models'
 import {
   changePaneSize, getMaxDiff, getMinDiff,
@@ -39,13 +39,13 @@ export const movingLogic = (mouseCoordinate: number, {
   let reverseSizeChange = sizeChange
 
   decreasingItemsLocal.forEach(item => {
-    sizeChange = changePaneSize(item, sizeChange, MINUS, direction)
+    sizeChange = changePaneSize(item, sizeChange, CHANGE.REMOVE, direction)
   })
 
   reverseSizeChange -= sizeChange
 
   increasingItemsLocal.forEach(item => {
-    reverseSizeChange = changePaneSize(item, reverseSizeChange, PLUS, direction)
+    reverseSizeChange = changePaneSize(item, reverseSizeChange, CHANGE.ADD, direction)
   })
 }
 
@@ -385,7 +385,7 @@ export const toRatioModeAllPanes = (resizable: ResizableModel, isOnResize = fals
 
   const sizeSum = getItemsSizeSum(panesList)
   const leftOverTotalSize = maxPaneSize - sizeSum
-  const changeOperation = leftOverTotalSize < 0 ? MINUS : PLUS
+  const changeOperation = leftOverTotalSize < 0 ? CHANGE.REMOVE : CHANGE.ADD
   change1PixelToPanes(panesList, Math.abs(leftOverTotalSize), changeOperation)
 
   setUISizesFn(items, DIRECTIONS.DOWN)

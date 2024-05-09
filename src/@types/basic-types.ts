@@ -4,7 +4,7 @@ export type IHiddenResizer = 'left' | 'right' | 'none'
 
 export type UnitTypes = 'ratio' | 'pixel' | undefined
 
-export type addAndRemoveType = '+'| '-'
+export type IAddAndRemove = number
 
 export type IPaneModelKey = keyof PaneModel
 

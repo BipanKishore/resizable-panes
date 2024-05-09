@@ -1,5 +1,5 @@
 import {IHiddenResizer, IResizableItem} from '../@types'
-import {LEFT, RIGHT, PLUS, DIRECTIONS, NONE} from '../constant'
+import {LEFT, RIGHT, DIRECTIONS, NONE, CHANGE} from '../constant'
 import {ResizableModel} from '../models'
 import {changePaneSize, restoreLimits, syncAxisSize} from '../models/pane'
 import {setUISizesFn} from './panes'
@@ -55,7 +55,7 @@ export const fixPartialHiddenResizer = (resizable: ResizableModel) => {
         visibleItems.forEach((item) => {
           restoreLimits(item)
           // None is right for this
-          sizeChange = changePaneSize(item, sizeChange, PLUS, DIRECTIONS.NONE)
+          sizeChange = changePaneSize(item, sizeChange, CHANGE.ADD, DIRECTIONS.NONE)
         })
 
         setUISizesFn(items, DIRECTIONS.NONE)

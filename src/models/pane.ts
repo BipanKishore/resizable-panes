@@ -1,9 +1,10 @@
-import {IResizerApi, ISizeState, IStoreResizableItemsModel, addAndRemoveType} from '../@types'
+import {IResizerApi, ISizeState, IStoreResizableItemsModel, IAddAndRemove} from '../@types'
 import {
+  CHANGE,
   DEFAULT_MAX_SIZE_KEY,
   DEFAULT_MIN_SIZE_KEY,
   LEFT, MAX_SIZE_STATE, MIN_SIZE_STATE, NONE, NORMAL_SIZE_STATE,
-  PLUS, RATIO, RIGHT, SIZE, VISIBILITY
+  RATIO, RIGHT, SIZE, VISIBILITY
 } from '../constant'
 import {isItUp, isItDown, filterKeys, ratioAndRoundOff} from '../utils/util'
 import {PaneModel} from './pane-model'
@@ -28,9 +29,9 @@ export const changePaneSizePlain = (pane: PaneModel, newSize: number) => {
 }
 
 export const changePaneSize = (pane: PaneModel, sizeChange: number,
-  operation: addAndRemoveType, direction: number) => {
+  operation: IAddAndRemove, direction: number) => {
   const {axisSize} = pane
-  const newSize = axisSize + (operation === PLUS ? sizeChange : -sizeChange)
+  const newSize = axisSize + (operation === CHANGE.ADD ? sizeChange : -sizeChange)
 
   if (axisSize !== 0) {
     setPaneHiddenResizer(pane, newSize, direction, 0)
@@ -41,8 +42,9 @@ export const changePaneSize = (pane: PaneModel, sizeChange: number,
 }
 
 // No visibility check required here, we are only using this method for visible panes
-export const setVisibilitySize = (pane: PaneModel, sizeChange: number, operation: addAndRemoveType) => {
-  const newSize = pane.size + (operation === PLUS ? sizeChange : -sizeChange)
+export const setVisibilitySize = (pane: PaneModel, sizeChange: number,
+  operation: IAddAndRemove) => {
+  const newSize = pane.size + (operation === CHANGE.ADD ? sizeChange : -sizeChange)
   restoreLimits(pane)
   const acceptedSize = changePaneSizePlain(pane, newSize)
   return acceptedSize === newSize
@@ -69,16 +71,18 @@ const setVisibilityHelper = (pane: PaneModel, isPartiallyHidden: boolean) => {
 }
 
 export const setPaneVisibility = (pane: PaneModel, visibility: boolean, isPartiallyHidden = false) => {
-  pane.visibility = visibility
-  if (visibility) {
-    pane.maxSize = pane.defaultMaxSize
-    pane.minSize = pane.defaultMinSize
-    setVisibilityHelper(pane, isPartiallyHidden)
-  } else {
-    pane.maxSize = 0
-    pane.minSize = 0
+  if (pane) {
+    pane.visibility = visibility
+    if (visibility) {
+      pane.maxSize = pane.defaultMaxSize
+      pane.minSize = pane.defaultMinSize
+      setVisibilityHelper(pane, isPartiallyHidden)
+    } else {
+      pane.maxSize = 0
+      pane.minSize = 0
+    }
+    if (pane.api && pane.api.destroy) { pane.api.destroy(visibility) }
   }
-  if (pane.api && pane.api.destroy) { pane.api?.destroy(visibility) }
 }
 
 export const setPaneOldVisibilityModel = (pane: PaneModel) => {

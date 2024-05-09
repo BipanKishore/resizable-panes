@@ -1,7 +1,7 @@
-import {ISetSizeBehaviour, IResizableItem, addAndRemoveType} from '../@types'
+import {ISetSizeBehaviour, IResizableItem, IAddAndRemove} from '../@types'
 import {
-  RATIO, LEFT, RIGHT, BUTTOM_FIRST,
-  MINUS, DIRECTIONS, NONE, PLUS, TOP_FIRST
+  RATIO, LEFT, RIGHT, BUTTOM_FIRST, DIRECTIONS, NONE, TOP_FIRST,
+  CHANGE
 } from '../constant'
 import {ResizableModel} from '../models'
 import {
@@ -25,7 +25,7 @@ export const setSizeTopAndBottom = (
 ) => {
   let firstInningItems : IResizableItem[]
   let secondInningItems: IResizableItem[]
-  const getActionOnItem = (operation: addAndRemoveType, direction: number) => (item: IResizableItem) => {
+  const getActionOnItem = (operation: IAddAndRemove, direction: number) => (item: IResizableItem) => {
     syncAxisSize(item)
     restoreLimits(item)
     sizeChange = changePaneSize(item, sizeChange, operation, direction)
@@ -33,15 +33,15 @@ export const setSizeTopAndBottom = (
 
   const changeSizeOfFirstAndSecondInningsItems = (firstInningDirection: number, secondInningDirection: number) => {
     if (sizeChange > 0) { // Need to reduce other
-      firstInningItems.forEach(getActionOnItem(MINUS, firstInningDirection))
-      secondInningItems.forEach(getActionOnItem(MINUS, secondInningDirection))
+      firstInningItems.forEach(getActionOnItem(CHANGE.REMOVE, firstInningDirection))
+      secondInningItems.forEach(getActionOnItem(CHANGE.REMOVE, secondInningDirection))
     }
 
     if (sizeChange < 0) { // Need to increase other
       sizeChange = Math.abs(sizeChange)
 
-      firstInningItems.forEach(getActionOnItem(PLUS, firstInningDirection))
-      secondInningItems.forEach(getActionOnItem(PLUS, secondInningDirection))
+      firstInningItems.forEach(getActionOnItem(CHANGE.ADD, firstInningDirection))
+      secondInningItems.forEach(getActionOnItem(CHANGE.ADD, secondInningDirection))
     }
   }
 

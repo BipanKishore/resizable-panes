@@ -5,7 +5,14 @@ export const DIRECTIONS = {
   UP: 1
 }
 
-// export const APP_NAME = 'react-split-pane'
+export const CHANGE = {
+  ADD: 1,
+  REMOVE: 2
+}
+
+export const LEFT = 'left'
+export const RIGHT = 'right'
+export const NONE = 'none'
 
 export const RATIO = 'ratio'
 export const SET_SIZE = 'setSize'
@@ -19,13 +26,6 @@ export const VISIBILITY = 'visibility'
 export const SIZE = 'size'
 export const DEFAULT_MIN_SIZE_KEY = 'defaultMinSize'
 export const DEFAULT_MAX_SIZE_KEY = 'defaultMaxSize'
-
-export const PLUS = '+'
-export const MINUS = '-'
-
-export const LEFT = 'left'
-export const RIGHT = 'right'
-export const NONE = 'none'
 
 export const ZIPPED = 'zipped'
 export const VISIBLE = 'visible'
