@@ -102,14 +102,6 @@ function App() {
 | resizer       | ReactElement |          | false               | It will replace the in build resizer of Pane.                                                            |
 | resizerSize   | number       |          | Optionally required | It is the size of attached Resizer Element. It is required when we have passed resizer prop to the Pane. |
 
-## Custom Resizer Component (resizer prop of ResizablePanes/Pane)
-
-| Prop                | Type     | Default | Required | Description                                                                                                                |
-| ------------------- | -------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
-| onMouseDown         | function |         |          | Attached it to the element that, upon being clicked and dragged, initiates the resizing of the Pane's size.                |
-| onTouchStartCapture |          |         |          | Attached it to the element that, upon being clicked and dragged, initiates the resizing of the Pane's size.(Touch devices) |
-| isMouseDown         | boolean  |         |          | Use it style you Custom resizer element behavior.                                                                          |
-
 ## ResizablePanes component api
 
 | Method          | Params                                                       | Description                                                                                                                              |
@@ -120,6 +112,44 @@ function App() {
 | getSizes        |                                                              | It returns the size map object of Ids of Panes                                                                                           |
 | getVisibilities |                                                              | It returns the visibility map object of Ids of Panes                                                                                     |
 | getState        |                                                              | It return the current state of all Panes.                                                                                                |
+
+## Custom Resizer Component (resizer prop of ResizablePanes/Pane)
+
+| Prop                | Type     | Default | Required | Description                                                                                                                |
+| ------------------- | -------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
+| onMouseDown         | function |         |          | Attached it to the element that, upon being clicked and dragged, initiates the resizing of the Pane's size.                |
+| onTouchStartCapture |          |         |          | Attached it to the element that, upon being clicked and dragged, initiates the resizing of the Pane's size.(Touch devices) |
+| isMouseDown         | boolean  |         |          | Use it style you Custom resizer element behavior.                                                                          |
+
+```tsx
+
+interface ICustomResizerProp {
+    onMouseDown: (e: HTMLEvent) => void,
+    isMouseDown: boolean,
+    onTouchStartCapture: (e: HTMLEvent) => void
+  }
+
+
+export const CustomResizer = ({
+    onMouseDown,
+    isMouseDown, 
+    onTouchStartCapture
+}: ICustomResizerProp) => {
+
+ // isMouseDown: use it to style the elements
+
+  return (
+    <SOME_ELEMENT>
+      <TARGET_ELEMENT
+        onMouseDown={onMouseDown}
+        onTouchStartCapture={onTouchStartCapture}
+      >
+      </TARGET_ELEMENT>
+    </SOME_ELEMENT>
+  )
+}
+
+```
 
 ## [Quick Demo](https://bipankishore.github.io/resizable-panes/)
 
