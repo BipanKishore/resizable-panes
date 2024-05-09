@@ -213,8 +213,8 @@ export const minMaxLogicUp = (
           return
 
         case value > 0:
-          resetMax(paneB)
-          synPanesMinToSize(panesList, 0, aIndex - 1)
+          sum += resetMax(paneB)
+          sum += synPanesMinToSize(panesList, 0, aIndex - 1)
           paneA.minSize = maxPaneSize - sum
           return
       }
@@ -224,8 +224,7 @@ export const minMaxLogicUp = (
       // return for every case
       switch (true) {
         case value < 0:
-          resetMin(paneA)
-          // synPanesMinToSize(panesList, bIndex + 1, lastIndex) // It wont run
+          sum += resetMin(paneA)
           paneB.maxSize = maxPaneSize - sum
           return
 
@@ -235,14 +234,13 @@ export const minMaxLogicUp = (
           return
 
         case value > 0:
-          resetMax(paneB)
-          // synPanesMaxToSize(panesList, 0, aIndex - 1) // It wont Run
+          sum += resetMax(paneB)
           paneA.minSize = maxPaneSize - sum
           return
       }
   }
 
-  minMaxLogicUp(panesList, <number>nextValue, nextAIndex, nextBIndex, sum, maxPaneSize)
+  minMaxLogicUp(panesList, nextValue, nextAIndex, nextBIndex, sum, maxPaneSize)
 }
 
 // eslint-disable-next-line complexity
@@ -284,8 +282,8 @@ export const minMaxLogicDown = (
     case aIndex === 0 && bIndex < lastIndex:
       switch (true) {
         case value < 0:
-          resetMax(paneA)
-          synPanesMinToSize(panesList, bIndex + 1, lastIndex)
+          sum += resetMax(paneA)
+          sum += synPanesMinToSize(panesList, bIndex + 1, lastIndex)
           paneB.minSize = maxPaneSize - sum
           return
 
@@ -313,14 +311,14 @@ export const minMaxLogicDown = (
           break
 
         case value === 0:
-          sum += resetMax(paneA)
-          sum += resetMin(paneB)
-          sum += synPanesMaxToSize(panesList, 0, aIndex - 1)
+          resetMax(paneA)
+          resetMin(paneB)
+          synPanesMaxToSize(panesList, 0, aIndex - 1)
           return
 
         case value > 0:
-          resetMin(paneB)
-          synPanesMaxToSize(panesList, 0, aIndex - 1)
+          sum += resetMin(paneB)
+          sum += synPanesMaxToSize(panesList, 0, aIndex - 1)
           paneA.maxSize = maxPaneSize - sum
           return
       }
@@ -330,8 +328,7 @@ export const minMaxLogicDown = (
       // return for every case
       switch (true) {
         case value < 0:
-          resetMax(paneA)
-          // synPanesMinToSize(panesList, bIndex + 1, lastIndex) // It wont run
+          sum += resetMax(paneA)
           paneB.minSize = maxPaneSize - sum
           return
 
@@ -341,14 +338,13 @@ export const minMaxLogicDown = (
           return
 
         case value > 0:
-          resetMin(paneB)
-          // synPanesMaxToSize(panesList, 0, aIndex - 1) // It wont Run
+          sum += resetMin(paneB)
           paneA.maxSize = maxPaneSize - sum
           return
       }
   }
 
-  minMaxLogicDown(panesList, <number>nextValue, nextAIndex, nextBIndex, sum, maxPaneSize)
+  minMaxLogicDown(panesList, nextValue, nextAIndex, nextBIndex, sum, maxPaneSize)
 }
 
 export const getMaxContainerSizes = ({getContainerRect, vertical, resizersList} :ResizableModel) => {
