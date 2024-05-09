@@ -120,7 +120,7 @@ export const getResizableContext = (
 
   const getIdToSizeMap = () => createMap(panesList, SIZE)
 
-  const setMouseDownDetails = ({mouseCoordinate}: any, handleId: string) => {
+  const setMouseDownDetails = ([mouseCoordinate]: IResizableEvent, handleId: string) => {
     resizable.register({
       handleId,
       direction: DIRECTIONS.NONE,
@@ -146,35 +146,34 @@ export const getResizableContext = (
     updatSizeStateAllPanes(panesList)
   }
 
-  const calculateAndSetHeight = (e: IResizableEvent) => {
-    const {movement} = e
+  const calculateAndSetHeight = ([mouseCoordinate, movement]: IResizableEvent) => {
     if (resizable.isViewSizeChanged || !movement) {
       return
     }
 
-    setDirection(e)
-    const isAxisLimitReached = setAxisConfig(e)
+    setDirection(mouseCoordinate, movement)
+    const isAxisLimitReached = setAxisConfig(mouseCoordinate)
 
     if (isAxisLimitReached) {
-      movingLogic(e, resizable)
+      movingLogic(mouseCoordinate, resizable)
     }
     setUISizesFn(items, resizable.direction)
     onNewView()
     emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
   }
 
-  const setDirection = (e: IResizableEvent) => {
+  const setDirection = (mouseCoordinate: number, movement: number) => {
     const {direction} = resizable
-    const currentDirection = getDirection(e)
+    const currentDirection = getDirection(movement)
 
     if (currentDirection !== direction) {
       resizable.direction = currentDirection
-      directionChangeActions(e)
+      directionChangeActions(mouseCoordinate)
     }
   }
 
-  const directionChangeActions = (e: IResizableEvent) => {
-    resizable.axisCoordinate = e.mouseCoordinate
+  const directionChangeActions = (mouseCoordinate: number) => {
+    resizable.axisCoordinate = mouseCoordinate
 
     setVirtualOrderList(resizable)
     if (zipping) {
@@ -186,15 +185,15 @@ export const getResizableContext = (
     calculateAxes(resizable)
   }
 
-  const setAxisConfig = (e: IResizableEvent) => {
+  const setAxisConfig = (mouseCoordinate: number) => {
     const {topAxis, bottomAxis} = resizable
 
-    if (e.mouseCoordinate <= topAxis) {
+    if (mouseCoordinate <= topAxis) {
       setMaxLimits(resizable, synSizeToMinSize, synSizeToMaxSize, DIRECTIONS.UP)
       syncAxisSizes()
       resizable.axisCoordinate = topAxis
       return false
-    } else if (e.mouseCoordinate >= bottomAxis) {
+    } else if (mouseCoordinate >= bottomAxis) {
       setMaxLimits(resizable, synSizeToMaxSize, synSizeToMinSize, DIRECTIONS.DOWN)
       syncAxisSizes()
       resizable.axisCoordinate = bottomAxis

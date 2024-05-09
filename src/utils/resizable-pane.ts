@@ -12,7 +12,7 @@ import {
 } from './panes'
 import {filterEmpty, findIndex, isItUp, reverse} from './util'
 
-export const movingLogic = (e: IResizableEvent, {
+export const movingLogic = (mouseCoordinate: number, {
   axisCoordinate,
   decreasingItems,
   increasingItems,
@@ -22,10 +22,10 @@ export const movingLogic = (e: IResizableEvent, {
   let decreasingItemsLocal = decreasingItems
   let increasingItemsLocal = increasingItems
   if (isItUp(direction)) {
-    sizeChange = axisCoordinate - e.mouseCoordinate
+    sizeChange = axisCoordinate - mouseCoordinate
     decreasingItemsLocal = reverse(decreasingItems)
   } else {
-    sizeChange = e.mouseCoordinate - <number>axisCoordinate
+    sizeChange = mouseCoordinate - <number>axisCoordinate
 
     increasingItemsLocal = reverse(increasingItems)
   }

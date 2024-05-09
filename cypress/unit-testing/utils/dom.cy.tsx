@@ -25,7 +25,7 @@ describe('Dom utils', () => {
     })
 
     it('should test getResizableEvent vertical panes ', () => {
-      const retValue = {mouseCoordinate: 10, movement: 10}
+      const retValue = [10, 10]
 
       const value = getResizableEvent(event, true, {})
       expect(preventDefault.calledOnce).to.equal(true)
@@ -34,8 +34,7 @@ describe('Dom utils', () => {
     })
 
     it('should test getResizableEvent Horizontal panes ', () => {
-      const retValue = {mouseCoordinate: 20, movement: 20}
-
+      const retValue = [20, 20]
       const value = getResizableEvent(event, false, {})
       expect(preventDefault.calledOnce).to.equal(true)
 
