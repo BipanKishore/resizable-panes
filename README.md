@@ -186,6 +186,19 @@ export const CustomResizer = ({
 
 ```
 
+## How to move Pane by n pixel
+
+```tsx
+    const n = 100
+    const paneId = 'P2'
+
+    const currentP2Size = resizableApi.getSizes()[paneId]
+    resizableApi.setSize(paneId, currentP2Size - n, TOP_FIRST)
+
+    const nowP2Size = resizableApi.getSizes()[paneId]
+    resizableApi.setSize(P2, nowP2Size + n, BUTTOM_FIRST)
+```
+
 ## [Quick Demo](https://bipankishore.github.io/resizable-panes/)
 
 ### Feel Free to Raise Pull Request
