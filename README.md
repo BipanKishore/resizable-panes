@@ -67,13 +67,6 @@ function App() {
 
 ## 👋 Hi there! If you find this project useful or valuable do give it star on GitHub or [Buy Me a Coffee]()
 
-🚀 By sponsoring, you'll:
-
-**Receive Recognition**:
-Sponsors will be prominently displayed on the project's README and other relevant documentation.
-
-**Influence Roadmap**: Your feedback and suggestions will carry significant weight in shaping the project's future direction and features.
-
 ## ResizablePanes Props
 
 | Prop               | Type               | Default | Required            | Description                                                                                                                                                       |
