@@ -122,3 +122,5 @@ function App() {
 | getState        |                                                              | It return the current state of all Panes.                                                                                                |
 
 ## [Quick Demo](https://bipankishore.github.io/resizable-panes/)
+
+### Feel Free to Raise Pull Request
