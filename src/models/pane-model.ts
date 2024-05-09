@@ -111,7 +111,7 @@ export class PaneModel {
     this.isHandle = isHandle
     if (isHandle) {
       this.id = getResizerId(id)
-      this.resizerSize = paneProps.resizerSize || resizerSize as number
+      this.resizerSize = paneProps.resizerSize || resizerSize
     }
   }
 }

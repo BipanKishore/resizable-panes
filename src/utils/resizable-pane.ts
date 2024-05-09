@@ -25,7 +25,7 @@ export const movingLogic = (mouseCoordinate: number, {
     sizeChange = axisCoordinate - mouseCoordinate
     decreasingItemsLocal = reverse(decreasingItems)
   } else {
-    sizeChange = mouseCoordinate - <number>axisCoordinate
+    sizeChange = mouseCoordinate - axisCoordinate
 
     increasingItemsLocal = reverse(increasingItems)
   }
@@ -184,9 +184,9 @@ export const minMaxLogicUp = (
           return
 
         case value === 0:
-          sum += resetMin(paneA)
-          sum += resetMax(paneB)
-          sum += synPanesMaxToSize(panesList, bIndex + 1, lastIndex)
+          resetMin(paneA)
+          resetMax(paneB)
+          synPanesMaxToSize(panesList, bIndex + 1, lastIndex)
           return
 
         case value > 0:
@@ -207,14 +207,14 @@ export const minMaxLogicUp = (
           break
 
         case value === 0:
-          sum += resetMin(paneA)
-          sum += resetMax(paneB)
-          sum += synPanesMinToSize(panesList, 0, aIndex - 1)
+          resetMin(paneA)
+          resetMax(paneB)
+          synPanesMinToSize(panesList, 0, aIndex - 1)
           return
 
         case value > 0:
-          sum += resetMax(paneB)
-          sum += synPanesMinToSize(panesList, 0, aIndex - 1)
+          resetMax(paneB)
+          synPanesMinToSize(panesList, 0, aIndex - 1)
           paneA.minSize = maxPaneSize - sum
           return
       }
@@ -224,18 +224,18 @@ export const minMaxLogicUp = (
       // return for every case
       switch (true) {
         case value < 0:
-          sum += resetMin(paneA)
+          resetMin(paneA)
           // synPanesMinToSize(panesList, bIndex + 1, lastIndex) // It wont run
           paneB.maxSize = maxPaneSize - sum
           return
 
         case value === 0:
-          sum += resetMin(paneA)
-          sum += resetMax(paneB)
+          resetMin(paneA)
+          resetMax(paneB)
           return
 
         case value > 0:
-          sum += resetMax(paneB)
+          resetMax(paneB)
           // synPanesMaxToSize(panesList, 0, aIndex - 1) // It wont Run
           paneA.minSize = maxPaneSize - sum
           return
@@ -284,15 +284,15 @@ export const minMaxLogicDown = (
     case aIndex === 0 && bIndex < lastIndex:
       switch (true) {
         case value < 0:
-          sum += resetMax(paneA)
-          sum += synPanesMinToSize(panesList, bIndex + 1, lastIndex)
+          resetMax(paneA)
+          synPanesMinToSize(panesList, bIndex + 1, lastIndex)
           paneB.minSize = maxPaneSize - sum
           return
 
         case value === 0:
-          sum += resetMax(paneA)
-          sum += resetMin(paneB)
-          sum += synPanesMinToSize(panesList, bIndex + 1, lastIndex)
+          resetMax(paneA)
+          resetMin(paneB)
+          synPanesMinToSize(panesList, bIndex + 1, lastIndex)
           return
 
         case value > 0:
@@ -319,8 +319,8 @@ export const minMaxLogicDown = (
           return
 
         case value > 0:
-          sum += resetMin(paneB)
-          sum += synPanesMaxToSize(panesList, 0, aIndex - 1)
+          resetMin(paneB)
+          synPanesMaxToSize(panesList, 0, aIndex - 1)
           paneA.maxSize = maxPaneSize - sum
           return
       }
@@ -330,18 +330,18 @@ export const minMaxLogicDown = (
       // return for every case
       switch (true) {
         case value < 0:
-          sum += resetMax(paneA)
+          resetMax(paneA)
           // synPanesMinToSize(panesList, bIndex + 1, lastIndex) // It wont run
           paneB.minSize = maxPaneSize - sum
           return
 
         case value === 0:
-          sum += resetMin(paneB)
-          sum += resetMax(paneA)
+          resetMin(paneB)
+          resetMax(paneA)
           return
 
         case value > 0:
-          sum += resetMin(paneB)
+          resetMin(paneB)
           // synPanesMaxToSize(panesList, 0, aIndex - 1) // It wont Run
           paneA.maxSize = maxPaneSize - sum
           return

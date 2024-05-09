@@ -1,4 +1,4 @@
-import {ISetSizeBehaviour, IResizableItem, IAddAndRemove} from '../@types'
+import {ISetSizeBehaviour, IResizableItem} from '../@types'
 import {
   RATIO, LEFT, RIGHT, BUTTOM_FIRST, DIRECTIONS, NONE, TOP_FIRST,
   CHANGE
@@ -25,7 +25,7 @@ export const setSizeTopAndBottom = (
 ) => {
   let firstInningItems : IResizableItem[]
   let secondInningItems: IResizableItem[]
-  const getActionOnItem = (operation: IAddAndRemove, direction: number) => (item: IResizableItem) => {
+  const getActionOnItem = (operation: number, direction: number) => (item: IResizableItem) => {
     syncAxisSize(item)
     restoreLimits(item)
     sizeChange = changePaneSize(item, sizeChange, operation, direction)

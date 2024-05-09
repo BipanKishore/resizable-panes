@@ -205,7 +205,7 @@ export const getResizableContext = (
 
   const getPaneSizeStyle = (id: string) => {
     const size = getSize(findById(panesList, id))
-    return getSizeStyle(vertical, size as number)
+    return getSizeStyle(vertical, size)
   }
 
   const reflectVisibilityChange = () => {

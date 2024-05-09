@@ -1,4 +1,4 @@
-import {IResizerApi, ISizeState, IStoreResizableItemsModel, IAddAndRemove} from '../@types'
+import {IResizerApi, ISizeState, IStoreResizableItemsModel} from '../@types'
 import {
   CHANGE,
   DEFAULT_MAX_SIZE_KEY,
@@ -29,7 +29,7 @@ export const changePaneSizePlain = (pane: PaneModel, newSize: number) => {
 }
 
 export const changePaneSize = (pane: PaneModel, sizeChange: number,
-  operation: IAddAndRemove, direction: number) => {
+  operation: number, direction: number) => {
   const {axisSize} = pane
   const newSize = axisSize + (operation === CHANGE.ADD ? sizeChange : -sizeChange)
 
@@ -43,7 +43,7 @@ export const changePaneSize = (pane: PaneModel, sizeChange: number,
 
 // No visibility check required here, we are only using this method for visible panes
 export const setVisibilitySize = (pane: PaneModel, sizeChange: number,
-  operation: IAddAndRemove) => {
+  operation: number) => {
   const newSize = pane.size + (operation === CHANGE.ADD ? sizeChange : -sizeChange)
   restoreLimits(pane)
   const acceptedSize = changePaneSizePlain(pane, newSize)

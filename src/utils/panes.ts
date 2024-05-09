@@ -1,5 +1,5 @@
 import {ReactElement} from 'react'
-import {IResizableItem, IResizablePaneProviderProps, IAddAndRemove} from '../@types'
+import {IResizableItem, IResizablePaneProviderProps} from '../@types'
 import {PaneModel, ResizableModel} from '../models'
 import {ResizeStorage} from './storage'
 import {CHANGE, DIRECTIONS, HIDDEN, NONE, VISIBLE, ZIPPED} from '../constant'
@@ -104,13 +104,13 @@ export const getVisibilityState = (panesList: PaneModel[]) => {
   return map
 }
 
-const fixChangeCallBack = (pane: PaneModel, change: number, operation: IAddAndRemove) => {
+const fixChangeCallBack = (pane: PaneModel, change: number, operation: number) => {
   const newSize = pane.size + (operation === CHANGE.ADD ? change : -change)
   initializeSize(pane, newSize)
 }
 
 export const change1PixelToPanes = (panesList: PaneModel[], sizeChange: number,
-  operation: IAddAndRemove) => {
+  operation: number) => {
   let count = 0
   const len = panesList.length
   let index: number
