@@ -140,35 +140,42 @@ export const minMaxLogicUp = (
   panesList: PaneModel[], value: number,
   aIndex: number, bIndex: number,
   sum: number, maxPaneSize: number) => {
-  // Failing for going up Reached Max
   const lastIndex = panesList.length - 1
 
-  let nextValue: number | undefined
+  let nextValue: number
   let nextAIndex = aIndex
   let nextBIndex = bIndex
 
   const paneA = panesList[aIndex]
   const paneB = panesList[bIndex]
 
+  const toMinA = () => {
+    sum += resetMin(paneA)
+  }
+
+  const toMaxB = () => {
+    sum += resetMax(paneB)
+  }
+
   switch (true) {
     case aIndex > 0 && bIndex < lastIndex:
       switch (true) {
         case value < 0:
-          sum += resetMin(paneA)
+          toMinA()
           nextAIndex = aIndex - 1
           nextValue = getMinDiff(panesList[nextAIndex]) + value
           break
 
         case value === 0:
-          sum += resetMin(paneA)
-          sum += resetMax(paneB)
+          toMinA()
+          toMaxB()
           nextAIndex = aIndex - 1
           nextBIndex = bIndex + 1
           nextValue = getMinDiff(panesList[nextAIndex]) - getMaxDiff(panesList[nextBIndex])
           break
 
         case value > 0:
-          sum += resetMax(paneB)
+          toMaxB()
           nextBIndex = bIndex + 1
           nextValue = value - getMaxDiff(panesList[nextBIndex])
           break
@@ -178,20 +185,20 @@ export const minMaxLogicUp = (
     case aIndex === 0 && bIndex < lastIndex:
       switch (true) {
         case value < 0:
-          sum += resetMin(paneA)
+          toMinA()
           sum += synPanesMaxToSize(panesList, bIndex + 1, lastIndex)
           paneB.maxSize = maxPaneSize - sum
           return
 
         case value === 0:
-          resetMin(paneA)
-          resetMax(paneB)
+          toMinA()
+          toMaxB()
           synPanesMaxToSize(panesList, bIndex + 1, lastIndex)
           return
 
         case value > 0:
           // not change from previous switch
-          sum += resetMax(paneB)
+          toMaxB()
           nextBIndex = bIndex + 1
           nextValue = value - getMaxDiff(panesList[nextBIndex])
           break
@@ -201,19 +208,19 @@ export const minMaxLogicUp = (
     case aIndex > 0 && bIndex === lastIndex:
       switch (true) {
         case value < 0:
-          sum += resetMin(paneA)
+          toMinA()
           nextAIndex = aIndex - 1
           nextValue = getMinDiff(panesList[nextAIndex]) + value
           break
 
         case value === 0:
-          resetMin(paneA)
-          resetMax(paneB)
+          toMinA()
+          toMaxB()
           synPanesMinToSize(panesList, 0, aIndex - 1)
           return
 
         case value > 0:
-          sum += resetMax(paneB)
+          toMaxB()
           sum += synPanesMinToSize(panesList, 0, aIndex - 1)
           paneA.minSize = maxPaneSize - sum
           return
@@ -224,17 +231,17 @@ export const minMaxLogicUp = (
       // return for every case
       switch (true) {
         case value < 0:
-          sum += resetMin(paneA)
+          toMinA()
           paneB.maxSize = maxPaneSize - sum
           return
 
         case value === 0:
-          resetMin(paneA)
-          resetMax(paneB)
+          toMinA()
+          toMaxB()
           return
 
         case value > 0:
-          sum += resetMax(paneB)
+          toMaxB()
           paneA.minSize = maxPaneSize - sum
           return
       }
@@ -249,30 +256,40 @@ export const minMaxLogicDown = (
   aIndex: number, bIndex: number, sum: number,
   maxPaneSize: number) => {
   const lastIndex = panesList.length - 1
-  let nextValue: number | undefined
+
+  let nextValue: number
   let nextAIndex = aIndex
   let nextBIndex = bIndex
   const paneA = panesList[aIndex]
   const paneB = panesList[bIndex]
+
+  const toMaxA = () => {
+    sum += resetMax(paneA)
+  }
+
+  const toMinB = () => {
+    sum += resetMin(paneB)
+  }
+
   switch (true) {
     case aIndex > 0 && bIndex < lastIndex:
       switch (true) {
         case value < 0:
-          sum += resetMax(paneA)
+          toMaxA()
           nextAIndex = aIndex - 1
           nextValue = getMaxDiff(panesList[nextAIndex]) + value
           break
 
         case value === 0:
-          sum += resetMax(paneA)
-          sum += resetMin(paneB)
+          toMaxA()
+          toMinB()
           nextAIndex = aIndex - 1
           nextBIndex = bIndex + 1
           nextValue = getMaxDiff(panesList[nextAIndex]) - getMinDiff(panesList[nextBIndex])
           break
 
         case value > 0:
-          sum += resetMin(paneB)
+          toMinB()
           nextBIndex = bIndex + 1
           nextValue = value - getMinDiff(panesList[nextBIndex])
           break
@@ -282,20 +299,20 @@ export const minMaxLogicDown = (
     case aIndex === 0 && bIndex < lastIndex:
       switch (true) {
         case value < 0:
-          sum += resetMax(paneA)
+          toMaxA()
           sum += synPanesMinToSize(panesList, bIndex + 1, lastIndex)
           paneB.minSize = maxPaneSize - sum
           return
 
         case value === 0:
-          resetMax(paneA)
-          resetMin(paneB)
+          toMaxA()
+          toMinB()
           synPanesMinToSize(panesList, bIndex + 1, lastIndex)
           return
 
         case value > 0:
           // not change from previous switch
-          sum += resetMin(paneB)
+          toMinB()
           nextBIndex = bIndex + 1
           nextValue = value - getMinDiff(panesList[nextBIndex])
           break
@@ -305,19 +322,19 @@ export const minMaxLogicDown = (
     case aIndex > 0 && bIndex === lastIndex:
       switch (true) {
         case value < 0:
-          sum += resetMax(paneA)
+          toMaxA()
           nextAIndex = aIndex - 1
           nextValue = getMaxDiff(panesList[nextAIndex]) + value
           break
 
         case value === 0:
-          resetMax(paneA)
-          resetMin(paneB)
+          toMaxA()
+          toMinB()
           synPanesMaxToSize(panesList, 0, aIndex - 1)
           return
 
         case value > 0:
-          sum += resetMin(paneB)
+          toMinB()
           sum += synPanesMaxToSize(panesList, 0, aIndex - 1)
           paneA.maxSize = maxPaneSize - sum
           return
@@ -328,17 +345,17 @@ export const minMaxLogicDown = (
       // return for every case
       switch (true) {
         case value < 0:
-          sum += resetMax(paneA)
+          toMaxA()
           paneB.minSize = maxPaneSize - sum
           return
 
         case value === 0:
-          resetMin(paneB)
-          resetMax(paneA)
+          toMinB()
+          toMaxA()
           return
 
         case value > 0:
-          sum += resetMin(paneB)
+          toMinB()
           paneA.maxSize = maxPaneSize - sum
           return
       }
