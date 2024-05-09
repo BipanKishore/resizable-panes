@@ -76,10 +76,10 @@ export const restoreFn = (items: IResizableItem[]) => {
 // It is used when we rapidly move out of axis
 export const setMaxLimits = (resizable: ResizableModel,
   firstInningMethod: any, secondInningMethod: any, direction: number) => {
-  const {virtualOrderList, virtualActiveIndex} = resizable
+  const {virtualOrderList, index} = resizable
 
   for (let i = 0; i < virtualOrderList.length; i++) {
-    if (i <= virtualActiveIndex) {
+    if (i <= index) {
       firstInningMethod(virtualOrderList[i], direction)
     } else {
       secondInningMethod(virtualOrderList[i], direction)

@@ -12,7 +12,9 @@ export class ResizableModel {
 
   direction: number
   axisCoordinate: number
-  virtualActiveIndex: number
+
+  // Index of virtualOrderListm handleId Index
+  index: number
   topAxis: number
   bottomAxis: number
 

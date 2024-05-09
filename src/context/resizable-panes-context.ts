@@ -160,6 +160,7 @@ export const getResizableContext = (
     setUISizesFn(items, resizable.direction)
     onNewView()
     emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
+    emitResize()
   }
 
   const setDirection = (mouseCoordinate: number, movement: number) => {
@@ -275,7 +276,6 @@ export const getResizableContext = (
   }
 
   return {
-    emitResize,
     api,
     onMoveEndFn,
     registerItem,

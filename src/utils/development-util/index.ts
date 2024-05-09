@@ -71,7 +71,7 @@ export const consoleResizerLimitCrossedDown = () => {
 
 export const consoleVirtualOrder = (resizable: ResizableModel) => {
   console.log(
-    'visibleActiveIndex', resizable.virtualActiveIndex
+    'visibleActiveIndex', resizable.index
   )
   console.log('increasingItems', getList((resizable.increasingItems), 'id'))
   console.log('decreasingItems', getList(resizable.decreasingItems, 'id'))

@@ -109,32 +109,32 @@ export const setVirtualOrderList = (resizable: ResizableModel) => {
   resizable.increasingItems = filterEmpty(increasingItems)
   resizable.decreasingItems = filterEmpty(decreasingItems)
 
-  resizable.virtualActiveIndex = findIndex(resizable.virtualOrderList, handleId)
+  resizable.index = findIndex(resizable.virtualOrderList, handleId)
 }
 
 export const setCurrentMinMax = (resizable: ResizableModel) => {
   const {containerSize} = getMaxContainerSizes(resizable)
 
-  const {virtualOrderList, virtualActiveIndex} = resizable
+  const {virtualOrderList, index} = resizable
 
-  const nextIdx = virtualActiveIndex + 1
-  const aMaxChangeUp = getMinDiff(virtualOrderList[virtualActiveIndex])
+  const nextIdx = index + 1
+  const aMaxChangeUp = getMinDiff(virtualOrderList[index])
   const bMaxChangeUp = getMaxDiff(virtualOrderList[nextIdx])
 
-  minMaxLogicUp(virtualOrderList, aMaxChangeUp - bMaxChangeUp, virtualActiveIndex, nextIdx, 0, containerSize)
+  minMaxLogicUp(virtualOrderList, aMaxChangeUp - bMaxChangeUp, index, nextIdx, 0, containerSize)
 
   const aMaxChangeDown = getMinDiff(virtualOrderList[nextIdx])
-  const bMaxChangeDown = getMaxDiff(virtualOrderList[virtualActiveIndex])
-  minMaxLogicDown(virtualOrderList, bMaxChangeDown - aMaxChangeDown, virtualActiveIndex, nextIdx, 0, containerSize)
+  const bMaxChangeDown = getMaxDiff(virtualOrderList[index])
+  minMaxLogicDown(virtualOrderList, bMaxChangeDown - aMaxChangeDown, index, nextIdx, 0, containerSize)
 }
 
 export const calculateAxes = (resizable: ResizableModel) => {
-  const {items, virtualActiveIndex} = resizable
+  const {items, index} = resizable
   const {maxTopAxis} = getMaxContainerSizes(resizable)
   const visibleItemsList = getVisibleItems(items)
 
-  resizable.bottomAxis = maxTopAxis + getMaxSizeSum(visibleItemsList, 0, virtualActiveIndex - 1)
-  resizable.topAxis = maxTopAxis + getMinSizeSum(visibleItemsList, 0, virtualActiveIndex - 1)
+  resizable.bottomAxis = maxTopAxis + getMaxSizeSum(visibleItemsList, 0, index - 1)
+  resizable.topAxis = maxTopAxis + getMinSizeSum(visibleItemsList, 0, index - 1)
 }
 
 // aIndex will decrease and bIndex will increase

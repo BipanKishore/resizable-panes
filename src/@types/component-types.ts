@@ -126,7 +126,6 @@ export interface IStoreModel {
 
 export interface IResizableContext {
   api: any;
-  emitResize: any;
   onMoveEndFn: any;
   registerItem: (api: any, id: string) => void;
   registerContainer: any;
