@@ -1,5 +1,5 @@
 import {IResizableItem} from '../../@types'
-import {DIRECTIONS} from '../../constant'
+import {DIRECTIONS, LEFT, RIGHT} from '../../constant'
 
 export const RIGHT_BUTTON_VALUE = 0
 
@@ -45,11 +45,11 @@ export const getPartialHiddenResizer = (items : IResizableItem[]) => {
 
   items.forEach((item, i) => {
     if (!item.isHandle) {
-      if (item.hiddenResizer === 'left') {
+      if (item.hiddenResizer === LEFT) {
         hiddenResizersI.push(i - 1)
       }
 
-      if (item.hiddenResizer === 'right') {
+      if (item.hiddenResizer === RIGHT) {
         hiddenResizersI.push(i + 1)
       }
     }

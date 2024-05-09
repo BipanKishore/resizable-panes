@@ -30,12 +30,11 @@ export const setResizersLimits = (resizable: ResizableModel) => {
 export const fixPartialHiddenResizer = (resizable: ResizableModel) => {
   const {items} = resizable
 
-  let sizeChange = 0
   items.forEach(
     // eslint-disable-next-line complexity
     (item, index) => {
-      if (item.isHandle && item.defaultSize !== item.size && item.size) {
-        sizeChange = item.size
+      let sizeChange = item.size
+      if (item.isHandle && item.defaultSize !== sizeChange && sizeChange) {
         item.size = 0
         let virtualIndex
         const resizingOrder: IResizableItem[] = []
@@ -59,7 +58,7 @@ export const fixPartialHiddenResizer = (resizable: ResizableModel) => {
           sizeChange = changePaneSize(item, sizeChange, PLUS, DIRECTIONS.NONE)
         })
 
-        setUISizesFn(items, item.partialHiddenDirection)
+        setUISizesFn(items, DIRECTIONS.NONE)
       }
     }
   )

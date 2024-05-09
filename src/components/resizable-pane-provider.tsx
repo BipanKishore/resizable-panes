@@ -7,7 +7,7 @@ import {ResizablePanes} from './resizable-panes'
 import {deleteUndefined, noop} from '../utils/util'
 import {IResizablePaneProviderProps} from '../@types'
 import {RATIO, RESIZE_HTML_EVENT} from '../constant'
-import {toRatioModeFn} from '../utils/resizable-pane'
+import {toRatioModeAllPanes} from '../utils/resizable-pane'
 
 const emptyObhect = {}
 
@@ -21,9 +21,7 @@ export const attachDefaultPaneProps = (
     onReady: noop,
     onChangeVisibility: noop,
     vertical: false,
-    storageApi: undefined,
     unit: RATIO,
-    resizer: undefined,
     resizerClass: '',
     activeResizerClass: '',
     resizerSize: 2,
@@ -49,7 +47,7 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   useEffect(() => {
     const onResize = () => {
       if (unit === RATIO) {
-        toRatioModeFn(resizable, true)
+        toRatioModeAllPanes(resizable, true)
       }
     }
     window.addEventListener(RESIZE_HTML_EVENT, onResize)

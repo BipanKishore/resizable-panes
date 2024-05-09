@@ -7,20 +7,19 @@ import {
   UnitTypes
 } from '../@types'
 import {
-  DIRECTIONS, NONE, NORMAL_SIZE_STATE,
+  NONE, NORMAL_SIZE_STATE,
   RATIO
 } from '../constant'
 import {ResizeStorage} from '../utils/storage'
 import {getResizerId} from '../utils/util'
 import {
   initializeSizes,
-  setPaneVisibility, syncPaneRatioSizeToSize
+  syncPaneRatioSizeToSize
 } from './pane'
 import {attachDefaultPaneProps, checkPaneModelErrors} from './utils'
 
 export class PaneModel {
   isHandle: boolean
-  partialHiddenDirection = DIRECTIONS.NONE
 
   hiddenResizer: IHiddenResizer = NONE
   prevHiddenResizer: IHiddenResizer = NONE

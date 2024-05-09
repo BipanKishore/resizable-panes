@@ -25,7 +25,7 @@ import {
   setVirtualOrderList,
   movingLogic,
   setCurrentMinMax,
-  toRatioModeFn,
+  toRatioModeAllPanes,
   getChangeInViewSize
 } from '../utils/resizable-pane'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
@@ -75,7 +75,7 @@ export const getResizableContext = (
   // const resizersList = createResizerModelList(myChildren, props, storage)
   // reference will never change for these items: storage, panesList, resizersList
 
-  const {panesList, resizersList} = getPanesAndResizers(items)
+  const [panesList, resizersList] = getPanesAndResizers(items)
 
   const resizable = new ResizableModel()
   resizable.register({
@@ -109,7 +109,7 @@ export const getResizableContext = (
     resizable.getContainerRect = getContainerRect
     let visibilityMap = props.visibility
     if (storage.empty && unit === RATIO && !resizable.isSetRatioMode) {
-      toRatioModeFn(resizable)
+      toRatioModeAllPanes(resizable)
       resizable.isSetRatioMode = true
     } else {
       const {panes} = storage.getStorage(uniqueId, storageApi)

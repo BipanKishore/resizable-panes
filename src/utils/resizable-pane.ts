@@ -1,9 +1,9 @@
-import {IResizableEvent, IResizableItem} from '../@types'
+import {IResizableItem} from '../@types'
 import {DIRECTIONS, MINUS, PLUS} from '../constant'
 import {PaneModel, ResizableModel} from '../models'
 import {
   changePaneSize, getMaxDiff, getMinDiff,
-  resetMax, resetMin, syncPaneSizeToRatioSize, toRatioMode
+  resetMax, resetMin, syncPaneSizeToRatioSize, toRatioModePane
 } from '../models/pane'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
@@ -364,12 +364,11 @@ export const getMaxContainerSizes = ({getContainerRect, vertical, resizersList} 
   return {
     containerSize,
     maxTopAxis,
-    maxPaneSize,
-    resizersSize
+    maxPaneSize
   }
 }
 
-export const toRatioModeFn = (resizable: ResizableModel, isOnResize = false) => {
+export const toRatioModeAllPanes = (resizable: ResizableModel, isOnResize = false) => {
   const {panesList, items} = resizable
   const {maxPaneSize} = getMaxContainerSizes(resizable)
 
@@ -381,7 +380,7 @@ export const toRatioModeFn = (resizable: ResizableModel, isOnResize = false) => 
   panesList
     .forEach((pane: PaneModel) => {
       syncPaneSizeToRatioSize(pane)
-      toRatioMode(pane, maxPaneSize, maxRatioValue, isOnResize)
+      toRatioModePane(pane, maxPaneSize, maxRatioValue, isOnResize)
     })
 
   const sizeSum = getItemsSizeSum(panesList)

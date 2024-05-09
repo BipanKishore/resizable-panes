@@ -142,13 +142,14 @@ export const change1PixelToPanes = (panesList: PaneModel[], sizeChange: number,
   }
 }
 
-export const getPanesAndResizers = (items: IResizableItem[]) => {
+export const getPanesAndResizers = (items: IResizableItem[]): [ panesList: IResizableItem[],
+  resizersList: IResizableItem[]] => {
   const panesList = items.filter((item) => !item.isHandle)
   const resizersList = items.filter((item) => item.isHandle)
-  return {
+  return [
     panesList,
     resizersList
-  }
+  ]
 }
 
 export const createPaneModelListAndResizerModelList = (

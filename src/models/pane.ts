@@ -27,11 +27,14 @@ export const changePaneSizePlain = (pane: PaneModel, newSize: number) => {
   return acceptedSize
 }
 
-export const changePaneSize = (pane: PaneModel, sizeChange: number, operation: addAndRemoveType, direction: number) => {
-  const newSize = pane.axisSize + (operation === PLUS ? sizeChange : -sizeChange)
+export const changePaneSize = (pane: PaneModel, sizeChange: number,
+  operation: addAndRemoveType, direction: number) => {
+  const {axisSize} = pane
+  const newSize = axisSize + (operation === PLUS ? sizeChange : -sizeChange)
 
-  setHiddenResizerWhileMovement(pane, newSize, direction)
-
+  if (axisSize !== 0) {
+    setPaneHiddenResizer(pane, newSize, direction, 0)
+  }
   const acceptedSize = changePaneSizePlain(pane, newSize)
   clearHiddenResizer(pane)
   return Math.abs(acceptedSize - newSize)
@@ -43,12 +46,6 @@ export const setVisibilitySize = (pane: PaneModel, sizeChange: number, operation
   restoreLimits(pane)
   const acceptedSize = changePaneSizePlain(pane, newSize)
   return acceptedSize === newSize
-}
-
-export const setHiddenResizerWhileMovement = (pane: PaneModel, newSize: number, direction: number) => {
-  if (pane.axisSize !== 0) {
-    setPaneHiddenResizer(pane, newSize, direction, 0)
-  }
 }
 
 // eslint-disable-next-line complexity
@@ -131,8 +128,8 @@ export const restoreLimits = (pane: PaneModel) => {
 }
 
 // pane method runs only for visible panes
-export const resetMax = (pane: PaneModel, reduce = 0) => {
-  pane.maxSize = pane.defaultMaxSize - reduce
+export const resetMax = (pane: PaneModel) => {
+  pane.maxSize = pane.defaultMaxSize
   return pane.maxSize
 }
 
@@ -176,16 +173,16 @@ export const syncAxisSize = (pane: PaneModel) => {
   pane.axisSize = pane.size
 }
 
-export const setPreSize = (pane: PaneModel) => {
-  pane.size = pane.preSize
-}
+// export const setPreSize = (pane: PaneModel) => {
+//   pane.size = pane.preSize
+// }
 
 // Task will run  for only visible Items
 export const setUISize = (pane: PaneModel) => {
-  if (pane.api) {
-    pane.api.setSize(pane.visibility ? pane.size : 0)
-  }
-  pane.preSize = pane.size
+  // if (pane.api) {
+  pane.api.setSize(getSize(pane))
+
+  // pane.preSize = pane.size
 }
 
 // eslint-disable-next-line complexity
@@ -244,7 +241,9 @@ export const initializeSizes = (pane: PaneModel, size: number, minSize: number, 
 }
 
 // We never come here for the case of store
-export const toRatioMode = (pane: PaneModel, containerSize: number, maxRatioValue: number, isOnResize: boolean) => {
+export const toRatioModePane = (
+  pane: PaneModel, containerSize: number,
+  maxRatioValue: number, isOnResize: boolean) => {
   const {
     minSize, size, maxSize
   } = pane.props
