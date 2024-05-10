@@ -12,7 +12,7 @@ export const ResizablePanes = (props: IResizablePaneProviderProps) => {
     node => registerContainer(() => node.getBoundingClientRect())
   )
 
-  const classname = getContainerClass(vertical as boolean, className as string, unit)
+  const classname = getContainerClass(vertical, className, unit)
 
   return (
     <div

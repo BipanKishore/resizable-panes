@@ -92,7 +92,7 @@ export class PaneModel {
     }
 
     // // it can be removed with change in default props
-    const show = visibility[id] !== undefined ? visibility[id] : true
+    const show = visibility[id] ?? true
     this.defaultVisibility = show
 
     const storedPane = store.getStoredPane(id)
@@ -105,7 +105,7 @@ export class PaneModel {
     }
 
     this.id = id
-    this.vertical = vertical as boolean
+    this.vertical = vertical
     syncPaneRatioSizeToSize(this)
 
     this.isHandle = isHandle
