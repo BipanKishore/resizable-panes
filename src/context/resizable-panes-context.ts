@@ -129,7 +129,7 @@ export const getResizableContext = (
     syncAxisSizes()
   }
 
-  const clearflagsOnNewView = (except: IClearFlagsParam = '') => {
+  const clearflagsOnNewView = (except: IClearFlagsParam) => {
     if (except !== RATIO) {
       panesList.forEach(syncPaneRatioSizeToSize)
     }
