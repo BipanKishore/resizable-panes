@@ -92,7 +92,7 @@ export class PaneModel {
     }
 
     // // it can be removed with change in default props
-    const show = visibility[id] !== undefined ? visibility[id] : true
+    const show = visibility[id] ?? true
     this.defaultVisibility = show
 
     const storedPane = store.getStoredPane(id)
