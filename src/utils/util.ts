@@ -54,7 +54,7 @@ export const addDefaultProps = (props: any, defaultProps: any) => {
 export const filterKeys = <T>(obj: T, ...keys: (keyof T)[]) => {
   const retObj: any = {}
   keys.forEach(key => {
-    retObj[key] = obj[key as keyof T]
+    retObj[key] = obj[key]
   })
 
   return retObj
