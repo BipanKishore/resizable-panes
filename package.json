@@ -24,7 +24,7 @@
     "pretest:open": "npm run test:clean",
     "test:open": "cypress open --component --config-file cypress.config.ts browser --browser chrome",
     "test": "cypress run --component --config-file cypress.config.ts browser --browser chrome",
-    "coverage": "nyc report --reporter=text --reporter=text-summary",
+    "coverage": "nyc report --lcov --reporter=text --reporter=text-summary",
     "posttest": "npm run coverage",
     "lint": "eslint ./src"
   },
