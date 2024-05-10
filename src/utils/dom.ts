@@ -13,7 +13,7 @@ import {
 export const toPx = (size: number) => `${size}px`
 export const getSizeKey = (vertical: boolean) => vertical ? 'width' : 'height'
 export const getSizeStyle = (vertical: IBooleanOrUndefined, size: number): ISizeStyle => ({
-  [getSizeKey(vertical as boolean)]: toPx(size)
+  [getSizeKey(vertical)]: toPx(size)
 })
 
 export const joinClassName = (param: IJoinClassNameParam, notRequired: boolean | any = false) => {
