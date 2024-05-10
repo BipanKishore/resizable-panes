@@ -47,3 +47,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    - name: NPM Publish
+      uses: JS-DevTools/npm-publish@v3
+      with:
+        token: ${{ secrets.NPM_TOKEN }}
