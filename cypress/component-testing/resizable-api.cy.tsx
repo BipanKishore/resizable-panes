@@ -883,3 +883,55 @@ describe('setSize should work in TOP_FIRST & BUTTOM_FIRST', () => {
     rCy.checkWidths([193, 10, 400, 10, 179, 10, 96, 10, 96])
   })
 })
+
+describe('Zipping=false', () => {
+  const rCy = new RCy({
+    resizerSize: 10,
+    containerId: rScontainerId,
+    len: 4
+  })
+  let resizableApi: IResizableApi
+
+  beforeEach(() => {
+    rCy.setViewPort()
+    cy.mount(
+      <div className="h-300 w-100p">
+        <ResizablePanes
+          resizer={<CustomResizerFirst horizontal={false} size={10} />}
+          resizerSize={10}
+          storageApi={localStorage}
+          uniqueId={rScontainerId}
+          vertical
+          zipping={false}
+          onReady={(api: IResizableApi) => {
+            resizableApi = api
+          }}
+        >
+          <Pane className="bg-cyan-500" id={P0} size={1}></Pane>
+          <Pane className="bg-red-500" id={P1} size={1}></Pane>
+          <Pane className="bg-red-500" id={P2} size={1}></Pane>
+          <Pane className="bg-red-500" id={P3} size={1}></Pane>
+        </ResizablePanes>
+      </div>
+    )
+
+    cy.wait(50)
+  })
+
+  // Edge
+  it(`
+  -- Move RO to most Right when zipping false
+  -- Hide P0
+  -- Show P0
+  -- It should hide partially hidden again with visible resizer
+  `, () => {
+    rCy.move(R0, containerId, 'right')
+
+    cy.wait(50)
+      .then(() => {
+        resizableApi.setVisibilities({P1: false})
+        resizableApi.setVisibilities({P1: true})
+        rCy.checkWidths([1000, 10, 0, 10, 0, 10, 0])
+      })
+  })
+})

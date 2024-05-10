@@ -198,9 +198,15 @@ export const updateSizeInRatio = (
   updateSizeInRatio(allVisiblePanes, maxPaneSize, nextActionVisibleList)
 }
 
+export const getResizerIndex = (pane: PaneModel, index: number) => {
+  const resizerIndex = index + pane.hiddenResizer === RIGHT ? 1 : -1
+  return resizerIndex
+}
+
+// eslint-disable-next-line complexity
 export const setVisibilityFn = (resizable: ResizableModel, idMap: IKeyToBoolMap) => {
   const {
-    panesList, items
+    panesList, items, zipping
   } = resizable
 
   panesList.forEach((pane) => {
@@ -215,22 +221,29 @@ export const setVisibilityFn = (resizable: ResizableModel, idMap: IKeyToBoolMap)
   if (currentPanesSize === 0) {
     visibleItems.forEach((pane, index) => {
       if (!pane.isHandle) {
-        if (pane.hiddenResizer === LEFT) {
-          pane.size = 1
-          pane.hiddenResizer = NONE
-          setPaneVisibility(visibleItems[index - 1], true)
-        }
-
-        if (pane.hiddenResizer === RIGHT) {
-          pane.hiddenResizer = NONE
-          pane.size = 1
-          setPaneVisibility(visibleItems[index + 1], true)
-        }
+        pane.size = 1
+        setPaneVisibility(visibleItems[getResizerIndex(pane, index)], true)
+        pane.hiddenResizer = NONE
       }
+      // resizable.newVisibilityModel = true
     })
   }
 
-  setVisibilityOfResizers(resizable)
+  if (zipping) {
+    setVisibilityOfResizers(resizable)
+  } else {
+    let first = -1
+    for (let i = 0; i < items.length; i += 2) {
+      const item = items[i]
+      setPaneVisibility(items[i + 1], false)
+      if (item.visibility) {
+        if (first !== -1) {
+          setPaneVisibility(items[i - 1], true)
+        }
+        first = i
+      }
+    }
+  }
 
   const {maxPaneSize} = getMaxContainerSizes(resizable)
 
