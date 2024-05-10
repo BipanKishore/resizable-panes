@@ -189,9 +189,13 @@ export const CustomResizer = ({
 ## How to move Pane by n pixel
 
 ```tsx
+
+import {RATIO, BUTTOM_FIRST, TOP_FIRST} from './constant'
+
     const n = 100
     const paneId = 'P2'
 
+    // resizableApi: Emitted by onReady event 
     const currentP2Size = resizableApi.getSizes()[paneId]
     resizableApi.setSize(paneId, currentP2Size - n, TOP_FIRST)
 
