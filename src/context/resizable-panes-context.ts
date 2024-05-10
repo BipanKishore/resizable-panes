@@ -247,6 +247,7 @@ export const getResizableContext = (
     onNewView()
     emitResizeStopAndStore()
     emitChangeVisibility()
+    resizable.isViewSizeChanged = false
   }
 
   const getState = () =>
