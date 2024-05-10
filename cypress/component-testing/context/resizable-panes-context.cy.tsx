@@ -26,7 +26,6 @@ describe('should test ResizableContext: clearflagsOnNewView', () => {
 
         uniqueId={containerId}
         vertical
-        zipping={false}
 
         onReady={(api: IResizableApi) => {
           resizableApi = api

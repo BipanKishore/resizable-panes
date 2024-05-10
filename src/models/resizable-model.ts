@@ -6,6 +6,7 @@ export class ResizableModel {
   isSetRatioMode = false
   newVisibilityModel = false
   isViewSizeChanged = false
+  zipping: boolean
   setSizeKey: string
 
   vertical: boolean

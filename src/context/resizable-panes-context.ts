@@ -82,7 +82,8 @@ export const getResizableContext = (
     vertical,
     items,
     panesList,
-    resizersList
+    resizersList,
+    zipping
   })
 
   const syncAxisSizes = () => syncAxisSizesFn(items)
