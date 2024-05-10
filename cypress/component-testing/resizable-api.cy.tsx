@@ -166,6 +166,24 @@ describe('Storage api', () => {
       }
     })
   })
+
+  // Edge
+  it(`
+  -- Hide all Panes
+  -- execute API.restore
+  -- It should allow resizing now`, () => {
+    resizableApi.setVisibilities({
+      P0: false,
+      P1: false
+    })
+
+    resizableApi.restore()
+    rCy.moveNPixel(R0, 100, 'right')
+    rCy.checkWidths({
+      P0: 615,
+      P1: 415
+    })
+  })
 })
 
 describe('Custom resizer:API: Method setSize', () => {
