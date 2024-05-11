@@ -2,7 +2,7 @@ import {checkWidths} from '../../../utils/check-widths'
 import {ENUMS, TestComponentWrapper} from '../../../components/test-component-wrapper'
 import {RCy} from '../../../utils'
 import React from 'react'
-import {R2, R0, R1, R3, rScontainerId} from '../../fix-test-ids'
+import {R2, R0, R1, R3} from '../../fix-test-ids'
 
 const uniqueIdResizablePanes = ENUMS.resizablePanesId
 
@@ -49,14 +49,14 @@ describe('Overlapping Resizers', () => {
     })
 
     rCy.checkWidthsAndSum({
-      [R0]: 0,
-      [R1]: 0,
+      [R0]: resizerSize,
+      [R1]: resizerSize,
       [R2]: resizerSize,
       [R3]: resizerSize,
       P0: 0,
       P1: 0,
       P2: 0,
-      P3: 920,
+      P3: 900,
       P4: 100
     })
   })
@@ -71,10 +71,10 @@ describe('Overlapping Resizers', () => {
     rCy.checkWidthsAndSum({
       [R0]: resizerSize,
       [R1]: resizerSize,
-      [R2]: 0,
-      [R3]: 0,
+      [R2]: resizerSize,
+      [R3]: resizerSize,
       P0: 100,
-      P1: 920,
+      P1: 900,
       P2: 0,
       P3: 0,
       P4: 0

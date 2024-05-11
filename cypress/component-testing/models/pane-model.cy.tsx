@@ -165,12 +165,12 @@ describe('Test Pane Model', () => {
             size={1}
             unmountOnHide={false}
           >
-            {' '}
-            <PaneChild hook='P0' />{' '}
+
+            <PaneChild hook='P0' />
           </Pane>
           <Pane className="bg-teal-500" id="P1" size={1}>
-            {' '}
-            <PaneChild hook='P1' />{' '}
+
+            <PaneChild hook='P1' />
           </Pane>
         </ResizableComponentCustomPanesTestWrapper>
       )
@@ -200,12 +200,12 @@ describe('Test Pane Model', () => {
             className="bg-orange-500" id="P0" size={1}
             unmountOnHide={true}
           >
-            {' '}
-            <PaneChild hook='P0' />{' '}
+
+            <PaneChild hook='P0' />
           </Pane>
           <Pane className="bg-teal-500" id="P1" size={1}>
-            {' '}
-            <PaneChild hook='P1' />{' '}
+
+            <PaneChild hook='P1' />
           </Pane>
         </ResizableComponentCustomPanesTestWrapper>
       )

@@ -1,6 +1,6 @@
 {
   "name": "resizable-panes-react",
-  "version": "4.0.69",
+  "version": "6.0.0",
   "description": "A simple library for resizing elements in the browser",
   "module": "./lib/esm/index.esm.js",
   "main": "./lib/cjs/index.cjs.js",
@@ -41,6 +41,9 @@
   ],
   "author": "bipankishore@gmail.com",
   "license": "ISC",
+  "dependencies": {
+    "throttleit": "^2.0.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.22.10",
     "@babel/eslint-parser": "^7.22.11",

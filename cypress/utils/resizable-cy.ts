@@ -105,13 +105,8 @@ export class RCy {
     let _sizeSum = 0
     if (Array.isArray(sizes)) {
       this.itemItems.forEach((id, i) => {
-        let size = sizes[i]
+        const size = sizes[i]
         _sizeSum += size
-        if (this.plainResizer && i % 2) {
-          if (size === this.resizerSize) {
-            size = this.resizerSize + 2 * this.detectionSize
-          }
-        }
         sizeMap[id] = size
       })
     } else {
@@ -132,6 +127,7 @@ export class RCy {
 
   checkWidths (sizes: ISizeMap | number[]) {
     const sizeMap = this.toSizeMap(sizes)
+    console.log(sizeMap)
     checkWidths(sizeMap, this.vertical)
   }
 

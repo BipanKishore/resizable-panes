@@ -45,7 +45,7 @@ describe('operations-no-min-max-plain-resizer', () => {
     it('R0 to max right', () => {
       rCy.move(R0, containerId, 'right')
       rCy.checkWidthsAndSum(
-        [1006, 2, 0, 0, 0, 0, 0, 0, 0]
+        [1000, 2, 0, 2, 0, 2, 0, 2, 0]
       )
     })
 
@@ -64,14 +64,14 @@ describe('operations-no-min-max-plain-resizer', () => {
         return left(1200)
       })
       .then(({right}) => {
-        rCy.checkWidthsAndSum([0, 0, 0, 0, 0, 2, 904, 2, 100]
+        rCy.checkWidthsAndSum([0, 2, 0, 2, 0, 2, 900, 2, 100]
         )
         return right(10)
       })
       .then(({right}) => {
         right(100)
 
-        rCy.checkWidthsAndSum([0, 0, 0, 0, 0, 2, 904, 2, 100])
+        rCy.checkWidthsAndSum([0, 2, 0, 2, 0, 2, 900, 2, 100])
       })
   })
 
@@ -83,13 +83,13 @@ describe('operations-no-min-max-plain-resizer', () => {
       })
       .then(({left}) => {
         rCy.checkWidthsAndSum(
-          [100, 2, 904, 2, 0, 0, 0, 0, 0]
+          [100, 2, 900, 2, 0, 2, 0, 2, 0]
         )
         return left(10)
       })
       .then(({up}) => {
         rCy.checkWidthsAndSum(
-          [100, 2, 904, 2, 0, 0, 0, 0, 0]
+          [100, 2, 900, 2, 0, 2, 0, 2, 0]
         )
         return up()
       })

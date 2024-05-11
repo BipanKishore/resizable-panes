@@ -1,13 +1,12 @@
 import {ISetSizeBehaviour, IResizableItem} from '../@types'
 import {
-  RATIO, LEFT, RIGHT, BUTTOM_FIRST, DIRECTIONS, NONE, TOP_FIRST,
+  RATIO, BUTTOM_FIRST, TOP_FIRST,
   CHANGE
 } from '../constant'
 import {ResizableModel} from '../models'
 import {
   changePaneSize, changePaneSizePlain, restoreLimits,
   restorePaneBeforeSetSize,
-  setPaneVisibility,
   storePaneForNewSetSizeKey, syncAxisSize
 } from '../models/pane'
 import {
@@ -25,36 +24,31 @@ export const setSizeTopAndBottom = (
 ) => {
   let firstInningItems : IResizableItem[]
   let secondInningItems: IResizableItem[]
-  const getActionOnItem = (operation: number, direction: number) => (item: IResizableItem) => {
+  const getActionOnItem = (operation: number) => (item: IResizableItem) => {
     syncAxisSize(item)
     restoreLimits(item)
-    sizeChange = changePaneSize(item, sizeChange, operation, direction)
+    sizeChange = changePaneSize(item, sizeChange, operation)
   }
 
-  const changeSizeOfFirstAndSecondInningsItems = (firstInningDirection: number, secondInningDirection: number) => {
-    if (sizeChange > 0) { // Need to reduce other
-      firstInningItems.forEach(getActionOnItem(CHANGE.REMOVE, firstInningDirection))
-      secondInningItems.forEach(getActionOnItem(CHANGE.REMOVE, secondInningDirection))
-    }
+  const changeSizeOfFirstAndSecondInningsItems = () => {
+    const orderList = [...firstInningItems, ...secondInningItems]
+    let action = CHANGE.REMOVE
 
-    if (sizeChange < 0) { // Need to increase other
+    if (sizeChange < 0) {
       sizeChange = Math.abs(sizeChange)
-
-      firstInningItems.forEach(getActionOnItem(CHANGE.ADD, firstInningDirection))
-      secondInningItems.forEach(getActionOnItem(CHANGE.ADD, secondInningDirection))
+      action = CHANGE.ADD
     }
+    orderList.forEach(getActionOnItem(action))
   }
 
   if (behavior === BUTTOM_FIRST) {
     firstInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
     secondInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
-
-    changeSizeOfFirstAndSecondInningsItems(DIRECTIONS.DOWN, DIRECTIONS.UP)
+    changeSizeOfFirstAndSecondInningsItems()
   } else if (behavior === TOP_FIRST) {
     firstInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
     secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
-
-    changeSizeOfFirstAndSecondInningsItems(DIRECTIONS.UP, DIRECTIONS.DOWN)
+    changeSizeOfFirstAndSecondInningsItems()
   }
 }
 
@@ -67,7 +61,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
   const visibleItems = getVisibleItems(items)
 
   const requestIndex = findIndex(visiblePanes, id)
-  if (requestIndex === -1 || newSize < 1) {
+  if (requestIndex === -1 || newSize < 0) {
     return
   }
 
@@ -86,34 +80,18 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
   const preSize = pane.size
 
   const acceptableNewSize = changePaneSizePlain(pane, newSize)
-  let sizeChange = acceptableNewSize - preSize
+  const sizeChange = acceptableNewSize - preSize
 
   if (!sizeChange) {
     return
   }
   const requestIndexInVisibleItems = findIndex(visibleItems, id)
 
-  let addOnSizeChange = 0
-  let resizer: IResizableItem
-
-  if (pane.hiddenResizer === LEFT) {
-    resizer = visibleItems[requestIndexInVisibleItems - 1]
-  } else if (pane.hiddenResizer === RIGHT) {
-    resizer = visibleItems[requestIndexInVisibleItems + 1]
-  }
-  pane.hiddenResizer = NONE
-
-  if (resizer) {
-    setPaneVisibility(resizer, true, false)
-    addOnSizeChange = resizer.resizerSize
-    sizeChange += addOnSizeChange
-  }
-
   if (behavior === RATIO) {
     const remainingVisiblePanes = [...visiblePanes]
     remainingVisiblePanes.splice(requestIndex, 1)
 
-    const newMaxPaneSizeAllowd = initialSizeSum - pane.size - addOnSizeChange
+    const newMaxPaneSizeAllowd = initialSizeSum - pane.size
     updateSizeInRatio(remainingVisiblePanes, newMaxPaneSizeAllowd, remainingVisiblePanes)
   }
 

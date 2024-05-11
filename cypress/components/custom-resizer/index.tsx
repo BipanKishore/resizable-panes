@@ -22,11 +22,11 @@ export const CustomResizerFirst = ({
   const parentClassName = joinClassName({
     'd-flex custom-resizer-1st-parent h-100p w-100p border-box': true,
     'flex-column': vertical,
-    'flex-row ': horizontal,
+    'flex-row ': horizontal
     // 'p-2px': !isMouseDown,
     // 'p-3px': isMouseDown,
-    'h-10': !size && horizontal,
-    'w-10': !size && !horizontal
+    // 'h-10': !size && horizontal,
+    // 'w-10': !size && !horizontal
   })
 
   const childClassName = joinClassName({
@@ -50,7 +50,7 @@ export const CustomResizerFirst = ({
   return (
     <div
       className={parentClassName}
-      style={parentStyle}
+      // style={parentStyle}
     >
       <div
         className={childClassName}

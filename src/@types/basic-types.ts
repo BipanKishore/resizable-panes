@@ -1,7 +1,5 @@
 import {PaneModel} from '../models'
 
-export type IHiddenResizer = 'left' | 'right' | 'none'
-
 export type UnitTypes = 'ratio' | 'pixel' | undefined
 
 export type IPaneModelKey = keyof PaneModel
@@ -14,6 +12,6 @@ export type IStringOrUndefined = string | undefined
 export type IVisibilityState = 'zipped' | 'visible' | 'hidden'
 
 export type IClearFlagsParam = 'setSize' | 'ratio' | 'visibility' | ''
-export type ISetSizeBehaviour = 'ratio' | 'buttomFirst' | 'topFirst'
+export type ISetSizeBehaviour = 'ratio' | '1' | '2'
 
 export type ISizeState = 'onNormalSize' | 'onMinSize' | 'onMaxSize'

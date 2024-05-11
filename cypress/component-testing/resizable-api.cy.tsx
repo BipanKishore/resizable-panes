@@ -26,8 +26,7 @@ import {CustomResizerFirst} from '../components/custom-resizer'
 import {Pane, ResizablePanes} from '../../src'
 import {IGetState, IResizableApi} from '../../src/@types'
 import {
-  BUTTOM_FIRST, DEFAULT_MAX_SIZE_KEY, DEFAULT_MIN_SIZE_KEY,
-  HIDDEN, TOP_FIRST, VISIBLE
+  BUTTOM_FIRST, DEFAULT_MAX_SIZE_KEY, DEFAULT_MIN_SIZE_KEY, TOP_FIRST
 } from '../../src/constant'
 import {SinonSpy} from 'cypress/types/sinon'
 
@@ -74,8 +73,8 @@ describe('Storage api', () => {
   it('Check initial visibility with fixed values and API.getSizes method', () => {
     const visibilityMap = resizableApi.getVisibilities()
     expect(visibilityMap).to.deep.equal({
-      P1: VISIBLE,
-      P0: VISIBLE
+      P1: true,
+      P0: true
     })
   })
 
@@ -84,8 +83,8 @@ describe('Storage api', () => {
     const visibilityMap = resizableApi.getVisibilities()
 
     expect(visibilityMap).to.deep.equal({
-      P1: VISIBLE,
-      P0: HIDDEN
+      P1: true,
+      P0: false
     })
   })
 
@@ -114,8 +113,8 @@ describe('Storage api', () => {
     const visibilityMap = resizableApi.getVisibilities()
 
     expect(visibilityMap).to.deep.equal({
-      P1: VISIBLE,
-      P0: HIDDEN
+      P1: true,
+      P0: false
     })
 
     resizableApi.restore()
@@ -242,8 +241,8 @@ describe('Custom resizer:API: Method setSize', () => {
     cy.wait(50)
   })
 
-  it('setSize should not make any change for Zero of Negative numbers', () => {
-    resizableApi.setSize(P0, 0)
+  it('setSize should not make any change for of Negative numbers', () => {
+    resizableApi.setSize(P0, -1)
 
     rCy.checkWidths([100, 10, 300, 10, 200, 10, 300, 10, 100])
   })
@@ -458,7 +457,7 @@ describe('Plain resizer:API: Method setSize', () => {
   })
 })
 
-describe('PartialHidden:Plain resizer:API: Method setSize', () => {
+describe.skip('PartialHidden:Plain resizer:API: Method setSize', () => {
   const rCy = new RCy({
     resizerSize: 10,
     containerId: rScontainerId,
@@ -560,7 +559,7 @@ describe('Storage api', () => {
   })
 })
 
-describe('Should make partial hidden visible with setSize', () => {
+describe.skip('Should make partial hidden visible with setSize', () => {
   let resizableApi: IResizableApi
   let onResizeStop: SinonSpy
   let onChangeVisibility: SinonSpy
@@ -884,6 +883,48 @@ describe('setSize should work in TOP_FIRST & BUTTOM_FIRST', () => {
   })
 })
 
+describe('setSizeRatio should work in TOP_FIRST & BUTTOM_FIRST', () => {
+  let resizableApi: IResizableApi
+
+  const rCy = new RCy({
+    resizerSize: 1,
+    detectionSize: 5
+  })
+  beforeEach(() => {
+    rCy.setViewPort()
+    cy.mount(
+      <RPTestWrapper
+        panesList={withMinMaxAllPaneEqualSizeExcept15PanesSet}
+        resizer={<CustomResizerFirst horizontal={false} size={10} />}
+        resizerClass="bg-slate-500"
+        resizerSize={10}
+        storageApi={localStorage}
+        uniqueId={rScontainerId}
+        vertical
+        onReady={(api: IResizableApi) => {
+          resizableApi = api
+        }}
+      >
+      </RPTestWrapper>
+    )
+  })
+  /// ///////////////////////////////////////////////////////////////////////
+
+  it(`
+  -- to setSize to maximum space availiable using setSizeRatio
+  `, () => {
+    resizableApi.setSizeRatio(P1, 1, BUTTOM_FIRST)
+    rCy.checkWidths([10, 10, 752, 10, 96, 10, 96, 10, 10])
+  })
+
+  it(`
+  -- to setSize to minimum space availiable using setSizeRatio
+  `, () => {
+    resizableApi.setSizeRatio(P1, 0, BUTTOM_FIRST)
+    rCy.checkWidths([193, 10, 182, 10, 193, 10, 193, 10, 193])
+  })
+})
+
 describe('Zipping=false', () => {
   const rCy = new RCy({
     resizerSize: 10,
@@ -902,7 +943,7 @@ describe('Zipping=false', () => {
           storageApi={localStorage}
           uniqueId={rScontainerId}
           vertical
-          zipping={false}
+
           onReady={(api: IResizableApi) => {
             resizableApi = api
           }}

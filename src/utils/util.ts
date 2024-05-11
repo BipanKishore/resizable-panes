@@ -40,17 +40,6 @@ export const ratioAndRoundOff = (totalSize: number, maxRatioValue: number, size:
   ratioToNumber(totalSize, maxRatioValue, size)
 )
 
-// Not required
-export const addDefaultProps = (props: any, defaultProps: any) => {
-  const keys = Object.keys({...props, ...defaultProps})
-  const newProps: any = {}
-
-  for (const key of keys) {
-    newProps[key] = props[key] === undefined ? defaultProps[key] : props[key]
-  }
-  return newProps
-}
-
 export const filterKeys = <T>(obj: T, ...keys: (keyof T)[]) => {
   const retObj: any = {}
   keys.forEach(key => {
@@ -77,3 +66,14 @@ export const deleteUndefined = (anyObject: any) => {
 
 export const reverse = <T>(list: T[]): T[] => [...list].reverse()
 export const filterEmpty = (list: any[]) => list.filter(_ => _)
+
+export const sortNumber = (list: number[]) => {
+  return [...list].sort((a, b) => {
+    if (a > b) {
+      return -1
+    } else if (b > a) {
+      return 1
+    }
+    return 0
+  })
+}

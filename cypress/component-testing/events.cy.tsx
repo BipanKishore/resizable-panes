@@ -33,8 +33,8 @@ describe('Test inital events', () => {
       .then(() => {
         expect(onChangeVisibility.calledOnce).to.equal(true)
         expect(onChangeVisibility.getCalls()[0].args).to.deep.equal([{
-          P0: 'visible',
-          P1: 'visible'
+          P0: true,
+          P1: true
         }])
       })
   })
@@ -74,9 +74,9 @@ describe('Test onChangeVisibility Rejected param', () => {
         const rejectedArrgs = onChangeVisibility.getCall(1).args
 
         expect(rejectedArrgs).to.deep.equal([{
-          P0: 'hidden',
+          P0: false,
 
-          P1: 'visible'
+          P1: true
         }])
 
         rCy.checkWidths(
@@ -97,8 +97,8 @@ describe('Test onChangeVisibility Rejected param', () => {
         const rejectedArrgs = onChangeVisibility.getCall(1).args
 
         expect(rejectedArrgs).to.deep.equal([{
-          P0: 'visible',
-          P1: 'hidden'
+          P0: true,
+          P1: false
         }])
 
         rCy.checkWidths(

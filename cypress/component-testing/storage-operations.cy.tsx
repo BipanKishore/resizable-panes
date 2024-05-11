@@ -4,7 +4,7 @@ import {_2PaneWithNoMinMax, _3PanesWithMinMax, noMinMax5PanesSet} from './pane-m
 import {RPTestWrapper} from '../components/rp-test-wrapper'
 import {
   CK0,
-  P0, P1, P2, R0, R1, R2, R3,
+  P0, P1, P2, P3, R0, R1, R2, R3,
   containerId, mountUnMountButtonId, rScontainerId
 } from './fix-test-ids'
 import {CustomResizerFirst} from '../components/custom-resizer'
@@ -23,14 +23,14 @@ const {resizerSize} = rCy
 const storeInMemoryAndCheckSizeAfterRemounting = () => {
   rCy.moveNPixel(R2, 1000, 'left')
   rCy.checkWidthsAndSum({
-    [R0]: 0,
-    [R1]: 0,
+    [R0]: resizerSize,
+    [R1]: resizerSize,
     [R2]: resizerSize,
     [R3]: resizerSize,
     P0: 0,
     P1: 0,
     P2: 0,
-    P3: 920,
+    P3: 900,
     P4: 100
   })
 
@@ -39,14 +39,14 @@ const storeInMemoryAndCheckSizeAfterRemounting = () => {
   rCy.cyGet(mountUnMountButtonId).click()
 
   rCy.checkWidthsAndSum({
-    [R0]: 0,
-    [R1]: 0,
+    [R0]: resizerSize,
+    [R1]: resizerSize,
     [R2]: resizerSize,
     [R3]: resizerSize,
     P0: 0,
     P1: 0,
     P2: 0,
-    P3: 920,
+    P3: 900,
     P4: 100
   })
 }
@@ -161,9 +161,12 @@ describe('Check auto clear memory', () => {
 
     rCy.checkWidths({
       P0: 112,
-      P1: 337,
-      P2: 224,
-      P3: 337
+      [R0]: 10,
+      [P1]: 337,
+      [R1]: 10,
+      [P2]: 224,
+      [R2]: 10,
+      [P3]: 337
     })
   })
 })

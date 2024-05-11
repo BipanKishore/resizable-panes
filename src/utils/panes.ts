@@ -2,8 +2,7 @@ import {ReactElement} from 'react'
 import {IResizableItem, IResizablePaneProviderProps} from '../@types'
 import {PaneModel, ResizableModel} from '../models'
 import {ResizeStorage} from './storage'
-import {CHANGE, DIRECTIONS, HIDDEN, NONE, VISIBLE, ZIPPED} from '../constant'
-import {fixFacingHiddenResizersOrder} from './resizer'
+import {CHANGE} from '../constant'
 import {
   getRatioSize,
   getSize, initializeSize, restorePane, setUISize, synMaxToSize,
@@ -15,28 +14,8 @@ import {
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
   panesList.forEach(syncAxisSize)
 
-// It only checks if it is partially hiiden or not
-export const emitIfChangeInPartialHiddenState = (items: PaneModel[], emitChangeVisibility: any) => {
-  let changeInHiidenCount = 0
-  items.forEach(item => {
-    const {visibility, hiddenResizer, prevHiddenResizer} = item
-    if (visibility) {
-      const isHidden = hiddenResizer !== NONE
-      const isPreviouslyHidden = prevHiddenResizer !== NONE
-      if (isHidden !== isPreviouslyHidden) {
-        ++changeInHiidenCount
-      }
-      item.prevHiddenResizer = hiddenResizer
-    }
-  })
-  if (changeInHiidenCount) {
-    emitChangeVisibility()
-  }
-}
-
-export const setUISizesFn = (items: IResizableItem[], direction: number) => {
+export const setUISizesFn = (items: IResizableItem[]) => {
   items.forEach(setUISize)
-  fixFacingHiddenResizersOrder(items, direction)
 }
 
 export const getVisibleItems = (list: IResizableItem[]) => list.filter(item => item.visibility)
@@ -70,7 +49,7 @@ export const getMinSizeSum = (panesList: PaneModel[], start: number, end: number
 // Need to check for hidden element
 export const restoreFn = (items: IResizableItem[]) => {
   items.forEach(restorePane)
-  setUISizesFn(items, DIRECTIONS.NONE)
+  setUISizesFn(items)
 }
 
 // It is used when we rapidly move out of axis
@@ -89,19 +68,6 @@ export const setMaxLimits = (resizable: ResizableModel,
 
 export const updatSizeStateAllPanes = (panesList: PaneModel[]) => {
   panesList.forEach(updatSizeState)
-}
-
-export const getItemsByIndexes = (items : IResizableItem[], indexes: number[]) => {
-  const itemsByIndexes = items.filter((_, i) => indexes.includes(i))
-  return itemsByIndexes
-}
-
-export const getVisibilityState = (panesList: PaneModel[]) => {
-  const map = {}
-  panesList.forEach(({id, hiddenResizer, visibility}) => {
-    map[id] = visibility && hiddenResizer !== NONE ? ZIPPED : (visibility ? VISIBLE : HIDDEN)
-  })
-  return map
 }
 
 const fixChangeCallBack = (pane: PaneModel, change: number, operation: number) => {

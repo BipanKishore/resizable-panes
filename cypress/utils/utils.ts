@@ -298,3 +298,14 @@ export const getHookMethod = (parentHook: string) => {
     return `${parentHook}-${hook}`
   }
 }
+
+// Not required
+export const addDefaultProps = (props: any, defaultProps: any) => {
+  const keys = Object.keys({...props, ...defaultProps})
+  const newProps: any = {}
+
+  for (const key of keys) {
+    newProps[key] = props[key] === undefined ? defaultProps[key] : props[key]
+  }
+  return newProps
+}

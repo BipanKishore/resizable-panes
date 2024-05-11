@@ -1,9 +1,8 @@
 import {MouseEventHandler, ReactElement, ReactNode} from 'react'
 import {IKeyToBoolMap, IMapIdToSize} from './general-type'
-import {PaneModel, ResizableModel} from '../models'
+import {PaneModel} from '../models'
 import {
   UnitTypes,
-  IHiddenResizer,
   IVisibilityState,
   ISetSizeBehaviour
 } from './basic-types'
@@ -48,6 +47,7 @@ export interface IResizableApi {
   getSizes: () => INumberMap;
   getState: () => IGetState;
   setSize: (id: string, size: number, behavior?: ISetSizeBehaviour) => void;
+  setSizeRatio:(id: string, ratio: number, behavior?: ISetSizeBehaviour) => void;
 }
 export type onReadyType = (api: IResizableApi) => void;
 
@@ -63,19 +63,21 @@ export interface IResizablePaneProviderProps {
   vertical?: boolean;
   unit?: UnitTypes;
   minMaxUnit?: UnitTypes;
+  storageApi?: any;
+  resizer?: ReactElement;
+  resizerSize?: number;
+  visibility?: IKeyToBoolMap;
+  unmountOnHide?: boolean;
+  detectionRadius?: number
+
+  children: ReactElement | ReactElement[];
+
   onResize?: onResizeType;
   onResizeStop?: onResizeType;
   onReady?: onReadyType;
   onChangeVisibility?: (map: IKeyToBoolMap) => void;
-  children: ReactNode | ReactNode[];
-  storageApi?: any;
-  resizer?: ReactNode;
-  resizerSize?: number;
-  visibility?: IKeyToBoolMap;
-  unmountOnHide?: boolean;
-  zipping?: boolean;
-  onMinSize?: (id: string, minSize:number) => void,
-  onMaxSize?: (id: string, maxSize:number) => void,
+  onMinSize?: (id: string, minSize: number) => void,
+  onMaxSize?: (id: string, maxSize: number) => void,
   onNormalSize?: (id: string) => void
 }
 
@@ -87,10 +89,15 @@ export interface IPane {
   children?: ReactNode[] | ReactNode;
   maxSize?: number;
   minSize?: number;
-  resizer?: ReactNode;
+
+  detectionRadius?: number
+  resizer?: ReactElement;
   resizerSize?: number;
-  onMinSize?: (id: string, minSize:number) => void,
-  onMaxSize?: (id: string, maxSize:number) => void,
+  resizerClass?: string,
+  activeResizerClass?: string,
+
+  onMinSize?: (id: string, minSize: number) => void,
+  onMaxSize?: (id: string, maxSize: number) => void,
   onNormalSize?: (id: string) => void
 }
 
@@ -103,7 +110,7 @@ export interface IResizer {
   onMouseDown?: MouseEventHandler<HTMLDivElement>;
   node?: any;
   visibility?: boolean;
-  children?: ReactElement;
+  children?: ReactElement
 }
 
 export interface IStoreResizableItemsModel {
@@ -114,25 +121,10 @@ export interface IStoreResizableItemsModel {
   defaultMinSize: number;
   defaultMaxSize: string | number;
   storedSize: number;
-  hiddenResizer: IHiddenResizer;
 }
 
 export interface IStoreModel {
   panes: IStoreResizableItemsModel[];
   resizers: IStoreResizableItemsModel[];
   containerSize?: number;
-}
-
-export interface IResizableContext {
-  api: any;
-  onMoveEndFn: any;
-  registerItem: (api: any, id: string) => void;
-  registerContainer: any;
-  setMouseDownDetails: any;
-  vertical: boolean | undefined;
-  calculateAndSetHeight: any;
-  props: IResizablePaneProviderProps;
-  resizable: ResizableModel;
-  getPaneSizeStyle: (id: string) => void;
-  // setVisibility: (param: IKeyToBoolMap) => void;
 }
