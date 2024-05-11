@@ -190,7 +190,7 @@ export const CustomResizer = ({
 
 ```tsx
 
-import {RATIO, BUTTOM_FIRST, TOP_FIRST} from './constant'
+import {RATIO, BUTTOM_FIRST, TOP_FIRST} from 'resizable-panes-react'
 
     const n = 100
     const paneId = 'P2'
