@@ -70,11 +70,6 @@ export const updatSizeStateAllPanes = (panesList: PaneModel[]) => {
   panesList.forEach(updatSizeState)
 }
 
-export const getItemsByIndexes = (items : IResizableItem[], indexes: number[]) => {
-  const itemsByIndexes = items.filter((_, i) => indexes.includes(i))
-  return itemsByIndexes
-}
-
 const fixChangeCallBack = (pane: PaneModel, change: number, operation: number) => {
   const newSize = pane.size + (operation === CHANGE.ADD ? change : -change)
   initializeSize(pane, newSize)

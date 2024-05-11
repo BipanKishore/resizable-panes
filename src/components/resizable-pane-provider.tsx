@@ -9,6 +9,7 @@ import {IResizablePaneProviderProps} from '../@types'
 import {RATIO, RESIZE_HTML_EVENT} from '../constant'
 import {toRatioModeAllPanes} from '../utils/resizable-pane'
 import {attachDetectionCoordinate} from '../services/detection-service'
+import {addDOMEvent, removeDOMEvent} from '../utils/dom'
 
 const emptyObhect = {}
 
@@ -21,16 +22,14 @@ export const attachDefaultPaneProps = (
     onResizeStop: noop,
     onReady: noop,
     onChangeVisibility: noop,
+
     vertical: false,
     unit: RATIO,
-    resizerClass: '',
-    activeResizerClass: '',
     resizerSize: 2,
-    detectionRadius: 3,
+    detectionRadius: 5,
     visibility: emptyObhect,
-    minMaxUnit: RATIO,
     unmountOnHide: true,
-    zipping: true,
+
     ...propsWithNoUndefined
   }
 }
@@ -53,9 +52,9 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
         attachDetectionCoordinate(resizable)
       }
     }
-    window.addEventListener(RESIZE_HTML_EVENT, onResize)
+    addDOMEvent(window, onResize, RESIZE_HTML_EVENT)
 
-    return () => window.removeEventListener(RESIZE_HTML_EVENT, onResize)
+    return () => removeDOMEvent(window, onResize, RESIZE_HTML_EVENT)
   }, [unit, resizable])
 
   const ref = useRef(true)

@@ -55,7 +55,6 @@ export const getResizableContext = (
     unit,
     uniqueId,
     storageApi,
-    zipping,
     onResizeStop,
     onChangeVisibility,
     onResize
@@ -81,8 +80,7 @@ export const getResizableContext = (
     vertical,
     items,
     panesList,
-    resizersList,
-    zipping
+    resizersList
   })
 
   const syncAxisSizes = () => syncAxisSizesFn(items)
@@ -303,4 +301,4 @@ export const getResizableContext = (
   return resizable
 }
 
-export const ResizablePaneContext = createContext({})
+export const ResizablePaneContext = createContext({} as ResizableModel)

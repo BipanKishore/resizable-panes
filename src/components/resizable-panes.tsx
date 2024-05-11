@@ -4,10 +4,13 @@ import {IResizablePaneProviderProps} from '../@types'
 import {getContainerClass} from '../utils/dom'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
 import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
+import {ResizableModel} from '../models'
 
 export const ResizablePanes = (props: IResizablePaneProviderProps) => {
   const {children, className, unit, vertical, uniqueId} = props
-  const {registerContainer}: any = useContext(ResizablePaneContext)
+
+  const {registerContainer}: any = useContext<ResizableModel>(ResizablePaneContext)
+
   const [containerRef]: any = useHookWithRefCallback(
     node => registerContainer(node)
   )

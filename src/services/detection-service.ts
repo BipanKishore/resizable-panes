@@ -10,7 +10,6 @@ import {EVENT_NAMES} from '../constant'
 export const attachDetectionCoordinate = (resizable: ResizableModel) => {
   const {vertical, items, getContainerRect} = resizable
 
-  const detectionRadius = 10
   const {left, top} = getContainerRect()
 
   let coordinatesSum = vertical ? left : top
@@ -21,10 +20,10 @@ export const attachDetectionCoordinate = (resizable: ResizableModel) => {
   for (let i = 0; i < visibleItems.length - 1; i += 2) {
     const pane = visibleItems[i]
     if (!pane.isHandle) {
-      const {defaultSize, id, resizerSize} = visibleItems[i + 1]
+      const {defaultSize, id, detectionRadius} = visibleItems[i + 1]
       const size = getSize(pane)
-      const resizerX1 = coordinatesSum + size - detectionRadius + resizerSize
-      const resizerX2 = coordinatesSum + size + defaultSize + detectionRadius + resizerSize
+      const resizerX1 = coordinatesSum + size - detectionRadius
+      const resizerX2 = coordinatesSum + size + defaultSize + detectionRadius
       coordinatesSum += size + defaultSize
       detectionCoordinate.push([resizerX1, resizerX2, id])
     }

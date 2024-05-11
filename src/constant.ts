@@ -13,8 +13,8 @@ export const CHANGE = {
 export const RATIO = 'ratio'
 export const SET_SIZE = 'setSize'
 
-export const BUTTOM_FIRST = 'buttomFirst'
-export const TOP_FIRST = 'topFirst'
+export const BUTTOM_FIRST = '1'
+export const TOP_FIRST = '2'
 
 export const RESIZER = 'resizer'
 
@@ -23,29 +23,8 @@ export const SIZE = 'size'
 export const DEFAULT_MIN_SIZE_KEY = 'defaultMinSize'
 export const DEFAULT_MAX_SIZE_KEY = 'defaultMaxSize'
 
-export const VISIBLE = 'visible'
-export const HIDDEN = 'hidden'
-
-export const MARGIN = 'margin' // Not required to export
-const BORDER = 'border'
 export const MIN_WIDTH = 'minWidth'
 export const MIN_HEIGHT = 'minHeight'
-
-const CSS_POSITION_KEYS = ['Left', 'Right', 'Top', 'Bottom']
-
-export const [
-  MARGIN_LEFT,
-  MARGIN_RIGHT,
-  MARGIN_TOP,
-  MARGIN_BOTTOM
-] = CSS_POSITION_KEYS.map(key => `${MARGIN}${key}`)
-
-export const [
-  BORDER_LEFT,
-  BORDER_RIGHT,
-  BORDER_TOP,
-  BORDER_BOTTOM
-] = CSS_POSITION_KEYS.map(key => `${BORDER}${key}`)
 
 export const RESIZE_HTML_EVENT = 'resize'
 

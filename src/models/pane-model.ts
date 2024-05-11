@@ -1,5 +1,4 @@
 import {
-  IHiddenResizer,
   IPane,
   IResizablePaneProviderProps,
   IResizerApi,
@@ -22,9 +21,9 @@ export class PaneModel {
   isHandle: boolean
 
   initialSetSize: number
-  initialSetSizeResizer: IHiddenResizer
 
   resizerSize: number
+  detectionRadius: number
 
   id: string
   api: any | IResizerApi
@@ -66,7 +65,6 @@ export class PaneModel {
 
   oldVisibleSize: number = 0
   oldVisibility: boolean = true
-  oldHiddenResizer: IHiddenResizer
   props:IPane
   // Development Variables
 
@@ -78,11 +76,12 @@ export class PaneModel {
     this.props = attachDefaultPaneProps(paneProps, resizableProps)
 
     const {
-      id, minSize, size, maxSize
+      id, minSize, size, maxSize, resizerSize, detectionRadius
     } = this.props
 
-    const {visibility, vertical, minMaxUnit, unit, resizerSize} = resizableProps
-    this.minMaxUnit = minMaxUnit
+    const {visibility, vertical, minMaxUnit, unit} = resizableProps
+
+    this.minMaxUnit = minMaxUnit ?? unit
 
     if (unit !== RATIO) {
       checkPaneModelErrors(size, minSize, maxSize, id)
@@ -107,7 +106,8 @@ export class PaneModel {
     this.isHandle = isHandle
     if (isHandle) {
       this.id = getResizerId(id)
-      this.resizerSize = paneProps.resizerSize || resizerSize
+      this.resizerSize = resizerSize
+      this.detectionRadius = detectionRadius
     }
   }
 }

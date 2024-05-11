@@ -40,17 +40,6 @@ export const ratioAndRoundOff = (totalSize: number, maxRatioValue: number, size:
   ratioToNumber(totalSize, maxRatioValue, size)
 )
 
-// Not required
-export const addDefaultProps = (props: any, defaultProps: any) => {
-  const keys = Object.keys({...props, ...defaultProps})
-  const newProps: any = {}
-
-  for (const key of keys) {
-    newProps[key] = props[key] === undefined ? defaultProps[key] : props[key]
-  }
-  return newProps
-}
-
 export const filterKeys = <T>(obj: T, ...keys: (keyof T)[]) => {
   const retObj: any = {}
   keys.forEach(key => {

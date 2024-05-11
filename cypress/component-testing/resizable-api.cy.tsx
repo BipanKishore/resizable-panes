@@ -901,7 +901,7 @@ describe('Zipping=false', () => {
           storageApi={localStorage}
           uniqueId={rScontainerId}
           vertical
-          zipping={false}
+
           onReady={(api: IResizableApi) => {
             resizableApi = api
           }}

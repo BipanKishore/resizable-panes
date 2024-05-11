@@ -6,7 +6,7 @@ export class ResizableModel {
   isSetRatioMode = false
   newVisibilityModel = false
   isViewSizeChanged = false
-  zipping: boolean
+
   setSizeKey: string
 
   vertical: boolean
@@ -40,7 +40,7 @@ export class ResizableModel {
   registerContainer: any
   props: IResizablePaneProviderProps
 
-  getPaneSizeStyle: (id: string) => void
+  getPaneSizeStyle: (id: string) => any
 
   getContainerRect: () => any
 

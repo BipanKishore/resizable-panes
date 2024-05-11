@@ -2,10 +2,12 @@ import React, {useRef, useState} from 'react'
 
 import '../../styles/style.css'
 import {ResizablePanes} from '../../../src'
-import {addDefaultProps, noop} from '../../../src/utils/util'
+
 import {testResizablePanesId} from './constant'
 import {generatePaneModel} from './util'
 import {MultiStateButtonGroup} from './multi-state-button-group'
+import {addDefaultProps} from '../../utils'
+import {noop} from '../../../src/utils/util'
 
 interface IIDMap {
   [id: string]: boolean

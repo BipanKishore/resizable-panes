@@ -689,7 +689,7 @@ describe('Resizing with min and max with visibility operations written here for 
       <RPTestWrapper
         panesList={withMinMaxEqualSize5PanesSet}
         resizer={
-          <CustomResizerFirst size={10} />
+          <CustomResizerFirst />
         }
         resizerClass='bg-slate-500'
         resizerSize={10}
@@ -703,6 +703,7 @@ describe('Resizing with min and max with visibility operations written here for 
     )
   })
 
+  // Edge
   // Resizing after this fails
   it('Hide P0, P1, P3 - should not allow movement when View Size Changed has changed (isViewSizeChanged)', () => {
     cy.get(`[data-cy=${CK0}]`).click()

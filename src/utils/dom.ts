@@ -3,11 +3,11 @@ import {
   UnitTypes, IBooleanOrUndefined, ISizeStyle
 } from '../@types'
 import {
-  BORDER_BOTTOM, BORDER_LEFT, BORDER_RIGHT,
-  BORDER_TOP,
-  DIRECTIONS, HIDDEN, MARGIN, MARGIN_BOTTOM, MARGIN_LEFT,
-  MARGIN_RIGHT, MARGIN_TOP, MIN_HEIGHT, MIN_WIDTH, RATIO,
-  VISIBLE
+
+  DIRECTIONS,
+  MIN_HEIGHT,
+  MIN_WIDTH,
+  RATIO
 } from '../constant'
 
 export const toPx = (size: number) => `${size}px`
@@ -16,10 +16,7 @@ export const getSizeStyle = (vertical: IBooleanOrUndefined, size: number): ISize
   [getSizeKey(vertical)]: toPx(size)
 })
 
-export const joinClassName = (param: IJoinClassNameParam, notRequired: boolean | any = false) => {
-  if (notRequired) {
-    return ''
-  }
+export const joinClassName = (param: IJoinClassNameParam) => {
   const keys = Object.keys(param)
   return keys.map((key) => param[key] ? key : '').join(' ')
 }
@@ -58,79 +55,26 @@ export const getResizableEvent = (e: any, vertical: boolean, previousTouchEvent:
     : getResizableEventFromMouse(e, vertical)
 }
 
+// it can be removed
 export const getDirection = (movement: number) => movement < 0 ? DIRECTIONS.UP : DIRECTIONS.DOWN
 
 export const toArray = (items: any) => Array.isArray(items) ? items : [items]
-
-const clearPlainResizerStyle = (node: any) => {
-  [
-    MARGIN,
-    MARGIN_LEFT,
-    MARGIN_RIGHT,
-    MARGIN_TOP,
-    MARGIN_BOTTOM,
-    MIN_WIDTH, MIN_HEIGHT,
-    BORDER_LEFT, BORDER_RIGHT, BORDER_BOTTOM, BORDER_TOP].forEach((key:string) => {
-    node.style[key] = null
-  })
-}
-
-const setPlainResizerStyle = (node: any, style: any) => {
-  const keys = Object.keys(style)
-  keys.forEach((key) => { node.style[key] = style[key] })
-}
-
-export const generateResizerStyle = (resizerSize: number,
-  detectionSize: number, vertical: boolean) => {
-  const detectionSizePx = toPx(detectionSize)
-  const minSize = toPx(resizerSize + 2 * detectionSize)
-  const border = `${detectionSizePx} solid transparent`
-
-  const negativeDetectionSizePxString = `-${detectionSizePx}`
-
-  if (vertical) {
-    return {
-      [MARGIN_LEFT]: negativeDetectionSizePxString,
-      [MARGIN_RIGHT]: negativeDetectionSizePxString,
-      minWidth: minSize,
-      [BORDER_LEFT]: border,
-      [BORDER_RIGHT]: border
-    }
-  }
-
-  return {
-    [MARGIN_TOP]: negativeDetectionSizePxString,
-    [MARGIN_BOTTOM]: negativeDetectionSizePxString,
-    minHeight: minSize,
-    [BORDER_TOP]: border,
-    [BORDER_BOTTOM]: border
-  }
-}
 
 export const getSetSize = (node: any, vertical: boolean) => (size: number) => {
   node.style[getSizeKey(vertical)] = toPx(size)
 }
 
-export const getSetResizerSize = (node: any, vertical: boolean,
-  isValidCustomResizer: boolean, resizerSize: number, detectionSize: number) => (size: number) => {
+export const getSetResizerSize = (node: any, vertical: boolean) => (size: number) => {
+  const getSizeKey = (vertical: boolean) => vertical ? MIN_WIDTH : MIN_HEIGHT
   node.style[getSizeKey(vertical)] = toPx(size)
-  node.style.overflow = size ? VISIBLE : HIDDEN
-  const sizeReduction = Math.abs(size - resizerSize)
-
-  if (!isValidCustomResizer) {
-    if (size) {
-      const style = generateResizerStyle(resizerSize - sizeReduction, detectionSize, vertical)
-      setPlainResizerStyle(node, style)
-    } else {
-      clearPlainResizerStyle(node)
-    }
-  }
 }
 
-export const addDOMEvent = (node: HTMLElement | Document, callBack: (e: any) => void, ...eventNames: string[]) => {
+export const addDOMEvent = (node: HTMLElement | Document | Window,
+  callBack: (e: any) => void, ...eventNames: string[]) => {
   eventNames.forEach((eventName) => node.addEventListener(eventName, callBack))
 }
 
-export const removeDOMEvent = (node: HTMLElement | Document, callBack: (e: any) => void, ...eventNames: string[]) => {
+export const removeDOMEvent = (node: HTMLElement | Document | Window,
+  callBack: (e: any) => void, ...eventNames: string[]) => {
   eventNames.forEach((eventName) => node.removeEventListener(eventName, callBack))
 }

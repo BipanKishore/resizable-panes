@@ -6,30 +6,28 @@ import React, {
 } from 'react'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
 import {
-  getSetResizerSize,
-  getSetSize, joinClassName
+  getSetResizerSize, joinClassName
 } from '../utils/dom'
 import {findIndex, getResizerId} from '../utils/util'
 import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
 import {IResizer} from '../@types'
+import {ResizableModel} from '../models'
 
 export const Resizer = (props: IResizer) => {
   const {children, id} = props
   const resizerId = getResizerId(id)
 
-  const resizable: any = useContext(ResizablePaneContext)
+  const resizable = useContext<ResizableModel>(ResizablePaneContext)
 
   const {
     registerItem,
-    panesList
+    panesList,
+    vertical
   } = resizable
 
-  const {
-    vertical,
-    resizerClass, activeResizerClass
-  } = resizable.props
-
   const index = findIndex(panesList, id)
+  const {resizerClass, activeResizerClass} = panesList[index].props
+
   const isNotLastIndex = index < (panesList.length - 1)
 
   const [isMouseDown, setIsMouseDown] = useState(false)
@@ -41,8 +39,7 @@ export const Resizer = (props: IResizer) => {
   }, [resizerId])
 
   const onNewRef = (node: any) => {
-    // const setSize = getSetSize(node, vertical)
-    const setSize = getSetResizerSize(node, vertical, isValidCustomResizer, resizerSize, resizerSize)
+    const setSize = getSetResizerSize(node, vertical)
     registerItem({
       setSize,
       setMouseDownFlag
@@ -53,6 +50,7 @@ export const Resizer = (props: IResizer) => {
   const [setResizerRef]: any = useHookWithRefCallback(onNewRef)
 
   const className = joinClassName({
+    'overflow-hidden': true,
     [activeResizerClass]: isMouseDown,
     [resizerClass]: !isMouseDown
   })
