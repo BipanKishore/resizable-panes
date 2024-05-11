@@ -3,7 +3,7 @@ import {getSize} from '../models/pane'
 import {addDOMEvent, getResizableEvent, removeDOMEvent} from '../utils/dom'
 import {getVisibleItems} from '../utils/panes'
 
-import throttle from 'lodash.throttle'
+import throttle from 'throttleit'
 import {sortNumber} from '../utils/util'
 import {EVENT_NAMES} from '../constant'
 

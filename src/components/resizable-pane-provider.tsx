@@ -26,7 +26,7 @@ export const attachDefaultPaneProps = (
     vertical: false,
     unit: RATIO,
     resizerSize: 2,
-    detectionRadius: 5,
+    detectionRadius: 6,
     visibility: emptyObhect,
     unmountOnHide: true,
 
