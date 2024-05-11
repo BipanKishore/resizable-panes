@@ -229,7 +229,7 @@ describe.skip('Should not emit Partial hidden ', () => {
   })
 
   // Edge
-  it.only(`
+  it(`
   -- Move R1 to R0 
   -- hide R2 to R0
   Result- It Should not emit Partial hidden`, () => {
