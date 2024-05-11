@@ -1,6 +1,6 @@
 import {ISetSizeBehaviour, IResizableItem} from '../@types'
 import {
-  RATIO, BUTTOM_FIRST, DIRECTIONS, TOP_FIRST,
+  RATIO, BUTTOM_FIRST, TOP_FIRST,
   CHANGE
 } from '../constant'
 import {ResizableModel} from '../models'
@@ -24,37 +24,34 @@ export const setSizeTopAndBottom = (
 ) => {
   let firstInningItems : IResizableItem[]
   let secondInningItems: IResizableItem[]
-  const getActionOnItem = (operation: number, direction: number) => (item: IResizableItem) => {
+  const getActionOnItem = (operation: number) => (item: IResizableItem) => {
     syncAxisSize(item)
     restoreLimits(item)
-    sizeChange = changePaneSize(item, sizeChange, operation, direction)
+    sizeChange = changePaneSize(item, sizeChange, operation)
   }
 
-  const changeSizeOfFirstAndSecondInningsItems = (firstInningDirection: number, secondInningDirection: number) => {
+  const changeSizeOfFirstAndSecondInningsItems = () => {
     if (sizeChange > 0) { // Need to reduce other
-      firstInningItems.forEach(getActionOnItem(CHANGE.REMOVE, firstInningDirection))
-      secondInningItems.forEach(getActionOnItem(CHANGE.REMOVE, secondInningDirection))
+      firstInningItems.forEach(getActionOnItem(CHANGE.REMOVE))
+      secondInningItems.forEach(getActionOnItem(CHANGE.REMOVE))
     }
 
     if (sizeChange < 0) { // Need to increase other
       sizeChange = Math.abs(sizeChange)
 
-      firstInningItems.forEach(getActionOnItem(CHANGE.ADD, firstInningDirection))
-      secondInningItems.forEach(getActionOnItem(CHANGE.ADD, secondInningDirection))
+      firstInningItems.forEach(getActionOnItem(CHANGE.ADD))
+      secondInningItems.forEach(getActionOnItem(CHANGE.ADD))
     }
   }
 
   if (behavior === BUTTOM_FIRST) {
     firstInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
     secondInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
-
-    changeSizeOfFirstAndSecondInningsItems(DIRECTIONS.DOWN, DIRECTIONS.UP)
   } else if (behavior === TOP_FIRST) {
     firstInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
     secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
-
-    changeSizeOfFirstAndSecondInningsItems(DIRECTIONS.UP, DIRECTIONS.DOWN)
   }
+  changeSizeOfFirstAndSecondInningsItems()
 }
 
 // eslint-disable-next-line complexity

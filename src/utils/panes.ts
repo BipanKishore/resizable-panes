@@ -2,7 +2,7 @@ import {ReactElement} from 'react'
 import {IResizableItem, IResizablePaneProviderProps} from '../@types'
 import {PaneModel, ResizableModel} from '../models'
 import {ResizeStorage} from './storage'
-import {CHANGE, DIRECTIONS} from '../constant'
+import {CHANGE} from '../constant'
 import {
   getRatioSize,
   getSize, initializeSize, restorePane, setUISize, synMaxToSize,
@@ -14,7 +14,7 @@ import {
 export const syncAxisSizesFn = (panesList: PaneModel[]) =>
   panesList.forEach(syncAxisSize)
 
-export const setUISizesFn = (items: IResizableItem[], direction?: number) => {
+export const setUISizesFn = (items: IResizableItem[]) => {
   items.forEach(setUISize)
 }
 
@@ -49,7 +49,7 @@ export const getMinSizeSum = (panesList: PaneModel[], start: number, end: number
 // Need to check for hidden element
 export const restoreFn = (items: IResizableItem[]) => {
   items.forEach(restorePane)
-  setUISizesFn(items, DIRECTIONS.NONE)
+  setUISizesFn(items)
 }
 
 // It is used when we rapidly move out of axis

@@ -23,7 +23,7 @@ export const changePaneSizePlain = (pane: PaneModel, newSize: number) => {
 }
 
 export const changePaneSize = (pane: PaneModel, sizeChange: number,
-  operation: number, direction: number) => {
+  operation: number) => {
   const {axisSize} = pane
   const newSize = axisSize + (operation === CHANGE.ADD ? sizeChange : -sizeChange)
 
@@ -133,7 +133,7 @@ export const getMaxDiff = (pane: PaneModel) => {
   return pane.defaultMaxSize - pane.size
 }
 
-export const synSizeToMinSize = (pane: PaneModel, direction: number) => {
+export const synSizeToMinSize = (pane: PaneModel) => {
   pane.size = pane.minSize
 }
 

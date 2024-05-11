@@ -169,7 +169,7 @@ export const getResizableContext = (
     if (isAxisLimitReached) {
       movingLogic(mouseCoordinate, resizable)
     }
-    setUISizesFn(items, resizable.direction)
+    setUISizesFn(items)
     onNewView()
     emitResize()
   }
@@ -219,7 +219,7 @@ export const getResizableContext = (
   }
 
   const reflectVisibilityChange = () => {
-    setUISizesFn(items, DIRECTIONS.NONE)
+    setUISizesFn(items)
     afterResizeStop()
     emitChangeVisibility()
     onNewView(VISIBILITY)
@@ -269,7 +269,7 @@ export const getResizableContext = (
   const getVisibilities = () => getVisibilityState()
 
   const postSetSize = () => {
-    setUISizesFn(items, DIRECTIONS.NONE)
+    setUISizesFn(items)
     afterResizeStop()
     onNewView(SET_SIZE)
   }
