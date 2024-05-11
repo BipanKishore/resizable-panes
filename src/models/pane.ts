@@ -6,7 +6,7 @@ import {
   MAX_SIZE_STATE, MIN_SIZE_STATE, NORMAL_SIZE_STATE,
   RATIO, SIZE, VISIBILITY
 } from '../constant'
-import {isItUp, isItDown, filterKeys, ratioAndRoundOff} from '../utils/util'
+import {filterKeys, ratioAndRoundOff} from '../utils/util'
 import {PaneModel} from './pane-model'
 import {checkPaneModelErrors} from './utils'
 
