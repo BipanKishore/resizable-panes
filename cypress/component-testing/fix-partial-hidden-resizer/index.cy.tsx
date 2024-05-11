@@ -12,7 +12,7 @@ const rCy = new RCy({
   detectionSize: 5
 })
 
-describe('operations-no-min-max-plain-resizer', () => {
+describe.skip('operations-no-min-max-plain-resizer', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(

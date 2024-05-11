@@ -1,5 +1,4 @@
-import {IResizableItem} from '../../@types'
-import {DIRECTIONS, LEFT, RIGHT} from '../../constant'
+import {DIRECTIONS} from '../../constant'
 
 export const RIGHT_BUTTON_VALUE = 0
 
@@ -38,20 +37,4 @@ export const throwForNonZero = (value: any, id: string) => {
   if (typeof value !== 'number') {
     throw new Error(`${id} -- ${value} `)
   }
-}
-
-export const getPartialHiddenResizer = (items : IResizableItem[]) => {
-  const hiddenResizersI: number[] = []
-
-  items.forEach((item, i) => {
-    if (!item.isHandle) {
-      if (item.hiddenResizer === LEFT) {
-        hiddenResizersI.push(i - 1)
-      }
-
-      if (item.hiddenResizer === RIGHT) {
-        hiddenResizersI.push(i + 1)
-      }
-    }
-  })
 }

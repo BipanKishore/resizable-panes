@@ -10,10 +10,6 @@ export const CHANGE = {
   REMOVE: 2
 }
 
-export const LEFT = 'left'
-export const RIGHT = 'right'
-export const NONE = 'none'
-
 export const RATIO = 'ratio'
 export const SET_SIZE = 'setSize'
 
@@ -27,7 +23,6 @@ export const SIZE = 'size'
 export const DEFAULT_MIN_SIZE_KEY = 'defaultMinSize'
 export const DEFAULT_MAX_SIZE_KEY = 'defaultMaxSize'
 
-export const ZIPPED = 'zipped'
 export const VISIBLE = 'visible'
 export const HIDDEN = 'hidden'
 

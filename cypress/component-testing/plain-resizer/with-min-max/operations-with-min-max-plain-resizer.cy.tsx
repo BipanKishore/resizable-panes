@@ -135,41 +135,44 @@ describe('operations-with-min-max-plain-resizer', () => {
   describe('Resizing with visibility operations', () => {
     it('Continuous resizing with visibility operations', () => {
       rCy.move(R1, R2, 'left')
-      rCy.checkWidthsAndSum([100, 2, 490, 2, 100, 2, 210, 2, 100])
+      rCy.checkWidthsAndSum([100, 2, 500, 2, 100, 2, 200, 2, 100])
 
       rCy.cyGet(CK1).click()
 
-      rCy.checkWidthsAndSum([197, 0, 0, 2, 196, 2, 413, 2, 196])
+      rCy.checkWidthsAndSum(
+        [201, 0, 0, 2, 200, 2, 401, 2, 200]
+      )
 
       rCy.cyGet(CK1).click()
-      rCy.checkWidthsAndSum([100, 2, 490, 2, 100, 2, 210, 2, 100])
+
+      rCy.checkWidthsAndSum([100, 2, 500, 2, 100, 2, 200, 2, 100])
 
       rCy.moveNPixel(R1, 100, 'left')
-      rCy.checkWidthsAndSum([100, 2, 390, 2, 200, 2, 210, 2, 100])
+      rCy.checkWidthsAndSum([100, 2, 400, 2, 200, 2, 200, 2, 100])
 
       rCy.cyGet(CK0).click()
       rCy.cyGet(CK4).click()
-      rCy.checkWidthsAndSum([0, 0, 489, 2, 251, 2, 264, 0, 0])
+      rCy.checkWidthsAndSum([0, 0, 502, 2, 251, 2, 251, 0, 0])
 
       rCy.moveNPixel(R1, 45, 'left')
 
-      rCy.checkWidthsAndSum([0, 0, 444, 2, 296, 2, 264, 0, 0])
+      rCy.checkWidthsAndSum([0, 0, 457, 2, 296, 2, 251, 0, 0])
 
       rCy.moveNPixel(R1, 200, 'left')
-      rCy.checkWidthsAndSum([0, 0, 244, 2, 300, 2, 460, 0, 0])
+      rCy.checkWidthsAndSum([0, 0, 257, 2, 300, 2, 447, 0, 0])
 
       rCy.moveNPixel(R2, 200, 'right')
 
-      rCy.checkWidthsAndSum([0, 0, 444, 2, 300, 2, 260, 0, 0])
+      rCy.checkWidthsAndSum([0, 0, 457, 2, 300, 2, 247, 0, 0])
 
       rCy.cyGet(CK2).click()
-      rCy.checkWidthsAndSum([0, 0, 634, 0, 0, 2, 372, 0, 0])
+      rCy.checkWidthsAndSum([0, 0, 653, 0, 0, 2, 353, 0, 0])
 
       rCy.moveNPixel(R2, 200, 'right')
-      rCy.checkWidthsAndSum([0, 0, 834, 0, 0, 2, 172, 0, 0])
+      rCy.checkWidthsAndSum([0, 0, 853, 0, 0, 2, 153, 0, 0])
 
       rCy.moveNPixel(R2, 400, 'left')
-      rCy.checkWidthsAndSum([0, 0, 434, 0, 0, 2, 572, 0, 0])
+      rCy.checkWidthsAndSum([0, 0, 453, 0, 0, 2, 553, 0, 0])
 
       rCy.move(R2, containerId, 'left')
       rCy.checkWidthsAndSum([0, 0, 100, 0, 0, 2, 906, 0, 0])

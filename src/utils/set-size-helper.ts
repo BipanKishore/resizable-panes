@@ -1,13 +1,12 @@
 import {ISetSizeBehaviour, IResizableItem} from '../@types'
 import {
-  RATIO, LEFT, RIGHT, BUTTOM_FIRST, DIRECTIONS, NONE, TOP_FIRST,
+  RATIO, BUTTOM_FIRST, DIRECTIONS, TOP_FIRST,
   CHANGE
 } from '../constant'
 import {ResizableModel} from '../models'
 import {
   changePaneSize, changePaneSizePlain, restoreLimits,
   restorePaneBeforeSetSize,
-  setPaneVisibility,
   storePaneForNewSetSizeKey, syncAxisSize
 } from '../models/pane'
 import {
@@ -86,34 +85,18 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
   const preSize = pane.size
 
   const acceptableNewSize = changePaneSizePlain(pane, newSize)
-  let sizeChange = acceptableNewSize - preSize
+  const sizeChange = acceptableNewSize - preSize
 
   if (!sizeChange) {
     return
   }
   const requestIndexInVisibleItems = findIndex(visibleItems, id)
 
-  let addOnSizeChange = 0
-  let resizer: IResizableItem
-
-  if (pane.hiddenResizer === LEFT) {
-    resizer = visibleItems[requestIndexInVisibleItems - 1]
-  } else if (pane.hiddenResizer === RIGHT) {
-    resizer = visibleItems[requestIndexInVisibleItems + 1]
-  }
-  pane.hiddenResizer = NONE
-
-  if (resizer) {
-    setPaneVisibility(resizer, true, false)
-    addOnSizeChange = resizer.resizerSize
-    sizeChange += addOnSizeChange
-  }
-
   if (behavior === RATIO) {
     const remainingVisiblePanes = [...visiblePanes]
     remainingVisiblePanes.splice(requestIndex, 1)
 
-    const newMaxPaneSizeAllowd = initialSizeSum - pane.size - addOnSizeChange
+    const newMaxPaneSizeAllowd = initialSizeSum - pane.size
     updateSizeInRatio(remainingVisiblePanes, newMaxPaneSizeAllowd, remainingVisiblePanes)
   }
 

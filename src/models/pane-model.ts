@@ -7,7 +7,7 @@ import {
   UnitTypes
 } from '../@types'
 import {
-  NONE, NORMAL_SIZE_STATE,
+  NORMAL_SIZE_STATE,
   RATIO
 } from '../constant'
 import {ResizeStorage} from '../utils/storage'
@@ -20,9 +20,6 @@ import {attachDefaultPaneProps, checkPaneModelErrors} from './utils'
 
 export class PaneModel {
   isHandle: boolean
-
-  hiddenResizer: IHiddenResizer = NONE
-  prevHiddenResizer: IHiddenResizer = NONE
 
   initialSetSize: number
   initialSetSizeResizer: IHiddenResizer
@@ -97,8 +94,7 @@ export class PaneModel {
 
     const storedPane = store.getStoredPane(id)
     if (storedPane) {
-      const {size, defaultMaxSize, defaultMinSize, defaultSize, visibility, storedSize, hiddenResizer} = storedPane
-      this.hiddenResizer = hiddenResizer
+      const {size, defaultMaxSize, defaultMinSize, defaultSize, visibility, storedSize} = storedPane
       initializeSizes(this, size, defaultMinSize, defaultMaxSize as number, defaultSize, storedSize, visibility)
     } else {
       initializeSizes(this, size, minSize, maxSize, size, size, show)

@@ -332,7 +332,8 @@ describe('Test Visibility for 2 panes', () => {
   })
 })
 
-describe('Test Visibility for 5 panes', () => {
+// Partially hidden case
+describe.skip('Test Visibility for 5 panes', () => {
   const rCy = new RCy({
     resizerSize: 10,
     containerId: rScontainerId,

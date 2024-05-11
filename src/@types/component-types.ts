@@ -114,7 +114,6 @@ export interface IStoreResizableItemsModel {
   defaultMinSize: number;
   defaultMaxSize: string | number;
   storedSize: number;
-  hiddenResizer: IHiddenResizer;
 }
 
 export interface IStoreModel {

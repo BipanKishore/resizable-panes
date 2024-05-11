@@ -1,19 +1,17 @@
 import React from 'react'
 import {joinClassName} from '../../../src/utils/dom'
-import {VISIBLE, ZIPPED} from '../../../src/constant'
 
 const statesClassOrange = {
-  visible: 'bg-orange-500',
+  true: 'bg-orange-500',
   zipped: 'bg-orange-300',
-  hidden: 'bg-orange-100'
+  false: 'bg-orange-100'
 }
 
 export const MultiStateButton = ({name, statesClass = statesClassOrange, state, onClick}: any) => {
   const onClickBtn = () => {
-    const newState = ![VISIBLE, ZIPPED].includes(state)
     onClick({
       name,
-      checked: newState
+      checked: !state
     })
   }
 

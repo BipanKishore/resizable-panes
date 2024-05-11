@@ -19,10 +19,10 @@
     margin: auto;
 }
 
-/* .resizer {
+.resizer {
     box-sizing: border-box;
     background-clip: padding-box;
-} */
+}
 
 /* .resizer-vertical {
     cursor: row-resize;

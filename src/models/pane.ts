@@ -3,18 +3,12 @@ import {
   CHANGE,
   DEFAULT_MAX_SIZE_KEY,
   DEFAULT_MIN_SIZE_KEY,
-  LEFT, MAX_SIZE_STATE, MIN_SIZE_STATE, NONE, NORMAL_SIZE_STATE,
-  RATIO, RIGHT, SIZE, VISIBILITY
+  MAX_SIZE_STATE, MIN_SIZE_STATE, NORMAL_SIZE_STATE,
+  RATIO, SIZE, VISIBILITY
 } from '../constant'
 import {isItUp, isItDown, filterKeys, ratioAndRoundOff} from '../utils/util'
 import {PaneModel} from './pane-model'
 import {checkPaneModelErrors} from './utils'
-
-const clearHiddenResizer = (pane: PaneModel) => {
-  if (pane.size > 0) {
-    pane.hiddenResizer = NONE
-  }
-}
 
 export const changePaneSizePlain = (pane: PaneModel, newSize: number) => {
   const {minSize, maxSize} = pane
@@ -33,11 +27,7 @@ export const changePaneSize = (pane: PaneModel, sizeChange: number,
   const {axisSize} = pane
   const newSize = axisSize + (operation === CHANGE.ADD ? sizeChange : -sizeChange)
 
-  if (axisSize !== 0) {
-    setPaneHiddenResizer(pane, newSize, direction, 0)
-  }
   const acceptedSize = changePaneSizePlain(pane, newSize)
-  clearHiddenResizer(pane)
   return Math.abs(acceptedSize - newSize)
 }
 
@@ -48,20 +38,6 @@ export const setVisibilitySize = (pane: PaneModel, sizeChange: number,
   restoreLimits(pane)
   const acceptedSize = changePaneSizePlain(pane, newSize)
   return acceptedSize === newSize
-}
-
-// eslint-disable-next-line complexity
-export const setPaneHiddenResizer = (pane: PaneModel, newSize: number, direction: number, sizeToCompare: number) => {
-  if (!pane.isHandle) {
-    if (newSize < sizeToCompare && pane.defaultMinSize === 0) {
-      if (isItUp(direction)) {
-        pane.hiddenResizer = LEFT
-      }
-      if (isItDown(direction)) {
-        pane.hiddenResizer = RIGHT
-      }
-    }
-  }
 }
 
 const setVisibilityHelper = (pane: PaneModel, isPartiallyHidden: boolean) => {
@@ -88,23 +64,19 @@ export const setPaneVisibility = (pane: PaneModel, visibility: boolean, isPartia
 export const setPaneOldVisibilityModel = (pane: PaneModel) => {
   pane.oldVisibleSize = pane.size
   pane.oldVisibility = pane.visibility
-  pane.oldHiddenResizer = pane.hiddenResizer
 }
 
 export const syncPaneToOldVisibilityModel = (pane: PaneModel) => {
   pane.size = pane.oldVisibleSize
   pane.visibility = pane.oldVisibility
-  pane.hiddenResizer = pane.oldHiddenResizer
 }
 
 export const storePaneForNewSetSizeKey = (pane: PaneModel) => {
   pane.initialSetSize = pane.size
-  pane.initialSetSizeResizer = pane.hiddenResizer
 }
 
 export const restorePaneBeforeSetSize = (pane: PaneModel) => {
   pane.size = pane.initialSetSize
-  pane.hiddenResizer = pane.initialSetSizeResizer
 }
 
 export const syncPaneSizeToRatioSize = (pane: PaneModel) => {
@@ -123,7 +95,6 @@ export const restorePane = (pane: PaneModel) => {
   pane.size = pane.defaultSize
   restoreLimits(pane)
   setPaneVisibility(pane, pane.defaultVisibility)
-  pane.hiddenResizer = NONE
 }
 
 export const restoreLimits = (pane: PaneModel) => {
@@ -164,9 +135,6 @@ export const getMaxDiff = (pane: PaneModel) => {
 
 export const synSizeToMinSize = (pane: PaneModel, direction: number) => {
   pane.size = pane.minSize
-  if (pane.defaultMinSize === 0) {
-    setPaneHiddenResizer(pane, pane.size, direction, 1)
-  }
 }
 
 export const synSizeToMaxSize = (pane: PaneModel) => {
@@ -211,7 +179,7 @@ export const updatSizeState = (pane: PaneModel) => {
 }
 
 export const getStoreModel = (pane: PaneModel): IStoreResizableItemsModel => {
-  const t = filterKeys(pane, 'id', 'hiddenResizer', SIZE,
+  const t = filterKeys(pane, 'id', SIZE,
     'defaultSize', DEFAULT_MIN_SIZE_KEY, VISIBILITY, 'storedSize')
   return {
     ...t,

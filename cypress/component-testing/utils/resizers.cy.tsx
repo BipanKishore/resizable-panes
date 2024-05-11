@@ -32,7 +32,7 @@ describe('Test UI Action: setResizersLimits method with mix3PanesSet', () => {
   it('Move R0 to most right R1 should become zero', () => {
     rCy.move(R0, containerId, 'right')
     rCy.checkWidths(
-      [750, 10, 0, 0, 260]
+      [750, 10, 0, 10, 250]
     )
   })
 
@@ -40,7 +40,7 @@ describe('Test UI Action: setResizersLimits method with mix3PanesSet', () => {
   it('Move R1 to most left R0 should become zero', () => {
     rCy.move(R1, containerId, 'left')
     rCy.checkWidths(
-      [260, 0, 0, 10, 750]
+      [250, 10, 0, 10, 750]
     )
   })
 

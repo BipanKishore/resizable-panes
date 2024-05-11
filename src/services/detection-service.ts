@@ -10,7 +10,7 @@ import {EVENT_NAMES} from '../constant'
 export const attachDetectionCoordinate = (resizable: ResizableModel) => {
   const {vertical, items, getContainerRect} = resizable
 
-  const detectionRadius = 30
+  const detectionRadius = 10
   const {left, top} = getContainerRect()
 
   let coordinatesSum = vertical ? left : top

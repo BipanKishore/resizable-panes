@@ -6,6 +6,7 @@ import React, {
 } from 'react'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
 import {
+  getSetResizerSize,
   getSetSize, joinClassName
 } from '../utils/dom'
 import {findIndex, getResizerId} from '../utils/util'
@@ -13,7 +14,7 @@ import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
 import {IResizer} from '../@types'
 
 export const Resizer = (props: IResizer) => {
-  const {children, id} = props
+  const {children, id, resizerSize, detectionSize} = props
   const resizerId = getResizerId(id)
 
   const resizable: any = useContext(ResizablePaneContext)
@@ -40,8 +41,8 @@ export const Resizer = (props: IResizer) => {
   }, [resizerId])
 
   const onNewRef = (node: any) => {
-    const setSize = getSetSize(node, vertical)
-
+    // const setSize = getSetSize(node, vertical)
+    const setSize = getSetResizerSize(node, vertical, isValidCustomResizer, resizerSize, detectionSize)
     registerItem({
       setSize,
       setMouseDownFlag

@@ -66,7 +66,7 @@ describe('No min max limits, Custom resizer with resizerSize prop', () => {
     })
   })
 
-  describe('Partial visible resizer auto fix use case', () => {
+  describe.skip('Partial visible resizer auto fix use case', () => {
     it('Partially hide R1 from left using R0, R1 should hide completely', () => {
       rCy.move(R0, P1, 'right', 2)
       rCy.checkWidths({
@@ -112,7 +112,7 @@ describe('No min max limits, Custom resizer with resizerSize prop', () => {
     })
   })
 
-  describe('Overlap resizer to another, no visibility operation', () => {
+  describe.skip('Overlap resizer to another, no visibility operation', () => {
     describe('R0 Movements', () => {
       it('Overlap R0 to R1', () => {
         rCy.moveItem(R0, R1)

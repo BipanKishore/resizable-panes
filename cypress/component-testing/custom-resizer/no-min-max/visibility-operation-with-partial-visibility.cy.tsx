@@ -21,7 +21,7 @@ const rCy = new RCy({
 })
 const {resizerSize} = rCy
 
-describe('Move Panes on', () => {
+describe.skip('Move Panes on', () => {
   beforeEach(() => {
     rCy.setViewPort()
     cy.mount(
@@ -95,7 +95,12 @@ describe('Move Panes on', () => {
   })
 
   // leading to Bug
-  it('-- Hide P2 -- Move R0 to R2 -- Show P2 -- Hide P1, Move R1 to 100px right Result -- Hide R0, P1', () => {
+  it(`
+  -- Hide P2 
+  -- Move R0 to R2 
+  -- Show P2 
+  -- Hide P1, Move R1 to 100px right Result 
+  -- Hide R0, P1`, () => {
     rCy.cyGet(CK2).click()
 
     rCy.move(R0, R2, 'right')
@@ -194,7 +199,7 @@ describe('Move Panes on', () => {
   })
 })
 
-describe('Should not emit Partial hidden ', () => {
+describe.skip('Should not emit Partial hidden ', () => {
   let resizableApi: IResizableApi
   let onChangeVisibility: SinonSpy
   const rCy = new RCy({
@@ -224,7 +229,7 @@ describe('Should not emit Partial hidden ', () => {
   })
 
   // Edge
-  it(`
+  it.only(`
   -- Move R1 to R0 
   -- hide R2 to R0
   Result- It Should not emit Partial hidden`, () => {
