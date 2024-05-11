@@ -26,7 +26,7 @@ export const attachDefaultPaneProps = (
     resizerClass: '',
     activeResizerClass: '',
     resizerSize: 2,
-    detectionSize: 5,
+    detectionRadius: 3,
     visibility: emptyObhect,
     minMaxUnit: RATIO,
     unmountOnHide: true,

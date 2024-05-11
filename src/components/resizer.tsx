@@ -14,7 +14,7 @@ import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
 import {IResizer} from '../@types'
 
 export const Resizer = (props: IResizer) => {
-  const {children, id, resizerSize, detectionSize} = props
+  const {children, id} = props
   const resizerId = getResizerId(id)
 
   const resizable: any = useContext(ResizablePaneContext)
@@ -42,7 +42,7 @@ export const Resizer = (props: IResizer) => {
 
   const onNewRef = (node: any) => {
     // const setSize = getSetSize(node, vertical)
-    const setSize = getSetResizerSize(node, vertical, isValidCustomResizer, resizerSize, detectionSize)
+    const setSize = getSetResizerSize(node, vertical, isValidCustomResizer, resizerSize, resizerSize)
     registerItem({
       setSize,
       setMouseDownFlag
