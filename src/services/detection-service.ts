@@ -36,22 +36,21 @@ const getMouseDownOnHandle = (
   resizable: ResizableModel,
   vertical: boolean,
   registerResizeEvent: any) => (e: any) => {
-  const {detectionDetails: detectionCoordinate} = resizable
+  const {detectionDetails} = resizable
 
   const cursorCoordinate = vertical ? e.clientX : e.clientY
 
-  const resizerClickedCoordinateList = []
-  for (let i = 0; i < detectionCoordinate.length; i++) {
-    const [x1, x2] = detectionCoordinate[i]
+  const resizerClickedCoordinateList = detectionDetails.map(([x1, x2]) => {
     const coordinates = Math.abs(((x1 + x2) / 2) - cursorCoordinate)
-    resizerClickedCoordinateList.push(coordinates)
-  }
+    return coordinates
+  })
+
   const copyForSort = sortNumber(resizerClickedCoordinateList)
 
   const closestCoordinate = copyForSort.pop()
 
   const closestIndex = resizerClickedCoordinateList.indexOf(closestCoordinate)
-  const [x1, x2, handleId] = detectionCoordinate[closestIndex]
+  const [x1, x2, handleId] = detectionDetails[closestIndex]
   if (closestCoordinate <= ((x2 - x1) / 2)) {
     resizable.previousTouchEvent = e
     const resizableEvent = getResizableEvent(e, vertical, {})
@@ -68,12 +67,11 @@ const onContainerMouseMove = (
   const {detectionDetails} = resizable
   const cursorCoordinate = vertical ? e.clientX : e.clientY
   element.style.cursor = 'auto'
-  for (let i = 0; i < detectionDetails.length; i++) {
-    const [x1, x2] = detectionDetails[i]
+  detectionDetails.forEach(([x1, x2]) => {
     if (cursorCoordinate >= x1 && cursorCoordinate <= x2) {
       element.style.cursor = cursorStyle
     }
-  }
+  })
 }
 
 const getResize = (resizable: ResizableModel, vertical: boolean) => (e: any) => {
