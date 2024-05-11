@@ -47,6 +47,7 @@ export interface IResizableApi {
   getSizes: () => INumberMap;
   getState: () => IGetState;
   setSize: (id: string, size: number, behavior?: ISetSizeBehaviour) => void;
+  setSizeRatio:(id: string, ratio: number, behavior?: ISetSizeBehaviour) => void;
 }
 export type onReadyType = (api: IResizableApi) => void;
 

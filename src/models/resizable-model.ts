@@ -1,4 +1,4 @@
-import {IResizableEvent, IResizableItem, IResizablePaneProviderProps} from '../@types'
+import {IResizableApi, IResizableEvent, IResizableItem, IResizablePaneProviderProps} from '../@types'
 import {PaneModel} from './pane-model'
 
 export class ResizableModel {
@@ -35,7 +35,7 @@ export class ResizableModel {
   resizeOnMove: ([mouseCoordinate, movement]: IResizableEvent) => void
   onMouseUp: () => void
 
-  api: any
+  api: IResizableApi
   registerItem: (api: any, id: string) => void
   registerContainer: any
   props: IResizablePaneProviderProps

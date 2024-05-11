@@ -66,7 +66,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
   const visibleItems = getVisibleItems(items)
 
   const requestIndex = findIndex(visiblePanes, id)
-  if (requestIndex === -1 || newSize < 1) {
+  if (requestIndex === -1 || newSize < 0) {
     return
   }
 

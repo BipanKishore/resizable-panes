@@ -24,7 +24,8 @@ import {
   movingLogic,
   setCurrentMinMax,
   toRatioModeAllPanes,
-  getChangeInViewSize
+  getChangeInViewSize,
+  getMaxContainerSizes
 } from '../utils/resizable-pane'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage, setStorage} from '../utils/storage'
@@ -267,16 +268,29 @@ export const getResizableContext = (
     createMap(panesList, SIZE, VISIBILITY, DEFAULT_MIN_SIZE_KEY, DEFAULT_MAX_SIZE_KEY)
   const getVisibilities = () => getVisibilityState()
 
+  const postSetSize = () => {
+    setUISizesFn(items, DIRECTIONS.NONE)
+    afterResizeStop()
+    onNewView(SET_SIZE)
+  }
+
   const setSize = (
     id: string,
     newSize: number,
     behavior?: ISetSizeBehaviour
   ) => {
     setSizeMethod(resizable, id, newSize, behavior)
+    postSetSize()
+  }
 
-    setUISizesFn(items, DIRECTIONS.NONE)
-    afterResizeStop()
-    onNewView(SET_SIZE)
+  const setSizeRatio = (
+    id: string,
+    percent: number,
+    behavior?: ISetSizeBehaviour) => {
+    const {containerSize} = getMaxContainerSizes(resizable)
+    const newSize = containerSize * percent
+    setSizeMethod(resizable, id, newSize, behavior)
+    postSetSize()
   }
 
   const api = {
@@ -285,7 +299,8 @@ export const getResizableContext = (
     getSizes: getIdToSizeMap,
     getVisibilities,
     getState,
-    setSize
+    setSize,
+    setSizeRatio
   }
 
   resizable.register(

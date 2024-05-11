@@ -241,8 +241,8 @@ describe('Custom resizer:API: Method setSize', () => {
     cy.wait(50)
   })
 
-  it('setSize should not make any change for Zero of Negative numbers', () => {
-    resizableApi.setSize(P0, 0)
+  it('setSize should not make any change for of Negative numbers', () => {
+    resizableApi.setSize(P0, -1)
 
     rCy.checkWidths([100, 10, 300, 10, 200, 10, 300, 10, 100])
   })
@@ -880,6 +880,48 @@ describe('setSize should work in TOP_FIRST & BUTTOM_FIRST', () => {
   `, () => {
     resizableApi.setSize(P1, 400, TOP_FIRST)
     rCy.checkWidths([193, 10, 400, 10, 179, 10, 96, 10, 96])
+  })
+})
+
+describe('setSizeRatio should work in TOP_FIRST & BUTTOM_FIRST', () => {
+  let resizableApi: IResizableApi
+
+  const rCy = new RCy({
+    resizerSize: 1,
+    detectionSize: 5
+  })
+  beforeEach(() => {
+    rCy.setViewPort()
+    cy.mount(
+      <RPTestWrapper
+        panesList={withMinMaxAllPaneEqualSizeExcept15PanesSet}
+        resizer={<CustomResizerFirst horizontal={false} size={10} />}
+        resizerClass="bg-slate-500"
+        resizerSize={10}
+        storageApi={localStorage}
+        uniqueId={rScontainerId}
+        vertical
+        onReady={(api: IResizableApi) => {
+          resizableApi = api
+        }}
+      >
+      </RPTestWrapper>
+    )
+  })
+  /// ///////////////////////////////////////////////////////////////////////
+
+  it(`
+  -- to setSize to maximum space availiable using setSizeRatio
+  `, () => {
+    resizableApi.setSizeRatio(P1, 1, BUTTOM_FIRST)
+    rCy.checkWidths([10, 10, 752, 10, 96, 10, 96, 10, 10])
+  })
+
+  it(`
+  -- to setSize to minimum space availiable using setSizeRatio
+  `, () => {
+    resizableApi.setSizeRatio(P1, 0, BUTTOM_FIRST)
+    rCy.checkWidths([193, 10, 182, 10, 193, 10, 193, 10, 193])
   })
 })
 
