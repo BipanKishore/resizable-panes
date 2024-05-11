@@ -1,11 +1,11 @@
-import {IResizableContext} from '../@types'
+import {ResizableModel} from '../models'
 
 function SingletonService () {
   const serviceMap: {
-    [key: string]: IResizableContext
+    [key: string]: ResizableModel
   } = {}
 
-  const getService = (id: string, createService: () => IResizableContext) => {
+  const getService = (id: string, createService: () => ResizableModel) => {
     serviceMap[id] = serviceMap[id] ? serviceMap[id] : createService()
     return serviceMap[id]
   }

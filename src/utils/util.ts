@@ -77,3 +77,14 @@ export const deleteUndefined = (anyObject: any) => {
 
 export const reverse = <T>(list: T[]): T[] => [...list].reverse()
 export const filterEmpty = (list: any[]) => list.filter(_ => _)
+
+export const sortNumber = (list: number[]) => {
+  return [...list].sort((a, b) => {
+    if (a > b) {
+      return -1
+    } else if (b > a) {
+      return 1
+    }
+    return 0
+  })
+}

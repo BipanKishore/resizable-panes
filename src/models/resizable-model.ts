@@ -1,4 +1,4 @@
-import {IResizableItem} from '../@types'
+import {IResizableEvent, IResizableItem, IResizablePaneProviderProps} from '../@types'
 import {PaneModel} from './pane-model'
 
 export class ResizableModel {
@@ -28,6 +28,19 @@ export class ResizableModel {
 
   panesList: PaneModel[]
   resizersList: IResizableItem[]
+
+  previousTouchEvent: any
+  detectionDetails: [number, number, string][]
+  onMouseDown: ([mouseCoordinate]: IResizableEvent, handleId: string) => void
+  resizeOnMove: ([mouseCoordinate, movement]: IResizableEvent) => void
+  onMouseUp: () => void
+
+  api: any
+  registerItem: (api: any, id: string) => void
+  registerContainer: any
+  props: IResizablePaneProviderProps
+
+  getPaneSizeStyle: (id: string) => void
 
   getContainerRect: () => any
 

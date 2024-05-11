@@ -8,6 +8,7 @@ import {deleteUndefined, noop} from '../utils/util'
 import {IResizablePaneProviderProps} from '../@types'
 import {RATIO, RESIZE_HTML_EVENT} from '../constant'
 import {toRatioModeAllPanes} from '../utils/resizable-pane'
+import {attachDetectionCoordinate} from '../services/detection-service'
 
 const emptyObhect = {}
 
@@ -42,12 +43,14 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
 
   const resizableRef: any = useRef(getResizableContext(currentProps))
 
-  const {api, resizable} = resizableRef.current
+  const resizable = resizableRef.current
+  const {api} = resizable
 
   useEffect(() => {
     const onResize = () => {
       if (unit === RATIO) {
         toRatioModeAllPanes(resizable, true)
+        attachDetectionCoordinate(resizable)
       }
     }
     window.addEventListener(RESIZE_HTML_EVENT, onResize)

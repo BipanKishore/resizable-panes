@@ -33,7 +33,6 @@ import {ResizeStorage, setStorage} from '../utils/storage'
 import {
   IClearFlagsParam,
   IKeyToBoolMap,
-  IResizableContext,
   IResizableEvent,
   IResizablePaneProviderProps,
   ISetSizeBehaviour
@@ -46,10 +45,11 @@ import {
   getSize, registerResizableItem, setPaneOldVisibilityModel,
   synSizeToMaxSize, synSizeToMinSize, syncPaneRatioSizeToSize
 } from '../models/pane'
+import {attachDetectionCoordinate, detectionService} from '../services/detection-service'
 
 export const getResizableContext = (
   props: IResizablePaneProviderProps
-): IResizableContext => {
+): ResizableModel => {
   const {
     vertical,
     children,
@@ -91,10 +91,11 @@ export const getResizableContext = (
     const resizeParams = getIdToSizeMap()
     onResize(resizeParams)
   }
-  const emitResizeStopAndStore = () => {
+  const afterResizeStop = () => {
     const resizeParams = getIdToSizeMap()
     onResizeStop(resizeParams)
     setStorage(uniqueId, storageApi, resizable)
+    attachDetectionCoordinate(resizable)
   }
 
   const emitChangeVisibility = () => {
@@ -106,8 +107,8 @@ export const getResizableContext = (
     registerResizableItem(findById(items, id), api)
   }
 
-  const registerContainer = (getContainerRect: any) => {
-    resizable.getContainerRect = getContainerRect
+  const registerContainer = (node: HTMLElement) => {
+    resizable.getContainerRect = () => node.getBoundingClientRect()
     let visibilityMap = props.visibility
     if (storage.empty && unit === RATIO && !resizable.isSetRatioMode) {
       toRatioModeAllPanes(resizable)
@@ -117,9 +118,16 @@ export const getResizableContext = (
       visibilityMap = createMap(panes, VISIBILITY)
     }
     setVisibilities(visibilityMap)
+    detectionService(node, resizable)
   }
 
   const getIdToSizeMap = () => createMap(panesList, SIZE)
+
+  const setMouseDownFlag = (isMouseDown: boolean) => {
+    resizersList.forEach(({api}) => {
+      api.setMouseDownFlag(resizable.handleId, isMouseDown)
+    })
+  }
 
   const setMouseDownDetails = ([mouseCoordinate]: IResizableEvent, handleId: string) => {
     resizable.register({
@@ -127,8 +135,12 @@ export const getResizableContext = (
       direction: DIRECTIONS.NONE,
       axisCoordinate: mouseCoordinate
     })
+    console.log(handleId, mouseCoordinate)
+    setMouseDownFlag(true)
     syncAxisSizes()
   }
+
+  resizable.onMouseDown = setMouseDownDetails
 
   const clearflagsOnNewView = (except: IClearFlagsParam) => {
     if (except !== RATIO) {
@@ -163,6 +175,8 @@ export const getResizableContext = (
     emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
     emitResize()
   }
+
+  resizable.resizeOnMove = calculateAndSetHeight
 
   const setDirection = (mouseCoordinate: number, movement: number) => {
     const {direction} = resizable
@@ -211,7 +225,7 @@ export const getResizableContext = (
 
   const reflectVisibilityChange = () => {
     setUISizesFn(items, DIRECTIONS.NONE)
-    emitResizeStopAndStore()
+    afterResizeStop()
     emitChangeVisibility()
     onNewView(VISIBILITY)
   }
@@ -240,13 +254,17 @@ export const getResizableContext = (
 
   const onMoveEndFn = () => {
     fixPartialHiddenResizer(resizable)
-    emitResizeStopAndStore()
+    afterResizeStop()
+
+    setMouseDownFlag(false)
   }
+
+  resizable.onMouseUp = onMoveEndFn
 
   const restore = () => {
     restoreFn(resizable.items)
     onNewView()
-    emitResizeStopAndStore()
+    afterResizeStop()
     emitChangeVisibility()
     resizable.isViewSizeChanged = false
   }
@@ -264,7 +282,7 @@ export const getResizableContext = (
 
     setUISizesFn(items, DIRECTIONS.NONE)
     emitIfChangeInPartialHiddenState(panesList, emitChangeVisibility)
-    emitResizeStopAndStore()
+    afterResizeStop()
     onNewView(SET_SIZE)
   }
 
@@ -277,18 +295,17 @@ export const getResizableContext = (
     setSize
   }
 
-  return {
-    api,
-    onMoveEndFn,
-    registerItem,
-    registerContainer,
-    setMouseDownDetails,
-    vertical,
-    calculateAndSetHeight,
-    props,
-    resizable,
-    getPaneSizeStyle
-  }
+  resizable.register(
+    {
+      api,
+      registerItem,
+      registerContainer,
+      vertical,
+      props,
+      getPaneSizeStyle
+    }
+  )
+  return resizable
 }
 
 export const ResizablePaneContext = createContext({})

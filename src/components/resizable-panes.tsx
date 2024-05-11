@@ -9,7 +9,7 @@ export const ResizablePanes = (props: IResizablePaneProviderProps) => {
   const {children, className, unit, vertical, uniqueId} = props
   const {registerContainer}: any = useContext(ResizablePaneContext)
   const [containerRef]: any = useHookWithRefCallback(
-    node => registerContainer(() => node.getBoundingClientRect())
+    node => registerContainer(node)
   )
 
   const classname = getContainerClass(vertical, className, unit)

@@ -122,7 +122,7 @@ export const syncPaneRatioSizeToSize = (pane: PaneModel) => {
 export const restorePane = (pane: PaneModel) => {
   pane.size = pane.defaultSize
   restoreLimits(pane)
-  pane.visibility = pane.defaultVisibility
+  setPaneVisibility(pane, pane.defaultVisibility)
   pane.hiddenResizer = NONE
 }
 

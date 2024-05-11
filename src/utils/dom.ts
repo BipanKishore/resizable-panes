@@ -126,3 +126,11 @@ export const getSetResizerSize = (node: any, vertical: boolean,
     }
   }
 }
+
+export const addDOMEvent = (node: HTMLElement | Document, callBack: (e: any) => void, ...eventNames: string[]) => {
+  eventNames.forEach((eventName) => node.addEventListener(eventName, callBack))
+}
+
+export const removeDOMEvent = (node: HTMLElement | Document, callBack: (e: any) => void, ...eventNames: string[]) => {
+  eventNames.forEach((eventName) => node.removeEventListener(eventName, callBack))
+}

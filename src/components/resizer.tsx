@@ -1,80 +1,50 @@
 import React, {
   useState,
   useContext, useCallback,
-  isValidElement, cloneElement, useRef,
+  isValidElement, cloneElement,
   ReactElement
 } from 'react'
 import {ResizablePaneContext} from '../context/resizable-panes-context'
 import {
-  getResizableEvent,
-  getSetResizerSize, joinClassName
+  getSetSize, joinClassName
 } from '../utils/dom'
-import {findIndex, getResizerId, noop} from '../utils/util'
+import {findIndex, getResizerId} from '../utils/util'
 import {useHookWithRefCallback} from '../hook/useHookWithRefCallback'
 import {IResizer} from '../@types'
 
 export const Resizer = (props: IResizer) => {
-  const {
-    children,
-    id
-  } = props
-
+  const {children, id} = props
   const resizerId = getResizerId(id)
 
-  const context: any = useContext(ResizablePaneContext)
+  const resizable: any = useContext(ResizablePaneContext)
 
   const {
-    onMoveEndFn, resizable
-  } = context
-  const {panesList} = resizable
+    registerItem,
+    panesList
+  } = resizable
 
-  const {vertical, uniqueId, resizerSize, detectionSize, resizerClass, activeResizerClass} = context.props
+  const {
+    vertical,
+    resizerClass, activeResizerClass
+  } = resizable.props
 
   const index = findIndex(panesList, id)
   const isNotLastIndex = index < (panesList.length - 1)
-  const previousTouchEvent:any = useRef()
 
   const [isMouseDown, setIsMouseDown] = useState(false)
 
-  const onMouseMove = useCallback((e: any) => {
-    const resizableEvent = getResizableEvent(e, vertical, previousTouchEvent)
-    context.calculateAndSetHeight(resizableEvent)
-  }, [vertical, context])
-
-  const onMoveEnd = useCallback(() => {
-    document.removeEventListener('mousemove', onMouseMove)
-    document.removeEventListener('touchmove', onMouseMove)
-
-    onMoveEndFn()
-
-    setIsMouseDown(false)
-    document.removeEventListener('mouseup', onMoveEnd)
-    document.removeEventListener('touchend', onMoveEnd)
-  }, [uniqueId, onMouseMove, context])
-
-  const onMouseDown = useCallback((e: any) => {
-    setIsMouseDown(true)
-    const resizableEvent = getResizableEvent(e, vertical, previousTouchEvent)
-    context.setMouseDownDetails(resizableEvent, resizerId)
-    document.addEventListener('mousemove', onMouseMove)
-    document.addEventListener('touchmove', onMouseMove, {passive: false})
-    document.addEventListener('mouseup', onMoveEnd)
-    document.addEventListener('touchend', onMoveEnd)
-  }, [
-    context,
-    onMouseMove,
-    vertical,
-    resizerId,
-    onMoveEnd
-  ])
-
-  const isValidCustomResizer = isValidElement(children)
-  const onMouseDownElement = isValidCustomResizer ? noop : onMouseDown
+  const setMouseDownFlag = useCallback((id:string, isMouseDownFlag: boolean) => {
+    if (resizerId === id) {
+      setIsMouseDown(isMouseDownFlag)
+    }
+  }, [resizerId])
 
   const onNewRef = (node: any) => {
-    const setSize = getSetResizerSize(node, vertical, isValidCustomResizer, resizerSize, detectionSize)
-    context.registerItem({
-      setSize
+    const setSize = getSetSize(node, vertical)
+
+    registerItem({
+      setSize,
+      setMouseDownFlag
     }, resizerId)
   }
 
@@ -83,18 +53,14 @@ export const Resizer = (props: IResizer) => {
 
   const className = joinClassName({
     [activeResizerClass]: isMouseDown,
-    [resizerClass]: !isMouseDown,
-    resizer: true,
-    'resizer-horizontal': vertical,
-    'resizer-vertical': !vertical
-  }, children)
+    [resizerClass]: !isMouseDown
+  })
 
+  const isValidCustomResizer = isValidElement(children)
   let cloneChild: ReactElement
   if (isValidCustomResizer) {
     cloneChild = cloneElement(children as ReactElement, {
       ...children.props as object,
-      onMouseDown,
-      onTouchStartCapture: onMouseDown,
       isMouseDown,
       id: `${resizerId}`
 
@@ -107,8 +73,6 @@ export const Resizer = (props: IResizer) => {
         className={className}
         data-cy={resizerId}
         ref={setResizerRef}
-        onMouseDown={onMouseDownElement}
-        onTouchStartCapture={onMouseDownElement}
       >
         {cloneChild}
       </div>

@@ -1,6 +1,6 @@
 import {MouseEventHandler, ReactElement, ReactNode} from 'react'
 import {IKeyToBoolMap, IMapIdToSize} from './general-type'
-import {PaneModel, ResizableModel} from '../models'
+import {PaneModel} from '../models'
 import {
   UnitTypes,
   IHiddenResizer,
@@ -121,18 +121,4 @@ export interface IStoreModel {
   panes: IStoreResizableItemsModel[];
   resizers: IStoreResizableItemsModel[];
   containerSize?: number;
-}
-
-export interface IResizableContext {
-  api: any;
-  onMoveEndFn: any;
-  registerItem: (api: any, id: string) => void;
-  registerContainer: any;
-  setMouseDownDetails: any;
-  vertical: boolean | undefined;
-  calculateAndSetHeight: any;
-  props: IResizablePaneProviderProps;
-  resizable: ResizableModel;
-  getPaneSizeStyle: (id: string) => void;
-  // setVisibility: (param: IKeyToBoolMap) => void;
 }

@@ -58,3 +58,12 @@ export const RESIZE_HTML_EVENT = 'resize'
 export const MIN_SIZE_STATE = 'onMinSize'
 export const MAX_SIZE_STATE = 'onMaxSize'
 export const NORMAL_SIZE_STATE = 'onNormalSize'
+
+export const EVENT_NAMES = {
+  mouseup: 'mouseup',
+  mousemove: 'mousemove',
+  mousedown: 'mousedown',
+  touchmove: 'touchmove',
+  touchend: 'touchend',
+  touchStartCapture: 'touchStartCapture'
+}

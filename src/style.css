@@ -19,18 +19,18 @@
     margin: auto;
 }
 
-.resizer {
+/* .resizer {
     box-sizing: border-box;
     background-clip: padding-box;
-}
+} */
 
-.resizer-vertical {
+/* .resizer-vertical {
     cursor: row-resize;
-}
+} */
 
-.resizer-horizontal {
+/* .resizer-horizontal {
     cursor: col-resize;
-}
+} */
 
 .overflow-hidden {
     overflow: hidden;   
