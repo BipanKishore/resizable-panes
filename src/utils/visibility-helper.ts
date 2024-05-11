@@ -49,37 +49,29 @@ export const updateSizeInRatio = (
 export const setVisibilityFn = (resizable: ResizableModel, idMap: IKeyToBoolMap) => {
   const {panesList, items} = resizable
 
-  panesList.forEach((pane) => {
-    syncPaneToOldVisibilityModel(pane)
-    const {id} = pane
-    setPaneVisibility(pane, idMap[id])
-  })
-
-  const visiblePanes = getVisibleItems(panesList)
-  const currentPanesSize = getItemsSizeSum(visiblePanes)
-  const visibleItems = getVisibleItems(items)
-
-  if (currentPanesSize === 0) {
-    visibleItems.forEach((pane) => {
-      if (!pane.isHandle) {
-        pane.size = 1
-      }
-      // resizable.newVisibilityModel = true
-    })
-  }
-
-  console.log('v----------------------------')
   let first = -1
   for (let i = 0; i < items.length; i += 2) {
     const item = items[i]
+    syncPaneToOldVisibilityModel(item)
+    const {id} = item
+    setPaneVisibility(item, idMap[id])
+
     setPaneVisibility(items[i + 1], false)
     if (item.visibility) {
       if (first !== -1) {
         setPaneVisibility(items[i - 1], true)
-        console.log(items[i - 1].id)
       }
       first = i
     }
+  }
+
+  const visiblePanes = getVisibleItems(panesList)
+  const currentPanesSize = getItemsSizeSum(visiblePanes)
+
+  if (currentPanesSize === 0) {
+    visiblePanes.forEach((pane) => {
+      pane.size = 1
+    })
   }
 
   const {maxPaneSize} = getMaxContainerSizes(resizable)

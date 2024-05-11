@@ -31,27 +31,25 @@ export const setSizeTopAndBottom = (
   }
 
   const changeSizeOfFirstAndSecondInningsItems = () => {
-    if (sizeChange > 0) { // Need to reduce other
-      firstInningItems.forEach(getActionOnItem(CHANGE.REMOVE))
-      secondInningItems.forEach(getActionOnItem(CHANGE.REMOVE))
-    }
+    const orderList = [...firstInningItems, ...secondInningItems]
+    let action = CHANGE.REMOVE
 
-    if (sizeChange < 0) { // Need to increase other
+    if (sizeChange < 0) {
       sizeChange = Math.abs(sizeChange)
-
-      firstInningItems.forEach(getActionOnItem(CHANGE.ADD))
-      secondInningItems.forEach(getActionOnItem(CHANGE.ADD))
+      action = CHANGE.ADD
     }
+    orderList.forEach(getActionOnItem(action))
   }
 
   if (behavior === BUTTOM_FIRST) {
     firstInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
     secondInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
+    changeSizeOfFirstAndSecondInningsItems()
   } else if (behavior === TOP_FIRST) {
     firstInningItems = visibleItems.slice(0, requestIndexInVisibleItems - 1).reverse()
     secondInningItems = visibleItems.slice(requestIndexInVisibleItems + 2)
+    changeSizeOfFirstAndSecondInningsItems()
   }
-  changeSizeOfFirstAndSecondInningsItems()
 }
 
 // eslint-disable-next-line complexity
