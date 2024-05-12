@@ -235,9 +235,7 @@ export const getResizableContext = (
 
   resizable.onMouseUp = () => {
     afterResizeStop()
-
     setMouseDownFlag(false)
-    consoleGetSize(resizable.panesList)
   }
 
   const restore = () => {
