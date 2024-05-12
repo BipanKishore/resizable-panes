@@ -1,6 +1,7 @@
 import React from 'react'
 import {RCy} from '../utils'
 import {
+  _2PaneWithMinMax,
   noMinMax5PanesSet,
   withMinMaxAllPaneEqualSizeExcept15PanesSet,
   withMinMaxEqualSize5PanesSet
@@ -921,7 +922,7 @@ describe('setSizeRatio should work in TOP_FIRST & BUTTOM_FIRST', () => {
   -- to setSize to minimum space availiable using setSizeRatio
   `, () => {
     resizableApi.setSizeRatio(P1, 0, BUTTOM_FIRST)
-    rCy.checkWidths([193, 10, 182, 10, 193, 10, 193, 10, 193])
+    rCy.checkWidths([193, 10, 192, 10, 193, 10, 193, 10, 193])
   })
 })
 
@@ -973,6 +974,58 @@ describe('Zipping=false', () => {
         resizableApi.setVisibilities({P1: false})
         resizableApi.setVisibilities({P1: true})
         rCy.checkWidths([1000, 10, 0, 10, 0, 10, 0])
+      })
+  })
+})
+
+describe('Should make partial hidden visible with setSize', () => {
+  let resizableApi: IResizableApi
+  let onResizeStop: SinonSpy
+  let onChangeVisibility: SinonSpy
+
+  const rCy = new RCy({
+    resizerSize: 1,
+    detectionSize: 5,
+    len: 2
+  })
+  beforeEach(() => {
+    rCy.setViewPort()
+    onResizeStop = cy.spy()
+    onChangeVisibility = cy.spy()
+    cy.mount(
+      <RPTestWrapper
+        panesList={_2PaneWithMinMax}
+        resizerClass="bg-slate-500"
+        resizerSize={1}
+        // storageApi={localStorage}
+        uniqueId={rScontainerId}
+        vertical
+        onChangeVisibility={onChangeVisibility}
+        onReady={(api: IResizableApi) => {
+          resizableApi = api
+        }}
+        onResizeStop={onResizeStop}
+      >
+      </RPTestWrapper>
+    )
+  })
+
+  // Edge
+  it(`
+  -- Partially hide P2 moving R2 to R1
+  -- setSize P2 with 150 and BUTTOM_FIRST
+  -- should emit onResizeStop haveing P2 = 150
+  `, () => {
+    resizableApi.setSize(P0, 1000, BUTTOM_FIRST)
+
+    cy.wait(50)
+      .then(() => {
+        cy.viewport(400, 400)
+        cy.wait(50)
+          .then(() => {
+            resizableApi.setSize(P1, 1000, BUTTOM_FIRST)
+            rCy.checkWidths([73, 1, 293])
+          })
       })
   })
 })

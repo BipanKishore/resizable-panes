@@ -1,9 +1,9 @@
-import {IResizableItem} from '../@types'
-import {CHANGE} from '../constant'
+import {IClearFlagsParam, IResizableItem} from '../@types'
+import {CHANGE, RATIO, SET_SIZE, VISIBILITY} from '../constant'
 import {PaneModel, ResizableModel} from '../models'
 import {
   changePaneSize, getMaxDiff, getMinDiff,
-  resetMax, resetMin, syncPaneSizeToRatioSize, toRatioModePane
+  resetMax, resetMin, syncPaneRatioSizeToSize, syncPaneSizeToRatioSize, toRatioModePane
 } from '../models/pane'
 import {
   change1PixelToPanes, getMaxSizeSum, getMinSizeSum,
@@ -406,4 +406,17 @@ export const getChangeInViewSize = (resizable: ResizableModel) => {
   const {containerSize} = getMaxContainerSizes(resizable)
   const allItemsSum = getItemsSizeSum(items)
   return containerSize - allItemsSum
+}
+
+export const clearflagsOnNewView = (resizable: ResizableModel, except?: IClearFlagsParam) => {
+  const {panesList} = resizable
+  if (except !== RATIO) {
+    panesList.forEach(syncPaneRatioSizeToSize)
+  }
+  if (except !== VISIBILITY) {
+    resizable.newVisibilityModel = false
+  }
+  if (except !== SET_SIZE) {
+    resizable.setSizeKey = null
+  }
 }

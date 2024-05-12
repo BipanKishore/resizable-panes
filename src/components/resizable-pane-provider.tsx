@@ -7,7 +7,7 @@ import {ResizablePanes} from './resizable-panes'
 import {deleteUndefined, noop} from '../utils/util'
 import {IResizablePaneProviderProps} from '../@types'
 import {RATIO, RESIZE_HTML_EVENT} from '../constant'
-import {toRatioModeAllPanes} from '../utils/resizable-pane'
+import {clearflagsOnNewView, toRatioModeAllPanes} from '../utils/resizable-pane'
 import {attachDetectionCoordinate} from '../services/detection-service'
 import {addDOMEvent, removeDOMEvent} from '../utils/dom'
 
@@ -50,6 +50,7 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
       if (unit === RATIO) {
         toRatioModeAllPanes(resizable, true)
         attachDetectionCoordinate(resizable)
+        clearflagsOnNewView(resizable)
       }
     }
     addDOMEvent(window, onResize, RESIZE_HTML_EVENT)
