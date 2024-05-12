@@ -46,6 +46,7 @@ import {
   synSizeToMaxSize, synSizeToMinSize
 } from '../models/pane'
 import {attachDetectionCoordinate, detectionService} from '../services/detection-service'
+import {consoleGetSize} from '../utils/development-util'
 
 export const getResizableContext = (
   props: IResizablePaneProviderProps
@@ -241,7 +242,7 @@ export const getResizableContext = (
     afterResizeStop()
 
     setMouseDownFlag(false)
-    // consoleGetSize(resizable.panesList)
+    consoleGetSize(resizable.panesList)
   }
 
   resizable.onMouseUp = onMoveEndFn
