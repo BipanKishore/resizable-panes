@@ -2,6 +2,7 @@ name: Cypress Cloud
 on:
   schedule:
   - cron: "0 0 * * THU"
+  workflow_dispatch:  
 
 jobs:
   cypress-run:

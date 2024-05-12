@@ -25,7 +25,8 @@ import {
   setCurrentMinMax,
   toRatioModeAllPanes,
   getChangeInViewSize,
-  getMaxContainerSizes
+  getMaxContainerSizes,
+  clearflagsOnNewView
 } from '../utils/resizable-pane'
 import {getDirection, getSizeStyle, toArray} from '../utils/dom'
 import {ResizeStorage, setStorage} from '../utils/storage'
@@ -42,9 +43,10 @@ import {setVisibilityFn} from '../utils/visibility-helper'
 import {setSizeMethod} from '../utils/set-size-helper'
 import {
   getSize, registerResizableItem, setPaneOldVisibilityModel,
-  synSizeToMaxSize, synSizeToMinSize, syncPaneRatioSizeToSize
+  synSizeToMaxSize, synSizeToMinSize
 } from '../models/pane'
 import {attachDetectionCoordinate, detectionService} from '../services/detection-service'
+import {consoleGetSize} from '../utils/development-util'
 
 export const getResizableContext = (
   props: IResizablePaneProviderProps
@@ -76,6 +78,7 @@ export const getResizableContext = (
   const [panesList, resizersList] = getPanesAndResizers(items)
 
   const resizable = new ResizableModel()
+
   resizable.register({
     vertical,
     items,
@@ -84,10 +87,12 @@ export const getResizableContext = (
   })
 
   const syncAxisSizes = () => syncAxisSizesFn(items)
+
   const emitResize = () => {
     const resizeParams = getIdToSizeMap()
     onResize(resizeParams)
   }
+
   const afterResizeStop = () => {
     const resizeParams = getIdToSizeMap()
     onResizeStop(resizeParams)
@@ -139,20 +144,8 @@ export const getResizableContext = (
 
   resizable.onMouseDown = setMouseDownDetails
 
-  const clearflagsOnNewView = (except: IClearFlagsParam) => {
-    if (except !== RATIO) {
-      panesList.forEach(syncPaneRatioSizeToSize)
-    }
-    if (except !== VISIBILITY) {
-      resizable.newVisibilityModel = false
-    }
-    if (except !== SET_SIZE) {
-      resizable.setSizeKey = null
-    }
-  }
-
   const onNewView = (except: IClearFlagsParam = '') => {
-    clearflagsOnNewView(except)
+    clearflagsOnNewView(resizable, except)
     updatSizeStateAllPanes(panesList)
   }
 
@@ -249,6 +242,7 @@ export const getResizableContext = (
     afterResizeStop()
 
     setMouseDownFlag(false)
+    consoleGetSize(resizable.panesList)
   }
 
   resizable.onMouseUp = onMoveEndFn
@@ -261,8 +255,7 @@ export const getResizableContext = (
     resizable.isViewSizeChanged = false
   }
 
-  const getState = () =>
-    createMap(panesList, SIZE, VISIBILITY, DEFAULT_MIN_SIZE_KEY, DEFAULT_MAX_SIZE_KEY)
+  const getState = () => createMap(panesList, SIZE, VISIBILITY, DEFAULT_MIN_SIZE_KEY, DEFAULT_MAX_SIZE_KEY)
   const getVisibilities = () => getVisibilityState()
 
   const postSetSize = () => {

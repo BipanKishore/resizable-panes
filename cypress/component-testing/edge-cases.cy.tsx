@@ -1,9 +1,6 @@
 import React from 'react'
 import {ENUMS, TestComponentWrapper} from '../components/test-component-wrapper'
 import {RCy} from '../utils'
-import {Pane} from '../../src'
-import {CustomResizerFirst} from '../components/custom-resizer'
-import {RPTestWrapper} from '../components/rp-test-wrapper'
 import {R2, CK4, R3, R1, CK0, R0} from './fix-test-ids'
 
 const containerId = ENUMS.resizablePanesId
@@ -89,51 +86,4 @@ describe('Overlapping Resizers', () => {
   //     }
   //   })
   // })
-})
-
-describe.skip('', () => {
-  beforeEach(() => {
-    rCy.setViewPort()
-    cy.mount(
-      <div className='h-300 w-100p' >
-        <RPTestWrapper
-          resizer={ <CustomResizerFirst size={10} />}
-          uniqueId='Min-Max-2'
-          vertical
-
-        >
-
-          <Pane
-            className='bg-red-500' id='P0' maxSize={450}
-            minSize={100}
-            size={280}
-          >
-            P0
-          </Pane>
-
-          <Pane
-            className='bg-orange-500' id='P1' maxSize={400}
-            minSize={100}
-            size={335}
-          >
-            P1
-          </Pane>
-
-          <Pane
-            className='bg-lime-500' id='P2'
-            maxSize={500}
-            minSize={150}
-            size={280}
-          >
-            P2
-          </Pane>
-
-        </RPTestWrapper>
-      </div>
-    )
-  })
-
-  it('should check initial size', () => {
-
-  })
 })

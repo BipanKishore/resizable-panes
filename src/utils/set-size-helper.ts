@@ -53,7 +53,8 @@ export const setSizeTopAndBottom = (
 }
 
 // eslint-disable-next-line complexity
-export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: number,
+export const setSizeMethod = (
+  resizable: ResizableModel, id: string, newSize: number,
   behavior: ISetSizeBehaviour = RATIO, isSecondAttemp = false) => {
   const {panesList, items} = resizable
 
@@ -99,7 +100,7 @@ export const setSizeMethod = (resizable: ResizableModel, id: string, newSize: nu
 
   if (!isSecondAttemp) {
     const changeInView = getChangeInViewSize(resizable)
-    const allowedChange = newSize + changeInView
+    const allowedChange = acceptableNewSize + changeInView
     setSizeMethod(resizable, id, allowedChange, behavior, true)
   }
 }

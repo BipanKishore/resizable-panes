@@ -1,7 +1,7 @@
 import React from 'react'
 import {RCy} from '../utils'
 import {
-  noMinMax5PanesSet,
+  _2PaneWithMinMax,
   withMinMaxAllPaneEqualSizeExcept15PanesSet,
   withMinMaxEqualSize5PanesSet
 } from './pane-model-config-sets'
@@ -457,78 +457,6 @@ describe('Plain resizer:API: Method setSize', () => {
   })
 })
 
-describe.skip('PartialHidden:Plain resizer:API: Method setSize', () => {
-  const rCy = new RCy({
-    resizerSize: 10,
-    containerId: rScontainerId,
-    len: 5
-  })
-  let resizableApi
-
-  beforeEach(() => {
-    rCy.setViewPort()
-    cy.mount(
-      <div className="h-300 w-100p">
-        <ResizablePanes
-          resizer={<CustomResizerFirst horizontal={false} size={10} />}
-          resizerSize={10}
-          storageApi={localStorage}
-          uniqueId={rScontainerId}
-          vertical
-          onReady={(api: IResizableApi) => {
-            resizableApi = api
-          }}
-        >
-          <Pane className="bg-cyan-500" id={P0} size={1}>
-            P0
-          </Pane>
-
-          <Pane className="bg-red-500" id={P1} maxSize={5} size={3}>
-            P1
-          </Pane>
-          <Pane className="bg-orange-500" id={P2} maxSize={4} size={2}>
-            P2
-          </Pane>
-
-          <Pane className="bg-red-500" id={P3} maxSize={5} size={3}>
-            P3
-          </Pane>
-
-          <Pane className="bg-amber-500" id={P4} size={1}>
-            P4
-          </Pane>
-        </ResizablePanes>
-      </div>
-    )
-    cy.wait(50)
-  })
-
-  it('Move R3 to R0, should setSize of First Pane to 500', () => {
-    rCy.move(R3, R0, 'left')
-
-    resizableApi.setSize(P0, 500)
-    rCy.checkWidths([500, 0, 0, 0, 0, 0, 0, 10, 530])
-  })
-
-  it('setting P2 to 500 Result it should set P2 to only max allowed ie 400', () => {
-    rCy.move(R3, R1, 'left')
-    cy.wait(50).then(() => {
-      resizableApi.setSize(P2, 500)
-    })
-
-    rCy.checkWidths([60, 10, 179, 10, 400, 0, 0, 10, 371])
-  })
-
-  it('setting P2 to 10 Result it should set P2 to only min allowed ie 50', () => {
-    rCy.move(R1, R3, 'left')
-    cy.wait(50).then(() => {
-      resizableApi.setSize(P2, 10)
-    })
-
-    rCy.checkWidths([402, 10, 490, 10, 10, 10, 0, 10, 98])
-  })
-})
-
 describe('Storage api', () => {
   const rCy = new RCy({
     resizerSize: 1,
@@ -556,138 +484,6 @@ describe('Storage api', () => {
     rCy.cyGet(CK4).click()
 
     rCy.move(R2, rScontainerId, 'left')
-  })
-})
-
-describe.skip('Should make partial hidden visible with setSize', () => {
-  let resizableApi: IResizableApi
-  let onResizeStop: SinonSpy
-  let onChangeVisibility: SinonSpy
-
-  const rCy = new RCy({
-    resizerSize: 1,
-    detectionSize: 5
-  })
-  beforeEach(() => {
-    rCy.setViewPort()
-    onResizeStop = cy.spy()
-    onChangeVisibility = cy.spy()
-    cy.mount(
-      <RPTestWrapper
-        panesList={noMinMax5PanesSet}
-        resizer={<CustomResizerFirst horizontal={false} size={10} />}
-        resizerClass="bg-slate-500"
-        resizerSize={10}
-        storageApi={localStorage}
-        uniqueId={rScontainerId}
-        vertical
-        onChangeVisibility={onChangeVisibility}
-        onReady={(api: IResizableApi) => {
-          resizableApi = api
-        }}
-        onResizeStop={onResizeStop}
-      >
-      </RPTestWrapper>
-    )
-  })
-
-  // Edge
-  it(`
-  -- Partially hide P2 moving R2 to R1
-  -- setSize P2 with 150 and BUTTOM_FIRST
-  -- should emit onResizeStop haveing P2 = 150
-  `, () => {
-    rCy.move(R2, R1, 'left')
-    cy.wait(50)
-      .then(() => {
-        resizableApi.setSize(P2, 150, BUTTOM_FIRST)
-        expect(onResizeStop.getCalls()[2].lastArg).to.deep.equal(
-          {P0: 97, P1: 289, P2: 150, P3: 332, P4: 96}
-        )
-      })
-  })
-
-  // Edge
-  it(`
-    -- Partially hide P2 moving R1 to R2
-    -- setSize P2 with 150 and BUTTOM_FIRST
-    -- should emit onResizeStop haveing P2 = 150
-    `, () => {
-    rCy.move(R2, R1, 'left')
-    cy.wait(50)
-      .then(() => {
-        resizableApi.setSize(P2, 150, BUTTOM_FIRST)
-        console.log(onResizeStop.getCalls()[2].lastArg)
-        expect(onResizeStop.getCalls()[2].lastArg).to.deep.equal(
-          {P0: 97, P1: 289, P2: 150, P3: 332, P4: 96}
-        )
-      })
-  })
-
-  // Edge
-  it(`
-    -- Partially hide P2 moving R1 to R2
-    -- setSize P2 with 150 and TOP_FIRST
-    -- should emit onResizeStop haveing P2 = 150
-    `, () => {
-    rCy.move(R2, R1, 'left')
-    cy.wait(50)
-      .then(() => {
-        resizableApi.setSize(P2, 150, TOP_FIRST)
-        console.log(onResizeStop.getCalls()[2].lastArg)
-        expect(onResizeStop.getCalls()[2].lastArg).to.deep.equal(
-          {P0: 97, P1: 129, P2: 150, P3: 492, P4: 96}
-        )
-      })
-  })
-
-  // Edge
-  it(`
-    -- Partially hide P2 moving R2 to R1
-    -- setSize P2 with 150 and TOP_FIRST
-    -- should emit onResizeStop haveing P2 = 150
-    `, () => {
-    rCy.move(R1, R2, 'left')
-    cy.wait(50)
-      .then(() => {
-        resizableApi.setSize(P2, 150, TOP_FIRST)
-        console.log(onResizeStop.getCalls()[2].lastArg)
-        expect(onResizeStop.getCalls()[2].lastArg).to.deep.equal(
-          {P0: 97, P1: 332, P2: 150, P3: 289, P4: 96}
-        )
-      })
-  })
-
-  // Edge
-  it(`
-    -- Partially hide last Pane moving last Resizer to right
-    -- setSize last Pane with 150 and BUTTOM_FIRST
-    -- should emit onChangeVisibility haveing P4 = visible
-    -- should emit onResizeStop haveing P4 = 150
-    `, () => {
-    rCy.move(R3, containerId, 'right')
-    cy.wait(50)
-      .then(() => {
-        resizableApi.setSize(P4, 150, BUTTOM_FIRST)
-        expect(onChangeVisibility.getCalls()[2].lastArg).to.deep.equal(
-          {P0: 'visible', P1: 'visible', P2: 'visible', P3: 'visible', P4: 'visible'}
-        )
-        expect(onResizeStop.getCalls()[2].lastArg).to.deep.equal(
-          {P0: 97, P1: 289, P2: 193, P3: 235, P4: 150}
-        )
-      })
-  })
-
-  // Edge Edge
-  it('Should make partial hidden visible with setSize test', () => {
-    rCy.move(R0, containerId, 'right')
-    cy.wait(50).then(() => {
-      resizableApi.setSize(P4, 100)
-      resizableApi.setSize(P3, 100)
-      resizableApi.setSize(P2, 100)
-      resizableApi.setSize(P1, 100)
-      rCy.checkWidths([626, 10, 100, 10, 89, 10, 79, 10, 70])
-    })
   })
 })
 
@@ -921,7 +717,7 @@ describe('setSizeRatio should work in TOP_FIRST & BUTTOM_FIRST', () => {
   -- to setSize to minimum space availiable using setSizeRatio
   `, () => {
     resizableApi.setSizeRatio(P1, 0, BUTTOM_FIRST)
-    rCy.checkWidths([193, 10, 182, 10, 193, 10, 193, 10, 193])
+    rCy.checkWidths([193, 10, 192, 10, 193, 10, 193, 10, 193])
   })
 })
 
@@ -973,6 +769,58 @@ describe('Zipping=false', () => {
         resizableApi.setVisibilities({P1: false})
         resizableApi.setVisibilities({P1: true})
         rCy.checkWidths([1000, 10, 0, 10, 0, 10, 0])
+      })
+  })
+})
+
+describe('Should make partial hidden visible with setSize', () => {
+  let resizableApi: IResizableApi
+  let onResizeStop: SinonSpy
+  let onChangeVisibility: SinonSpy
+
+  const rCy = new RCy({
+    resizerSize: 1,
+    detectionSize: 5,
+    len: 2
+  })
+  beforeEach(() => {
+    rCy.setViewPort()
+    onResizeStop = cy.spy()
+    onChangeVisibility = cy.spy()
+    cy.mount(
+      <RPTestWrapper
+        panesList={_2PaneWithMinMax}
+        resizerClass="bg-slate-500"
+        resizerSize={1}
+        // storageApi={localStorage}
+        uniqueId={rScontainerId}
+        vertical
+        onChangeVisibility={onChangeVisibility}
+        onReady={(api: IResizableApi) => {
+          resizableApi = api
+        }}
+        onResizeStop={onResizeStop}
+      >
+      </RPTestWrapper>
+    )
+  })
+
+  // Edge
+  it(`
+  -- Partially hide P2 moving R2 to R1
+  -- setSize P2 with 150 and BUTTOM_FIRST
+  -- should emit onResizeStop haveing P2 = 150
+  `, () => {
+    resizableApi.setSize(P0, 1000, BUTTOM_FIRST)
+
+    cy.wait(50)
+      .then(() => {
+        cy.viewport(500, 500)
+        cy.wait(50)
+          .then(() => {
+            resizableApi.setSize(P1, 1000, BUTTOM_FIRST)
+            rCy.checkWidths([97, 1, 386])
+          })
       })
   })
 })
