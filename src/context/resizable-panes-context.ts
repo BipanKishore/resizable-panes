@@ -45,7 +45,6 @@ import {
   synSizeToMaxSize, synSizeToMinSize, syncPaneRatioSizeToSize
 } from '../models/pane'
 import {attachDetectionCoordinate, detectionService} from '../services/detection-service'
-import {consoleGetSize} from '../utils/development-util'
 
 export const getResizableContext = (
   props: IResizablePaneProviderProps
@@ -134,7 +133,6 @@ export const getResizableContext = (
       direction: DIRECTIONS.NONE,
       axisCoordinate: mouseCoordinate
     })
-    console.log(handleId, mouseCoordinate)
     setMouseDownFlag(true)
     syncAxisSizes()
   }
@@ -251,7 +249,6 @@ export const getResizableContext = (
     afterResizeStop()
 
     setMouseDownFlag(false)
-    consoleGetSize(resizable.items)
   }
 
   resizable.onMouseUp = onMoveEndFn
