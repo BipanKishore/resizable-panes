@@ -76,7 +76,8 @@ function App() {
 | className          | string             |         | false               | It will get attached to ResizablePanes container element.                                                                                                         |
 | vertical           | boolean            | false   | false               | It sets the orientation of Panes.                                                                                                                                 |
 | unit               | 'ratio' or 'pixel' | ratio   | false               | It sets the unit of size of panes.                                                                                                                                |
-| minMaxUnit         | 'ratio' or 'pixel' | ratio   | false               | It sets the unit of minSize and maxSize of panes.                                                                                                                 |
+| minMaxUnit         | 'ratio' or 'pixel' | Same value as of unit props   | false               | It sets the unit of minSize and maxSize of panes.                                                                                                                 |
+| detectionRadius    | number             |  6      | false               | It create the extra margin on both side for handle/resizer detection.  |
 | visibility         | Object             |         | false               | It accepts a boolean map of Pane Ids visibility.                                                                                                                  |
 | storageApi         | Object             |         | false               | It used to store data across session. It can be localStorage, sessionStorage or any other following the interface of localStorage.                                |
 | resizerClass       | string             |         | false               | It gets applied to the main resizer element in normal state.                                                                                                      |
@@ -103,6 +104,7 @@ function App() {
 | minSize       | number       | 0        | false               | The minimum size limit of the Pane.                                                                      |
 | resizer       | ReactElement |          | false               | It will replace the in build resizer of Pane.                                                            |
 | resizerSize   | number       |          | Optionally required | It is the size of attached Resizer Element. It is required when we have passed resizer prop to the Pane. |
+| detectionRadius    | number  |  6      | false     | Works at individual Pane level.  |
 | onMinSize       | (id: string, minSize:number) => void       |         | false               | It emits when it enters min size of the Pane. |
 | onMaxSize       | (id: string, maxSize:number) => void       |         | false               | It emits when it enters max size of the Pane. |
 | onNormalSize    | (id: string) => void       |         | false               | It emits when it enters normal size of the Pane. |
@@ -112,7 +114,8 @@ function App() {
 | Method          | Params                                                       | Description                                                                                                                              |
 | --------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | restore  |                                                              | It restores the default view of layout.                                                                                                  |
-| setSize         | (paneId: string, size: number, <br /> behaviour: ISetSizeBehaviour) | It excepts the positive number. It sets the size of Pane depending upon: <br /> 1. Its min and max. <br />2. min and max of other panes.|
+| setSize         | (paneId: string, size: number, <br /> behaviour: ISetSizeBehaviour) | It excepts the positive number. It sets the size of Pane depending upon: <br /> 1. Its min and max. <br />2. Min and max of other panes.|
+| setSizeRatio         | (paneId: string, size: number, <br /> behaviour: ISetSizeBehaviour) | Pass value 0 to 1. It will automatically covert it percent in Pixel. <br /> 1 corresponds to the sum of size of visible Panes.|
 | setVisibilities   | Object                                                       | It sets the visibility of Panes using the Boolean map of id of Panes.                                                                    |
 | getSizes        |                                                              | It returns the size map object of Ids of Panes                                                                                           |
 | getVisibilities |                                                              | It returns the visibility map object of Ids of Panes                                                                                     |
@@ -122,33 +125,25 @@ function App() {
 
 | Prop                | Type     | Default | Required | Description                                                                                                                |
 | ------------------- | -------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
-| onMouseDown         | function |         |          | Attached it to the element that, upon being clicked and dragged, initiates the resizing of the Pane's size.                |
-| onTouchStartCapture |          |         |          | Attached it to the element that, upon being clicked and dragged, initiates the resizing of the Pane's size.(Touch devices) |
 | isMouseDown         | boolean  |         |          | Use it style you Custom resizer element behavior.                                                                          |
 
 ```tsx
 
 interface ICustomResizerProp {
-    onMouseDown: (e: HTMLEvent) => void,
     isMouseDown: boolean,
-    onTouchStartCapture: (e: HTMLEvent) => void
   }
 
 
 export const CustomResizer = ({
-    onMouseDown,
-    isMouseDown, 
-    onTouchStartCapture
+    isMouseDown
 }: ICustomResizerProp) => {
 
  // isMouseDown: use it to style the elements
 
   return (
     <SOME_ELEMENT>
-      <TARGET_ELEMENT
-        onMouseDown={onMouseDown}
-        onTouchStartCapture={onTouchStartCapture}
-      >
+      <TARGET_ELEMENT>
+
       </TARGET_ELEMENT>
     </SOME_ELEMENT>
   )
