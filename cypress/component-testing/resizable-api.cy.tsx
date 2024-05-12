@@ -2,7 +2,6 @@ import React from 'react'
 import {RCy} from '../utils'
 import {
   _2PaneWithMinMax,
-  noMinMax5PanesSet,
   withMinMaxAllPaneEqualSizeExcept15PanesSet,
   withMinMaxEqualSize5PanesSet
 } from './pane-model-config-sets'
@@ -816,11 +815,11 @@ describe('Should make partial hidden visible with setSize', () => {
 
     cy.wait(50)
       .then(() => {
-        cy.viewport(400, 400)
+        cy.viewport(500, 500)
         cy.wait(50)
           .then(() => {
             resizableApi.setSize(P1, 1000, BUTTOM_FIRST)
-            rCy.checkWidths([73, 1, 293])
+            rCy.checkWidths([97, 1, 386])
           })
       })
   })
