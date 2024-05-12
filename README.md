@@ -3,7 +3,7 @@
 [![resizable-panes-react](https://github.com/BipanKishore/resizable-panes-react/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/BipanKishore/resizable-panes-react/actions/workflows/build.yml) ![nycrc config on GitHub](https://img.shields.io/nycrc/BipanKishore/resizable-panes-react)
 [![NPM Version](https://img.shields.io/npm/v/resizable-panes-react)](https://www.npmjs.com/package/resizable-panes-react) [![npm bundle size](https://img.shields.io/bundlephobia/minzip/resizable-panes-react)](https://www.npmjs.com/package/resizable-panes-react) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=BipanKishore_resizable-panes-react&branch=master&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=BipanKishore_resizable-panes-react)
 
-[Cypress Recoreded tests are available here](https://cloud.cypress.io/projects/2xc7po/branches/master/overview)
+<!-- [Cypress Recoreded tests are available here](https://cloud.cypress.io/projects/2xc7po/branches/master/overview) -->
 
 ## [Quick Demo](https://bipankishore.github.io/resizable-panes/)
 
