@@ -46,7 +46,6 @@ import {
   synSizeToMaxSize, synSizeToMinSize
 } from '../models/pane'
 import {attachDetectionCoordinate} from '../services/detection-service'
-import {consoleGetSize} from '../utils/development-util'
 
 export const getResizableContext = (
   props: IResizablePaneProviderProps

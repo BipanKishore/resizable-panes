@@ -20,6 +20,10 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+        
+    - name: Patch
+      run: | 
+          npm version patch
 
     - name: Install
       run: |
@@ -40,10 +44,6 @@ jobs:
     - name: Check Coverage
       run: |
         npm run coverage
-    
-    - name: Patch
-      run: | 
-        npm version patch
 
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@master
