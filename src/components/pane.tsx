@@ -52,7 +52,6 @@ export const Pane = (props: IPane) => {
       <div
         className={classname}
         data-cy={id}
-        key={id}
         ref={setPaneRef}
         style={style}
       >

@@ -39,5 +39,5 @@ export const EVENT_NAMES = {
   mousedown: 'mousedown',
   touchmove: 'touchmove',
   touchend: 'touchend',
-  touchStartCapture: 'touchStartCapture'
+  touchstart: 'touchstart'
 }

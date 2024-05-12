@@ -1,6 +1,6 @@
 import {ResizableModel} from '../models'
 import {getSize} from '../models/pane'
-import {addDOMEvent, getResizableEvent, removeDOMEvent} from '../utils/dom'
+import {addDOMEvent, addDOMEventPassive, getResizableEvent, removeDOMEvent} from '../utils/dom'
 import {getVisibleItems} from '../utils/panes'
 
 import throttle from 'throttleit'
@@ -38,7 +38,7 @@ const getMouseDownOnHandle = (
   registerResizeEvent: any) => (e: any) => {
   const {detectionDetails} = resizable
 
-  const cursorCoordinate = vertical ? e.clientX : e.clientY
+  const [cursorCoordinate] = getResizableEvent(e, vertical, {})
 
   const resizerClickedCoordinateList = detectionDetails.map(([x1, x2]) => {
     const coordinates = Math.abs(((x1 + x2) / 2) - cursorCoordinate)
@@ -85,7 +85,7 @@ export const detectionService = (containerNode: HTMLElement, resizable: Resizabl
 
   const onGlobalMouseMoveDebounce = throttle(onContainerMouseMove(containerNode, resizable, vertical, cursorStyle), 100)
 
-  addDOMEvent(containerNode, onGlobalMouseMoveDebounce, EVENT_NAMES.mousemove)
+  addDOMEventPassive(containerNode, onGlobalMouseMoveDebounce, EVENT_NAMES.mousemove)
   document.addEventListener(EVENT_NAMES.touchmove, onGlobalMouseMoveDebounce, {passive: false})
 
   const resize = getResize(resizable, vertical)
@@ -102,7 +102,8 @@ export const detectionService = (containerNode: HTMLElement, resizable: Resizabl
 
   const onMouseDownOnHandle = getMouseDownOnHandle(resizable, vertical, registerResizeEvent)
 
-  addDOMEvent(containerNode, onMouseDownOnHandle, EVENT_NAMES.mousedown, EVENT_NAMES.touchStartCapture)
+  addDOMEvent(containerNode, onMouseDownOnHandle, EVENT_NAMES.mousedown)
+  addDOMEventPassive(containerNode, onMouseDownOnHandle, EVENT_NAMES.touchstart)
 
   addDOMEvent(document, clearResizeEvent, EVENT_NAMES.mouseup, EVENT_NAMES.touchend)
 }

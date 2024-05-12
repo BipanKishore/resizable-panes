@@ -74,6 +74,11 @@ export const addDOMEvent = (node: HTMLElement | Document | Window,
   eventNames.forEach((eventName) => node.addEventListener(eventName, callBack))
 }
 
+export const addDOMEventPassive = (node: HTMLElement | Document | Window,
+  callBack: (e: any) => void, eventName: string) => {
+  node.addEventListener(eventName, callBack, {passive: false})
+}
+
 export const removeDOMEvent = (node: HTMLElement | Document | Window,
   callBack: (e: any) => void, ...eventNames: string[]) => {
   eventNames.forEach((eventName) => node.removeEventListener(eventName, callBack))
