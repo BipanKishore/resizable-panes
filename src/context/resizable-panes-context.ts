@@ -45,7 +45,7 @@ import {
   getSize, registerResizableItem, setPaneOldVisibilityModel,
   synSizeToMaxSize, synSizeToMinSize
 } from '../models/pane'
-import {attachDetectionCoordinate, detectionService} from '../services/detection-service'
+import {attachDetectionCoordinate} from '../services/detection-service'
 import {consoleGetSize} from '../utils/development-util'
 
 export const getResizableContext = (
@@ -120,7 +120,6 @@ export const getResizableContext = (
       visibilityMap = createMap(panes, VISIBILITY)
     }
     setVisibilities(visibilityMap)
-    detectionService(node, resizable)
   }
 
   const getIdToSizeMap = () => createMap(panesList, SIZE)
@@ -132,7 +131,7 @@ export const getResizableContext = (
     })
   }
 
-  const setMouseDownDetails = ([mouseCoordinate]: IResizableEvent, handleId: string) => {
+  resizable.onMouseDown = ([mouseCoordinate]: IResizableEvent, handleId: string) => {
     resizable.register({
       handleId,
       direction: DIRECTIONS.NONE,
@@ -142,14 +141,12 @@ export const getResizableContext = (
     syncAxisSizes()
   }
 
-  resizable.onMouseDown = setMouseDownDetails
-
   const onNewView = (except: IClearFlagsParam = '') => {
     clearflagsOnNewView(resizable, except)
     updatSizeStateAllPanes(panesList)
   }
 
-  const calculateAndSetHeight = ([mouseCoordinate, movement]: IResizableEvent) => {
+  resizable.onMoveResize = ([mouseCoordinate, movement]: IResizableEvent) => {
     if (resizable.isViewSizeChanged || !movement) {
       return
     }
@@ -164,8 +161,6 @@ export const getResizableContext = (
     onNewView()
     emitResize()
   }
-
-  resizable.resizeOnMove = calculateAndSetHeight
 
   const setDirection = (mouseCoordinate: number, movement: number) => {
     const {direction} = resizable
@@ -238,14 +233,12 @@ export const getResizableContext = (
     reflectVisibilityChange()
   }
 
-  const onMoveEndFn = () => {
+  resizable.onMouseUp = () => {
     afterResizeStop()
 
     setMouseDownFlag(false)
     consoleGetSize(resizable.panesList)
   }
-
-  resizable.onMouseUp = onMoveEndFn
 
   const restore = () => {
     restoreFn(resizable.items)

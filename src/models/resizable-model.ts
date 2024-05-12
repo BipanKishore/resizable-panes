@@ -32,7 +32,7 @@ export class ResizableModel {
   previousTouchEvent: any
   detectionDetails: [number, number, string][]
   onMouseDown: ([mouseCoordinate]: IResizableEvent, handleId: string) => void
-  resizeOnMove: ([mouseCoordinate, movement]: IResizableEvent) => void
+  onMoveResize: ([mouseCoordinate, movement]: IResizableEvent) => void
   onMouseUp: () => void
 
   api: IResizableApi
