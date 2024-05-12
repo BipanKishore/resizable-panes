@@ -806,7 +806,7 @@ describe('Should make partial hidden visible with setSize', () => {
   })
 
   // Edge
-  it.only(`
+  it(`
   -- Partially hide P2 moving R2 to R1
   -- setSize P2 with 150 and BUTTOM_FIRST
   -- should emit onResizeStop haveing P2 = 150
