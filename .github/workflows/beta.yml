@@ -1,4 +1,4 @@
-name: Build
+name: Launch Beta
 
 on:
   workflow_dispatch:
@@ -31,7 +31,7 @@ jobs:
 
     - name: Build
       run: |
-        npm run prod
+        npm run build
 
     - name: Component Testing
       run: |
@@ -40,6 +40,10 @@ jobs:
     - name: Check Coverage
       run: |
         npm run coverage
+    
+    - name: Patch
+      run: | 
+        npm version patch
 
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@master
