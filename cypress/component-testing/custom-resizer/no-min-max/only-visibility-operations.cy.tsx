@@ -332,50 +332,6 @@ describe('Test Visibility for 2 panes', () => {
   })
 })
 
-// Partially hidden case
-describe.skip('Test Visibility for 5 panes', () => {
-  const rCy = new RCy({
-    resizerSize: 10,
-    containerId: rScontainerId,
-    len: 5
-  })
-
-  beforeEach(() => {
-    rCy.setViewPort()
-    cy.mount(
-      <RPTestWrapper
-        panesList={noMinMax5PanesSet}
-        resizer={
-          <CustomResizerFirst size={10} />
-        }
-        resizerClass='bg-slate-500'
-        resizerSize={10}
-        storageApi={localStorage}
-        uniqueId={rScontainerId}
-        vertical
-      >
-      </RPTestWrapper>
-    )
-  })
-
-  // Edge
-  it(`
-  -- 1st Partially hide P2, P3, P4 (One Half)
-  -- Hide P0, 01 (Other Half)
-  -- Result It should make visible Partially hidden panes
-  -- 2nd Show P0, and P1
-  -- Partially hidden should hide again`, () => {
-    rCy.move(R1, rScontainerId, 'right')
-    rCy.cyGet(CK0).click()
-    rCy.cyGet(CK1).click()
-
-    rCy.checkWidths([0, 0, 0, 0, 340, 10, 340, 10, 340])
-    rCy.cyGet(CK0).click()
-    rCy.cyGet(CK1).click()
-    rCy.checkWidths([100, 10, 920, 10, 0, 0, 0, 0, 0])
-  })
-})
-
 // https://github.com/BipanKishore/resizable-panes-react/pull/64
 // describe('Hide All consecutive Panes', () => {
 //   it('hide P0 >> P1 >> P2 >> P3 >> P4', () => {
