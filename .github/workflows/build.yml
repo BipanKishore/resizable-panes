@@ -41,6 +41,14 @@ jobs:
     - name: Check Coverage
       run: |
         npm run coverage
+    
+    - name: Upload artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with: 
+        path: cypress/screenshots
+        retention-days: 30
+
 
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@master
