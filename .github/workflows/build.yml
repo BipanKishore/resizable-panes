@@ -41,6 +41,11 @@ jobs:
     - name: Check Coverage
       run: |
         npm run coverage
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with: 
+        path: cypress\screenshots
 
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@master
