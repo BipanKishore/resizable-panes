@@ -76,23 +76,18 @@ const onContainerMouseMove = (
 
 const getResize = (resizable: ResizableModel, vertical: boolean) => (e: any) => {
   const resizableEvent = getResizableEvent(e, vertical, resizable.previousTouchEvent)
-  resizable.resizeOnMove(resizableEvent)
+  resizable.onMoveResize(resizableEvent)
 }
 
-export const detectionService = (containerNode: HTMLElement, resizable: ResizableModel) => {
+export const getDetectionService = (resizable: ResizableModel) => {
   const {vertical} = resizable
   const cursorStyle = vertical ? 'col-resize' : 'row-resize'
-
-  const onGlobalMouseMoveDebounce = throttle(onContainerMouseMove(containerNode, resizable, vertical, cursorStyle), 100)
-
-  addDOMEventPassive(containerNode, onGlobalMouseMoveDebounce, EVENT_NAMES.mousemove)
-  document.addEventListener(EVENT_NAMES.touchmove, onGlobalMouseMoveDebounce, {passive: false})
 
   const resize = getResize(resizable, vertical)
 
   const registerResizeEvent = () => {
     addDOMEvent(document, resize, EVENT_NAMES.mousemove)
-    document.addEventListener(EVENT_NAMES.touchmove, resize, {passive: false})
+    addDOMEventPassive(document, resize, EVENT_NAMES.touchmove)
   }
 
   const clearResizeEvent = () => {
@@ -102,8 +97,26 @@ export const detectionService = (containerNode: HTMLElement, resizable: Resizabl
 
   const onMouseDownOnHandle = getMouseDownOnHandle(resizable, vertical, registerResizeEvent)
 
-  addDOMEvent(containerNode, onMouseDownOnHandle, EVENT_NAMES.mousedown)
-  addDOMEventPassive(containerNode, onMouseDownOnHandle, EVENT_NAMES.touchstart)
+  const startDetectionService = (containerNode: HTMLElement) => {
+    const onGlobalMouseMoveDebounce = throttle(
+      onContainerMouseMove(containerNode, resizable, vertical, cursorStyle), 100
+    )
 
-  addDOMEvent(document, clearResizeEvent, EVENT_NAMES.mouseup, EVENT_NAMES.touchend)
+    // auto clear
+    addDOMEventPassive(containerNode, onGlobalMouseMoveDebounce, EVENT_NAMES.mousemove)
+    // auto clear
+    addDOMEventPassive(containerNode, onGlobalMouseMoveDebounce, EVENT_NAMES.touchmove)
+    // auto clear
+    addDOMEvent(containerNode, onMouseDownOnHandle, EVENT_NAMES.mousedown)
+    // auto clear
+    addDOMEventPassive(containerNode, onMouseDownOnHandle, EVENT_NAMES.touchstart)
+
+    addDOMEvent(document, clearResizeEvent, EVENT_NAMES.mouseup, EVENT_NAMES.touchend)
+  }
+
+  const clearDetectionService = () => {
+    removeDOMEvent(document, clearResizeEvent, EVENT_NAMES.mouseup, EVENT_NAMES.touchend)
+  }
+
+  return [startDetectionService, clearDetectionService]
 }
