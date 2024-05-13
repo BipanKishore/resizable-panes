@@ -25,6 +25,12 @@ jobs:
       run: | 
           npm version patch
 
+    - name: Echo
+      run: |
+        pwd
+        myVar=$(pwd)
+        echo $myVar
+
     - name: Install
       run: |
         npm install
