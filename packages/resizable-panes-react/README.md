@@ -1,7 +1,10 @@
 # The modern library that solve all resizing use cases. Don't trust! Try it
 
-[![resizable-panes-react](https://github.com/BipanKishore/resizable-panes-react/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/BipanKishore/resizable-panes-react/actions/workflows/build.yml) ![nycrc config on GitHub](https://img.shields.io/nycrc/BipanKishore/resizable-panes-react)
-[![NPM Version](https://img.shields.io/npm/v/resizable-panes-react)](https://www.npmjs.com/package/resizable-panes-react) [![npm bundle size](https://img.shields.io/bundlephobia/minzip/resizable-panes-react)](https://www.npmjs.com/package/resizable-panes-react) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=BipanKishore_resizable-panes-react&branch=master&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=BipanKishore_resizable-panes-react)
+[![resizable-panes-react][build-n-deploy-badge-link]][build-n-deploy-link]
+[![nycrc config on GitHub][nyc-link]][build-n-deploy-link]
+[![NPM Version][npm-version-badge]][npm-link]
+[![npm bundle size][npm-min-size-badge-link]][npm-min-size-link]
+ [![Quality Gate Status][sonar-react-badge-link]][sonar-react-link]
 
 <!-- [Cypress Recoreded tests are available here](https://cloud.cypress.io/projects/2xc7po/branches/master/overview) -->
 
@@ -200,3 +203,17 @@ import {RATIO, BUTTOM_FIRST, TOP_FIRST} from 'resizable-panes-react'
 ## [Quick Demo](https://bipankishore.github.io/resizable-panes/)
 
 ### Feel Free to Raise Pull Request
+
+[nyc-link]:https://img.shields.io/nycrc/BipanKishore/resizable-panes?config=%2Fpackages%2Fresizable-panes-react%2F.nycrc
+
+[npm-link]: https://www.npmjs.com/package/resizable-panes-react
+[npm-version-badge]: https://img.shields.io/npm/v/resizable-panes-react
+
+[npm-min-size-badge-link]: https://img.shields.io/bundlephobia/minzip/resizable-panes-react
+[npm-min-size-link]: https://www.npmjs.com/package/resizable-panes-react
+
+[sonar-react-badge-link]: https://sonarcloud.io/api/project_badges/measure?project=BipanKishore_resizable-panes-react&branch=master&metric=alert_status
+[sonar-react-link]:https://sonarcloud.io/summary/new_code?id=BipanKishore_resizable-panes-react
+
+[build-n-deploy-badge-link]: https://github.com/BipanKishore/resizable-panes-react/actions/workflows/build-n-deploy.yml/badge.svg?branch=master
+[build-n-deploy-link]: https://github.com/BipanKishore/resizable-panes/actions/workflows/build-n-deploy.yml?query=branch%3Amaster

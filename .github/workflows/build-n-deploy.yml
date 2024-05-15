@@ -86,7 +86,7 @@ jobs:
       working-directory: ./packages/demo-app
 
     - name: Demo App - Deploy to GitHub Pages
-      if: ${{ github.ref == 'refs/heads/master' }}
+      #    if: ${{ github.ref == 'refs/heads/master' }}
       uses: JamesIves/github-pages-deploy-action@4.1.0
       with:
         branch: gh-pages
