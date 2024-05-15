@@ -1,0 +1,31 @@
+
+.w-m-1200 {
+  max-width: 1200px;
+}
+
+  .hiddenClass {
+    background-color: #fbfbfb;
+    color: #434343;
+  border: 1px solid #d9d9d9;
+}
+
+.zippedClass {
+  background-color: aliceblue;
+  color: #8ec7f9;
+  border: 1px solid #8ec7f9;
+}
+
+.visibleClass{
+  background-color: #e1e1e1;
+  color: #434343;
+  border: 1px solid  #e1e1e1;
+}
+
+
+
+@media (min-width: 1250px) {
+  .modal-width{
+    min-width: 864px;
+  }
+
+}
