@@ -1,4 +1,4 @@
-import {MouseEventHandler, ReactElement, ReactNode} from 'react'
+import {MouseEventHandler, ReactElement} from 'react'
 import {IKeyToBoolMap, IMapIdToSize} from './general-type'
 import {PaneModel} from '../../../resizable-core/src/models'
 import {
