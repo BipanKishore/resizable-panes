@@ -98,5 +98,17 @@ jobs:
       with:
         token: ${{ secrets.NPM_TOKEN }}
         package:  ${{format('{0}/{1}', github.workspace, 'packages/resizable-panes-react')}}
+
+    - name: Resizable Js Build
+      run: |
+          npm run prod
+      working-directory: ./packages/resizable-panes-js
+
+    - name: Resizable JS NPM Publish
+      if: ${{ github.ref == 'refs/heads/master' }}
+      uses: JS-DevTools/npm-publish@v3
+      with:
+        token: ${{ secrets.NPM_TOKEN }}
+        package:  ${{format('{0}/{1}', github.workspace, 'packages/resizable-panes-js')}}
         
 
