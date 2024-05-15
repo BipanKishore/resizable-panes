@@ -132,7 +132,6 @@ const productionConfigMinSet = {
 }
 
 export const productionConfig = [
-  // developmentConfig,
   productionConfigMinSet,
   typesRollupConfig
 ]
