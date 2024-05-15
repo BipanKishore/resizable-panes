@@ -1,75 +1,38 @@
 {
-  "name": "resizable-panes-react",
-  "version": "6.0.11",
-  "description": "A simple library for resizing elements in the browser",
-  "module": "./lib/esm/index.esm.js",
-  "main": "./lib/cjs/index.cjs.js",
-  "types": "./lib/index.d.ts",
-  "files": [
-    "lib"
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "packages/demo-app",
+    "packages/resizable-panes-js",
+    "packages/resizable-panes-react"
   ],
   "scripts": {
-    "clean": "rimraf node_modules package-lock.json coverage .nyc_output",
-    "Install": "npm install",
-    "clean:build": "rimraf lib",
-    "test:clean": "rimraf coverage .nyc_output",
-    "prod": "rimraf lib && cross-env NODE_ENV=prod rollup -c --bundleConfigAsCjs",
-    "build": "rimraf lib && cross-env NODE_ENV=dev rollup -c --bundleConfigAsCjs",
-    "dev": "rimraf lib && cross-env NODE_ENV=dev rollup -c -w --bundleConfigAsCjs",
-    "link-local": "npm link && cd ./node_modules/react && npm link",
-    "start": "run-s -n link-local dev",
-    "patch": "npm version patch",
-    "predeploy": "run-s -n patch clean Install test prod",
-    "deploy": "npm publish",
-    "pretest": "npm run test:clean",
-    "pretest:open": "npm run test:clean",
-    "test:open": "cypress open --component --config-file cypress.config.ts browser --browser chrome",
-    "test": "cypress run --component --config-file cypress.config.ts browser --browser chrome",
-    "coverage": "nyc report --lcov --reporter=text --reporter=text-summary",
-    "posttest": "npm run coverage",
-    "lint": "eslint ./src"
+    "lint": "lerna run lint"
   },
-  "keywords": [
-    "react",
-    "panel",
-    "resizable",
-    "split-pane",
-    "flexible-content",
-    "flexible-panes",
-    "resizable-dailog",
-    "resizable-panels",
-    "flexible-layout"
-  ],
-  "author": "bipankishore@gmail.com",
-  "license": "ISC",
-  "dependencies": {
-    "throttleit": "^2.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@babel/core": "^7.22.10",
-    "@babel/eslint-parser": "^7.22.11",
-    "@babel/preset-env": "^7.22.10",
-    "@babel/preset-react": "^7.22.5",
-    "@babel/preset-typescript": "^7.24.1",
-    "@cypress/code-coverage": "^3.12.34",
-    "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "lerna": "^8.1.2",
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@rollup/plugin-terser": "^0.4.0",
     "@rollup/plugin-typescript": "^11.1.6",
-    "@types/react": "^18.2.21",
-    "@types/react-dom": "^18.2.8",
-    "@typescript-eslint/eslint-plugin": "^6.5.0",
-    "@typescript-eslint/parser": "^6.5.0",
-    "autoprefixer": "^10.4.19",
-    "babel-loader": "^9.1.3",
-    "babel-plugin-istanbul": "^6.1.1",
-    "copy-webpack-plugin": "^11.0.0",
-    "cross-env": "^7.0.3",
-    "css-loader": "^6.8.1",
-    "cypress": "^13.7.3",
+    "rollup-plugin-typescript2": "^0.36.0",
     "dotenv": "^16.4.5",
+    "rollup": "^3.20.2",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-dts": "^5.3.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "npm-run-all": "^4.1.5",
+
+    "postcss-loader": "^8.1.1",
+
+    "@babel/eslint-parser": "^7.22.11",
+
+    "@typescript-eslint/parser": "^6.5.0",
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+
     "eslint": "^8.48.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-config-standard-react": "^13.0.0",
@@ -81,44 +44,12 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-sort-keys-fix": "^1.1.2",
-    "fork-ts-checker-notifier-webpack-plugin": "^7.0.0",
-    "fork-ts-checker-webpack-plugin": "^8.0.0",
-    "html-webpack-plugin": "^5.6.0",
-    "mini-css-extract-plugin": "^2.8.1",
-    "npm-run-all": "^4.1.5",
-    "nyc": "^15.1.0",
-    "postcss-loader": "^8.1.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "rollup": "^3.20.2",
-    "rollup-plugin-copy": "^3.5.0",
-    "rollup-plugin-dts": "^5.3.0",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-postcss": "^4.0.2",
-    "sass": "^1.75.0",
     "sass-loader": "^14.2.0",
-    "style-loader": "^3.3.3",
-    "terser-webpack-plugin": "^5.3.9",
     "ts-loader": "^9.4.4",
     "tslib": "^2.6.2",
-    "typescript": "^5.2.2",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1",
-    "webpack-node-externals": "^3.0.0",
-    "webpack-notifier": "^1.15.0"
+    "typescript": "^5.2.2"
   },
-  "peerDependencies": {
-    "react": "*",
-    "react-dom": "*"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/BipanKishore/resizable-panes-react.git"
-  },
-  "bugs": {
-    "url": "https://github.com/BipanKishore/resizable-panes-react/issues",
-    "email": "bipankishore@gmail.com"
-  },
-  "homepage": "https://bipankishore.github.io/resizable-panes-demo/"
+  "optionalDependencies": {
+    "@nx/nx-linux-x64-gnu": "^19.0.3"
+  }
 }
