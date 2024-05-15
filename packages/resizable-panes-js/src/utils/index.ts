@@ -50,6 +50,8 @@ export const getMouseDownOnResizer = (
     }
   }
 
+export const getElementById = (id: string) => document.getElementById(id)
+
 export const INITIAL_CONFIG:IResizableOptions = {
   vertical: true,
   id: 'container',
@@ -67,6 +69,10 @@ export const INITIAL_CONFIG:IResizableOptions = {
     },
     {
       id: 'P2',
+      size: 100
+    },
+    {
+      id: 'P3',
       size: 100
     }
   ]
