@@ -55,30 +55,25 @@ export const getElementById = (id: string) => document.getElementById(id)
 export const INITIAL_CONFIG:IResizableOptions = {
   vertical: true,
   uniqueId: 'container',
-  resizerSize: 10,
-  detectionRadius: 6,
+  resizerSize: 2,
   resizerClass: 'bg-slate-500',
-  storageApi: sessionStorage,
 
-  visibility: {
-    P1: false
-  },
   panes: [
     {
       id: 'P0',
-      size: 100,
-      minSize: 30,
-      maxSize: 150,
-      detectionRadius: 20,
-      onMaxSize: (id: string, size: number) => {
-        console.log('onMaxSize', id, size)
-      },
-      onMinSize: (id: string, size: number) => {
-        console.log('onMinSize', id, size)
-      },
-      onNormalSize: (id: string) => {
-        console.log('onNormalSize', id)
-      }
+      size: 100
+      // minSize: 30,
+      // maxSize: 150,
+      // detectionRadius: 20,
+      // onMaxSize: (id: string, size: number) => {
+      //   console.log('onMaxSize', id, size)
+      // },
+      // onMinSize: (id: string, size: number) => {
+      //   console.log('onMinSize', id, size)
+      // },
+      // onNormalSize: (id: string) => {
+      //   console.log('onNormalSize', id)
+      // }
     },
     {
       id: 'P1',
@@ -87,9 +82,22 @@ export const INITIAL_CONFIG:IResizableOptions = {
     {
       id: 'P2',
       size: 100
+    }
+  ]
+}
+
+export const CHILD_CONFIG:IResizableOptions = {
+  vertical: false,
+  uniqueId: 'uniqueId2',
+  resizerSize: 2,
+  resizerClass: 'bg-slate-500',
+  panes: [
+    {
+      id: 'P00',
+      size: 100
     },
     {
-      id: 'P3',
+      id: 'P01',
       size: 100
     }
   ]

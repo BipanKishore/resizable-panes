@@ -1,8 +1,8 @@
 import {getSetResizerSize, findIndex, getResizerId, ResizableModel} from '../../resizable-core'
 import {getMouseDownOnResizer, getElementById, addClasses} from './utils'
 
-export const initializeResizer = (paneId: string, registerItem: any, options: ResizableModel) => {
-  const {panesList, vertical} = options
+export const initializeResizer = (paneId: string, registerItem: any, resizable: ResizableModel) => {
+  const {panesList, vertical} = resizable
 
   const index = findIndex(panesList, paneId)
 
