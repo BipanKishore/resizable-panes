@@ -43,7 +43,7 @@ export const attachDefaultPaneProps = (
 export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
   const currentProps = attachDefaultPaneProps(props)
 
-  const {onReady, unit} = currentProps
+  const {visibility, onReady, unit} = currentProps
 
   const resizableRef: any = useRef(getResizable(currentProps))
 
@@ -63,10 +63,19 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
     return () => removeDOMEvent(window, onResize, RESIZE_HTML_EVENT)
   }, [unit, resizable])
 
+  const ref = useRef(true)
   useEffect(() => {
     onReady(api)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [api])
+
+  useEffect(() => {
+    if (ref.current === false) {
+      resizableRef.current.api.setVisibilities(visibility)
+    } else {
+      ref.current = false
+    }
+  }, [visibility])
 
   return (
     <ResizablePaneContext.Provider value={resizable}>
