@@ -1,19 +1,20 @@
-import {getSetResizerSize, findIndex, getResizerId} from '../../resizable-core'
-import {getMouseDownOnResizer, getElementById} from './utils'
-import {IResizableOptions} from './@types'
+import {getSetResizerSize, findIndex, getResizerId, ResizableModel} from '../../resizable-core'
+import {getMouseDownOnResizer, getElementById, addClasses} from './utils'
 
-export const initializeResizer = (paneId: string, registerItem: any, options: IResizableOptions) => {
-  const {panes, vertical} = options
+export const initializeResizer = (paneId: string, registerItem: any, options: ResizableModel) => {
+  const {panesList, vertical} = options
 
-  const index = findIndex(panes, paneId)
+  const index = findIndex(panesList, paneId)
 
-  const {resizerClass, activeResizerClass} = panes[index]
+  const {resizerClass, activeResizerClass} = panesList[index].props
 
   const resizerId = getResizerId(paneId)
   const node = getElementById(resizerId)
   const setSize = getSetResizerSize(node, vertical)
-  const setMouseDownFlag = getMouseDownOnResizer(node, resizerId, resizerClass, activeResizerClass)
+  addClasses(node, 'overflow-hidden')
 
+  const setMouseDownFlag = getMouseDownOnResizer(node, resizerId, activeResizerClass, resizerClass)
+  setMouseDownFlag(resizerId, false)
   registerItem({
     setSize,
     setMouseDownFlag

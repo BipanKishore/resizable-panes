@@ -75,10 +75,10 @@ export const ResizablePaneProvider = (props: IResizablePaneProviderProps) => {
     } else {
       ref.current = false
     }
-  }, [visibility, ref])
+  }, [visibility])
 
   return (
-    <ResizablePaneContext.Provider value={resizableRef.current}>
+    <ResizablePaneContext.Provider value={resizable}>
       <ResizablePanes {...currentProps} />
     </ResizablePaneContext.Provider>
   )

@@ -54,14 +54,31 @@ export const getElementById = (id: string) => document.getElementById(id)
 
 export const INITIAL_CONFIG:IResizableOptions = {
   vertical: true,
-  id: 'container',
-  resizerSize: 2,
-  activeResizerClass: 'bg-slate-500',
-  storageApi: null,
+  uniqueId: 'container',
+  resizerSize: 10,
+  detectionRadius: 6,
+  resizerClass: 'bg-slate-500',
+  storageApi: sessionStorage,
+
+  visibility: {
+    P1: false
+  },
   panes: [
     {
       id: 'P0',
-      size: 100
+      size: 100,
+      minSize: 30,
+      maxSize: 150,
+      detectionRadius: 20,
+      onMaxSize: (id: string, size: number) => {
+        console.log('onMaxSize', id, size)
+      },
+      onMinSize: (id: string, size: number) => {
+        console.log('onMinSize', id, size)
+      },
+      onNormalSize: (id: string) => {
+        console.log('onNormalSize', id)
+      }
     },
     {
       id: 'P1',

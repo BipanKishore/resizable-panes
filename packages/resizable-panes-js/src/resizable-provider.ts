@@ -1,6 +1,13 @@
 import {
   IResizableApi,
-  getDetectionService, getResizable
+  RATIO,
+  RESIZE_HTML_EVENT,
+  addDOMEvent,
+  attachDetectionCoordinate,
+  clearflagsOnNewView,
+  getDetectionService, getResizable,
+  removeDOMEvent,
+  toRatioModeAllPanes
 } from '../../resizable-core'
 import {IResizableOptions} from './@types'
 import {initializPane} from './pane'
@@ -9,9 +16,11 @@ import {initializeResizer} from './resizer'
 
 import {attachDefaultOptions} from './utils'
 
-export const getResizablePanes = (options: IResizableOptions): [IResizableApi, () => void, () => void] => {
+export type IGetResizablePanes = [resizableApi: IResizableApi, refreshResizable: () => void, clearResizable: () => void]
+
+export const getResizablePanes = (options: IResizableOptions):IGetResizablePanes => {
   const optionsWithDefaults = attachDefaultOptions(options) as any
-  const {panes, id} = optionsWithDefaults
+  const {panes, uniqueId, unit} = optionsWithDefaults
 
   const resizable = getResizable(optionsWithDefaults)
 
@@ -20,17 +29,37 @@ export const getResizablePanes = (options: IResizableOptions): [IResizableApi, (
   panes.forEach(({id}, index: number) => {
     initializPane(id, registerItem, optionsWithDefaults)
     if (index !== panes.length - 1) {
-      initializeResizer(id, registerItem, optionsWithDefaults)
+      initializeResizer(id, registerItem, resizable)
     }
   })
 
-  const containerNode = initializResizableContainer(id, registerContainer, optionsWithDefaults)
+  const onResize = () => {
+    if (unit === RATIO) {
+      toRatioModeAllPanes(resizable, true)
+      attachDetectionCoordinate(resizable)
+      clearflagsOnNewView(resizable)
+    }
+  }
+
+  addDOMEvent(window, onResize, RESIZE_HTML_EVENT)
+
+  const containerNode = initializResizableContainer(uniqueId, registerContainer, optionsWithDefaults)
 
   const [startDetectionService, clearDetectionService] = getDetectionService(resizable)
-  const startResizable = () => startDetectionService(containerNode)
-  const clearResizable = () => clearDetectionService(containerNode)
+  const refreshResizable = () => {
+    clearDetectionService(containerNode)
+    startDetectionService(containerNode)
+  }
+  const clearResizable = () => {
+    clearDetectionService(containerNode)
+    removeDOMEvent(window, onResize, RESIZE_HTML_EVENT)
+  }
 
-  startResizable()
+  refreshResizable()
 
-  return [api, startResizable, clearResizable]
+  // api.setVisibilities(visibility)
+  console.log('Vimal')
+  setTimeout(() => api.setVisibilities({P1: true}), 2000)
+
+  return [api, refreshResizable, clearResizable]
 }
