@@ -1,9 +1,16 @@
-# The modern library that solve all resizing use cases of a Layout.
+# The modern library that solve all resizing use cases of a Layout. The mono repo contains following pacakges
 
-## Available in
+| Available In | Name | Version | Gzip |
+|--------------|------|---------|------|
+|  React       |[resizable-panes-react][resizable-panes-react-git-link]      |         |      |
+|  JS          |[resizable-panes-next][resizable-panes-next-git-link]      |         |      |
+|  Next        |[resizable-panes-js][resizable-panes-js-git-link]      |         |      |
+|  Vue         |[resizable-panes-vue][resizable-panes-vue-git-link]      |         |      |
 
-### React:  [resizable-panes-react](https://github.com/BipanKishore/resizable-panes/tree/master/packages/resizable-panes-react#the-modern-library-that-solve-all-resizing-use-cases-dont-trust-try-it)
+[resizable-panes-react-git-link]: https://github.com/BipanKishore/resizable-panes/tree/master/packages/resizable-panes-react
 
-### JS:  [resizable-panes-react](https://github.com/BipanKishore/resizable-panes/tree/master/packages/resizable-panes-js)
+[resizable-panes-js-git-link]: https://github.com/BipanKishore/resizable-panes/tree/master/packages/resizable-panes-js
 
-### Vue:  [resizable-panes-react](https://github.com/BipanKishore/resizable-panes/tree/master/packages/resizable-panes-vue)
+[resizable-panes-next-git-link]: https://github.com/BipanKishore/resizable-panes/tree/master/packages/resizable-panes-next
+
+[resizable-panes-vue-git-link]: https://github.com/BipanKishore/resizable-panes/tree/master/packages/resizable-panes-vue
