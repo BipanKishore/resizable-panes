@@ -1,5 +1,5 @@
 {
-  "name": "resizable-panes-js",
+  "name": "resizable-panes-next",
   "version": "6.0.15",
   "description": "A simple library for resizing elements in the browser",
   "module": "./lib/esm/index.esm.js",
@@ -30,7 +30,7 @@
     "lint": "eslint ./src"
   },
   "keywords": [
-    "js",
+    "react",
     "panel",
     "resizable",
     "split-pane",
@@ -120,5 +120,5 @@
     "url": "https://github.com/BipanKishore/resizable-panes/issues",
     "email": "bipankishore@gmail.com"
   },
-  "homepage": "https://github.com/BipanKishore/resizable-panes/tree/master/packages/resizable-panes-js"
+  "homepage": "https://github.com/BipanKishore/resizable-panes/tree/master/packages/resizable-panes-next"
 }

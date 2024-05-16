@@ -1,0 +1,41 @@
+
+.flex{
+    display: flex;
+}
+
+.f-column{
+    flex-direction: column;
+}
+
+.f-row {
+    flex-direction: row;
+}
+
+.w-fit-content{
+    width: fit-content;
+}
+
+.m-auto {
+    margin: auto;
+}
+
+.resizer {
+    box-sizing: border-box;
+    background-clip: padding-box;
+}
+
+.overflow-hidden {
+    overflow: hidden;   
+}
+
+.w-100p{
+    width: 100%
+}
+
+.h-100p{
+    height: 100%;
+}
+
+.flex-shrink-0{
+    flex-shrink: 0;
+}
