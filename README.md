@@ -1,4 +1,4 @@
-# The modern library that solve all resizing use cases
+# The modern library that solve all resizing use cases of a Layout.
 
 ## Available in
 
