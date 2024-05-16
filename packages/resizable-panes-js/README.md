@@ -1,4 +1,4 @@
-# The modern library that solve all resizing use cases. Don't trust! Try it
+# The modern library that solve all resizing use cases of a Layout. Don't trust! Try it
 
 [![resizable-panes-react][build-n-deploy-badge-link]][build-n-deploy-link]
 [![nycrc config on GitHub][nyc-link]][build-n-deploy-link]
@@ -20,7 +20,7 @@
 
 - **Custom Resizers:** Customize resizer handles to match your app's design.
 
-- **Unique Resizers:** Single Resizer handle can push and pull n number of Panes in forward and backword direction.
+- **Unique Resizers:** Best for mobile devices. Resizer can have 0 size pixel.
 
 - **Responsive:** In ratio mode, It adjusts pane sizes responsively to fit in available space, making it perfect for dynamic layouts.
 
@@ -29,9 +29,9 @@
 ## Installation
 
 ```bash
-npm i resizable-panes-react --save
+npm i resizable-panes-js --save
 # or
-yarn add resizable-panes-react
+yarn add resizable-panes-js
 ```
 
 ## Usage
@@ -42,77 +42,103 @@ yarn add resizable-panes-react
 }
 ```
 
-```jsx
-import { Pane, ResizablePanes } from "resizable-panes-react";
+```js
+import resizablePanes from "resizable-panes-js";
 
-function App() {
-  return (
-    <div
-      style={{
-        height: "300px",
-      }}
-    >
-      <ResizablePanes uniqueId="uniqueId" vertical resizerClass="bg-slate-500">
-        <Pane id="P0" size={1}>
-          Your component 1
-        </Pane>
-        <Pane id="P1" size={2}>
-          Your component 2
-        </Pane>
-        <Pane id="P2" size={3}>
-          Your component 3
-        </Pane>
-      </ResizablePanes>
-    </div>
-  );
+const INTIAL_CONFIG = {
+  vertical: true,
+  id: 'container',
+  resizerSize: 2,
+  resizerClass: 'bg-slate-500',
+  panes: [
+    {
+      id: 'P0',
+      size: 100
+    },
+    {
+      id: 'P1',
+      size: 100
+    },
+    {
+      id: 'P2',
+      size: 100
+    }
+  ]
 }
+
+resizablePanes(INITIAL_CONFIG)
+
+```
+
+```html
+    <div id="container" style="height: 200px;" >
+
+        <div id="P0" style="background-color: blue;" > Your HTML/Component </div>
+
+        <div id="resizer-P0">
+          Node: Id of resizer should be equals to "resizer-" + id of previous pane.
+          You can add your custom element inside it.
+        </div>
+
+        <div id="P1" style="background-color: orange;" > Your HTML/Component </div>
+
+        <div id="resizer-P1"></div>
+        
+        <div id="P2" style="background-color: green;" > Your HTML/Component </div>
+    </div>
 ```
 
 ## 👋 Hi there! If you find this project useful or valuable do give it star on GitHub or [Buy Me a Coffee]()
 
-## ResizablePanes Props
+## ResizablePanes Options
 
 | Prop               | Type               | Default | Required            | Description                                                                                                                                                       |
 | ------------------ | ------------------ | ------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| uniqueId           | string             |         | true                | Helps identify ResizablePanes component.                                                                                                                          |
-| unmountOnHide      | boolean            | true    | false               | true - Unmounts the child or children of Pane in Hidden state. <br /> false - keeps the child or children of Pane in DOM in Hidden state.                         |
-| className          | string             |         | false               | It will get attached to ResizablePanes container element.                                                                                                         |
+| uniqueId           | string             |         | true                | Helps identify ResizablePanes container.                                                                                                                          |
 | vertical           | boolean            | false   | false               | It sets the orientation of Panes.                                                                                                                                 |
 | unit               | 'ratio' or 'pixel' | ratio   | false               | It sets the unit of size of panes.                                                                                                                                |
-| minMaxUnit         | 'ratio' or 'pixel' | Same value as of unit props   | false               | It sets the unit of minSize and maxSize of panes.                                                                                                                 |
-| detectionRadius    | number             |  6      | false               | It create the extra margin on both side for handle/resizer detection.  |
-| visibility         | Object             |         | false               | It accepts a boolean map of Pane Ids visibility.                                                                                                                  |
+| minMaxUnit         | 'ratio' or 'pixel' | Same value as of unit.   | false               | It sets the unit of minSize and maxSize of panes.                                                                                                                 |
+| detectionRadius    | number             |  6      | false               | It create the extra virtual margin on both side for handle/resizer to detect handle position.  |
+| visibility         | Object             |         | false               | It accepts a boolean map of visibility of Pane Ids.                                                                                                                  |
 | storageApi         | Object             |         | false               | It used to store data across session. It can be localStorage, sessionStorage or any other following the interface of localStorage.                                |
 | resizerClass       | string             |         | false               | It gets applied to the main resizer element in normal state.                                                                                                      |
 | activeResizerClass | string             |         | false               | It gets applied to the main resizer element in active state.                                                                                                      |
-| resizer            | ReactElement       |         | false               | It will replace the in build resizer.                                                                                                                             |
 | resizerSize        | number             | 2       | optionally required | It is the size of resizer. If the size of resizer is other than 2px you will have to provide the value.                                                           |
 | onResize           | function           |         | false               | It emits size map while resizing layout.                                                                                                                       |
 | onResizeStop       | function           |         | false               | It emits size map after the layout resizing is complete.                                                                                                          |
-| onReady            | function           |         | false               | It emits ResizablePanes component's api once it is constructed.                                                                                                   |
 | onChangeVisibility | function           |         | false               | It emits visibility map when there is change in visibility. A Pane can have 'visible', 'hidden' or 'zipped' state.                                                |
 | onMinSize       | (id: string, minSize:number) => void       |         | false               | It emits when a Pane enters min size. |
 | onMaxSize       | (id: string, maxSize:number) => void       |         | false               | It emits when a Pane enters max size. |
 | onNormalSize    | (id: string) => void       |         | false               | It emits when a Pane enters normal size. |
+| panes    | IPane       |         | true               | It is an array which hold the properites of all panes. [Click here](#pane-options) to ream more.|
 
-## Pane Props
+## Pane options
 
-| Prop          | Type         | Default  | Required            | Description                                                                                              |
+| Property          | Type         | Default  | Required            | Description                                                                                              |
 | ------------- | ------------ | -------- | ------------------- | -------------------------------------------------------------------------------------------------------- |
 | id            | string       |          | true                | Helps identify Pane component.                                                                           |
 | size          | number       |          | true                | Sets the size of Pane.                                                                                   |
-| unmountOnHide | boolean      |          |                     | Same behaviour as of ResizablePanes Prop but works for individual Pane.                                  |
-| className     | string       |          | false               | It will get attached to Pane element.                                                                    |
 | maxSize       | number       | Infinity | false               | The maximum size limit of the Pane.                                                                      |
 | minSize       | number       | 0        | false               | The minimum size limit of the Pane.                                                                      |
-| resizer       | ReactElement |          | false               | It will replace the in build resizer of Pane.                                                            |
-| resizerSize   | number       |          | Optionally required | It is the size of attached Resizer Element. It is required when we have passed resizer prop to the Pane. |
+| resizerSize   | number       |          | Optionally required | It is the size of attached Resizer Element. Works at individual Pane level.|
 | detectionRadius    | number  |  6      | false     | Works at individual Pane level.  |
 | onMinSize       | (id: string, minSize:number) => void       |         | false               | It emits when it enters min size of the Pane. |
 | onMaxSize       | (id: string, maxSize:number) => void       |         | false               | It emits when it enters max size of the Pane. |
 | onNormalSize    | (id: string) => void       |         | false               | It emits when it enters normal size of the Pane. |
 
-## ResizablePanes component api
+## How to access ResizablePanes's api and other methods
+
+```tsx
+import resizablePanes from "resizable-panes-js";
+
+const [resizableApi, refreshResizable, clearResizable] = resizablePanes(config object)
+
+resizableApi - It is explained bellow.
+refreshResizable - It reattaches the DOM events.
+clearResizable - It clears the DOM events.
+```
+
+## ResizablePanes's api
 
 | Method          | Params                                                       | Description                                                                                                                              |
 | --------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -124,75 +150,92 @@ function App() {
 | getVisibilities |                                                              | It returns the visibility map object of Ids of Panes                                                                                     |
 | getState        |                                                              | It return the current state of all Panes.                                                                                                |
 
-## Custom Resizer Component (resizer prop of ResizablePanes/Pane)
+## Nesting
 
-| Prop                | Type     | Default | Required | Description                                                                                                                |
-| ------------------- | -------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
-| isMouseDown         | boolean  |         |          | Use it style you Custom resizer element behavior.                                                                          |
+```js
+import resizablePanes from "resizable-panes-js";
 
-```tsx
-
-interface ICustomResizerProp {
-    isMouseDown: boolean,
-  }
-
-
-export const CustomResizer = ({
-    isMouseDown
-}: ICustomResizerProp) => {
-
- // isMouseDown: use it to style the elements
-
-  return (
-    <SOME_ELEMENT>
-      <TARGET_ELEMENT>
-
-      </TARGET_ELEMENT>
-    </SOME_ELEMENT>
-  )
+const PARENT_CONFIG = {
+  vertical: true,
+  id: 'container',
+  resizerSize: 2,
+  resizerClass: 'bg-slate-500',
+  panes: [
+    {
+      id: 'P0',
+      size: 100
+    },
+    {
+      id: 'P1',
+      size: 100
+    },
+    {
+      id: 'P2',
+      size: 100
+    }
+  ]
 }
+
+export const CHILD_CONFIG:IResizableOptions = {
+  vertical: false,
+  uniqueId: 'uniqueId2',
+  resizerSize: 2,
+  resizerClass: 'bg-slate-500',
+  panes: [
+    {
+      id: 'P00',
+      size: 100
+    },
+    {
+      id: 'P01',
+      size: 100
+    }
+  ]
+}
+
+resizablePanes(PARENT_CONFIG)
+resizablePanes(CHILD_CONFIG)
 
 ```
 
-## Nesting
+```html
+    <div id="container" style="height: 200px;" >
 
-```tsx
+        <div id="P0" style="background-color: blue;" >
+        
+            <div id="uniqueId2">
 
-      <ResizablePanes uniqueId="uniqueId" vertical resizerClass="bg-slate-500">
+                <div id="P00" style="background-color: orange;">
+                  Your child component 1
+                </div>
+                   <div id="resizer-P00" > </div>
+                <div id="P01" style="background-color: green;">
+                  Your child component 2
+                </div>
+    
+              </div>
 
-      <Pane id="P0" size={1}>    
-          <ResizablePanes uniqueId="uniqueId2" resizerClass="bg-slate-500">
+        </div>
 
-            <Pane id="P01" size={2}>
-              Your child component 1
-            </Pane>
-            <Pane id="P01" size={3}>
-              Your child component 2
-            </Pane>
+        <div id="resizer-P0"></div>
 
-          </ResizablePanes>
-      </Pane>
+        <div id="P1" style="background-color: orange;" > Hey two </div>
 
-        <Pane id="P1" size={2}>
-          Your component 2
-        </Pane>
-        <Pane id="P2" size={3}>
-          Your component 3
-        </Pane>
-      </ResizablePanes>
-
+        <div id="resizer-P1"></div>
+        
+        <div id="P2" style="background-color: green;" > Hey One </div>
+    </div>
 ```
 
 ## How to move Pane by n pixel
 
 ```tsx
 
-import {RATIO, BUTTOM_FIRST, TOP_FIRST} from 'resizable-panes-react'
+import {RATIO, BUTTOM_FIRST, TOP_FIRST} from 'resizable-panes-js'
 
     const n = 100
     const paneId = 'P2'
 
-    // resizableApi: Emitted by onReady event 
     const currentP2Size = resizableApi.getSizes()[paneId]
     resizableApi.setSize(paneId, currentP2Size - n, TOP_FIRST)
 
