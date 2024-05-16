@@ -43,7 +43,7 @@ yarn add resizable-panes-next
 ```
 
 ```jsx
-import { Pane, ResizablePanes } from "resizable-panes-react";
+import { Pane, ResizablePanes } from "resizable-panes-next";
 
 function App() {
   return (
@@ -187,7 +187,7 @@ export const CustomResizer = ({
 
 ```tsx
 
-import {RATIO, BUTTOM_FIRST, TOP_FIRST} from 'resizable-panes-react'
+import {RATIO, BUTTOM_FIRST, TOP_FIRST} from 'resizable-panes-next'
 
     const n = 100
     const paneId = 'P2'
@@ -206,11 +206,11 @@ import {RATIO, BUTTOM_FIRST, TOP_FIRST} from 'resizable-panes-react'
 
 [nyc-link]:https://img.shields.io/nycrc/BipanKishore/resizable-panes?config=%2Fpackages%2Fresizable-panes-react%2F.nycrc
 
-[npm-link]: https://www.npmjs.com/package/resizable-panes-react
-[npm-version-badge]: https://img.shields.io/npm/v/resizable-panes-react
+[npm-link]: https://www.npmjs.com/package/resizable-panes-next
+[npm-version-badge]: https://img.shields.io/npm/v/resizable-panes-next
 
-[npm-min-size-badge-link]: https://img.shields.io/bundlephobia/minzip/resizable-panes-react
-[npm-min-size-link]: https://www.npmjs.com/package/resizable-panes-react
+[npm-min-size-badge-link]: https://img.shields.io/bundlephobia/minzip/resizable-panes-next
+[npm-min-size-link]: https://www.npmjs.com/package/resizable-panes-next
 
 [sonar-react-badge-link]: https://sonarcloud.io/api/project_badges/measure?project=BipanKishore_resizable-panes-react&branch=master&metric=alert_status
 [sonar-react-link]:https://sonarcloud.io/summary/new_code?id=BipanKishore_resizable-panes-react
