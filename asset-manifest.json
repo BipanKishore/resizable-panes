@@ -1,18 +1,21 @@
 {
   "files": {
-    "main.css": "/resizable-panes/static/css/main.3e998fe0.css",
-    "main.js": "/resizable-panes/static/js/main.2d73a2ad.js",
+    "main.css": "/resizable-panes/static/css/main.e41d6ed3.css",
+    "main.js": "/resizable-panes/static/js/main.0ab3fcb7.js",
     "static/js/400.8765c1cb.chunk.js": "/resizable-panes/static/js/400.8765c1cb.chunk.js",
+    "static/media/react.svg": "/resizable-panes/static/media/react.1495a6a0c751ac52af3164f785e64d7b.svg",
+    "static/media/javascript.svg": "/resizable-panes/static/media/javascript.75fa9cdf8b00c1ddc571fbe57667c38f.svg",
     "static/media/github-color.svg": "/resizable-panes/static/media/github-color.7b8957dbab85107e12b6a994680a0b7c.svg",
     "static/media/linkedin-color.svg": "/resizable-panes/static/media/linkedin-color.8d07d1a4602facca8e43f594949a8c49.svg",
     "index.html": "/resizable-panes/index.html",
     "static/media/npm-color.svg": "/resizable-panes/static/media/npm-color.2b9f00532406a32dcac6b23b93ab2e45.svg",
-    "main.3e998fe0.css.map": "/resizable-panes/static/css/main.3e998fe0.css.map",
-    "main.2d73a2ad.js.map": "/resizable-panes/static/js/main.2d73a2ad.js.map",
+    "static/media/nextdotjs.svg": "/resizable-panes/static/media/nextdotjs.7ff86746ec25a6637a0f1b80a9d20332.svg",
+    "main.e41d6ed3.css.map": "/resizable-panes/static/css/main.e41d6ed3.css.map",
+    "main.0ab3fcb7.js.map": "/resizable-panes/static/js/main.0ab3fcb7.js.map",
     "400.8765c1cb.chunk.js.map": "/resizable-panes/static/js/400.8765c1cb.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.3e998fe0.css",
-    "static/js/main.2d73a2ad.js"
+    "static/css/main.e41d6ed3.css",
+    "static/js/main.0ab3fcb7.js"
   ]
 }
