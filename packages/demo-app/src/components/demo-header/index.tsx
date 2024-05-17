@@ -7,10 +7,12 @@ import { PanesCollectionListRatioMode } from "../../shared/pane-model-config-set
 import { Select } from "../form-controls/select";
 import { CheckBox } from "../form-controls/check-box";
 import TextField from "../form-controls/textfield";
-import { NPM_URL } from "../header/constant";
+import { GITHUB_URL } from "../header/constant";
+import { getDetailsByLib } from "./utils";
 
 export const DemoHeader = ({ onUpdateInitalConfig, initialConfig }: any) => {
   const [modalIsOpen, setIsOpen] = useState(false);
+  const {libName} = getDetailsByLib()
 
   function openModal() {
     setIsOpen(true);
@@ -64,8 +66,8 @@ export const DemoHeader = ({ onUpdateInitalConfig, initialConfig }: any) => {
       <div>
         <div className="text-2xl">
           Why to use{" "}
-          <a className="text-blue-500" href={NPM_URL}>
-            resizable-panes-react
+          <a className="text-blue-500" href={GITHUB_URL}>
+            {libName}
           </a>
           :
         </div>
@@ -88,7 +90,7 @@ export const DemoHeader = ({ onUpdateInitalConfig, initialConfig }: any) => {
               <p>
                 Other features Detection Radius (best for mobile devices), Custom Resizer, Responsive, Auto Save Layout in
                 browser's memory, Nesting and{" "}
-                <a className="text-blue-500" href={NPM_URL}>
+                <a className="text-blue-500" href={GITHUB_URL}>
                   read more
                 </a>
                 .

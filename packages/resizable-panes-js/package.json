@@ -1,6 +1,6 @@
 {
   "name": "resizable-panes-js",
-  "version": "6.0.15",
+  "version": "6.0.16",
   "description": "A simple library for resizing elements in the browser",
   "module": "./lib/esm/index.esm.js",
   "main": "./lib/cjs/index.cjs.js",
@@ -30,7 +30,10 @@
     "lint": "eslint ./src"
   },
   "keywords": [
+    "javascript",
+    "typescript",
     "js",
+    "ts",
     "panel",
     "resizable",
     "split-pane",
