@@ -8,7 +8,7 @@
 
 <!-- [Cypress Recoreded tests are available here](https://cloud.cypress.io/projects/2xc7po/branches/master/overview) -->
 
-## [Quick Demo](https://bipankishore.github.io/resizable-panes/)
+## [Quick Demo!][quick-demo-link]
 
 ## Key Features
 
@@ -200,9 +200,11 @@ import {RATIO, BUTTOM_FIRST, TOP_FIRST} from 'resizable-panes-next'
     resizableApi.setSize(P2, nowP2Size + n, BUTTOM_FIRST)
 ```
 
-## [Quick Demo](https://bipankishore.github.io/resizable-panes/)
+## [Quick Demo][quick-demo-link]
 
 ### Feel Free to Raise Pull Request
+
+[quick-demo-link]:https://bipankishore.github.io/resizable-panes?lib=next
 
 [nyc-link]:https://img.shields.io/nycrc/BipanKishore/resizable-panes?config=%2Fpackages%2Fresizable-panes-react%2F.nycrc
 
