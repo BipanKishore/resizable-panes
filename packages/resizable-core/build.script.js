@@ -32,6 +32,10 @@ export const LIB_FILE_NAME_PRODUCTION_ESM = `${LIB_NAME}.${PRODUCTION}.min.${ESM
 
 export const BUILD_INPUT_FILE_PATH = path.resolve(__dirname, '../src/index.ts')
 
+const globals = {
+  react: 'React'
+}
+
 export const cjsOutOptionsDevelopment = {
   file: `${CJS_BUILD_PATH}${'index.cjs.js'}`,
   format: 'cjs',
@@ -123,16 +127,20 @@ export const developmentConfig = {
   external: EXTERNALS
 }
 
+const productionOutput = [cjsOutOptionsProduction,
+  esmOutOptionsProduction,
+  iffeOutOptionsProduction,
+  umdOutOptionsProduction].map((outputConfig) => ({
+  ...outputConfig,
+  globals
+}))
+
 export const productionConfigMinSet = {
   input: 'src/index.ts',
-  output: [
-    cjsOutOptionsProduction,
-    esmOutOptionsProduction,
-    iffeOutOptionsProduction,
-    umdOutOptionsProduction
-  ],
+  output: productionOutput,
   plugins: productionPlugins,
   external: EXTERNALS
+
 }
 
 export const productionConfig = [
