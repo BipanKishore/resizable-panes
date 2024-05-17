@@ -8,7 +8,7 @@
 
 <!-- [Cypress Recoreded tests are available here](https://cloud.cypress.io/projects/2xc7po/branches/master/overview) -->
 
-## [Quick Demo](https://bipankishore.github.io/resizable-panes/)
+## [Quick Demo!][quick-demo-link]
 
 ## Key Features
 
@@ -200,17 +200,19 @@ import {RATIO, BUTTOM_FIRST, TOP_FIRST} from 'resizable-panes-react'
     resizableApi.setSize(P2, nowP2Size + n, BUTTOM_FIRST)
 ```
 
-## [Quick Demo](https://bipankishore.github.io/resizable-panes/)
+## [Quick Demo][quick-demo-link]
 
 ### Feel Free to Raise Pull Request
 
+[quick-demo-link]:https://bipankishore.github.io/resizable-panes?lib=react
+
 [nyc-link]:https://img.shields.io/nycrc/BipanKishore/resizable-panes?config=%2Fpackages%2Fresizable-panes-react%2F.nycrc
 
-[npm-link]: https://www.npmjs.com/package/resizable-panes-react
-[npm-version-badge]: https://img.shields.io/npm/v/resizable-panes-react
+[npm-link]: https://www.npmjs.com/package/resizable-panes-next
+[npm-version-badge]: https://img.shields.io/npm/v/resizable-panes-next
 
-[npm-min-size-badge-link]: https://img.shields.io/bundlephobia/minzip/resizable-panes-react
-[npm-min-size-link]: https://www.npmjs.com/package/resizable-panes-react
+[npm-min-size-badge-link]: https://img.shields.io/bundlephobia/minzip/resizable-panes-next
+[npm-min-size-link]: https://github.com/BipanKishore/resizable-panes
 
 [sonar-react-badge-link]: https://sonarcloud.io/api/project_badges/measure?project=BipanKishore_resizable-panes-react&branch=master&metric=alert_status
 [sonar-react-link]:https://sonarcloud.io/summary/new_code?id=BipanKishore_resizable-panes-react

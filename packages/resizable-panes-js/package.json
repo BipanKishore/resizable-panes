@@ -30,7 +30,10 @@
     "lint": "eslint ./src"
   },
   "keywords": [
+    "javascript",
+    "typescript",
     "js",
+    "ts",
     "panel",
     "resizable",
     "split-pane",

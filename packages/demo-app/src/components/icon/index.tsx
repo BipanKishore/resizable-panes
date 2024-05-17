@@ -6,18 +6,19 @@ interface IIcon {
   url: string;
   className?: string;
   onClick?: any;
+  width?: number
 }
 
 export const Icon = (props: IIcon) => {
-  const { name, url, ...otherProps } = props;
+  const { name, width = 20, url, className = 'ml-2', ...otherProps } = props;
   return (
-    <a className="ml-2" href={url}>
+    <a className={className} href={url}>
       <span>
         <img
           alt=""
-          height="20px"
+          // height="20px"
           src={ICONS_MAP[name]}
-          width={"20px"}
+          width={`${width}px`}
           {...otherProps}
         />
       </span>

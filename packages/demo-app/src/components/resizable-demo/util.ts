@@ -31,6 +31,9 @@ export const getInitialConfig = () => {
 }
 
 
-
-
-
+export const getLibName = () => {
+  // eslint-disable-next-line no-restricted-globals
+  const urlParams =  new URLSearchParams(location.search)
+  const libName = urlParams.get('lib')
+  return libName
+}
