@@ -3,11 +3,11 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import typescript from 'rollup-plugin-typescript2'
 import postcss from 'rollup-plugin-postcss'
-import terser from '@rollup/plugin-terser'
 import {dts} from 'rollup-plugin-dts'
 // import copy from 'rollup-plugin-copy'
 import path from 'path'
 import {fileURLToPath} from 'url'
+import {productionConfigMinSet} from '../resizable-core/build.script'
 
 const __filename = fileURLToPath(import.meta.url) // get the resolved path to the file
 const __dirname = path.dirname(__filename) // get the name of the directory
@@ -39,25 +39,7 @@ export const cjsOutOptionsDevelopment = {
   }
 }
 
-export const cjsOutOptionsProduction = {
-  file: `${CJS_BUILD_PATH}${'index.cjs.js'}`,
-  format: 'cjs',
-  sourcemap: true,
-  sourcemapPathTransform: (sourcePath) => {
-    return sourcePath.substring('../'.length)
-  }
-}
-
 export const esmOutOptionsDevelopment = {
-  file: `${ESM_BUILD_PATH}${'index.esm.js'}`,
-  format: 'esm',
-  sourcemap: true,
-  sourcemapPathTransform: (sourcePath) => {
-    return sourcePath.substring('../'.length)
-  }
-}
-
-export const esmOutOptionsProduction = {
   file: `${ESM_BUILD_PATH}${'index.esm.js'}`,
   format: 'esm',
   sourcemap: true,
@@ -86,15 +68,6 @@ export const developmentPlugins = [
   // })
 ]
 
-export const productionPlugins = [
-  peerDepsExternal(),
-  resolve(),
-  commonjs(),
-  typescript(),
-  postcss(),
-  terser()
-]
-
 export const EXTERNALS = ['react']
 
 export const typesRollupConfig = {
@@ -114,20 +87,6 @@ export const developmentConfig = {
     }
   ],
   plugins: developmentPlugins,
-  external: EXTERNALS
-}
-
-const productionConfigMinSet = {
-  input: 'src/index.ts',
-  output: [
-    {
-      ...cjsOutOptionsProduction
-    },
-    {
-      ...esmOutOptionsProduction
-    }
-  ],
-  plugins: productionPlugins,
   external: EXTERNALS
 }
 

@@ -22,8 +22,7 @@
     ]
   },
   "include": [
-    "src",
-    "cypress"
+    "src"
   ],
   "exclude": [
     "node_modules"
