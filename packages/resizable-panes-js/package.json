@@ -1,6 +1,6 @@
 {
   "name": "resizable-panes-js",
-  "version": "6.0.17",
+  "version": "6.0.19",
   "description": "A simple library that allows resizing and saving layout.",
   "module": "./lib/esm/index.esm.js",
   "main": "./lib/cjs/index.cjs.js",
