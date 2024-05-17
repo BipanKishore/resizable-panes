@@ -1,7 +1,7 @@
 import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-import typescript from '@rollup/plugin-typescript'
+import typescript from 'rollup-plugin-typescript2'
 import postcss from 'rollup-plugin-postcss'
 import terser from '@rollup/plugin-terser'
 import {dts} from 'rollup-plugin-dts'
@@ -21,6 +21,8 @@ const ESM_EXTENTION = 'esm.js'
 
 const CJS_BUILD_PATH = './lib/cjs/'
 const ESM_BUILD_PATH = './lib/esm/'
+const IFFE_BUILD_PATH = './lib/iffe/'
+const UMD_BUILD_PATH = './lib/umd/'
 
 export const LIB_FILE_NAME_DEVELOPMENT_CJS = `${LIB_NAME}.${DEVELOPMENT}.${CJS_EXTENTION}`
 export const LIB_FILE_NAME_PRODUCTION_CJS = `${LIB_NAME}.${PRODUCTION}.min.${CJS_EXTENTION}`
@@ -56,6 +58,18 @@ export const esmOutOptionsDevelopment = {
 export const esmOutOptionsProduction = {
   file: `${ESM_BUILD_PATH}${'index.esm.js'}`,
   format: 'esm'
+}
+
+export const iffeOutOptionsProduction = {
+  file: `${IFFE_BUILD_PATH}${'index.iffe.js'}`,
+  name: 'resizablePanes',
+  format: 'iife'
+}
+
+export const umdOutOptionsProduction = {
+  file: `${UMD_BUILD_PATH}${'index.umd.js'}`,
+  name: 'resizablePanes',
+  format: 'umd'
 }
 
 export const developmentPlugins = [
@@ -109,22 +123,19 @@ export const developmentConfig = {
   external: EXTERNALS
 }
 
-const productionConfigMinSet = {
+export const productionConfigMinSet = {
   input: 'src/index.ts',
   output: [
-    {
-      ...cjsOutOptionsProduction
-    },
-    {
-      ...esmOutOptionsProduction
-    }
+    cjsOutOptionsProduction,
+    esmOutOptionsProduction,
+    iffeOutOptionsProduction,
+    umdOutOptionsProduction
   ],
   plugins: productionPlugins,
   external: EXTERNALS
 }
 
 export const productionConfig = [
-  // developmentConfig,
   productionConfigMinSet,
   typesRollupConfig
 ]
