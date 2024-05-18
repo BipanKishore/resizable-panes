@@ -1,5 +1,5 @@
 {
-  "name": "root",
+  "name": "resizable-panes",
   "private": true,
   "workspaces": [
     "packages/demo-app",

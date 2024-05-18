@@ -3,7 +3,7 @@ import {IKeyToBoolMap, IMapIdToSize} from './general-type'
 import {PaneModel} from '../models'
 import {
   UnitTypes,
-  IVisibilityState,
+
   ISetSizeBehaviour
 } from './basic-types'
 
@@ -23,10 +23,6 @@ export interface IBoolMap {
   [key: string]: boolean;
 }
 
-export interface IVisibilityMap {
-  [key: string]: IVisibilityState;
-}
-
 export type IGetMaP = INumberMap | IBoolMap;
 
 interface IGetStateItem {
@@ -43,7 +39,7 @@ export interface IGetState {
 export interface IResizableApi {
   restore: () => void;
   setVisibilities: (map: IKeyToBoolMap) => void;
-  getVisibilities: () => IVisibilityMap;
+  getVisibilities: () => IBoolMap;
   getSizes: () => INumberMap;
   getState: () => IGetState;
   setSize: (id: string, size: number, behavior?: ISetSizeBehaviour) => void;
