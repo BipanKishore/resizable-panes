@@ -1,6 +1,6 @@
 {
   "name": "resizable-panes-next",
-  "version": "6.0.23",
+  "version": "6.0.222",
   "description": "A straightforward library that enables dynamic resizing of layouts and saves the layout configurations.",
   "module": "./lib/esm/index.esm.js",
   "main": "./lib/cjs/index.cjs.js",
@@ -44,7 +44,6 @@
     "throttleit": "^2.0.0"
   },
   "devDependencies": {
-    "rimraf": "^5.0.7",
     "@babel/core": "^7.22.10",
     "@babel/eslint-parser": "^7.22.11",
     "@babel/preset-env": "^7.22.10",
@@ -89,6 +88,7 @@
     "postcss-loader": "^8.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "rimraf": "^5.0.7",
     "rollup": "^3.20.2",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-dts": "^5.3.0",

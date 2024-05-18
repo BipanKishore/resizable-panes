@@ -1,7 +1,7 @@
 {
   "name": "demo-app",
   "homepage": "https://bipankishore.github.io/resizable-panes/",
-  "version": "0.1.0",
+  "version": "6.0.222",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
@@ -19,7 +19,7 @@
     "react-dom": "^18.3.1",
     "react-modal": "^3.16.1",
     "react-scripts": "5.0.1",
-    "resizable-panes-react": "^6.0.8",
+    "resizable-panes-react": "^6.0.222",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
