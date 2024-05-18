@@ -5,20 +5,14 @@ export const js = 'js'
 export const next = 'next'
 
 export const getDetailsByLib = () => {
-    const libType = getLibName()
+    const libType = getLibName() ?? react
+
 
     const npmLink = `https://www.npmjs.com/package/resizable-panes-${libType}`
     const libName = `resizable-panes-${libType}`
     const getTitle = (type: string) => `Resizable Panes ${type}`
 
     switch (libType) {
-        case react:
-            return {
-                libName,
-                title: getTitle(`React`),
-                npmLink,
-                libType
-            }
         case js:
             return {
                 libName,
@@ -33,7 +27,13 @@ export const getDetailsByLib = () => {
                 npmLink,
                 libType
             }
+        default:
+        return {
+            libName,
+            title: getTitle(`React`),
+            npmLink,
+            libType
+        }
     }
 
-    return {}
 }
