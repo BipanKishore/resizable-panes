@@ -5,6 +5,7 @@ import typescript from 'rollup-plugin-typescript2'
 import postcss from 'rollup-plugin-postcss'
 import terser from '@rollup/plugin-terser'
 import {dts} from 'rollup-plugin-dts'
+import sourcemaps from 'rollup-plugin-sourcemaps'
 // import copy from 'rollup-plugin-copy'
 import path from 'path'
 import {fileURLToPath} from 'url'
@@ -21,7 +22,6 @@ const ESM_EXTENTION = 'esm.js'
 
 const CJS_BUILD_PATH = './lib/cjs/'
 const ESM_BUILD_PATH = './lib/esm/'
-const IFFE_BUILD_PATH = './lib/iffe/'
 const UMD_BUILD_PATH = './lib/umd/'
 
 export const LIB_FILE_NAME_DEVELOPMENT_CJS = `${LIB_NAME}.${DEVELOPMENT}.${CJS_EXTENTION}`
@@ -88,7 +88,8 @@ export const developmentPlugins = [
   resolve(),
   commonjs(),
   typescript(),
-  postcss()
+  postcss(),
+  sourcemaps()
   // copy({
   //   targets: [{
   //     src: 'scripts/include-scripts.cjs.js',
@@ -109,7 +110,8 @@ export const productionPlugins = [
   commonjs(),
   typescript(),
   postcss(),
-  terser()
+  terser(),
+  sourcemaps()
 ]
 
 export const EXTERNALS = ['react']

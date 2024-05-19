@@ -1,6 +1,6 @@
 {
   "name": "resizable-panes-react",
-  "version": "6.0.22",
+  "version": "6.0.23",
   "description": "A straightforward library that enables dynamic resizing of layouts and saves the layout configurations.",
   "module": "./lib/esm/index.esm.js",
   "main": "./lib/cjs/index.cjs.js",
