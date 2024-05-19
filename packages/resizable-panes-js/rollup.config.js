@@ -1,5 +1,5 @@
 import {config} from 'dotenv'
-import {developmentConfig, productionConfig, typesRollupConfig} from './build.script'
+import {typesRollupConfig, productionConfig, developmentConfig} from '../resizable-core/build.script'
 
 let isProduction = false
 
