@@ -14,3 +14,4 @@ export * from './services/detection-service'
 export * from './utils/constant'
 
 export * from './@types'
+console.log('Hey')
