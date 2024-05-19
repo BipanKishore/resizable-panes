@@ -1,6 +1,6 @@
 {
   "name": "resizable-core",
-  "version": "6.0.10",
+  "version": "6.0.11",
   "description": "A straightforward library that enables dynamic resizing of layouts and saves the layout configurations.",
   "module": "./lib/esm/index.esm.js",
   "main": "./lib/cjs/index.cjs.js",
