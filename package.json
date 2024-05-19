@@ -9,6 +9,7 @@
   "scripts": {
     "lint": "lerna run lint",
     "demo": "lerna run demo",
+    "demo:prod": "lerna run demo:prod" ,
     "core": "lerna run core",
     "core:prod": "lerna run core:prod",
     "start": "lerna run start",
