@@ -1,5 +1,5 @@
 import {DIRECTIONS} from '../constant'
-import {ResizableModel, PaneModel} from '../../models'
+import {PaneModel} from '../../models'
 import {getSize} from '../../models/pane'
 
 export const localConsole = (obj: any, key : string) => {
