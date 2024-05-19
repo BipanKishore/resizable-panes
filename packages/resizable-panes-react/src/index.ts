@@ -7,5 +7,3 @@ export {
 } from './components/resizable-pane-provider'
 
 export {RATIO, BUTTOM_FIRST, TOP_FIRST} from '../../resizable-core'
-
-console.log('Hey')
