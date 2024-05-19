@@ -49,7 +49,7 @@ jobs:
     
     - name: Resizable Demo App Build
       run: |
-          npm run build
+          npm run demo:prod
 
     - name: Resizable React Testing
       run: |
