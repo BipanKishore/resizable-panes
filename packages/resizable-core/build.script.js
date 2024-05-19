@@ -72,18 +72,15 @@ export const esmOutOptionsProduction = {
   }
 }
 
-export const iffeOutOptionsProduction = {
-  file: `${IFFE_BUILD_PATH}${'index.iffe.js'}`,
-  name: 'resizablePanes',
-  format: 'iife',
-  globals
-}
-
 export const umdOutOptionsProduction = {
   file: `${UMD_BUILD_PATH}${'index.umd.js'}`,
   name: 'resizablePanes',
   format: 'umd',
-  globals
+  globals,
+  sourcemap: true,
+  sourcemapPathTransform: (sourcePath) => {
+    return sourcePath.substring('../'.length)
+  }
 }
 
 export const developmentPlugins = [
@@ -136,7 +133,6 @@ export const developmentConfig = {
 const productionOutput = [
   cjsOutOptionsProduction,
   esmOutOptionsProduction,
-  iffeOutOptionsProduction,
   umdOutOptionsProduction]
 
 export const productionConfigMinSet = {

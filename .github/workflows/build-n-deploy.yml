@@ -43,9 +43,13 @@ jobs:
       run: |
         npm run core:prod
 
-    - name: Resizable React/JS/Next/Demo App Builds
+    - name: Resizable React/JS/Next Builds
       run: |
         npm run prod
+    
+    - name: Resizable Demo App Build
+      run: |
+          npm run build
 
     - name: Resizable React Testing
       run: |

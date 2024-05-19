@@ -29,7 +29,6 @@
   "scripts": {
     "demo": "react-scripts start",
     "build": "react-scripts build",
-    "prod": "react-scripts build",
     "eject": "react-scripts eject",
     "prelink-local": "rimraf node_modules/.cache",
     "link-local": "npm link resizable-panes-react react",
