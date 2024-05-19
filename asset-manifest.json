@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/resizable-panes/static/css/main.93f8ee27.css",
-    "main.js": "/resizable-panes/static/js/main.36028078.js",
+    "main.js": "/resizable-panes/static/js/main.94e856c1.js",
     "static/js/400.8765c1cb.chunk.js": "/resizable-panes/static/js/400.8765c1cb.chunk.js",
     "static/media/react.svg": "/resizable-panes/static/media/react.1495a6a0c751ac52af3164f785e64d7b.svg",
     "static/media/javascript.svg": "/resizable-panes/static/media/javascript.75fa9cdf8b00c1ddc571fbe57667c38f.svg",
@@ -11,11 +11,11 @@
     "static/media/npm-color.svg": "/resizable-panes/static/media/npm-color.2b9f00532406a32dcac6b23b93ab2e45.svg",
     "static/media/nextdotjs.svg": "/resizable-panes/static/media/nextdotjs.7ff86746ec25a6637a0f1b80a9d20332.svg",
     "main.93f8ee27.css.map": "/resizable-panes/static/css/main.93f8ee27.css.map",
-    "main.36028078.js.map": "/resizable-panes/static/js/main.36028078.js.map",
+    "main.94e856c1.js.map": "/resizable-panes/static/js/main.94e856c1.js.map",
     "400.8765c1cb.chunk.js.map": "/resizable-panes/static/js/400.8765c1cb.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.93f8ee27.css",
-    "static/js/main.36028078.js"
+    "static/js/main.94e856c1.js"
   ]
 }
