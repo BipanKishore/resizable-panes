@@ -47,7 +47,11 @@ export const cjsOutOptionsDevelopment = {
 
 export const cjsOutOptionsProduction = {
   file: `${CJS_BUILD_PATH}${'index.cjs.js'}`,
-  format: 'cjs'
+  format: 'cjs',
+  sourcemap: true,
+  sourcemapPathTransform: (sourcePath) => {
+    return sourcePath.substring('../'.length)
+  }
 }
 
 export const esmOutOptionsDevelopment = {
@@ -61,19 +65,22 @@ export const esmOutOptionsDevelopment = {
 
 export const esmOutOptionsProduction = {
   file: `${ESM_BUILD_PATH}${'index.esm.js'}`,
-  format: 'esm'
-}
-
-export const iffeOutOptionsProduction = {
-  file: `${IFFE_BUILD_PATH}${'index.iffe.js'}`,
-  name: 'resizablePanes',
-  format: 'iife'
+  format: 'esm',
+  sourcemap: true,
+  sourcemapPathTransform: (sourcePath) => {
+    return sourcePath.substring('../'.length)
+  }
 }
 
 export const umdOutOptionsProduction = {
   file: `${UMD_BUILD_PATH}${'index.umd.js'}`,
   name: 'resizablePanes',
-  format: 'umd'
+  format: 'umd',
+  globals,
+  sourcemap: true,
+  sourcemapPathTransform: (sourcePath) => {
+    return sourcePath.substring('../'.length)
+  }
 }
 
 export const developmentPlugins = [
@@ -116,24 +123,17 @@ export const typesRollupConfig = {
 export const developmentConfig = {
   input: 'src/index.ts',
   output: [
-    {
-      ...cjsOutOptionsDevelopment
-    },
-    {
-      ...esmOutOptionsDevelopment
-    }
+    cjsOutOptionsDevelopment,
+    esmOutOptionsDevelopment
   ],
   plugins: developmentPlugins,
   external: EXTERNALS
 }
 
-const productionOutput = [cjsOutOptionsProduction,
+const productionOutput = [
+  cjsOutOptionsProduction,
   esmOutOptionsProduction,
-  iffeOutOptionsProduction,
-  umdOutOptionsProduction].map((outputConfig) => ({
-  ...outputConfig,
-  globals
-}))
+  umdOutOptionsProduction]
 
 export const productionConfigMinSet = {
   input: 'src/index.ts',

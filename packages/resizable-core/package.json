@@ -1,6 +1,6 @@
 {
   "name": "resizable-core",
-  "version": "6.0.9",
+  "version": "6.0.10",
   "description": "A straightforward library that enables dynamic resizing of layouts and saves the layout configurations.",
   "module": "./lib/esm/index.esm.js",
   "main": "./lib/cjs/index.cjs.js",
@@ -115,7 +115,7 @@
     "url": "https://github.com/BipanKishore/resizable-panes-react.git"
   },
   "bugs": {
-    "url": "https://github.com/BipanKishore/resizable-panes-react/issues",
+    "url": "https://github.com/BipanKishore/resizable-panes/issues",
     "email": "bipankishore@gmail.com"
   },
   "homepage": "https://bipankishore.github.io/resizable-panes-demo/"

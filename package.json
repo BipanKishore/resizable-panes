@@ -9,11 +9,13 @@
   "scripts": {
     "lint": "lerna run lint",
     "demo": "lerna run demo",
+    "demo:prod": "lerna run demo:prod" ,
     "core": "lerna run core",
     "core:prod": "lerna run core:prod",
     "start": "lerna run start",
     "prod": "lerna run prod",
-    "patch": "lerna run patch"
+    "patch": "lerna run patch",
+    "version": "lerna version"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.22.11",
