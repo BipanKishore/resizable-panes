@@ -10,24 +10,29 @@ import {
   getItemsSizeSum, getRatioSizeSum, getVisibleItems, setUISizesFn,
   synPanesMaxToSize, synPanesMinToSize
 } from './panes'
-import {filterEmpty, findIndex, isItUp, reverse} from './util'
+import {findIndex, isItUp, reverse} from './util'
 
-export const movingLogic = (mouseCoordinate: number, {
-  axisCoordinate,
-  decreasingItems,
-  increasingItems,
-  direction
-}: ResizableModel) => {
+export const movingLogic = (mouseCoordinate: number, resizable: ResizableModel) => {
   let sizeChange: number
-  let decreasingItemsLocal = decreasingItems
-  let increasingItemsLocal = increasingItems
+
+  const {items, direction, index, axisCoordinate} = resizable
+
+  const visibleItems = getVisibleItems(items)
+
+  let decreasingItems: IResizableItem[]
+  let increasingItems: IResizableItem []
+
+  const firstHalf = reverse(visibleItems.slice(0, index + 1))
+  const secondHalf = visibleItems.slice(index + 1)
+
   if (isItUp(direction)) {
     sizeChange = axisCoordinate - mouseCoordinate
-    decreasingItemsLocal = reverse(decreasingItems)
+    increasingItems = secondHalf
+    decreasingItems = firstHalf
   } else {
     sizeChange = mouseCoordinate - axisCoordinate
-
-    increasingItemsLocal = reverse(increasingItems)
+    increasingItems = firstHalf
+    decreasingItems = secondHalf
   }
 
   if (sizeChange < 0) {
@@ -38,91 +43,38 @@ export const movingLogic = (mouseCoordinate: number, {
 
   let reverseSizeChange = sizeChange
 
-  decreasingItemsLocal.forEach(item => {
+  decreasingItems.forEach(item => {
     sizeChange = changePaneSize(item, sizeChange, CHANGE.REMOVE)
   })
 
   reverseSizeChange -= sizeChange
 
-  increasingItemsLocal.forEach(item => {
+  increasingItems.forEach(item => {
     reverseSizeChange = changePaneSize(item, reverseSizeChange, CHANGE.ADD)
   })
 }
 
-// eslint-disable-next-line complexity
-export const setVirtualOrderList = (resizable: ResizableModel) => {
-  const {items, direction, handleId} = resizable
-
+export const getHandleIndex = (items: IResizableItem[], handleId: string) => {
   const visibleItems = getVisibleItems(items)
   const handleIndex = findIndex(visibleItems, handleId)
-
-  const decreasingItems: (IResizableItem | undefined)[] = []
-  let increasingItems: (IResizableItem | undefined)[] = []
-  let virtualOrderList: (IResizableItem)[]
-
-  const logicForIncreasingList = (i: number, attachedIndex: number) => {
-    const pane = visibleItems[i]
-    // i - Pane
-    // i + 1 - Resizer
-    if (pane.size) {
-      increasingItems[i] = pane
-      increasingItems[i + attachedIndex] = visibleItems[i + attachedIndex] // it is pane
-    } else {
-      increasingItems[i] = visibleItems[i + attachedIndex]
-      increasingItems[i + attachedIndex] = pane // it is pane
-    }
-  }
-
-  if (isItUp(direction)) {
-    for (let i = handleIndex - 1; i > -1; i -= 2) {
-      decreasingItems.push(visibleItems[i], visibleItems[i - 1])
-    }
-    decreasingItems.reverse()
-
-    increasingItems = [visibleItems[handleIndex]]
-
-    for (let i = handleIndex + 1; i < visibleItems.length; i += 2) {
-      logicForIncreasingList(i, 1)
-    }
-
-    virtualOrderList = [...decreasingItems, ...increasingItems]
-  } else {
-    increasingItems = [visibleItems[0]]
-
-    for (let i = handleIndex - 1; i > 0; i -= 2) {
-      logicForIncreasingList(i, -1)
-    }
-
-    increasingItems.push(visibleItems[handleIndex])
-
-    for (let i = handleIndex + 1; i < visibleItems.length; i += 2) {
-      decreasingItems.push(visibleItems[i], visibleItems[i + 1])
-    }
-
-    virtualOrderList = [...increasingItems, ...decreasingItems]
-  }
-
-  resizable.virtualOrderList = filterEmpty(virtualOrderList)
-  resizable.increasingItems = filterEmpty(increasingItems)
-  resizable.decreasingItems = filterEmpty(decreasingItems)
-
-  resizable.index = findIndex(resizable.virtualOrderList, handleId)
+  return handleIndex
 }
 
 export const setCurrentMinMax = (resizable: ResizableModel) => {
   const {containerSize} = getMaxContainerSizes(resizable)
 
-  const {virtualOrderList, index} = resizable
+  const {items, index} = resizable
+  const visibleItems = getVisibleItems(items)
 
   const nextIdx = index + 1
-  const aMaxChangeUp = getMinDiff(virtualOrderList[index])
-  const bMaxChangeUp = getMaxDiff(virtualOrderList[nextIdx])
+  const aMaxChangeUp = getMinDiff(visibleItems[index])
+  const bMaxChangeUp = getMaxDiff(visibleItems[nextIdx])
 
-  minMaxLogicUp(virtualOrderList, aMaxChangeUp - bMaxChangeUp, index, nextIdx, 0, containerSize)
+  minMaxLogicUp(visibleItems, aMaxChangeUp - bMaxChangeUp, index, nextIdx, 0, containerSize)
 
-  const aMaxChangeDown = getMinDiff(virtualOrderList[nextIdx])
-  const bMaxChangeDown = getMaxDiff(virtualOrderList[index])
-  minMaxLogicDown(virtualOrderList, bMaxChangeDown - aMaxChangeDown, index, nextIdx, 0, containerSize)
+  const aMaxChangeDown = getMinDiff(visibleItems[nextIdx])
+  const bMaxChangeDown = getMaxDiff(visibleItems[index])
+  minMaxLogicDown(visibleItems, bMaxChangeDown - aMaxChangeDown, index, nextIdx, 0, containerSize)
 }
 
 export const calculateAxes = (resizable: ResizableModel) => {

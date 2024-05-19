@@ -19,7 +19,7 @@ import {
 } from '../utils/panes'
 import {
   calculateAxes,
-  setVirtualOrderList,
+  getHandleIndex,
   movingLogic,
   setCurrentMinMax,
   toRatioModeAllPanes,
@@ -130,7 +130,9 @@ export const getResizable = (
   }
 
   resizable.onMouseDown = ([mouseCoordinate]: IResizableEvent, handleId: string) => {
+    const index = getHandleIndex(items, handleId)
     resizable.register({
+      index,
       handleId,
       direction: DIRECTIONS.NONE,
       axisCoordinate: mouseCoordinate
@@ -172,8 +174,6 @@ export const getResizable = (
 
   const directionChangeActions = (mouseCoordinate: number) => {
     resizable.axisCoordinate = mouseCoordinate
-
-    setVirtualOrderList(resizable)
 
     syncAxisSizes()
     setCurrentMinMax(resizable)

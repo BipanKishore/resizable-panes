@@ -1,5 +1,5 @@
 import {DIRECTIONS} from '../constant'
-import {ResizableModel, PaneModel} from '../../models'
+import {PaneModel} from '../../models'
 import {getSize} from '../../models/pane'
 
 export const localConsole = (obj: any, key : string) => {
@@ -58,13 +58,4 @@ export const consoleResizerLimitCrossedUp = () => {
 
 export const consoleResizerLimitCrossedDown = () => {
   console.error('setDownMaxLimits setDownMaxLimits')
-}
-
-export const consoleVirtualOrder = (resizable: ResizableModel) => {
-  console.log(
-    'visibleActiveIndex', resizable.index
-  )
-  console.log('increasingItems', getList((resizable.increasingItems), 'id'))
-  console.log('decreasingItems', getList(resizable.decreasingItems, 'id'))
-  console.log('virtualOrderList', getList(resizable.virtualOrderList, 'id'))
 }
