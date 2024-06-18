@@ -14,7 +14,6 @@ export class ResizableModel {
   direction: number
   axisCoordinate: number
 
-  // Index of virtualOrderListm handleId Index
   index: number
   topAxis: number
   bottomAxis: number
@@ -22,9 +21,6 @@ export class ResizableModel {
   handleId: string
 
   items: IResizableItem[]
-  virtualOrderList: IResizableItem[]
-  decreasingItems: IResizableItem[]
-  increasingItems: IResizableItem[]
 
   panesList: PaneModel[]
   resizersList: IResizableItem[]
