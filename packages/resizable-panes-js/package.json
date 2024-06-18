@@ -42,7 +42,7 @@
     "flexible-layout"
   ],
   "author": "bipankishore@gmail.com",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "throttleit": "^2.0.0"
   },
