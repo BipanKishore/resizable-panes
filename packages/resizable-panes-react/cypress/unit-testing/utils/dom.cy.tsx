@@ -20,7 +20,7 @@ describe('Dom utils', () => {
 
     })
 
-    it.only('should test getResizableEvent vertical panes ', () => {
+    it('should test getResizableEvent vertical panes ', () => {
       const retValue = [10, 10]
       const value = getResizableEvent(event, true, {})
       expect(value).to.deep.equals(retValue)
