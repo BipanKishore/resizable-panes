@@ -6,7 +6,7 @@ import {
   noMinMax5PanesSet,
   withMinMaxWithMinMaxUnitPixel5PanesSet
 } from '../pane-model-config-sets'
-import {CK0, L0, LG0, R0, R1, rScontainerId} from '../fix-test-ids'
+import {CK0, L0, LG0, R0, R1, rScontainerId, textAreaP1} from '../fix-test-ids'
 import {CustomResizerFirst} from '../../components/custom-resizer'
 import {ResizableComponentCustomPanesTestWrapper}
   from '../../components/rp-test-wrapper/resizable-component-custom-panes-test-wrapper'
@@ -218,6 +218,38 @@ describe('Test Pane Model', () => {
             .should('have.text', LOADING_TEXT)
         })
       })
+    })
+  })
+
+  describe('Text area editing', () => {
+    it('should call api method getMap', () => {
+      cy.viewport(1000, 1000)
+      cy.mount(
+        <ResizableComponentCustomPanesTestWrapper
+          resizer={<CustomResizerFirst horizontal={false} size={10} />}
+          resizerSize={10}
+          storageApi={localStorage}
+          uniqueId={rScontainerId}
+          unmountOnHide={false}
+          vertical
+        >
+          <Pane
+            className="bg-orange-500" id="P0" size={1}
+            unmountOnHide={true}
+          >
+
+            <textarea className='w-100p h-100p' data-cy={textAreaP1} />
+          </Pane>
+          <Pane className="bg-teal-500" id="P1" size={1}>
+
+            <PaneChild hook='P1' />
+          </Pane>
+        </ResizableComponentCustomPanesTestWrapper>
+      )
+      cy.wait(50)
+      rCy.cyGet(textAreaP1)
+        .type('text test')
+        .should('have.value', 'text test')
     })
   })
 })
