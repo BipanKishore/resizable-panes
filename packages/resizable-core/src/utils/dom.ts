@@ -49,7 +49,6 @@ export const getResizableEventFromMouse = (e: any, vertical: boolean): IResizabl
 }
 
 export const getResizableEvent = (e: any, vertical: boolean, previousTouchEvent: any): IResizableEvent => {
-  e.preventDefault()
   return isTouchEvent(e)
     ? getResizableEventFromTouch(e, vertical, previousTouchEvent)
     : getResizableEventFromMouse(e, vertical)
