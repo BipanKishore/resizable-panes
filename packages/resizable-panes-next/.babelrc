@@ -1,8 +1,0 @@
-{
-    "presets": [
-        "@babel/preset-typescript", "@babel/preset-env", "@babel/preset-react"
-    ],
-    "plugins": [["istanbul", {
-        "exclude": ["cypress", "src/utils/development-util"]
-      }]]
-}
