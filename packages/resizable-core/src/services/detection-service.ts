@@ -37,6 +37,7 @@ const getMouseDownOnHandle = (
   vertical: boolean,
   registerResizeEvent: any) => (e: any) => {
   const {detectionDetails} = resizable
+  if (detectionDetails.length === 0) return
 
   const [cursorCoordinate] = getResizableEvent(e, vertical, {})
 
