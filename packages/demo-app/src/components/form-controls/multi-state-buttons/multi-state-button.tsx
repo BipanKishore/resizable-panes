@@ -18,7 +18,6 @@ export const MultiStateButton = ({
   label,
 }: any) => {
   const onClickBtn = () => {
-    console.log(state)
     onClick({
       name,
       checked: !state,
