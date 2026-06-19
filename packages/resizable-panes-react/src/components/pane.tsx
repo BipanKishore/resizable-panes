@@ -40,7 +40,7 @@ export const Pane = (props: IPane) => {
   })
 
   const classname = joinClassName({
-    'overflow-hidden flex-shrink-0': true,
+    'flex-shrink-0': true,
     [className]: className
   })
 

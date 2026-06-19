@@ -40,6 +40,12 @@ yarn add resizable-panes-react
 .bg-slate-500 {
   background-color: rgb(100 116 139);
 }
+
+/* Desired overflow behaviour  */
+.overflow-x-scroll {
+  overflow-x: scroll;
+}
+
 ```
 
 ```jsx
@@ -53,13 +59,13 @@ function App() {
       }}
     >
       <ResizablePanes uniqueId="uniqueId" vertical resizerClass="bg-slate-500">
-        <Pane id="P0" size={1}>
+        <Pane id="P0" size={1} className="overflow-x-scroll">
           Your component 1
         </Pane>
-        <Pane id="P1" size={2}>
+        <Pane id="P1" size={2} className="overflow-x-scroll">
           Your component 2
         </Pane>
-        <Pane id="P2" size={3}>
+        <Pane id="P2" size={3} className="overflow-x-scroll">
           Your component 3
         </Pane>
       </ResizablePanes>
