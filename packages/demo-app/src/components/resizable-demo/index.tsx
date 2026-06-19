@@ -125,7 +125,7 @@ export const ResizableDemo = () => {
         onUpdateInitalConfig={onUpdateInitalConfig}
       />
 
-      <div className="h-96 w-100p mt-5">
+      <div className="h-80 w-100p mt-5">
         {shouldMountResizable && (
           <ResizablePanes
             onResize={setCurrentSizes}

@@ -7,7 +7,7 @@ import React, {
 import {ResizablePaneContext} from '../context/resizable-panes-context'
 import {
   ResizableModel,
-  getSetResizerSize, joinClassName,
+  getSetResizerSize,
   findIndex, getResizerId
 } from '../../../resizable-core'
 
@@ -50,11 +50,7 @@ export const Resizer = (props: IResizer) => {
   // Does not run for the last element
   const [setResizerRef]: any = useHookWithRefCallback(onNewRef)
 
-  const className = joinClassName({
-    'overflow-hidden': true,
-    [activeResizerClass]: isMouseDown,
-    [resizerClass]: !isMouseDown
-  })
+  const className = `overflow-hidden ${isMouseDown ? activeResizerClass : resizerClass}`
 
   const isValidCustomResizer = isValidElement(children)
   let cloneChild: ReactElement
